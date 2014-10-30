@@ -1,1 +1,0 @@
-QR Code images will be stored here.
