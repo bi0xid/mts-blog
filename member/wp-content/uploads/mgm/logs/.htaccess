@@ -1,4 +1,0 @@
-# deny web access
- order deny,allow
- deny from all
- allow from none
