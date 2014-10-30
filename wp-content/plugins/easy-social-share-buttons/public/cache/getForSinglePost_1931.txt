@@ -1,0 +1,1 @@
+{"twitter_shares_count":28,"fbsharecount_shares_count":324,"google_shares_count":17,"pinterest_shares_count":164,"digg_post_type":16,"stumble_shares_count":67894,"mail_post_type":139}

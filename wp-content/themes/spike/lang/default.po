@@ -1,0 +1,1040 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Spike WordPress Theme\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-06 08:25+0530\n"
+"PO-Revision-Date: 2013-03-06 08:26+0530\n"
+"Last-Translator: MyThemeShop <support-team@mythemeshop.com>\n"
+"Language-Team: MyThemeShop\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 1.5.3\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: 404.php:9
+msgid "Error 404 Not Found"
+msgstr ""
+
+#: 404.php:13
+msgid "Oops! We couldn't find this Page."
+msgstr ""
+
+#: 404.php:14
+msgid "Please check your URL or use the search form below."
+msgstr ""
+
+#: archive.php:9 archive.php:11
+msgid " Archive"
+msgstr ""
+
+#: archive.php:13
+msgid "Search Results for:"
+msgstr ""
+
+#: archive.php:15
+msgid "Author Archive"
+msgstr ""
+
+#: archive.php:17
+msgid "Daily Archive:"
+msgstr ""
+
+#: archive.php:19
+msgid "Monthly Archive:"
+msgstr ""
+
+#: archive.php:21
+msgid "Yearly Archive:"
+msgstr ""
+
+#: archive.php:44 index.php:52
+msgid "By "
+msgstr ""
+
+#: archive.php:52 index.php:60
+msgid "...Read More"
+msgstr ""
+
+#: archive.php:81 index.php:89
+msgid "&larr; Older posts"
+msgstr ""
+
+#: archive.php:82 index.php:90
+msgid "Newer posts &rarr;"
+msgstr ""
+
+#: functions.php:205
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: functions.php:209
+#, php-format
+msgid "<span class=\"fn\">%s</span>"
+msgstr ""
+
+#: functions.php:211
+msgid "(Edit)"
+msgstr ""
+
+#: index.php:18
+msgid "By"
+msgstr ""
+
+#: index.php:21
+msgid "Continue Reading "
+msgstr ""
+
+#: searchform.php:3
+msgid "Search the site"
+msgstr ""
+
+#: searchform.php:4 sidebar.php:7
+msgid "Search"
+msgstr ""
+
+#: sidebar.php:11
+msgid "Archives"
+msgstr ""
+
+#: sidebar.php:17
+msgid "Meta"
+msgstr ""
+
+#: single.php:15
+msgid "Posted by "
+msgstr ""
+
+#: single.php:16
+msgid "on "
+msgstr ""
+
+#: single.php:17
+msgid " in "
+msgstr ""
+
+#: single.php:45
+msgid "About Author"
+msgstr ""
+
+#: single.php:47
+msgid "by "
+msgstr ""
+
+#: single.php:57 theme-options.php:358
+msgid "Related Posts"
+msgstr ""
+
+#: theme-options.php:22
+msgid "A Section added by hook"
+msgstr ""
+
+#: theme-options.php:23
+msgid ""
+"<p class=\"description\">This is a section created by adding a filter to the "
+"sections array, great to allow child themes, to add/remove sections from the "
+"options.</p>"
+msgstr ""
+
+#: theme-options.php:93 theme-options.php:96
+msgid "Spike"
+msgstr ""
+
+#: theme-options.php:120
+msgid "Support"
+msgstr ""
+
+#: theme-options.php:121
+msgid ""
+"<p>If you are facing any problem with our theme or theme option panel, head "
+"over to our <a href=\"http://mythemeshop.com/support\">Knowledge Base</a></p>"
+msgstr ""
+
+#: theme-options.php:125
+msgid "Credit"
+msgstr ""
+
+#: theme-options.php:126
+msgid ""
+"<p>Options Panel created using the <a href=\"http://leemason.github.com/NHP-"
+"Theme-Options-Framework/\" target=\"_blank\">NHP Theme Options Framework</a> "
+"Version 1.0.5</p>"
+msgstr ""
+
+#: theme-options.php:130
+msgid "Earn Money"
+msgstr ""
+
+#: theme-options.php:131
+#, php-format
+msgid ""
+"<p>Earn 50% commision on every sale by refering your friends and readers. "
+"Join our <a href=\"http://mythemeshop.com/affiliate-program/\">Affiliate "
+"Program</a>.</p>"
+msgstr ""
+
+#: theme-options.php:142
+msgid "General Settings"
+msgstr ""
+
+#: theme-options.php:143
+msgid ""
+"<p class=\"description\">This tab contains common setting options which will "
+"be applied to whole theme.</p>"
+msgstr ""
+
+#: theme-options.php:148
+msgid "Logo Image"
+msgstr ""
+
+#: theme-options.php:149
+msgid ""
+"Upload your logo <strong>(Recommended height max 90px)</strong> using the "
+"Upload Button or insert image URL."
+msgstr ""
+
+#: theme-options.php:154
+msgid "Favicon"
+msgstr ""
+
+#: theme-options.php:155
+msgid ""
+"Upload a <strong>16 x 16 px</strong> image that will represent your "
+"website's favicon. You can refer to this link for more information on how to "
+"make it: <a href=\"http://www.favicon.cc/\" target=\"blank\" rel=\"nofollow"
+"\">http://www.favicon.cc/</a>"
+msgstr ""
+
+#: theme-options.php:160
+msgid "FeedBurner URL"
+msgstr ""
+
+#: theme-options.php:161
+msgid ""
+"Enter your FeedBurner's URL here, ex: <strong>http://feeds.feedburner.com/"
+"mythemeshop</strong> and your main feed (http://example.com/feed) will get "
+"redirected to the FeedBurner ID entered here.)"
+msgstr ""
+
+#: theme-options.php:167
+msgid "Twitter Username"
+msgstr ""
+
+#: theme-options.php:168
+msgid "Enter your Username here."
+msgstr ""
+
+#: theme-options.php:173
+msgid "Header Code"
+msgstr ""
+
+#: theme-options.php:174
+msgid ""
+"Enter the code which you need to place <strong>before closing </head> tag</"
+"strong>. (ex: Google Webmaster Tools verification, Bing Webmaster Center, "
+"BuySellAds Script, Alexa verification etc.)"
+msgstr ""
+
+#: theme-options.php:179
+msgid "Footer Code"
+msgstr ""
+
+#: theme-options.php:180
+msgid ""
+"Enter the codes which you need to place in your footer. <strong>(ex: Google "
+"Analytics, Clicky, STATCOUNTER, Woopra, Histats, etc.)</strong>."
+msgstr ""
+
+#: theme-options.php:185
+msgid "Copyrights Text"
+msgstr ""
+
+#: theme-options.php:186
+msgid ""
+"You can change or remove our link from footer and use your own custom text. "
+"(Link back is always appreciated)"
+msgstr ""
+
+#: theme-options.php:192
+msgid "Homepage Slider"
+msgstr ""
+
+#: theme-options.php:193
+msgid ""
+"<strong>Enable or Disable</strong> a homepage slider by using this check "
+"box. This slider will show 3 recent articles from the selected category."
+msgstr ""
+
+#: theme-options.php:198
+msgid "Slider Category"
+msgstr ""
+
+#: theme-options.php:199
+msgid ""
+"Select a category from the drop-down menu, latest three articles from this "
+"category will be show <strong>big thumbnail</strong>."
+msgstr ""
+
+#: theme-options.php:205
+msgid "Pagination"
+msgstr ""
+
+#: theme-options.php:206
+msgid ""
+"Enable or disable paginated navigation, which replaces the <strong>\"Older "
+"Posts\"</strong> and <strong>\"Newer Posts\"</strong> links with helpful "
+"numbered page links."
+msgstr ""
+
+#: theme-options.php:213
+msgid "Styling Options"
+msgstr ""
+
+#: theme-options.php:214
+msgid ""
+"<p class=\"description\">Control the visual appearance of your theme, such "
+"as colors, layout and patterns, from here.</p>"
+msgstr ""
+
+#: theme-options.php:219
+msgid "Color Scheme"
+msgstr ""
+
+#: theme-options.php:220
+msgid "Theme comes with unlimited color schemes for your theme's styling."
+msgstr ""
+
+#: theme-options.php:226
+msgid "Secondary Color"
+msgstr ""
+
+#: theme-options.php:227
+msgid ""
+"Choose Secondary color fo your theme, this will change default Green color."
+msgstr ""
+
+#: theme-options.php:233
+msgid "Layout Style"
+msgstr ""
+
+#: theme-options.php:234
+msgid "Choose from <strong>2 different layouts</strong> for your site."
+msgstr ""
+
+#: theme-options.php:244
+msgid "Background Color"
+msgstr ""
+
+#: theme-options.php:245
+msgid ""
+"Pick any color using the <strong>color picker</strong>, or enter a hex color "
+"value in the input field to make it the site background color for your theme."
+msgstr ""
+
+#: theme-options.php:251
+msgid "Background Pattern"
+msgstr ""
+
+#: theme-options.php:252
+msgid ""
+"Choose from any of <strong>37</strong> awesome background patterns for your "
+"site's background."
+msgstr ""
+
+#: theme-options.php:299
+msgid "Custom Background Image"
+msgstr ""
+
+#: theme-options.php:300
+msgid "Upload your own custom background image or pattern."
+msgstr ""
+
+#: theme-options.php:305
+msgid "Custom CSS"
+msgstr ""
+
+#: theme-options.php:306
+msgid ""
+"You can enter your own custom CSS here to further customize your theme. This "
+"will override the default CSS used on your site."
+msgstr ""
+
+#: theme-options.php:311
+msgid "Lightbox"
+msgstr ""
+
+#: theme-options.php:313
+msgid ""
+"A lightbox is a stylized pop-up that allows your visitors to view larger "
+"versions of images without leaving the current page. You can enable or "
+"disable the lightbox here."
+msgstr ""
+
+#: theme-options.php:319
+msgid "Custom WP Dashboard Design"
+msgstr ""
+
+#: theme-options.php:321
+msgid ""
+"Enabled/disable <strong>Custom Dashboard Design</strong>, specially created "
+"for MyThemeShop users."
+msgstr ""
+
+#: theme-options.php:328
+msgid "Single Posts"
+msgstr ""
+
+#: theme-options.php:329
+msgid ""
+"<p class=\"description\">From here, you can control the appearance and "
+"functionality of your single posts page.</p>"
+msgstr ""
+
+#: theme-options.php:334
+msgid "Post Meta Info."
+msgstr ""
+
+#: theme-options.php:336
+msgid ""
+"Use this button to Show or Hide Post Meta Info <strong>Author name and "
+"Categories</strong>."
+msgstr ""
+
+#: theme-options.php:342
+msgid "Breadcrumbs"
+msgstr ""
+
+#: theme-options.php:344
+msgid ""
+"Breadcrumbs are a great way to make your site more user-friendly. You can "
+"enable them by checking this box."
+msgstr ""
+
+#: theme-options.php:350
+msgid "Highlight Author Comment"
+msgstr ""
+
+#: theme-options.php:352
+msgid "Use this button to highlight author comments."
+msgstr ""
+
+#: theme-options.php:360
+msgid ""
+"Use this button to show related posts with thumbnails below the content area "
+"in a post."
+msgstr ""
+
+#: theme-options.php:366
+msgid "Tag Links"
+msgstr ""
+
+#: theme-options.php:368
+msgid ""
+"Use this button if you want to show a tag cloud below the related posts."
+msgstr ""
+
+#: theme-options.php:374
+msgid "Author Box"
+msgstr ""
+
+#: theme-options.php:376
+msgid ""
+"Use this button if you want to display author information below the article."
+msgstr ""
+
+#: theme-options.php:382
+msgid "Date in Comments"
+msgstr ""
+
+#: theme-options.php:384
+msgid "Use this button to show the date for comments."
+msgstr ""
+
+#: theme-options.php:391
+msgid "Fonts"
+msgstr ""
+
+#: theme-options.php:392
+msgid ""
+"<p class=\"description\">Typography is an important part of blog design, so "
+"from here, you can control the fonts and text on your site.</p>"
+msgstr ""
+
+#: theme-options.php:397
+msgid "Google Font Name (Title)"
+msgstr ""
+
+#: theme-options.php:398 theme-options.php:412
+msgid ""
+"Enter your favorite Google webfont name here. Browse fonts <a href=\"http://"
+"www.google.com/webfonts/\" target=\"_blank\">here</a>. (This will override "
+"below font.)"
+msgstr ""
+
+#: theme-options.php:403
+msgid "Title Font"
+msgstr ""
+
+#: theme-options.php:404
+msgid "Pick from the <strong>most popular fonts</strong> for your titles."
+msgstr ""
+
+#: theme-options.php:411
+msgid "Google Font Name (Content)"
+msgstr ""
+
+#: theme-options.php:417
+msgid "Body Font"
+msgstr ""
+
+#: theme-options.php:418
+msgid ""
+"Pick from the <strong>top most popular fonts</strong> for body/content text."
+msgstr ""
+
+#: theme-options.php:426
+msgid "Social Buttons"
+msgstr ""
+
+#: theme-options.php:427
+msgid ""
+"<p class=\"description\">Enable or disable social sharing buttons on single "
+"posts using these buttons.</p>"
+msgstr ""
+
+#: theme-options.php:432
+msgid "Social Media Buttons"
+msgstr ""
+
+#: theme-options.php:434
+msgid ""
+"Check this box to show social sharing buttons before an article's content "
+"text."
+msgstr ""
+
+#: theme-options.php:440
+msgid "Social media buttons on Homepage"
+msgstr ""
+
+#: theme-options.php:442
+msgid "Check this box to show social sharing buttons on homepage."
+msgstr ""
+
+#: theme-options.php:448
+msgid "Twitter"
+msgstr ""
+
+#: theme-options.php:455
+msgid "Google Plus"
+msgstr ""
+
+#: theme-options.php:462
+msgid "Facebook Like"
+msgstr ""
+
+#: theme-options.php:469
+msgid "LinkedIn"
+msgstr ""
+
+#: theme-options.php:476
+msgid "StumbleUpon"
+msgstr ""
+
+#: theme-options.php:483
+msgid "Pinterest"
+msgstr ""
+
+#: theme-options.php:491
+msgid "Ad Management"
+msgstr ""
+
+#: theme-options.php:492
+msgid ""
+"<p class=\"description\">Now, ad management is easy with our options panel. "
+"You can control everything from here, without using separate plugins.</p>"
+msgstr ""
+
+#: theme-options.php:497
+msgid "Below Post Title"
+msgstr ""
+
+#: theme-options.php:498
+msgid ""
+"Paste your Adsense, BSA or other ad code here to show ads below your article "
+"title on single posts."
+msgstr ""
+
+#: theme-options.php:503 theme-options.php:518
+msgid "Show After X Days"
+msgstr ""
+
+#: theme-options.php:504 theme-options.php:519
+msgid ""
+"Enter the number of days after which you want to show the Below Post Title "
+"Ad before it expires. Enter 0 to disable this feature."
+msgstr ""
+
+#: theme-options.php:512
+msgid "Below Post Content"
+msgstr ""
+
+#: theme-options.php:513
+msgid ""
+"Paste your Adsense, BSA or other ad code here to show ads below the post "
+"content on single posts."
+msgstr ""
+
+#: theme-options.php:528
+msgid "Navigation"
+msgstr ""
+
+#: theme-options.php:529
+msgid ""
+"<p class=\"description\"><div class=\"controls\"><b>Navigation settings can "
+"now be modified from the <a href=\"nav-menus.php\">Menus Section</a>.</"
+"b><br></div></p>"
+msgstr ""
+
+#: functions/theme-actions.php:110
+msgid "All Rights Reserved"
+msgstr ""
+
+#: functions/theme-actions.php:111
+msgid "Back to Top"
+msgstr ""
+
+#: functions/widget-ad125.php:33
+msgid "A widget for 125 x 125 ad unit (max 6 ads)"
+msgstr ""
+
+#: functions/widget-ad125.php:44
+msgid "MyThemeShop: 125x125 Ads"
+msgstr ""
+
+#: functions/widget-ad125.php:202 functions/widget-ad300.php:118
+#: functions/widget-recentposts.php:289 functions/widget-social.php:135
+#: functions/widget-subscribe.php:116 functions/widget-tweets.php:119
+msgid "Title:"
+msgstr ""
+
+#: functions/widget-ad125.php:208
+msgid "Ad 1 image url:"
+msgstr ""
+
+#: functions/widget-ad125.php:214
+msgid "Ad 1 link url:"
+msgstr ""
+
+#: functions/widget-ad125.php:220
+msgid "Ad 2 image url:"
+msgstr ""
+
+#: functions/widget-ad125.php:226
+msgid "Ad 2 link url:"
+msgstr ""
+
+#: functions/widget-ad125.php:232
+msgid "Ad 3 image url:"
+msgstr ""
+
+#: functions/widget-ad125.php:238
+msgid "Ad 3 link url:"
+msgstr ""
+
+#: functions/widget-ad125.php:244
+msgid "Ad 4 image url:"
+msgstr ""
+
+#: functions/widget-ad125.php:250
+msgid "Ad 4 link url:"
+msgstr ""
+
+#: functions/widget-ad125.php:256
+msgid "Ad 5 image url:"
+msgstr ""
+
+#: functions/widget-ad125.php:262
+msgid "Ad 5 link url:"
+msgstr ""
+
+#: functions/widget-ad125.php:268
+msgid "Ad 6 image url:"
+msgstr ""
+
+#: functions/widget-ad125.php:274
+msgid "Ad 6 link url:"
+msgstr ""
+
+#: functions/widget-ad125.php:280
+msgid "Randomize ads order?"
+msgstr ""
+
+#: functions/widget-ad300.php:33
+msgid "A widget for 300 x 250 ad (Single banner)"
+msgstr ""
+
+#: functions/widget-ad300.php:44
+msgid "MyThemeShop: 300x250 Ad"
+msgstr ""
+
+#: functions/widget-ad300.php:124
+msgid "Ad image url:"
+msgstr ""
+
+#: functions/widget-ad300.php:130
+msgid "Ad link url:"
+msgstr ""
+
+#: functions/widget-catposts.php:107
+msgid "Title"
+msgstr ""
+
+#: functions/widget-catposts.php:114
+msgid "Category"
+msgstr ""
+
+#: functions/widget-catposts.php:121
+msgid "Number of posts to show"
+msgstr ""
+
+#: functions/widget-catposts.php:128
+msgid "Sort by"
+msgstr ""
+
+#: functions/widget-catposts.php:144
+msgid "Reverse sort order (ascending)"
+msgstr ""
+
+#: functions/widget-catposts.php:151
+msgid "Make widget title link"
+msgstr ""
+
+#: functions/widget-catposts.php:158
+msgid "Show number of comments"
+msgstr ""
+
+#: functions/widget-catposts.php:165
+msgid "Show post date"
+msgstr ""
+
+#: functions/widget-catposts.php:173
+msgid "Show post thumbnail"
+msgstr ""
+
+#: functions/widget-popular.php:54 functions/widget-tabs.php:78
+msgid "Popular Posts"
+msgstr ""
+
+#: functions/widget-recentposts.php:34
+msgid "Includes advanced options."
+msgstr ""
+
+#: functions/widget-recentposts.php:36
+msgid "MyThemeShop: Recent Posts"
+msgstr ""
+
+#: functions/widget-recentposts.php:293
+msgid "Number of posts to show:"
+msgstr ""
+
+#: functions/widget-recentposts.php:300
+msgid "Include post excerpt"
+msgstr ""
+
+#: functions/widget-recentposts.php:305
+msgid "Show expert options"
+msgstr ""
+
+#: functions/widget-recentposts.php:311
+msgid "Limit post title:"
+msgstr ""
+
+#: functions/widget-recentposts.php:319
+msgid "Limit post excerpt:"
+msgstr ""
+
+#: functions/widget-recentposts.php:327
+msgid "Limit ellipsis:"
+msgstr ""
+
+#: functions/widget-social.php:51
+msgid "Dribbble URI"
+msgstr ""
+
+#: functions/widget-social.php:55
+msgid "Email URI"
+msgstr ""
+
+#: functions/widget-social.php:59
+msgid "Facebook URI"
+msgstr ""
+
+#: functions/widget-social.php:63
+msgid "Google+ URI"
+msgstr ""
+
+#: functions/widget-social.php:67
+msgid "Linkedin URI"
+msgstr ""
+
+#: functions/widget-social.php:71
+msgid "Pinterest URI"
+msgstr ""
+
+#: functions/widget-social.php:75
+msgid "RSS URI"
+msgstr ""
+
+#: functions/widget-social.php:79
+msgid "StumbleUpon URI"
+msgstr ""
+
+#: functions/widget-social.php:83
+msgid "Twitter URI"
+msgstr ""
+
+#: functions/widget-social.php:87
+msgid "YouTube URI"
+msgstr ""
+
+#: functions/widget-social.php:91
+msgid "Flickr URI"
+msgstr ""
+
+#: functions/widget-social.php:95
+msgid "Lastfm URI"
+msgstr ""
+
+#: functions/widget-social.php:99
+msgid "Tumblr URI"
+msgstr ""
+
+#: functions/widget-social.php:103
+msgid "Vimeo URI"
+msgstr ""
+
+#: functions/widget-social.php:110
+msgid "Show profile icons."
+msgstr ""
+
+#: functions/widget-social.php:119
+msgid "MyThemeShop: Social Profile Icons"
+msgstr ""
+
+#: functions/widget-subscribe.php:32
+msgid "Feedburner Subscription Widget."
+msgstr ""
+
+#: functions/widget-subscribe.php:38
+msgid "MyThemeShop: Subscribe Widget"
+msgstr ""
+
+#: functions/widget-subscribe.php:67
+msgid "Your email Address..."
+msgstr ""
+
+#: functions/widget-subscribe.php:68
+msgid "Subscribe"
+msgstr ""
+
+#: functions/widget-subscribe.php:122
+msgid "Feedburner id (http://feeds.feedburner.com/<b>mythemeshop</b>):"
+msgstr ""
+
+#: functions/widget-tabs.php:63
+msgid "Display the popular Posts and Latest Posts in tabbed format"
+msgstr ""
+
+#: functions/widget-tabs.php:65
+msgid "MyThemeShop: Tab Widget"
+msgstr ""
+
+#: functions/widget-tabs.php:79
+msgid "Recent Posts"
+msgstr ""
+
+#: functions/widget-tabs.php:122
+msgid "Number of popular posts to show::"
+msgstr ""
+
+#: functions/widget-tabs.php:125
+msgid "Number of latest posts to show:"
+msgstr ""
+
+#: functions/widget-tweets.php:29
+msgid "A widget for showing latest tweets in sidebar"
+msgstr ""
+
+#: functions/widget-tweets.php:35
+msgid "MyThemeShop: Latest Tweets"
+msgstr ""
+
+#: functions/widget-tweets.php:125
+msgid "Twitter Username e.g. mythemeshopteam"
+msgstr ""
+
+#: functions/widget-tweets.php:131
+msgid "Number of tweets (max 20)"
+msgstr ""
+
+#: functions/widget-tweets.php:137
+msgid "Follow Text e.g. Follow me on Twitter"
+msgstr ""
+
+#: functions/tinymce/window_page.php:6 functions/tinymce/window_post.php:6
+msgid "You are not allowed to be here"
+msgstr ""
+
+#: functions/tinymce/window_page.php:42 functions/tinymce/window_post.php:42
+msgid "Select Shortcodes"
+msgstr ""
+
+#: options/options.php:47 options/options.php:49
+msgid "Options"
+msgstr ""
+
+#: options/options.php:593
+msgid "<strong>Settings Imported!</strong>"
+msgstr ""
+
+#: options/options.php:595
+msgid "<strong>Settings Saved!</strong>"
+msgstr ""
+
+#: options/options.php:599
+msgid "<strong>Settings have changed!, you should save them!</strong>"
+msgstr ""
+
+#: options/options.php:600
+msgid "<strong><span></span> error(s) were found!</strong>"
+msgstr ""
+
+#: options/options.php:602
+msgid "<strong><span></span> warning(s) were found!</strong>"
+msgstr ""
+
+#: options/options.php:623
+msgid "Import / Export"
+msgstr ""
+
+#: options/options.php:642 options/options.php:724
+msgid "Dev Mode Info"
+msgstr ""
+
+#: options/options.php:660
+msgid "Import / Export Options"
+msgstr ""
+
+#: options/options.php:662
+msgid "Import Options"
+msgstr ""
+
+#: options/options.php:670
+msgid ""
+"Input your backup code below and hit Import to restore your sites options "
+"from a backup."
+msgstr ""
+
+#: options/options.php:683
+msgid ""
+"Input the URL to another sites options set and hit Import to load the "
+"options from that site."
+msgstr ""
+
+#: options/options.php:693
+msgid "Import"
+msgstr ""
+
+#: options/options.php:693
+msgid ""
+"WARNING! Importing options will overwrite your existing options, please "
+"proceed with caution and consider exporting your current options as backups."
+msgstr ""
+
+#: options/options.php:696
+msgid "Export Options"
+msgstr ""
+
+#: options/options.php:698
+msgid ""
+"Here, you can export and download your current options settings.  Keep this "
+"safe, as you can use it for backup in case of an emergency.  You can also "
+"use this to restore settings on this site, or on any other site using this "
+"theme.  You can also copy the link to your settings, and duplicate it to "
+"another site, which is useful if you have a network of blogs that all need "
+"the same settings."
+msgstr ""
+
+#: options/options.php:751
+msgid "Reset to Defaults"
+msgstr ""
+
+#: options/options.php:752
+msgid "Save Changes"
+msgstr ""
+
+#: options/fields/color_gradient/field_color_gradient.php:35
+msgid "From:"
+msgstr ""
+
+#: options/fields/color_gradient/field_color_gradient.php:38
+msgid " To:"
+msgstr ""
+
+#: options/fields/multi_text/field_multi_text.php:39
+#: options/fields/multi_text/field_multi_text.php:46
+#: options/fields/multi_text/field_multi_text.php:50
+msgid "Remove"
+msgstr ""
+
+#: options/fields/multi_text/field_multi_text.php:54
+msgid "Add More"
+msgstr ""
+
+#: options/fields/upload/field_upload.php:39
+msgid "Browse"
+msgstr ""
+
+#: options/fields/upload/field_upload.php:40
+msgid "Remove Upload"
+msgstr ""
+
+#: options/validation/color/validation_color.php:15
+msgid "This field must be a valid color value."
+msgstr ""
+
+#: options/validation/comma_numeric/validation_comma_numeric.php:15
+msgid ""
+"You must provide a comma seperated list of numerical values for this option."
+msgstr ""
+
+#: options/validation/date/validation_date.php:15
+msgid "This field must be a valid date."
+msgstr ""
+
+#: options/validation/email/validation_email.php:15
+msgid "You must provide a valid email for this option."
+msgstr ""
+
+#: options/validation/no_html/validation_no_html.php:15
+msgid ""
+"You must not enter any HTML in this field, all HTML tags have been removed."
+msgstr ""
+
+#: options/validation/no_special_chars/validation_no_special_chars.php:15
+msgid ""
+"You must not enter any special characters in this field, all special "
+"characters have been removed."
+msgstr ""
+
+#: options/validation/numeric/validation_numeric.php:15
+msgid "You must provide a numerical value for this option."
+msgstr ""
+
+#: options/validation/url/validation_url.php:15
+msgid "You must provide a valid URL for this option."
+msgstr ""
