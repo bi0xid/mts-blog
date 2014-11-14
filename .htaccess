@@ -177,7 +177,7 @@ Deny from all
         BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
     </IfModule>
     <IfModule mod_headers.c>
-        Header append Vary User-Agent env=!dont-vary
+#        Header append Vary User-Agent env=!dont-vary
     </IfModule>
         AddOutputFilterByType DEFLATE text/css text/x-component application/x-javascript application/javascript text/javascript text/x-js text/html text/richtext image/svg+xml text/plain text/xsd text/xsl text/xml image/x-icon application/json
     <IfModule mod_mime.c>
