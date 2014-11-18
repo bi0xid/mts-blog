@@ -100,13 +100,18 @@ if (isset($_POST['email']) && $_POST['email']) {
     $result = curl_exec($ch);
 
     curl_close($ch);
-
+    
+    header('Location: http://mytinysecrets.com/thank-you');
+    exit();
+    /*
     if($result = 'OK' || $result = 'user already subscribed') {
             header('Location: http://mytinysecrets.com/thank-you');
             exit();
     } else {
         redirect($http_referer);
     }
+     * 
+     */
 }
 
 redirect($http_referer);
