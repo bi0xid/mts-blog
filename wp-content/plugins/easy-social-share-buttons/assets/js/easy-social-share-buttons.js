@@ -190,14 +190,13 @@ jQuery(document).ready(function($){
         if($('.essb_links_list').length){
             var postId = parseInt(window._wp_rp_post_id);
             var plugin_url 		= $(this).find('.essb_info_plugin_url').val();            
-            var url = plugin_url + "/public/getCounters.php";
+            var url = plugin_url + "/public/getCounters.php?action=getForSinglePost&postId=" + postId;
             
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: url,
                 dataType: 'json',
                 async: true,
-                data: {'postId' : postId, 'action' : 'getForSinglePost'},
                 success: function(data) {
                     var twitter_shares_count = 0;
                     var fbsharecount_shares_count = 0;

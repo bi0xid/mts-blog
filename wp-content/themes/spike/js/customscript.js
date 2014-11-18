@@ -230,7 +230,7 @@ $(document).ready(function(){
     if(aPostIds.length > 0){
         var url = "/wp-content/plugins/easy-social-share-buttons/public/getCounters.php";
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: url,
             dataType: 'json',
             async: true,

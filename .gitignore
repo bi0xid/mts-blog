@@ -2,4 +2,13 @@
 !/wp-content/plugins/easy-social-share-buttons/public/cache/.gitkeep
 !/wp-content/plugins/easy-social-share-buttons/public/cache/.htaccess
 /dump.sql
+/dump.zip
 /wp-config.php
+/phpinfo.php
+/wp-content/cache/*
+!/wp-content/cache/.gitkeep
+/wp-content/uploads/*
+!/wp-content/uploads/.gitkeep
+/wp-content/advanced-cache.php
+/wp-content/db.php
+/wp-content/object-cache.php

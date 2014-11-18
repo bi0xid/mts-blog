@@ -5,10 +5,10 @@ if (!isset($wp_did_header)){
 	require_once( dirname(__FILE__) . '/../../../../wp-load.php' );
 }
 $sCacheFilePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR;
-$aAction = (isset($_POST['action']) && $_POST['action']) ? $_POST['action'] : '';
+$aAction = (isset($_GET['action']) && $_GET['action']) ? $_GET['action'] : '';
 
 if($aAction == 'getForHomePage'){
-    $aPostsIds = (array)$_POST['posts'];
+    $aPostsIds = (array)$_GET['posts'];
     $aPostsIds = array_map('intval', $aPostsIds);
     
     $sFilePath = $sCacheFilePath . "getForHomePage_".  implode('-', $aPostsIds).".txt";
@@ -181,7 +181,7 @@ if($aAction == 'getForHomePage'){
     ob_end_clean();
     die($sResult);
 }elseif($aAction == 'getForSinglePost'){
-    $iPostId = (int)(isset($_POST['postId']) && $_POST['postId']) ? $_POST['postId'] : 0;
+    $iPostId = (int)(isset($_GET['postId']) && $_GET['postId']) ? $_GET['postId'] : 0;
     
     $sFilePath = $sCacheFilePath . "getForSinglePost_{$iPostId}.txt";
     if(file_exists($sFilePath) &&
