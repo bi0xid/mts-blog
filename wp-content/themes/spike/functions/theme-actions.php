@@ -17,7 +17,7 @@ if ( ! function_exists( 'mts_meta' ) ) {
 	<link rel="prerender" href="<?php echo home_url(); ?>">
 <?php } ?>
 <!--iOS/android/handheld specific -->	
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="<?php echo home_url(); ?>/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">

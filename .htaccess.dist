@@ -36,7 +36,7 @@ RewriteRule ^wiredtree http://wiredtree.com [NC,L,QSA]
 
 # iOS icon
 
-RewriteRule apple-touch-icon.png wp-content/themes/twentyfourteen/images/apple-touch-icon.png [L]
+#RewriteRule apple-touch-icon.png wp-content/themes/twentyfourteen/images/apple-touch-icon.png [L]
 # BEGIN xmlrpc security
 
 <Files xmlrpc.php>
