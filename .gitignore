@@ -13,3 +13,8 @@
 /wp-content/db.php
 /wp-content/object-cache.php
 /.htaccess
+/member/*
+/purge/*
+/sharethelove/*
+/shop/*
+/wp-content/plugins/wordfence/tmp/*
