@@ -17,4 +17,5 @@
 /purge/*
 /sharethelove/*
 /shop/*
+/wp-content/plugins/wordfence/tmp/configCache.php
 /wp-content/plugins/wordfence/tmp/*
