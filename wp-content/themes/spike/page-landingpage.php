@@ -22,18 +22,29 @@
 	<meta name="p:domain_verify" content="2299c127dcf14a09af8856aae852cd5e"/>
 </head>
 <?php flush(); ?>
-<body id ="blog" <?php body_class('main'); ?>>    
+<body id ="blog" <?php body_class('main'); ?>>
+    <div id="fb-root"></div>	
     <div class="main-container">
         <div id="page">
             <div class="content">
-                <?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
-                    <h1 class="title"><?php the_title(); ?></h1>
-                    <div class="post-content box mark-links">
-                            <?php the_content(); ?>
+		<article class="ss-full-width">
+                    <div id="content_box" >
+                        <div id="content" class="hfeed">
+                            <?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
+                                <div id="post-<?php the_ID(); ?>" <?php post_class('g post'); ?>>
+                                        <div class="post-content box mark-links">
+                                                <?php the_content(); ?>                                                
+                                        </div><!--.post-content box mark-links -->
+                                </div><!--.g post-->
+                            <?php endwhile; ?>
+                        </div>
                     </div>
-                <?php endwhile; ?>
+		</article>
+                <?php $options = get_option('spike'); ?>
             </div>
-        </div>
-    </div>
+	</div><!--#page-->
+    </div><!--.main-container-->
+    <?php mts_footer(); ?>
+    <?php wp_footer(); ?>
 </body>
 </html>
