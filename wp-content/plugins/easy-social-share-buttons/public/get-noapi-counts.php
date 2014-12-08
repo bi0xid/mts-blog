@@ -62,7 +62,9 @@
             $iCounter = 0;
             if(preg_match('/<div[^>]*aggregateCount[^>]*>(?P<Counter>[\d]+)<\/div>/', $htmlData, $match))
             $iCounter = (int)$match['Counter'];
-            return $iCounter;
+            
+            if($iCounter)            
+                return $iCounter;
 
             $buttonUrl = sprintf('https://plusone.google.com/u/0/_/+1/fastbutton?url=%s', urlencode($url));
             //$htmlData  = file_get_contents($buttonUrl);
