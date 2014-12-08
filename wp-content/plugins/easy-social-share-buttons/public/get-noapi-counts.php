@@ -55,27 +55,33 @@
 	function getGplusShares($url)
 	{
 
-$buttonUrl = sprintf('https://plusone.google.com/u/0/_/+1/fastbutton?url=%s', urlencode($url));
+            $buttonUrl = sprintf('https://plusone.google.com/u/0/_/+1/fastbutton?url=%s', urlencode($url));
 
-		$htmlData  = file_get_contents($buttonUrl);
-		//$htmlData  = parse($buttonUrl);        
-        $iCounter = 0;
-        if(preg_match('/<div[^>]*aggregateCount[^>]*>(?P<Counter>[\d]+)<\/div>/', $htmlData, $match))
-                $iCounter = (int)$match['Counter'];
-		return $iCounter;
-/*
-		$buttonUrl = sprintf('https://plusone.google.com/u/0/_/+1/fastbutton?url=%s', urlencode($url));
-		//$htmlData  = file_get_contents($buttonUrl);
-		$htmlData  = parse($buttonUrl);
+            $htmlData  = file_get_contents($buttonUrl);
+            //$htmlData  = parse($buttonUrl);        
+            $iCounter = 0;
+            if(preg_match('/<div[^>]*aggregateCount[^>]*>(?P<Counter>[\d]+)<\/div>/', $htmlData, $match))
+            $iCounter = (int)$match['Counter'];
+            return $iCounter;
+
+            $buttonUrl = sprintf('https://plusone.google.com/u/0/_/+1/fastbutton?url=%s', urlencode($url));
+            //$htmlData  = file_get_contents($buttonUrl);
+            $htmlData  = parse($buttonUrl);
 	
-		@preg_match_all('#{c: (.*?),#si', $htmlData, $matches);
-		$ret = isset($matches[1][0]) && strlen($matches[1][0]) > 0 ? trim($matches[1][0]) : 0;
-		if(0 != $ret) {
-			$ret = str_replace('.0', '', $ret);
-		}
+            if($iCounter)
+              return $iCounter;
 	
-		return ($ret);
-*/
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, "https://clients6.google.com/rpc");
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, '[{"method":"pos.plusones.get","id":"p","params":{"nolog":true,"id":"' . $url . '","source":"widget","userId":"@viewer","groupId":"@self"},"jsonrpc":"2.0","key":"p","apiVersion":"v1"}]');
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+            $curl_results = curl_exec ($curl);
+            curl_close ($curl);            
+            $json = json_decode($curl_results, true);
+            
+            return intval( $json[0]['result']['metadata']['globalCounts']['count'] );
 	}
 	
 	function get_counter_number__vk( $url ) {
