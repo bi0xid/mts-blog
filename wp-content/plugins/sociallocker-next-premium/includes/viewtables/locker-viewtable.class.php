@@ -9,11 +9,11 @@ class SocialLockerViewTable extends FactoryViewtables320_Viewtable
          */
         
         $this->columns->clear();
-        $this->columns->add('title', 'Title');
-        $this->columns->add('shortcode', 'Shortcode'); 
-        $this->columns->add('bulk', 'Bulk Locking');   
-        $this->columns->add('theme', 'Theme');
-        $this->columns->add('created', 'Created');
+        $this->columns->add('title', __('Locker Title', 'sociallocker'));
+        $this->columns->add('shortcode', __('Shortcode', 'sociallocker')); 
+        $this->columns->add('bulk', __('Bulk Locking', 'sociallocker'));   
+        $this->columns->add('theme', __('Theme', 'sociallocker'));
+        $this->columns->add('created', __('Created', 'sociallocker'));
         
         /**
          * Scripts & styles
@@ -59,6 +59,8 @@ class SocialLockerViewTable extends FactoryViewtables320_Viewtable
             <?php  
             
         }
+        
+        
     }
     
     /**
@@ -94,6 +96,8 @@ class SocialLockerViewTable extends FactoryViewtables320_Viewtable
                 echo $theme;
                 break;
         }
+        
+        
     }
     
      /**
@@ -115,3 +119,4 @@ class SocialLockerViewTable extends FactoryViewtables320_Viewtable
         echo '<abbr title="' . esc_attr( $t_time ) . '">' . $h_time . '</abbr><br />';
     }
 }
+ 

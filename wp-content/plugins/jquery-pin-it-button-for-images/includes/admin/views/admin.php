@@ -12,7 +12,6 @@ foreach( $settings_tabs as $tab_name => $tab_settings)
 
 $tab = false == $tab_found ? 'selection_options' : $tab;
 $current_settings = $settings_tabs[ $tab ];
-//TODO dokończyć pętlę
 ?>
 <div id="icon-plugins" class="icon32"></div>
 <h2 class="nav-tab-wrapper">
@@ -22,11 +21,11 @@ $current_settings = $settings_tabs[ $tab ];
 </h2>
 
 <p>
+	<a href="http://mrsztuczkens.me/how-to-get-the-most-out-of-jpibfi/" class="button" target="_blank" rel="nofollow"><b><?php _e( 'How to Get The Most Out of JPIBFI', 'jpibfi' ); ?></b></a>
 	<a href="http://mrsztuczkens.me/jquery-pin-it-button-for-images-customization/" class="button" target="_blank" rel="nofollow"><b><?php _e( 'Plugin Customization', 'jpibfi' ); ?></b></a>
 	<a href="http://mrsztuczkens.me/jquery-pin-it-button-for-images-extensions/" class="button" target="_blank" rel="nofollow"><b><?php _e( 'Plugin Extensions', 'jpibfi' ); ?></b></a>
 	<a href="http://bit.ly/Uw2mEP" class="button" target="_blank" rel="nofollow"><b><?php _e( 'Donate', 'jpibfi' ); ?></b></a>
 	<a href="<?php echo $current_settings['support_link']; ?>" class="button" target="_blank" rel="nofollow"><b><?php _e( 'Support forum', 'jpibfi' ); ?></b></a>
-	<a href="<?php echo $current_settings['review_link']; ?>" class="button" target="_blank" rel="nofollow"><b><?php _e( 'Leave a review', 'jpibfi' ); ?></b></a>
 </p>
 <form method="post" action="options.php" ng-app="jpibfiApp" ng-controller="jpibfiController">
 	<?php

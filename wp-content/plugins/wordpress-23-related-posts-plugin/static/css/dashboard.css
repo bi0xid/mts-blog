@@ -16,8 +16,7 @@
 
 
 .settings_block {width: 700px; clear:both; }
-.settings_block.collapsed {border-bottom: 1px solid #ddd;}
-.settings_block.collapsed {border-bottom: 1px solid #ddd;}
+.settings_block.collapsed {border-bottom: 1px solid #cecece;}
 
 #wp_rp_wrap div#wp_rp_statistics_wrap ul.statistics {margin: 0; float: left; width: 600px;}
 #wp_rp_wrap.wp_rp_dashboard div#wp_rp_statistics_wrap ul.statistics {float: none; width: auto;}
@@ -155,3 +154,5 @@ form.wp_rp_message_form a.dismiss {float: right;}
 #wpwrap #wpcontent .wp_rp-updated .wp_rp-logo img {width: 90px;}
 #wpwrap #wpcontent .wp_rp-updated .wp_rp-dismiss a:before {content: '\f153'; display: inline-block; font: 400 16px/1 dashicons; speak: none; height: 20px; margin: 2px 0; text-align: center; vertical-align: middle; width: 20px; -webkit-font-smoothing: antialiased!important;}
 #wpwrap h2.title span {font-size:0.5em;}
+
+#wpwrap .subscription-container { width: 700px; padding: 5px 5px 5px 5px; background-color: #eee; margin-bottom: 20px;}

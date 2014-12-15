@@ -4,7 +4,7 @@ Plugin Name: jQuery Pin It Button For Images
 Plugin URI: http://mrsztuczkens.me/jpibfi/
 Description: Highlights images on hover and adds a "Pin It" button over them for easy pinning.
 Author: Marcin Skrzypiec
-Version: 1.32
+Version: 1.38
 Author URI: http://mrsztuczkens.me/
 */
 
@@ -47,7 +47,7 @@ if ( ! class_exists( 'jQuery_Pin_It_Button_For_Images' ) ) :
 			/* VERSIONING */
 			//plugin version
 			if ( ! defined( 'JPIBFI_VERSION' ) )
-				define( 'JPIBFI_VERSION', '1.32' );
+				define( 'JPIBFI_VERSION', '1.38' );
 
 			//used in versioning css and js files
 			if ( ! defined( 'JPIBFI_VERSION_MINOR' ) )
@@ -153,24 +153,22 @@ if ( ! class_exists( 'jQuery_Pin_It_Button_For_Images' ) ) :
 				update_option( JPIBFI_VERSION_OPTION, JPIBFI_VERSION );
 				//update not needed anymore
 				update_option( JPIBFI_UPDATE_OPTIONS, false);
+
+				add_action( 'admin_notices', array( $this, 'show_admin_notice') );
 			}
+		}
+
+		public function show_admin_notice(){
+			include_once( 'includes/admin/views/notice.php');
 		}
 
 		/* Function makes sure that option has all needed fields by checking with defaults */
 		public static function update_option_fields( $option, $default_option, $option_name ) {
 
-			$new_option = array();
-
 			if ( false == $option )
 				$option = array();
 
-			foreach ($default_option as $key => $value ) {
-				if ( false == array_key_exists( $key, $option ) )
-					$new_option [ $key ] = $value;
-				else
-					$new_option [ $key ] = $option [ $key ];
-			}
-
+			$new_option = array_merge($default_option, $option);
 			update_option( $option_name, $new_option );
 		}
 	}

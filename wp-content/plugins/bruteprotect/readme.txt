@@ -1,11 +1,12 @@
 === BruteProtect ===
-Contributors: samhotchkiss, roccotripaldi, sdquirk, professor44, magicbean, dsmartdesign
+Contributors: automattic, samhotchkiss, roccotripaldi, professor44, sdquirk, maverick3x6, magicbean, dsmartdesign
 Tags: security, bruteforce, brute force, brute force attack, harden wp, login lockdown, multisite, botnet, wordfence, best security
 Requires at least: 3.0
-Tested up to: 3.9
+Tested up to: 4.0
 Stable tag: trunk
 
 BruteProtect is a cloud-powered Brute Force attack prevention plugin and the best protection against botnet attacks.
+
 
 == Description ==
 
@@ -83,6 +84,75 @@ Yes, you may add IP addresses under the “whitelist” setting of BruteProtect.
 
 
 == Changelog ==
+
+= 2.3.3 =
+* Patch brute_check_preauth so that Google Apps login will work (props jay-s)
+
+= 2.3.2 =
+* Remove shoutouts
+
+= 2.3.1 =
+* Fix false downtime notifications
+
+= 2.3 =
+* Add ability for users to turn off monitoring
+* Improve IP detection
+* Added noncing on admin pages
+
+= 2.2.6 =
+* Minor updates admin config, removed secure login
+
+= 2.2.5 =
+* Fixed URL typo (props koke)
+
+= 2.2.4 =
+* Fix potential warning if current user isn't set (props migueluy)
+
+= 2.2.3 =
+* Add in filters for private IPs (props tellyworth)
+
+= 2.2.2 =
+* The future is bright
+
+= 2.2.1 =
+* Replaced placeholder with dynamic data
+
+= 2.2 =
+* Reformatted all plugin code to meet WP style standards
+* Added icons for WP 4.0 Plugin Browser
+* Removed secure login option
+* Changed link to my. mechanism from username/pass to key
+
+= 2.1 =
+* BruteProtect dashboard gets a makeover
+* Fixed some broken links
+* Fixed the way that beta versions of WP report that they need updating
+
+= 2.0.9.2 =
+* Fix minor issue with secure login
+
+= 2.0.9.1 =
+* Fix minor issue with secure login
+
+= 2.0.9 =
+* Change the hook used for our backstop check to ensure complete effectiveness
+* Improve secure login redirect
+
+= 2.0.8.1 =
+* Fixing a glitch that deactivated the Secure Login feature
+* Improving the urls in the Secure Login feature
+
+= 2.0.8 =
+* Improve the way site urls are saved
+* Improve how we determine if a site is linked to my.bruteprotect.com
+
+= 2.0.7 =
+* Fix minor bug in multisite admin
+
+= 2.0.6 =
+* Support for sites where WordPress is installed in a sub folder
+* More readable UI
+* Fixed bugs that where causing PHP errors
 
 = 2.0.5 =
 * Now you can opt out of the Secure Login feature from the login page
@@ -253,3 +323,8 @@ Yes, you may add IP addresses under the “whitelist” setting of BruteProtect.
 * Improve admin styling (thanks Michael Cain!)
 * Added statistics to your dashboard
 * If the API server goes down, we fall back to a math-based human verification
+
+== Upgrade Notice ==
+
+= 2.0.9 =
+This upgrade ensures complete protection against XML-RPC based attacks.  Please upgrade immediately.

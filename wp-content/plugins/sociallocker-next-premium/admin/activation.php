@@ -1,6 +1,6 @@
 <?php
 
-class OnpSL_Activation extends Factory320_Activator {
+class OnpSL_Activation extends Factory324_Activator {
     
     public function activate() {       
         // sets the default licence
@@ -9,7 +9,7 @@ class OnpSL_Activation extends Factory320_Activator {
             $this->plugin->license->setDefaultLicense( array(
                 'Category'      => 'free',
                 'Build'         => 'premium',
-                'Title'         => __('OnePress Zero License', 'sociallocker'),
+                'Title'         => 'OnePress Zero License',
                 'Description'   => __('Please, activate the plugin to get started. Enter a key 
                                     you received with the plugin into the form below.', 'sociallocker')
             ));
@@ -23,25 +23,28 @@ class OnpSL_Activation extends Factory320_Activator {
         add_option('sociallocker_short_lang', 'en');
 
         // pages and posts
+            
+            $baseLockerInfo = $this->addPost(
+                'onp_sl_default_locker_id',
+                array(
+                    'post_type' => 'social-locker',
+                    'post_title' => __('Default Locker', 'sociallocker'),
+                    'post_name' => 'default_sociallocker_locker'
+                ),
+                array(
+                    'sociallocker_header' => __('This content is locked!', 'sociallocker'),       
+                    'sociallocker_message' => __('Please support us, use one of the buttons below to unlock the content.', 'sociallocker'),
+                    'sociallocker_style' => 'secrets',
+                    'sociallocker_mobile' => 1,          
+                    'sociallocker_highlight' => 1,                   
+                    'sociallocker_is_system' => 1,
+                    'sociallocker_is_default' => 'block'
+                )
+            );
         
-        $baseLockerInfo = $this->addPost(
-            'onp_sl_default_locker_id',
-            array(
-                'post_type' => 'social-locker',
-                'post_title' => __('Default Locker', 'sociallocker'),
-                'post_name' => 'default_sociallocker_locker'
-            ),
-            array(
-                'sociallocker_header' => __('This content is locked!', 'sociallocker'),       
-                'sociallocker_message' => __('Please support us, use one of the buttons below to unlock the content.', 'sociallocker'),
-                'sociallocker_style' => 'secrets',
-                'sociallocker_mobile' => 1,          
-                'sociallocker_highlight' => 1,                   
-                'sociallocker_is_system' => 1,
-                'sociallocker_is_default' => 'block'
-            )
-        );
         
+
+  
         add_option('sociallocker_tracking', 'true');
         add_option('sociallocker_just_social_buttons', 'false');        
 
@@ -53,7 +56,8 @@ class OnpSL_Activation extends Factory320_Activator {
               ID BIGINT(20) NOT NULL AUTO_INCREMENT,
               AggregateDate DATE NOT NULL,
               PostID BIGINT(20) NOT NULL,
-              total_count INT(11) NOT NULL DEFAULT 0,
+              total_count INT(11) NOT NULL DEFAULT 0,  
+              na_count INT(11) NOT NULL DEFAULT 0,
               facebook_like_count INT(11) NOT NULL DEFAULT 0,
               twitter_tweet_count INT(11) NOT NULL DEFAULT 0,
               google_plus_count INT(11) NOT NULL DEFAULT 0,
@@ -72,6 +76,8 @@ class OnpSL_Activation extends Factory320_Activator {
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql); 
+        
+        global $sociallocker;
     } 
 }
 

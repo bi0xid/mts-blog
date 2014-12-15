@@ -3,7 +3,7 @@ Contributors: freediver
 Donate link: https://www.networkforgood.org/donation/MakeDonation.aspx?ORGID2=520781390
 Tags:  admin, posts, images, links, google, ajax, jquery, youtube, video, play, media, Post, posts
 Requires at least: 2.3
-Tested up to: 3.2.1
+Tested up to: 4.0
 Stable tag: trunk
 
 Insights allows you to quickly access and insert information (links, images, videos, maps..) into your blog posts.
@@ -29,9 +29,15 @@ Check the [screenshots](http://wordpress.org/extend/plugins/insights/screenshots
 
 Insights allows you to do all this using dynamic AJAX interface which loads the relevant information to your post in just a few seconds.
 
-Plugin by Vladimir Prelovac. Looking for <a href="http://www.prelovac.com/vladimir/services">WordPress Consultant</a>?
+Plugin by Vladimir Prelovac. Also check out <a href="https://managewp.com">ManageWP</a>.
 
 == Changelog ==
+
+= 1.0.7 =
+* Fixed images search
+
+= 1.0.6 =
+* Fixed WordPress 3.9 compatibility issue
 
 = 1.0.5 =
 * WordPress 3.2 compatibility

@@ -46,7 +46,13 @@ class OnpSL_AssetsManager {
     public static function printSdkScript() {
         
         $fb_appId = get_option('sociallocker_facebook_appid');
+        $fb_version = get_option('sociallocker_facebook_version', 'v2.0');
         $fb_lang = get_option('sociallocker_lang', 'en_US');
+        
+        $url = ( $fb_version === 'v1.0' ) 
+            ? "//connect.facebook.net/" . $fb_lang . "/all.js"
+            : "//connect.facebook.net/" . $fb_lang . "/sdk.js?";
+
         ?>
         <!-- 
             Facebook SDK
@@ -60,7 +66,8 @@ class OnpSL_AssetsManager {
                     appId: <?php echo $fb_appId ?>,
                     status: true,
                     cookie: true,
-                    xfbml: true
+                    xfbml: true,
+                    version: '<?php echo $fb_version ?>'
                 });
                 window.FB.init = function(){};
             };
@@ -68,12 +75,14 @@ class OnpSL_AssetsManager {
                 var js, fjs = d.getElementsByTagName(s)[0];
                 if (d.getElementById(id)) return;
                 js = d.createElement(s); js.id = id;
-                js.src = "//connect.facebook.net/<?php echo $fb_lang ?>/all.js";
+                js.src = "<?php echo $url ?>";
                 fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
         </script>
         <!-- / -->   
         <?php
+        
+        do_action('onp_sl_print_sdk_scripts');
     }
     
     public static function printCssSelectorOptions() {
@@ -96,7 +105,9 @@ class OnpSL_AssetsManager {
         </script>
         <style>
             <?php foreach( self::$_cssOptionsToPrint as $options ) { ?>
+            <?php if ( $options['overlap-mode'] === 'full' ) { ?>
             <?php echo $options['css-selector'] ?> { display: none; }
+            <?php } ?>
             <?php } ?>
         </style>
         <!-- / -->
@@ -114,7 +125,10 @@ class OnpSL_AssetsManager {
     public static function printCreaterScript() {
         if ( self::$_createrScriptPrinted ) return;
         self::$_createrScriptPrinted = true;
-    ?>
+        
+        do_action('onp_sl_begin_creater_script');
+        ?>
+                
         <!-- 
             Creater Script for Social Locker
         
@@ -125,7 +139,9 @@ class OnpSL_AssetsManager {
             (function($){ if ( window.onpsl && window.onpsl.lockers ) window.onpsl.lockers(); })(jQuery);
         </script>
         <!-- / -->
-    <?php
+        <?php
+    
+        do_action('onp_sl_end_creater_script');
     }
     
     /**
@@ -138,12 +154,12 @@ class OnpSL_AssetsManager {
         
             wp_enqueue_style( 
                 'onp-sociallocker', 
-                ONP_SL_PLUGIN_URL . '/assets/css/jquery.op.sociallocker.030503.min.css'
+                ONP_SL_PLUGIN_URL . '/assets/css/jquery.op.sociallocker.030701.min.css'
             );  
 
             wp_enqueue_script( 
                 'onp-sociallocker', 
-                ONP_SL_PLUGIN_URL . '/assets/js/jquery.op.sociallocker.030503.min.js', 
+                ONP_SL_PLUGIN_URL . '/assets/js/jquery.op.sociallocker.030701.min.js', 
                 array('jquery', 'jquery-effects-core', 'jquery-effects-highlight'), false, true
             );  
         
@@ -156,6 +172,8 @@ class OnpSL_AssetsManager {
         ); 
 
         wp_localize_script( 'onp-sociallocker', 'facebookSDK', $facebookSDK );
+        
+        do_action('onp_sl_connect_assets');
     }
         
     // -----------------------------------------------
@@ -221,28 +239,43 @@ class OnpSL_AssetsManager {
                   
         // Builds array of options to set into the jquery plugin
 
+            $actualUrls = get_option('sociallocker_actual_urls', false);
+            
             $postUrl = !empty($post) ? get_permalink( $post->ID ) : null;
-
+            $postUrl = $actualUrls ? null : $postUrl;
+            
             $fbLikeUrl = self::getLockerOption($id, 'facebook_like_url', false, $postUrl );
             $fbShareUrl = self::getLockerOption($id, 'facebook_share_url', false, $postUrl );
             $twTweetUrl = self::getLockerOption($id, 'twitter_tweet_url', false, $postUrl );
             $twFollowUrl = self::getLockerOption($id, 'twitter_follow_url', false, $postUrl );
             $glPlusUrl = self::getLockerOption($id, 'google_plus_url', false, $postUrl );      
             $glShareUrl = self::getLockerOption($id, 'google_share_url', false, $postUrl );
-            $lnShareUrl = self::getLockerOption($id, 'linkedin_share_url', false, $postUrl ); 
+            $lnShareUrl = self::getLockerOption($id, 'linkedin_share_url', false, $postUrl );
+                $buttonOrder = 'twitter-tweet,facebook-like,google-plus';
+            
+
 
             // PREMIUM build options
             $params = array(
                 'demo' => get_option('sociallocker_debug', false),
-
+                'actualUrls' => get_option('sociallocker_actual_urls', false),
+                
                 'text' => array(
                     'header' => self::getLockerOption($id, 'header'), 
                     'message' => self::getLockerOption($id, 'message')           
                 ),
                 
+                'tumbler' => get_option('sociallocker_tumbler', false),
+                
                 'theme' => self::getLockerOption($id, 'style'), 
                 
-                'googleAnalytics' => self::getLockerOption($id, 'google_analytics', false, 1),
+                'overlap' => array(
+                    'mode' => self::getLockerOption($id, 'overlap', false, 'full'),
+                    'position' => self::getLockerOption($id, 'overlap_position', false, 'middle'),
+                    'altMode' => get_option('sociallocker_alt_overlap_mode', 'transparence')
+                ),
+                
+                'googleAnalytics' => get_option('sociallocker_google_analytics', 1),
 
                 'effects' => array(
                     'highlight' => self::getLockerOption($id, 'highlight')
@@ -250,7 +283,7 @@ class OnpSL_AssetsManager {
 
                 'buttons' => array(
                     'counter' => self::getLockerOption($id, 'show_counters', false, 1),
-                    'order' => explode( ',', self::getLockerOption($id, 'buttons_order', false, 'twitter-tweet,facebook-like,google-plus') )
+                    'order' => explode( ',', self::getLockerOption($id, 'buttons_order', false, $buttonOrder) )
                 ),       
 
                 'locker' => array(
@@ -258,11 +291,15 @@ class OnpSL_AssetsManager {
                     'timer'     => self::getLockerOption($id, 'timer'),
                     'mobile'    => self::getLockerOption($id, 'mobile'),
                     'scope'     => $hasScope ? 'global' : '',
-                    'expires'   => self::getLockerOption($id, 'relock_interval_in_seconds', false, false)
+                    'expires'   => self::getLockerOption($id, 'relock_interval_in_seconds', false, false),
+                    'loadingTimeout' => get_option('sociallocker_timeout', 10000),
+                    'tumbler' => get_option('sociallocker_tumbler', false),
+                    'naMode' => get_option('sociallocker_na_mode', 'show-error')
                 ),
                 'facebook' => array(
                     'appId' => get_option('sociallocker_facebook_appid', '117100935120196'),
                     'lang' => get_option('sociallocker_lang', 'en_GB'),
+                    'version' => get_option('sociallocker_facebook_version', 'v1.0'),
                     'like' => array(
                         'url' => $fbLikeUrl,
                         'title' => self::getLockerOption($id, 'facebook_like_title' ),
@@ -346,7 +383,7 @@ class OnpSL_AssetsManager {
         
         $lockData['_theme'] = self::getLockerOption($id, 'style' );
         $lockData['_style'] = self::getLockerOption($id, 'style_profile' );
-                        
+          
         return $lockData;
     }
     
@@ -457,10 +494,13 @@ class OnpSL_AssetsManager {
             
             if ( $options['way'] == 'css-selector' ) {
                 
+                $lockData = self::getLockerDataToPrint($id);
+
                 self::$_lockerOptionsToPrint['css-selector-' . $id] = $id;
                 self::$_cssOptionsToPrint[] = array(
                     'locker-options-id' => 'css-selector-' . $id,
-                    'css-selector' => $options['css_selector']
+                    'css-selector' => $options['css_selector'],
+                    'overlap-mode' => $lockData['options']['overlap']['mode']
                 );
                 
                 self::requestAssets();

@@ -31,7 +31,7 @@
     // CHECKBOX CONTROL DEFINITION
     // ================================
     
-    $.fn.factoryBootstrap320_checkboxControl = function (option) {
+    $.fn.factoryBootstrap325_checkboxControl = function (option) {
         
         // call an method
         if ( typeof option === "string" ) {
@@ -50,13 +50,13 @@
         }
     };
 
-    $.fn.factoryBootstrap320_checkboxControl.Constructor = CheckboxControl;
+    $.fn.factoryBootstrap325_checkboxControl.Constructor = CheckboxControl;
     
     // AUTO CREATING
     // ================================
     
     $(function(){
-        $(".factory-bootstrap-320 .factory-checkbox.factory-buttons-way").factoryBootstrap320_checkboxControl();
+        $(".factory-bootstrap-325 .factory-checkbox.factory-buttons-way").factoryBootstrap325_checkboxControl();
     });
     
 }( jQuery ) );

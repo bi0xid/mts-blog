@@ -1,4 +1,4 @@
-<?php #comp-page builds: premium
+<?php
 /**
  * The file contains a class to configure the metabox Advanced Options.
  * 
@@ -68,7 +68,7 @@ class OnpSL_AdvancedOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
         $this->title = __('Advanced Options', 'sociallocker');
     }
     
-    public $cssClass = 'factory-bootstrap-320';
+    public $cssClass = 'factory-bootstrap-325';
     
     /**
      * Configures a form that will be inside the metabox.
@@ -76,12 +76,13 @@ class OnpSL_AdvancedOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
      * @see FactoryMetaboxes320_FormMetabox
      * @since 1.0.0
      * 
-     * @param FactoryForms320_Form $form A form object to configure.
+     * @param FactoryForms324_Form $form A form object to configure.
      * @return void
      */ 
     public function form( $form ) {
         
-        $form->add(array(  
+        
+        $options = array(  
             
             array(
                 'type'      => 'checkbox',
@@ -96,7 +97,7 @@ class OnpSL_AdvancedOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
             array(
                 'type'      => 'textbox',
                 'name'      => 'timer',
-                'title'     => __('Timer Inerval', 'sociallocker'),
+                'title'     => __('Timer Interval', 'sociallocker'),
                 'hint'      => __('Sets a countdown interval for the locker.', 'sociallocker'),
                 'icon'      => ONP_SL_PLUGIN_URL . '/assets/admin/img/timer-icon.png',
                 'default'   => false
@@ -121,7 +122,10 @@ class OnpSL_AdvancedOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
                 'icon'      => ONP_SL_PLUGIN_URL . '/assets/admin/img/highlight-icon.png',
                 'default'   => true
             )
-        ));  
+        );  
+        
+        $options = apply_filters('onp_sl_advanced_options', $options);
+        $form->add($options);
     }
 }
 

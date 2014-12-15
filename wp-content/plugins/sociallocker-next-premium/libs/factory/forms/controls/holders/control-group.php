@@ -14,7 +14,7 @@
  * 
  * @since 1.0.0
  */
-class FactoryForms320_ControlGroupHolder extends FactoryForms320_ControlHolder {
+class FactoryForms324_ControlGroupHolder extends FactoryForms324_ControlHolder {
     
     /**
      * A holder type.
@@ -41,7 +41,7 @@ class FactoryForms320_ControlGroupHolder extends FactoryForms320_ControlHolder {
                <?php                  
                 foreach( $this->elements as $element ):
                      if ( $element->options['type'] !== 'control-group-item' ) continue;
-                     $builder = new FactoryForms320_HtmlAttributeBuilder();
+                     $builder = new FactoryForms324_HtmlAttributeBuilder();
                      $builder->addCssClass('factory-control-group-nav-label');
                      $builder->addCssClass('factory-control-group-nav-label-'. $element->getOption('name') );
                      $builder->addHtmlData('control-id', 'factory-control-group-item-' . $element->getOption('name') );

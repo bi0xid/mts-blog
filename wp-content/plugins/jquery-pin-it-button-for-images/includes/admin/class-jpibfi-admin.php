@@ -4,10 +4,13 @@ class JPIBFI_Admin {
 
 	protected static $instance = null;
 
+	private $admin_screen_hook = null;
+
 	private function __construct() {
 		add_action( 'admin_menu', array( $this, 'print_admin_page_action') );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 		add_action( 'save_post', array( $this, 'save_meta_data' ) );
+		add_action( 'admin_notices', array( $this, 'show_admin_notice') );
 	}
 
 	public static function get_instance() {
@@ -20,7 +23,7 @@ class JPIBFI_Admin {
 	}
 
 	public function print_admin_page_action() {
-		$page = add_submenu_page(
+		$this->admin_screen_hook = add_submenu_page(
 			'options-general.php',
 			'jQuery Pin It Button For Images', 	// The value used to populate the browser's title bar when the menu page is active
 			'jQuery Pin It Button For Images', // The text of the menu in the administrator's sidebar
@@ -29,7 +32,7 @@ class JPIBFI_Admin {
 			array( $this, 'print_admin_page' )				// The callback function used to render this menu
 		);
 
-		add_action( 'admin_print_styles-' . $page, array( $this, 'add_admin_site_scripts') );
+		add_action( 'admin_print_styles-' . $this->admin_screen_hook, array( $this, 'add_admin_site_scripts') );
 	}
 
 	/* Adds admin scripts */
@@ -60,19 +63,16 @@ class JPIBFI_Admin {
 				'settings_name' => 'jpibfi_selection_options',
 				'tab_label' => __( 'Selection', 'jpibfi' ),
 				'support_link' => 'http://wordpress.org/support/plugin/jquery-pin-it-button-for-images',
-				'review_link' => 'http://wordpress.org/support/view/plugin-reviews/jquery-pin-it-button-for-images'
 			),
 			'visual_options' => array(
 				'settings_name' => 'jpibfi_visual_options',
 				'tab_label' => __( 'Visual', 'jpibfi' ),
 				'support_link' => 'http://wordpress.org/support/plugin/jquery-pin-it-button-for-images',
-				'review_link' => 'http://wordpress.org/support/view/plugin-reviews/jquery-pin-it-button-for-images'
 			),
 			'advanced_options' => array(
 				'settings_name' => 'jpibfi_advanced_options',
 				'tab_label' => __('Advanced', 'jpibfi' ),
 				'support_link' => 'http://wordpress.org/support/plugin/jquery-pin-it-button-for-images',
-				'review_link' => 'http://wordpress.org/support/view/plugin-reviews/jquery-pin-it-button-for-images'
 			)
 		);
 
@@ -140,6 +140,13 @@ class JPIBFI_Admin {
 			update_post_meta( $post_id, JPIBFI_METADATA, $post_meta );
 		else
 			delete_post_meta( $post_id, JPIBFI_METADATA );
+	}
+
+	function show_admin_notice() {
+		global $hook_suffix;
+		if ( $this->admin_screen_hook == $hook_suffix ) {
+			include_once( 'views/notice.php');
+		}
 	}
 }
 

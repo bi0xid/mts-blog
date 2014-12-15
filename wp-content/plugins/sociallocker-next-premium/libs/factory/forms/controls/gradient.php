@@ -19,7 +19,7 @@
  * @since 1.0.0
  */
 
-class FactoryForms320_GradientControl extends FactoryForms320_Control 
+class FactoryForms324_GradientControl extends FactoryForms324_Control 
 {
     public $type = 'gradient';
         
@@ -48,6 +48,12 @@ class FactoryForms320_GradientControl extends FactoryForms320_Control
             $this->addHtmlData('directions', 'top' ); 
         }
       ?>  
+      <script>
+          if ( !window.factory ) window.factory = {};
+          if ( !window.factory.res ) window.factory.res = {};            
+          factory.res.resVertical = '<?php _e( 'vertical', 'factory_forms_324' ) ?>';
+          factory.res.resHorizontal = '<?php _e( 'horizontal', 'factory_forms_324' ) ?>';
+      </script>
       <div <?php $this->attrs() ?>>
         <div class="factory-gradient-picker">
             

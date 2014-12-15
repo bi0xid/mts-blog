@@ -133,7 +133,7 @@
       }
       
       // call the Flickr API  
-      $url = "http://api.flickr.com/services/rest/?" . implode('&', $encoded_params);
+      $url = "https://api.flickr.com/services/rest/?" . implode('&', $encoded_params);
       
     
       $rsp = wp_remote_fopen($url);
