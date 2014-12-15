@@ -37,6 +37,16 @@ class JPIBFI_Selection_Options {
 		return apply_filters('jpibfi_default_selection_options', $defaults);
 	}
 
+	private function get_checkbox_settings(){
+		return array(
+			'show_on_home',
+			'show_on_single',
+			'show_on_page',
+			'show_on_category',
+			'show_on_blog'
+		);
+	}
+
 	/*
 	 * Defines selection options section and adds all required fields
 	 */
@@ -282,6 +292,13 @@ class JPIBFI_Selection_Options {
 					break;
 			}
 
+		}
+
+		$checkbox_settings = $this->get_checkbox_settings();
+		foreach($checkbox_settings as $setting_name){
+			if (false == array_key_exists( $setting_name, $input) ){
+				$input[ $setting_name ] = '0';
+			}
 		}
 
 		$errors = get_settings_errors();

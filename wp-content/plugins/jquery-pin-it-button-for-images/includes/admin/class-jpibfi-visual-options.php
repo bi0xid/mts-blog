@@ -43,7 +43,6 @@ class JPIBFI_Visual_Options {
 			'custom_image_width'  => '0',
 			'use_post_url'        => '0',
 			'button_position'			=> '0',
-			'mode'								=> 'static',
 			'button_margin_top'		=> '20',
 			'button_margin_right'	=> '20',
 			'button_margin_bottom'=> '20',
@@ -52,6 +51,14 @@ class JPIBFI_Visual_Options {
 		);
 
 		return apply_filters( 'jpibfi_default_visual_options', $defaults );
+	}
+
+	function get_checkbox_settings() {
+		return array(
+			'use_post_url',
+			'retina_friendly',
+			'use_custom_image'
+		);
 	}
 
 	/* Defines visual options section and defines all required fields */
@@ -66,17 +73,6 @@ class JPIBFI_Visual_Options {
 		);
 
 		//Then add all necessary fields to the section
-		add_settings_field(
-			'mode',
-			__( 'Mode', 'jpibfi' ),
-			array( $this, 'mode_option_callback' ),
-			'jpibfi_visual_options',
-			'visual_options_section',
-			array(
-				__( 'Static mode adds a layer on the top of the image that restricts image download, but works on websites that protect images download. Dynamic mode doesn\'t add that layer and allows image download. If you\'re experiencing issues with static mode, try using dynamic mode.', 'jpibfi' ),
-			)
-		);
-
 		add_settings_field(
 			'description_option',
 			__( 'Description source', 'jpibfi' ),
@@ -170,21 +166,6 @@ class JPIBFI_Visual_Options {
 		echo '<p>' . __('How it should look like', 'jpibfi') . '</p>';
 	}
 
-	public function mode_option_callback( $args ) {
-		$options = $this->get_visual_options();
-		$mode = $options[ 'mode' ];
-
-		?>
-
-		<select id="mode" name="jpibfi_visual_options[mode]">
-			<option value="static" <?php selected ( "static", $mode ); ?>><?php _e( 'Static', 'jpibfi' ); ?></option>
-			<option value="dynamic" <?php selected ( "dynamic", $mode ); ?>><?php _e( 'Dynamic', 'jpibfi' ); ?></option>
-		</select>
-
-		<?php
-		echo JPIBFI_Admin_Utilities::create_description( $args[0] );
-	}
-
 	public function description_option_callback( $args ) {
 		$options = $this->get_visual_options();
 
@@ -198,6 +179,7 @@ class JPIBFI_Visual_Options {
 			<option value="3" <?php selected ( "3", $description_option ); ?>><?php _e( 'Picture title or (if title not available) alt attribute', 'jpibfi' ); ?></option>
 			<option value="4" <?php selected ( "4", $description_option ); ?>><?php _e( 'Site title (Settings->General)', 'jpibfi' ); ?></option>
 			<option value="5" <?php selected ( "5", $description_option ); ?>><?php _e( 'Image description', 'jpibfi' ); ?></option>
+			<option value="6" <?php selected ( "6", $description_option ); ?>><?php _e( 'Image alt attribute', 'jpibfi' ); ?></option>
 		</select>
 
 		<?php
@@ -360,6 +342,12 @@ class JPIBFI_Visual_Options {
 					}
 					break;
 			}
+		}
+
+		$checkbox_settings = $this->get_checkbox_settings();
+		foreach($checkbox_settings as $setting_name){
+			if (false == array_key_exists( $setting_name, $input) )
+				$input[ $setting_name ] = '0';
 		}
 
 		$errors = get_settings_errors();

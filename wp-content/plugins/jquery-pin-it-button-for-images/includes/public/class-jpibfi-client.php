@@ -47,7 +47,6 @@ class JPIBFI_Client {
 
 		if ( ! ( JPIBFI_Client_Utilities::add_jpibfi() ) )
 			return;
-		//TODO minify
 		wp_enqueue_script( 'jquery-pin-it-button-script', JPIBFI_SCRIPT_URL . 'script.min.js', array( 'jquery' ), JPIBFI_VERSION . JPIBFI_VERSION_MINOR, false );
 
 		$use_custom_image = isset( $jpibfi_visual_options[ 'use_custom_image' ] ) && $jpibfi_visual_options[ 'use_custom_image' ] == "1";
@@ -61,7 +60,6 @@ class JPIBFI_Client {
 			'minImageHeight'	=> $jpibfi_selection_options['min_image_height'],
 			'minImageWidth'		=> $jpibfi_selection_options['min_image_width'],
 			'siteTitle'				=> get_bloginfo( 'name', 'display' ),
-			'mode'							=> $jpibfi_visual_options[ 'mode' ],
 			'buttonPosition'		=> $jpibfi_visual_options[ 'button_position' ],
 			'debug'							=> isset( $jpibfi_adanced_options[ 'debug'] ) ? $jpibfi_adanced_options[ 'debug'] : '0',
 			'containerSelector' => $jpibfi_adanced_options[ 'container_selector'],
@@ -70,7 +68,8 @@ class JPIBFI_Client {
 			'buttonMarginTop'	=> $jpibfi_visual_options[ 'button_margin_top' ],
 			'buttonMarginBottom'	=> $jpibfi_visual_options[ 'button_margin_bottom' ],
 			'buttonMarginLeft'=> $jpibfi_visual_options[ 'button_margin_left' ],
-			'buttonMarginRight'	=> $jpibfi_visual_options[ 'button_margin_right' ]
+			'buttonMarginRight'	=> $jpibfi_visual_options[ 'button_margin_right' ],
+			'retinaFriendly' => ( isset( $jpibfi_visual_options[ 'retina_friendly' ] ) && $jpibfi_visual_options[ 'retina_friendly' ] == '1' ) ? '1' : '0'
 		);
 
 		wp_localize_script( 'jquery-pin-it-button-script', 'jpibfi_options', apply_filters( 'jpibfi_javascript_parameters', $parameters_array ) );

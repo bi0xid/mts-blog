@@ -2,6 +2,7 @@
 class wfConfig {
 	public static $diskCache = array();
 	private static $diskCacheDisabled = false; //enables if we detect a write fail so we don't keep calling stat()
+	private static $cacheDisableCheckDone = false;
 	private static $table = false;
 	private static $cache = array();
 	private static $DB = false;
@@ -11,6 +12,7 @@ class wfConfig {
 		array( //level 0
 			"checkboxes" => array(
 				"alertOn_critical" => false,
+				"alertOn_update" => false,
 				"alertOn_warnings" => false,
 				"alertOn_throttle" => false,
 				"alertOn_block" => false,
@@ -56,8 +58,10 @@ class wfConfig {
 				"other_WFNet" => true,
 				"other_scanOutside" => false,
 				"deleteTablesOnDeact" => false,
+				"autoUpdate" => false,
 				"disableCookies" => false,
 				"startScansRemotely" => false,
+				"disableConfigCaching" => false,
 				"addCacheComment" => false,
 				"allowHTTPSCaching" => false,
 				"debugOn" => false
@@ -89,6 +93,7 @@ class wfConfig {
 		array( //level 1
 			"checkboxes" => array(
 				"alertOn_critical" => true,
+				"alertOn_update" => false,
 				"alertOn_warnings" => false,
 				"alertOn_throttle" => false,
 				"alertOn_block" => true,
@@ -134,8 +139,10 @@ class wfConfig {
 				"other_WFNet" => true,
 				"other_scanOutside" => false,
 				"deleteTablesOnDeact" => false,
+				"autoUpdate" => false,
 				"disableCookies" => false,
 				"startScansRemotely" => false,
+				"disableConfigCaching" => false,
 				"addCacheComment" => false,
 				"allowHTTPSCaching" => false,
 				"debugOn" => false
@@ -167,6 +174,7 @@ class wfConfig {
 		array( //level 2
 			"checkboxes" => array(
 				"alertOn_critical" => true,
+				"alertOn_update" => false,
 				"alertOn_warnings" => true,
 				"alertOn_throttle" => false,
 				"alertOn_block" => true,
@@ -212,8 +220,10 @@ class wfConfig {
 				"other_WFNet" => true,
 				"other_scanOutside" => false,
 				"deleteTablesOnDeact" => false,
+				"autoUpdate" => false,
 				"disableCookies" => false,
 				"startScansRemotely" => false,
+				"disableConfigCaching" => false,
 				"addCacheComment" => false,
 				"allowHTTPSCaching" => false,
 				"debugOn" => false
@@ -245,6 +255,7 @@ class wfConfig {
 		array( //level 3
 			"checkboxes" => array(
 				"alertOn_critical" => true,
+				"alertOn_update" => false,
 				"alertOn_warnings" => true,
 				"alertOn_throttle" => false,
 				"alertOn_block" => true,
@@ -290,8 +301,10 @@ class wfConfig {
 				"other_WFNet" => true,
 				"other_scanOutside" => false,
 				"deleteTablesOnDeact" => false,
+				"autoUpdate" => false,
 				"disableCookies" => false,
 				"startScansRemotely" => false,
+				"disableConfigCaching" => false,
 				"addCacheComment" => false,
 				"allowHTTPSCaching" => false,
 				"debugOn" => false
@@ -323,6 +336,7 @@ class wfConfig {
 		array( //level 4
 			"checkboxes" => array(
 				"alertOn_critical" => true,
+				"alertOn_update" => false,
 				"alertOn_warnings" => true,
 				"alertOn_throttle" => false,
 				"alertOn_block" => true,
@@ -368,8 +382,10 @@ class wfConfig {
 				"other_WFNet" => true,
 				"other_scanOutside" => false,
 				"deleteTablesOnDeact" => false,
+				"autoUpdate" => false,
 				"disableCookies" => false,
 				"startScansRemotely" => false,
+				"disableConfigCaching" => false,
 				"addCacheComment" => false,
 				"allowHTTPSCaching" => false,
 				"debugOn" => false
@@ -418,6 +434,21 @@ class wfConfig {
 			self::set('other_scanOutside', 0);
 		}
 	}
+	public static function getExportableOptionsKeys(){
+		$ret = array();
+		foreach(self::$securityLevels[2]['checkboxes'] as $key => $val){
+			$ret[] = $key;
+		}
+		foreach(self::$securityLevels[2]['otherParams'] as $key => $val){
+			if($key != 'apiKey'){
+				$ret[] = $key;
+			}
+		}
+		foreach(array('cbl_action', 'cbl_countries', 'cbl_redirURL', 'cbl_loggedInBlocked', 'cbl_loginFormBlocked', 'cbl_restOfSiteBlocked', 'cbl_bypassRedirURL', 'cbl_bypassRedirDest', 'cbl_bypassViewURL') as $key){
+			$ret[] = $key;
+		}
+		return $ret;
+	}
 	public static function parseOptions(){
 		$ret = array();
 		foreach(self::$securityLevels[2]['checkboxes'] as $key => $val){ //value is not used. We just need the keys for validation
@@ -448,7 +479,7 @@ class wfConfig {
 		self::$cache = array();
 	}
 	public static function getHTML($key){
-		return htmlspecialchars(self::get($key));
+		return wp_kses(self::get($key), array());
 	}
 	public static function inc($key){
 		$val = self::get($key, false);
@@ -458,6 +489,11 @@ class wfConfig {
 		self::set($key, $val + 1);
 	}
 	public static function set($key, $val){
+		if($key == 'disableConfigCaching'){
+			self::getDB()->queryWrite("insert into " . self::table() . " (name, val) values ('%s', '%s') ON DUPLICATE KEY UPDATE val='%s'", $key, $val, $val);
+			return;
+		}
+	
 		if(is_array($val)){
 			$msg = "wfConfig::set() got an array as second param with key: $key and value: " . var_export($val, true);
 			wordfence::status(1, 'error', $msg);
@@ -484,6 +520,19 @@ class wfConfig {
 		self::$diskCacheDisabled = true;
 	}
 	public static function get($key, $default = false){
+		if($key == 'disableConfigCaching'){
+			$val = self::getDB()->querySingle("select val from " . self::table() . " where name='%s'", $key);
+			return $val;
+		}
+
+		if(! self::$cacheDisableCheckDone){
+			self::$cacheDisableCheckDone = true;
+			$cachingDisabledSetting = self::getDB()->querySingle("select val from " . self::table() . " where name='%s'", 'disableConfigCaching');
+			if($cachingDisabledSetting == '1'){
+				self::$diskCacheDisabled = true;
+			}
+		}
+
 		if(! isset(self::$cache[$key])){ 
 			$val = self::loadFromDiskCache($key);
 			//$val = self::getDB()->querySingle("select val from " . self::table() . " where name='%s'", $key);
@@ -517,7 +566,9 @@ class wfConfig {
 			}
 		}
 		$val = self::getDB()->querySingle("select val from " . self::table() . " where name='%s'", $key);
-		if(self::$diskCacheDisabled){ return $val; }
+		if(self::$diskCacheDisabled){ 
+			return $val; 
+		}
 		wfConfig::$diskCache[$key] = isset($val) ? $val : '';
 		try {
 			$bytesWritten = @file_put_contents($cacheFile, self::$tmpFileHeader . serialize(wfConfig::$diskCache), LOCK_EX);
@@ -704,6 +755,55 @@ class wfConfig {
 	public static function liveTrafficEnabled(){
 		if( (! self::get('liveTrafficEnabled')) || self::get('cacheType') == 'falcon' || self::get('cacheType') == 'php'){ return false; }
 		return true;
+	}
+	public static function enableAutoUpdate(){
+		wfConfig::set('autoUpdate', '1');	
+		wp_schedule_event(time(), 'daily', 'wordfence_daily_autoUpdate');
+	}
+	public static function disableAutoUpdate(){
+		wfConfig::set('autoUpdate', '0');	
+		wp_clear_scheduled_hook('wordfence_daily_autoUpdate');
+	}
+	public static function autoUpdate(){
+		try {
+			if(getenv('noabort') != '1' && stristr($_SERVER['SERVER_SOFTWARE'], 'litespeed') !== false){
+				$lastEmail = self::get('lastLiteSpdEmail', false);
+				if( (! $lastEmail) || (time() - (int)$lastEmail > (86400 * 30))){
+					self::set('lastLiteSpdEmail', time());
+					 wordfence::alert("Wordfence Upgrade not run. Please modify your .htaccess", "To preserve the integrity of your website we are not running Wordfence auto-update.\n" .
+						"You are running the LiteSpeed web server which has been known to cause a problem with Wordfence auto-update.\n" .
+						"Please go to your website now and make a minor change to your .htaccess to fix this.\n" .
+						"You can find out how to make this change at:\n" .
+						"https://support.wordfence.com/solution/articles/1000129050-running-wordfence-under-litespeed-web-server-and-preventing-process-killing-or\n" .
+						"\nAlternatively you can disable auto-update on your website to stop receiving this message and upgrade Wordfence manually.\n",
+						'127.0.0.1'
+						);
+				}
+				return;
+			}
+			require_once(ABSPATH . 'wp-admin/includes/class-wp-upgrader.php');
+			require_once(ABSPATH . 'wp-admin/includes/misc.php');
+			/* We were creating show_message here so that WP did not write to STDOUT. This had the strange effect of throwing an error about redeclaring show_message function, but only when a crawler hit the site and triggered the cron job. Not a human. So we're now just require'ing misc.php which does generate output, but that's OK because it is a loopback cron request.  
+			if(! function_exists('show_message')){ 
+				function show_message($msg = 'null'){}
+			}
+			*/
+			define('FS_METHOD', 'direct');
+			require_once(ABSPATH . 'wp-includes/update.php');
+			require_once(ABSPATH . 'wp-admin/includes/file.php');
+			wp_update_plugins();
+			ob_start();
+			$upgrader = new Plugin_Upgrader();
+			$upret = $upgrader->upgrade('wordfence/wordfence.php');
+			if($upret){
+				$cont = file_get_contents(WP_PLUGIN_DIR . '/wordfence/wordfence.php');
+				if(wfConfig::get('alertOn_update') == '1' && preg_match('/Version: (\d+\.\d+\.\d+)/', $cont, $matches) ){
+					wordfence::alert("Wordfence Upgraded to version " . $matches[1], "Your Wordfence installation has been upgraded to version " . $matches[1], '127.0.0.1');
+				}
+			}
+			$output = @ob_get_contents();
+			@ob_end_clean();
+		} catch(Exception $e){}
 	}
 }
 ?>

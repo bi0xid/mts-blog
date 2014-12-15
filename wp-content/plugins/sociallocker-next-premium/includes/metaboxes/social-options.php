@@ -1,4 +1,4 @@
-<?php #comp-page builds: premium
+<?php
 /**
  * The file contains a class to configure the metabox Social Options.
  * 
@@ -50,7 +50,7 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
      */
     public $priority = 'core';
 	
-    public $cssClass = 'factory-bootstrap-320';
+    public $cssClass = 'factory-bootstrap-325';
     
     public function __construct( $plugin ) {
         parent::__construct( $plugin );
@@ -64,7 +64,7 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
      * @see FactoryMetaboxes320_FormMetabox
      * @since 1.0.0
      * 
-     * @param FactoryForms320_Form $form A form object to configure.
+     * @param FactoryForms324_Form $form A form object to configure.
      * @return void
      */ 
     public function form( $form ) {
@@ -75,7 +75,13 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
             'class'     => 'social-settings-tab',
             'items'     => array()
         );
+            $facebookIsActiveByDefault = true;
+            $twitterActiveByDefault = true;
+            $googleIsActiveByDefault = true;
+            $vkIsActiveByDefault = false; 
         
+
+
         // - Facebook Like Tab
         
         $tabs['items'][] = array(
@@ -87,20 +93,20 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
                     'type'  => 'checkbox',
                     'way'   => 'buttons',
                     'title' => __('Available', 'sociallocker'),
-                    'hint'  => __('Set Off to hide the Like Button.', 'sociallocker'),
+                    'hint'  => __('Set On, to activate the button.', 'sociallocker'),
                     'name'  => 'facebook-like_available',
-                    'default' => true
+                    'default' => $facebookIsActiveByDefault
                 ),        
                 array(
                     'type'  => 'url',
                     'title' => __('URL to like', 'sociallocker'),
-                    'hint'  => __('Set any URL to like (a fanpage or website). Leave this field empty to use a current page.', 'sociallocker'),
+                    'hint'  => __('Set an URL (a facebook page or website page) which the user has to like in order to unlock your content. Leave this field empty to use an URL of the page where the locker will be located.', 'sociallocker'),
                     'name'  => 'facebook_like_url'
                 ),
                 array(
                     'type'  => 'textbox',
                     'title' => __('Button Title', 'sociallocker'),
-                    'hint'  => __('Optional. A visible title of the buttons that is used in some themes (by default only in the Secrets theme).', 'sociallocker'),
+                    'hint'  => __('Optional. A title of the button that is situated on the covers in the themes "Secrets" and "Flat".', 'sociallocker'),
                     'name'  => 'facebook_like_title',
                     'default' => __('like', 'sociallocker')
                 ),  
@@ -108,7 +114,7 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
                 array(
                     'type'      => 'more-link',
                     'name'      => 'like-button-options',
-                    'title'     => 'Show more options',
+                    'title'     => __('Show more options', 'sociallocker'),
                     'count'     => 1,
                     'items'     => array(
                         
@@ -125,6 +131,8 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
             )
         );
         
+        
+        
         // - Twitter Tweet Tab
         
         $tabs['items'][] = array(
@@ -137,20 +145,20 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
                     'type'  => 'checkbox',
                     'way'   => 'buttons',
                     'title' => __('Available', 'sociallocker'),
-                    'hint'  => __('Set Off to hide the Tweet Button.', 'sociallocker'),
+                    'hint'  => __('Set On, to activate the button.', 'sociallocker'),
                     'name'  => 'twitter-tweet_available',
-                    'default' => true
+                    'default' => $twitterActiveByDefault
                 ),        
                 array(
                     'type'  => 'url',
                     'title' => __('URL to tweet', 'sociallocker'),
-                    'hint'  => __('Set any URL to tweet. Leave this field empty to use a current page.', 'sociallocker'),
+                    'hint'  => __('Set an URL which the user has to tweet in order to unlock your content. Leave this field empty to use an URL of the page where the locker will be located.', 'sociallocker'),
                     'name'  => 'twitter_tweet_url'
                 ),
                 array(
                     'type'  => 'textarea',
                     'title' => __('Tweet', 'sociallocker'),
-                    'hint'  => __('Leave this field empty to use default tweet (page title + URL). Also you can use shortcode: [post_title].', 'sociallocker'),
+                    'hint'  => __('Type a message to tweet. Leave this field empty to use default tweet (page title + URL). Also you can use the shortcode [post_title] in order to insert automatically a post title into the tweet.', 'sociallocker'),
                     'name'  => 'twitter_tweet_text'
                 ), 
                 array(
@@ -168,7 +176,7 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
                 array(
                     'type'  => 'textbox',
                     'title' => __('Button Title', 'sociallocker'),
-                    'hint'  => __('Optional. A visible title of the buttons that is used in some themes (by default only in the Secrets theme).', 'sociallocker'),
+                    'hint'  => __('Optional. A title of the button that is situated on the covers in the themes "Secrets" and "Flat".', 'sociallocker'),
                     'name'  => 'twitter_tweet_title',
                     'default' => __('tweet', 'sociallocker')
                 ),
@@ -187,20 +195,20 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
                     'type'  => 'checkbox',
                     'way'   => 'buttons',
                     'title' => __('Available', 'sociallocker'),
-                    'hint'  => __('Set Off to hide the Google +1 Button.', 'sociallocker'),
+                    'hint'  => __('Set On, to activate the button.', 'sociallocker'),
                     'name'  => 'google-plus_available',
-                    'default' => true
+                    'default' => $googleIsActiveByDefault
                 ),      
                 array(
                     'type'  => 'url',
                     'title' => __('URL to +1', 'sociallocker'),
-                    'hint'  => __('Set any URL to +1 (for example, main page of your site). Leave this field empty to use a current page.', 'sociallocker'),
+                    'hint'  => __('Set an URL which the user has to +1 in order to unlock your content. Leave this field empty to use an URL of the page where the locker will be located.', 'sociallocker'),
                     'name'  => 'google_plus_url'
                 ),
                 array(
                     'type'  => 'textbox',
                     'title' => __('Button Title', 'sociallocker'),
-                    'hint'  => __('Optional. A visible title of the buttons that is used in some themes (by default only in the Secrets theme).', 'sociallocker'),
+                    'hint'  => __('Optional. A title of the button that is situated on the covers in the themes "Secrets" and "Flat".', 'sociallocker'),
                     'name'  => 'google_plus_title',
                     'default' => __('+1 us', 'sociallocker')
                 ) 
@@ -209,34 +217,38 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
         
         // - Facebook Share Tab
         
+        // if the user has not updated the facebook app id, show a notice
+        $facebookAppId = get_option('sociallocker_facebook_appid', '117100935120196' );
+        
         $tabs['items'][] = array(
             'type'      => 'tab-item',
             'name'      => 'facebook-share',
             'items'     => array(
                 array(
+                    'off' =>   !empty($facebookAppId) && $facebookAppId !== '117100935120196',
                     'type'  => 'html',
                     'html'  => '<div class="alert alert-warning">'.
-                                __('Please make sure that you <a href="edit.php?post_type=social-locker&page=common-settings-sociallocker-rus">set a facebook app id</a> for your domain, otherwise the button will not work. The Facebook Share button requires an app id registered for a domain where it\'s used.', 'sociallocker')
+                                sprintf( __('Please make sure that you <a href="%s">set a facebook app id</a> for your domain, otherwise the button will not work. The Facebook Share button requires an app id registered for a domain where it\'s used.', 'sociallocker'), admin_url( 'edit.php?post_type=social-locker&page=common-settings-' . $this->plugin->pluginName ) )
                                 .'</div>'
                 ),
                 array(
                     'type'  => 'checkbox',
                     'way'   => 'buttons',
                     'title' => __('Available', 'sociallocker'),
-                    'hint'  => __('Set Off to hide the Share Button.', 'sociallocker'),
+                    'hint'  => __('Set On, to activate the button.', 'sociallocker'),
                     'name'  => 'facebook-share_available',
                     'default' => false
                 ),        
                 array(
                     'type'  => 'url',
                     'title' => __('URL to share', 'sociallocker'),
-                    'hint'  => __('Set any URL to share. Leave this field empty to use a current page.', 'sociallocker'),
+                    'hint'  => __('Set an URL which the user has to share in order to unlock your content. Leave this field empty to use an URL of the page where the locker will be located.', 'sociallocker'),
                     'name'  => 'facebook_share_url'
                 ),
                 array(
                     'type'  => 'textbox',
                     'title' => __('Button Title', 'sociallocker'),
-                    'hint'  => __('Optional. A visible title of the buttons that is used in some themes (by default only in the Secrets theme).', 'sociallocker'),
+                    'hint'  => __('Optional. A title of the button that is situated on the covers in the themes "Secrets" and "Flat".', 'sociallocker'),
                     'name'  => 'facebook_share_title',
                     'default' => __('share', 'sociallocker')
                 ),
@@ -296,20 +308,20 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
                     'type'  => 'checkbox',
                     'way'   => 'buttons',
                     'title' => __('Available', 'sociallocker'),
-                    'hint'  => __('Set Off to hide the Follow Button.', 'sociallocker'),
+                    'hint'  => __('Set On, to activate the button.', 'sociallocker'),
                     'name'  => 'twitter-follow_available',
                     'default' => false
                 ),        
                 array(
                     'type'  => 'url',
                     'title' => __('User to follow', 'sociallocker'),
-                    'hint'  => __('Set a URL of a Twitter user to follow.', 'sociallocker'),
+                    'hint'  => __('Set a full URL of your Twitter profile to which the user has to follow in order to unlock your content.', 'sociallocker'),
                     'name'  => 'twitter_follow_url'
                 ),  
                 array(
                     'type'  => 'textbox',
                     'title' => __('Button Title', 'sociallocker'),
-                    'hint'  => __('Optional. A visible title of the buttons that is used in some themes (by default only in the Secrets theme).', 'sociallocker'),
+                    'hint'  => __('Optional. A title of the button that is situated on the covers in the themes "Secrets" and "Flat".', 'sociallocker'),
                     'name'  => 'twitter_follow_title',
                     'default' => __('follow us', 'sociallocker')
                 )
@@ -325,26 +337,26 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
                 array(
                     'type'  => 'html',
                     'html'  => '<div class="alert alert-warning">'.
-                                __('<strong>Warning!</strong> The Google Share button is an experimental. The Google API doesn\'t allow to catch correctly the moment when a user clicks on the button. So the content appears even if a user hovers a mouse pointer on the button. Please don\'t use it if you\'re not sure that you do.', 'sociallocker').
+                                __('<strong>Warning!</strong> The Google Share button will not appear on mobile devices because it\'s not possible to catch the moment when the mobile user clicks on the button. Also please pay attention the plugin cannot track whether the user shared actually or not. If the user closes the Share Dialog without sharing, the content will be unlocked.', 'sociallocker').
                                 '</div>'
                 ),
                 array(
                     'type'  => 'checkbox',
                     'way'   => 'buttons',
                     'title' => __('Available', 'sociallocker'),
-                    'hint'  => __('Set Off to hide the Google Share Button.', 'sociallocker'),
+                    'hint'  => __('Set On, to activate the button.', 'sociallocker'),
                     'name'  => 'google-share_available'
                 ),      
                 array(
                     'type'  => 'url',
-                    'title' => __('URL to +1', 'sociallocker'),
-                    'hint'  => __('Set any URL to Share (for example, main page of your site). Leave this field empty to use a current page.', 'sociallocker'),
+                    'title' => __('URL to share', 'sociallocker'),
+                    'hint'  => __('Set an URL which the user has to share in order to unlock your content. Leave this field empty to use an URL of the page where the locker will be located.', 'sociallocker'),
                     'name'  => 'google_share_url'
                 ),  
                 array(
                     'type'  => 'textbox',
                     'title' => __('Button Title', 'sociallocker'),
-                    'hint'  => __('Optional. A visible title of the buttons that is used in some themes (by default only in the Secrets theme).', 'sociallocker'),
+                    'hint'  => __('Optional. A title of the button that is situated on the covers in the themes "Secrets" and "Flat".', 'sociallocker'),
                     'name'  => 'google_share_title',
                     'default' => __('share', 'sociallocker')
                 )
@@ -362,27 +374,27 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
                     'type'  => 'checkbox',
                     'way'   => 'buttons',
                     'title' => __('Available', 'sociallocker'),
-                    'hint'  => __('Set Off to hide the LingedIn Share Button.', 'sociallocker'),
+                    'hint'  => __('Set On, to activate the button.', 'sociallocker'),
                     'name'  => 'linkedin-share_available',
                     'default' => false
                 ),      
                 array(
                     'type'  => 'url',
-                    'title' => __('URL to +1', 'sociallocker'),
-                    'hint'  => __('Set any URL to Share (for example, main page of your site). Leave this field empty to use a current page.', 'sociallocker'),
+                    'title' => __('URL to share', 'sociallocker'),
+                    'hint'  => __('Set an URL which the user has to share in order to unlock your content. Leave this field empty to use an URL of the page where the locker will be located.', 'sociallocker'),
                     'name'  => 'linkedin_share_url'
                 ),  
                 array(
                     'type'  => 'textbox',
                     'title' => __('Button Title', 'sociallocker'),
-                    'hint'  => __('Optional. A visible title of the buttons that is used in some themes (by default only in the Secrets theme).', 'sociallocker'),
+                    'hint'  => __('Optional. A title of the button that is situated on the covers in the themes "Secrets" and "Flat".', 'sociallocker'),
                     'name'  => 'linkedin_share_title',
                     'default' => __('share', 'sociallocker')
                 )
             )
         );
         
-        $tabs = apply_filters('onp_social_options', $tabs);
+        $tabs = apply_filters('onp_sl_social_options', $tabs);
         
         $form->add(array(  
   
@@ -405,7 +417,7 @@ class OnpSL_SocialOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
             array(
                 'type'      => 'hidden',
                 'name'      => 'buttons_order',
-                'default'   => 'twitter-tweet,facebook-like,google-plus'
+                'default'   => 'vk-like,twitter-tweet,facebook-like'
             ),
             
             $tabs

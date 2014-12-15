@@ -1,4 +1,4 @@
-<?php #comp-page builds: premium, offline
+<?php
 /**
  * The file contains a class to configure the metabox Visibility Options.
  * 
@@ -67,7 +67,7 @@ class OnpSL_VisabilityOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
         $this->title = __('Visibility Options', 'sociallocker');
     }
     
-    public $cssClass = 'factory-bootstrap-320';
+    public $cssClass = 'factory-bootstrap-325';
     
     /**
      * Configures a form that will be inside the metabox.
@@ -75,7 +75,7 @@ class OnpSL_VisabilityOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
      * @see FactoryMetaboxes320_FormMetabox
      * @since 1.0.0
      * 
-     * @param FactoryForms320_Form $form A form object to configure.
+     * @param FactoryForms324_Form $form A form object to configure.
      * @return void
      */ 
     public function form( $form ) {
@@ -126,6 +126,8 @@ class OnpSL_VisabilityOptionsMetaBox extends FactoryMetaboxes320_FormMetabox
                 'default'   => true
             )
         ));  
+        
+        
     }
         
     public function htmlLockDelayOptions() {

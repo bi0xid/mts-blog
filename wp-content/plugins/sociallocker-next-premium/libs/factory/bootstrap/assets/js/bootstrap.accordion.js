@@ -5,7 +5,7 @@
 ;(function ( $, window, document, undefined ) {
     "use strict"; // jshint ;_;
     
-    $.fn.factoryBootstrap320_accordion = function(){         
+    $.fn.factoryBootstrap325_accordion = function(){         
         return this.each(function () {           
             var $self = $(this); 
             var startAnimation = false;
@@ -43,7 +43,7 @@
   }  
   
   $(function(){
-    $('.factory-bootstrap-320 .factory-accordion').factoryBootstrap320_accordion();
+    $('.factory-bootstrap-325 .factory-accordion').factoryBootstrap325_accordion();
   });
   
 })( jQuery, window, document );

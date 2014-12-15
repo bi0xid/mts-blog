@@ -26,7 +26,7 @@
 		jpibfi.fn = {};
 
 		jpibfi.fn.getImageUrl = function( $elem ) {
-			return $elem.data('media') || $elem.attr('src');
+			return ($.fn.prop && $elem.prop('src')) || $elem.attr('src');
 		};
 
 		/* FUNCTIONS THAT SHOULDN'T BE OVERRIDDEN */
@@ -53,17 +53,7 @@
 			jpibfiLog( 'Min width:' + jpibfi.settings.minImageWidth);
 			jpibfiLog( 'Min height:' + jpibfi.settings.minImageHeight);
 			var imageCount = 0;
-			$elements.each(function () {
-				var $image = $(this);
-				if ( this.clientWidth < jpibfi.settings.minImageWidth || this.clientHeight < jpibfi.settings.minImageHeight ) {
-					$image.removeAttr( 'data-jpibfi-indexer' );
-					return;
-				}
-				if ( jpibfi.settings.mode == 'static' )
-					jpibfiCreateAndShowOverlayDiv( $image, jpibfi.settings.buttonPosition );
-
-				imageCount++;
-			});
+			$elements.each(function () { imageCount++; });
 			jpibfiLog( 'Images caught after filtering: ' + imageCount );
 		};
 
@@ -86,6 +76,12 @@
 			pinButtonDimensions = {
 				height: parseInt( jpibfi_options.pinImageHeight ),
 				width: parseInt( jpibfi_options.pinImageWidth )
+			}
+
+			//adjust button size if retina active
+			if (jpibfi.settings.retinaFriendly == 1){
+				pinButtonDimensions.height = pinButtonDimensions.height/2;
+				pinButtonDimensions.width = pinButtonDimensions.width/2;
 			}
 
 			pinButtonMargins = {
@@ -114,96 +110,84 @@
 
 			//EVENT HANDLING - ADDING EVERY NEEDED EVENT
 
-			if ( 'static' == jpibfi.settings.mode) {
+			$( document ).delegate( 'a.pinit-button', 'mouseenter', function() {
+				var $button = $( this );
+				clearTimeout( $button.data('jpibfi-timeoutId') );
+			});
 
-				jpibfiLog( 'Adding static mode delegates');
+			$( document ).delegate( 'a.pinit-button', 'mouseleave', function() {
+				var $button = $( this );
+				var timeoutId = setTimeout( function(){
+					$button.remove();
+					$('img[data-jpibfi-indexer="' + $button.data( 'jpibfi-indexer' ) + '"]').removeClass( 'pinit-hover' );
+				}, 100 );
+				$button.data('jpibfi-timeoutId', timeoutId);
+			});
 
-				$( document).delegate( 'div.pinit-overlay', 'hover', function( event ) {
-					var hover = event.type === 'mouseenter';
-					var indexer = $(this).data("jpibfi-indexer");
-					$('.pinit-button[data-jpibfi-indexer="' + indexer + '"]').toggle( hover );
-					$('img[data-jpibfi-indexer="' + indexer + '"]').toggleClass( 'pinit-hover', hover );
-				});
+			$( document ).delegate( 'img[data-jpibfi-indexer]', 'mouseenter', function() {
+				var $image = $( this );
 
-			} else if ( 'dynamic' == jpibfi.settings.mode ) {
+				if (jpibfiCheckImageSize ( $image) == false ){
+					$image.removeAttr( 'data-jpibfi-indexer' );
+					return;
+				}
 
-				jpibfiLog( 'Adding dynamic mode delegates');
+				var indexer = $image.data( 'jpibfi-indexer' );
+				var $button = $('a.pinit-button[data-jpibfi-indexer="' + indexer + '"]');
 
-				$( document ).delegate( 'a.pinit-button', 'mouseenter', function() {
-					var $button = $( this );
-					clearTimeout( $button.data('jpibfi-timeoutId') );
-				});
-
-				$( document ).delegate( 'a.pinit-button', 'mouseleave', function() {
-					var $button = $( this );
-					var timeoutId = setTimeout( function(){
-						$button.remove();
-						$('img[data-jpibfi-indexer="' + $button.data( 'jpibfi-indexer' ) + '"]').removeClass( 'pinit-hover' );
-					}, 100 );
-					$button.data('jpibfi-timeoutId', timeoutId);
-				});
-
-				$( document ).delegate( 'img[data-jpibfi-indexer]', 'mouseenter', function() {
-					var $image = $( this );
-					var indexer = $image.data( 'jpibfi-indexer' );
-
-					var $button = $('a.pinit-button[data-jpibfi-indexer="' + indexer + '"]');
-
-					if ( $button.length == 0 ) {
-						//button doesn't exist so we need to create it
-						$button = jpibfiCreatePinitButton( indexer );
-						var position = $image.offset();
-						var imageDimensions = {
-							width: $image.get(0).clientWidth,
-							height: $image.get(0).clientHeight
-						}
-
-						switch( jpibfi.settings.buttonPosition ){
-							case '0': //top-left
-								position.left += pinButtonMargins.left;
-								position.top += pinButtonMargins.top;
-								break;
-							case '1': //top-right
-								position.top += pinButtonMargins.top;
-								position.left = position.left + imageDimensions.width - pinButtonMargins.right - pinButtonDimensions.width;
-								break;
-							case '2': //bottom-left;
-								position.left += pinButtonMargins.left;
-								position.top = position.top + imageDimensions.height - pinButtonMargins.bottom - pinButtonDimensions.height;
-								break;
-							case '3': //bottom-right
-								position.left = position.left + imageDimensions.width - pinButtonMargins.right - pinButtonDimensions.width;
-								position.top = position.top + imageDimensions.height - pinButtonMargins.bottom - pinButtonDimensions.height;
-								break;
-							case '4': //middle
-								position.left = Math.round( position.left + imageDimensions.width / 2 - pinButtonDimensions.width / 2 );
-								position.top = Math.round( position.top + imageDimensions.height / 2 - pinButtonDimensions.height / 2 );
-								break;
-						}
-
-						$image.after( $button );
-						$button
-							.show()
-							.offset({ left: position.left, top: position.top });
-					} else {
-						//button exists, we need to clear the timeout that has to remove it
-						clearTimeout( $button.data('jpibfi-timeoutId') );
+				if ( $button.length == 0 ) {
+					//button doesn't exist so we need to create it
+					$button = jpibfiCreatePinitButton( indexer );
+					var position = $image.offset();
+					var imageDimensions = {
+						width: $image.get(0).clientWidth,
+						height: $image.get(0).clientHeight
 					}
-					$image.addClass( 'pinit-hover' );
-				});
 
-				$( document).delegate( 'img[data-jpibfi-indexer]', 'mouseleave', function() {
-					var indexer = $(this).data("jpibfi-indexer");
-					var $button = $('a.pinit-button[data-jpibfi-indexer="' + indexer + '"]');
+					switch( jpibfi.settings.buttonPosition ){
+						case '0': //top-left
+							position.left += pinButtonMargins.left;
+							position.top += pinButtonMargins.top;
+							break;
+						case '1': //top-right
+							position.top += pinButtonMargins.top;
+							position.left = position.left + imageDimensions.width - pinButtonMargins.right - pinButtonDimensions.width;
+							break;
+						case '2': //bottom-left;
+							position.left += pinButtonMargins.left;
+							position.top = position.top + imageDimensions.height - pinButtonMargins.bottom - pinButtonDimensions.height;
+							break;
+						case '3': //bottom-right
+							position.left = position.left + imageDimensions.width - pinButtonMargins.right - pinButtonDimensions.width;
+							position.top = position.top + imageDimensions.height - pinButtonMargins.bottom - pinButtonDimensions.height;
+							break;
+						case '4': //middle
+							position.left = Math.round( position.left + imageDimensions.width / 2 - pinButtonDimensions.width / 2 );
+							position.top = Math.round( position.top + imageDimensions.height / 2 - pinButtonDimensions.height / 2 );
+							break;
+					}
 
-					var timeoutId = setTimeout(function(){
-						$button.remove();
-						$('img[data-jpibfi-indexer="' + $button.data( 'jpibfi-indexer' ) + '"]').removeClass( 'pinit-hover' );
-					}, 100 );
-					$button.data('jpibfi-timeoutId', timeoutId);
-				});
+					$image.after( $button );
+					$button
+						.show()
+						.offset({ left: position.left, top: position.top });
+				} else {
+					//button exists, we need to clear the timeout that has to remove it
+					clearTimeout( $button.data('jpibfi-timeoutId') );
+				}
+				$image.addClass( 'pinit-hover' );
+			});
 
-			}
+			$( document).delegate( 'img[data-jpibfi-indexer]', 'mouseleave', function() {
+				var indexer = $(this).data("jpibfi-indexer");
+				var $button = $('a.pinit-button[data-jpibfi-indexer="' + indexer + '"]');
+
+				var timeoutId = setTimeout(function(){
+					$button.remove();
+					$('img[data-jpibfi-indexer="' + $button.data( 'jpibfi-indexer' ) + '"]').removeClass( 'pinit-hover' );
+				}, 100 );
+				$button.data('jpibfi-timeoutId', timeoutId);
+			});
 		};
 
 		return jpibfi;
@@ -216,7 +200,7 @@
 				href: '#',
 				"class": 'pinit-button',
 				"data-jpibfi-indexer": indexer,
-				text: "Pin It"
+				text: ""
 			});
 
 			$anchor.click( function(e) {
@@ -246,6 +230,8 @@
 					bookmarkDescription = jpibfi.settings.siteTitle;
 				else if ( jpibfi.settings.descriptionOption == 5 )
 					bookmarkDescription = $image.data( 'jpibfi-description' );
+				else if ( jpibfi.settings.descriptionOption == 6 )
+					bookmarkDescription = $image.attr('alt');
 
 				bookmarkDescription = bookmarkDescription || ( descriptionForUrl || jpibfi.settings.pageTitle );
 
@@ -260,36 +246,10 @@
 			return $anchor;
 		}
 
-
-		function jpibfiCreateAndShowOverlayDiv( $image, buttonPosition ) {
-			var position = $image.offset();
-
-			var $overlay = jpibfiCreateOverlayDiv( $image, buttonPosition );
-
-			$image.after( $overlay );
-
-			$overlay
-					.css({
-						height: $image.get(0).clientHeight + 'px',
-						width: $image.get(0).clientWidth + 'px'
-					})
-					.show()
-					.offset({ left: position.left, top: position.top });
-
-			return $overlay;
-		}
-
-		//function creates an overlay div that covers the image
-		function jpibfiCreateOverlayDiv( $image, buttonPosition ) {
-
-			var indexer = $image.data("jpibfi-indexer");
-
-			return jQuery('<div/>', {
-				"class": 'pinit-overlay',
-				"data-jpibfi-indexer": indexer,
-				title: $image.attr( 'title' )  || '',
-				html: jpibfiCreatePinitButton( indexer).addClass( jpibfiButtonPositionToClass( buttonPosition ))
-			})
+		function jpibfiCheckImageSize( $image ) {
+			if ( $image[0].clientWidth < jpibfi.settings.minImageWidth || $image[0].clientHeight < jpibfi.settings.minImageHeight )
+				return false;
+			return true;
 		}
 
 		/* PRIVATE UTILITY FUNCTIONS */
@@ -350,7 +310,9 @@
 	$(document).ready( function() {
 		jpibfi.init( jpibfi_options );
 
+		$(document).trigger('jpibfi_beforeAddImages', {});
 		jpibfi.addImages( jpibfi_options.imageSelector );
+		$(document).trigger('jpibfi_afterAddImages', {});
 
 		$(window).load( function() {
 			jpibfi.prepareImages( $('img[data-jpibfi-indexer]') );

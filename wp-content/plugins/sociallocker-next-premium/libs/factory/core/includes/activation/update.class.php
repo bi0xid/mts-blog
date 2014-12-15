@@ -14,15 +14,15 @@
  * 
  * @since 1.0.0
  */
-abstract class Factory320_Update {
+abstract class Factory324_Update {
     
     /**
      * Current plugin
-     * @var Factory320_Plugin
+     * @var Factory324_Plugin
      */
     var $plugin;
     
-    public function __construct( Factory320_Plugin $plugin ){
+    public function __construct( Factory324_Plugin $plugin ){
         $this->plugin = $plugin;
     }
     

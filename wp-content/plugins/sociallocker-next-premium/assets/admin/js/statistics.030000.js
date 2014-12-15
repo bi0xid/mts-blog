@@ -15,7 +15,8 @@ if ( !window.onpsl.statistics ) window.onpsl.statistics = {};
             "google-share": '#ba5145', 
             "linkedin-share": '#006080',
             "vk-like": '#517296', 
-            "vk-subscribe": '#517296',
+            "vk-share": '#435c77',
+            "vk-subscribe": '#435c77',
             "ok-klass": '#f3800d'
         },
         
@@ -73,14 +74,14 @@ if ( !window.onpsl.statistics ) window.onpsl.statistics = {};
             var self = this;
             
             var activeButtons = this.getPreSelectedButtons();
-            
+              
             for(var buttonName in this.availableButtons) {
                 var item = $(".onp-sl-chart-item." + buttonName);
-                
+                             
                 if ( $.inArray( buttonName, activeButtons ) > -1 ) {
                     item.addClass('active');
                     $("#onp-sl-posts .col-" + buttonName).show();
-                } else {
+                } else {                    
                     item.removeClass('active');
                     $("#onp-sl-posts .col-" + buttonName).hide();
                 }
@@ -98,7 +99,7 @@ if ( !window.onpsl.statistics ) window.onpsl.statistics = {};
                     $(this).addClass('active');
                     $("#onp-sl-posts .col-" + buttonName).show();
                 }
-                
+
                 self.savePreSelectedButtons();
                 self.drawChart();
             });
@@ -143,6 +144,9 @@ if ( !window.onpsl.statistics ) window.onpsl.statistics = {};
                 if ( window.localStorage ) window.localStorage.setItem('admin-sociallocker-chart-type', type);
                 $(this).addClass("active");
                 self.drawChart(type);
+                
+                $(document).find(".onp-chart-hint").hide();
+                $(document).find(".onp-chart-hint-" + type).fadeIn();
             });
 
             if ( window.localStorage ) {
@@ -206,9 +210,9 @@ if ( !window.onpsl.statistics ) window.onpsl.statistics = {};
                 
                 options.legend.position = 'in';
                 options.areaOpacity = 0.1;
-                options.colors = [ window.onpsl.factoryBootstrap320.colors.primaryDark ];
+                options.colors = [ window.onpsl.factoryBootstrap325.colors.primaryDark ];
                 
-                dataTable.addColumn('number', 'Total social impact');
+                dataTable.addColumn('number', window.onpsl.res.total_social_impact);
                 dataTable.addColumn({type:'string',role:'tooltip'});
                 
                 data = [];
@@ -255,11 +259,11 @@ if ( !window.onpsl.statistics ) window.onpsl.statistics = {};
                 chartFunction = 'ColumnChart';
                 
                 options.legend.position = 'in';
-                options.colors = [window.onpsl.factoryBootstrap320.colors.primaryDark, '#333', '#ddd'];    
+                options.colors = [window.onpsl.factoryBootstrap325.colors.primaryDark, '#333', '#ddd'];    
                 
-                dataTable.addColumn('number', 'Unlocked by Buttons');
-                dataTable.addColumn('number', 'Unlocked by Timer');
-                dataTable.addColumn('number', 'Unlocked by Close Icon'); 
+                dataTable.addColumn('number', window.onpsl.res.unlocked_by_buttons);
+                dataTable.addColumn('number', window.onpsl.res.unlocked_by_timer);
+                dataTable.addColumn('number', window.onpsl.res.unlocked_by_close_icon); 
                 
                 data = [];
                 for(var rowIndex in chartData) {
@@ -274,7 +278,31 @@ if ( !window.onpsl.statistics ) window.onpsl.statistics = {};
                     var chartRow = [ row['date'], totalCount, row['timer'], row['cross'] ];
                     data.push(chartRow);
                 }
+            } else if (this.currentType == 'errors') {
+                chartFunction = 'AreaChart';
+                
+                options.legend.position = 'in';
+                options.areaOpacity = 0.1;
+                options.colors = [ '#e00' ];
+                
+                dataTable.addColumn('number', window.onpsl.res.na);
+                dataTable.addColumn({type:'string',role:'tooltip'});
+                
+                data = [];
+                for(var rowIndex in chartData) {
+                    var row = chartData[rowIndex];
+                    
+                    var totalCount = 0;
+                    for(index in activeButtons) {
+                        button = activeButtons[index];
+                        totalCount += row[button];
+                    }
+                    
+                    var chartRow = [ row['date'], row['na'], '' + row['na'] ];
+                    data.push(chartRow);
+                }
             }
+            
 
             dataTable.addRows(data);
             
@@ -285,7 +313,7 @@ if ( !window.onpsl.statistics ) window.onpsl.statistics = {};
     };
 
     $(function(){
-        window.onpsl.statistics.init();
+        window.onpsl.statistics.init();       
     });
     
 })(jQuery)

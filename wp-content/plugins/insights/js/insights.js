@@ -1,11 +1,11 @@
 // Insights for WordPress plugin
 
 function send_wp_editor(html) {
-    var win = window.dialogArguments || opener || parent || top;
-    win.send_to_editor(html);
+ //   var win = window.dialogArguments || opener || parent || top;
+   // win.send_to_editor(html);
 
     // alternatively
-    // tinyMCE.execCommand("mceInsertContent", false, html);
+     tinyMCE.execCommand("mceInsertContent", false, html);
 }
 
 function insert_link(html_link) {

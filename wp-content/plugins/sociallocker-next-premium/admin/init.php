@@ -21,7 +21,9 @@ include_once(ONP_SL_PLUGIN_DIR . '/admin/pages/common-settings.php');
 include_once(ONP_SL_PLUGIN_DIR . '/admin/pages/statistics.php');
 include_once(ONP_SL_PLUGIN_DIR . '/admin/pages/preview.php');
 include_once(ONP_SL_PLUGIN_DIR . '/admin/pages/how-to-use.php');
-    include_once(ONP_SL_PLUGIN_DIR . '/admin/pages/license-manager.php');
+    if ( isset( $sociallocker->license ) && class_exists('OnpLicensing324_LicenseManagerPage') ) {
+        include_once(ONP_SL_PLUGIN_DIR . '/admin/pages/license-manager.php');
+    }
 
 
 
@@ -30,55 +32,55 @@ include_once(ONP_SL_PLUGIN_DIR . '/admin/ajax/shortcode.php'); global $socialloc
 if ( in_array( $sociallocker->license->type, array( 'paid','trial' ) ) ) {
 
 
-            /**
-             * Adds the "Add-ons" menu item.
-             * 
-             * @since 3.4.6
-             */
-            function sociallocker_addon_menu(){
-                add_submenu_page(
-                  'edit.php?post_type=social-locker',
-                   __('&equiv; Add-Ons', 'sociallocker'), 
-                   __('&equiv; Add-Ons', 'sociallocker'),
-                   'manage_options', 
-                   'sociallocker-addons', 
-                   'sociallocker_show_page_for_addons'); 
-            }
-            add_action('admin_menu', 'sociallocker_addon_menu');
-            
-            /**
-             * Shows a page with the offer to visit the add-on page.
-             * 
-             * @since 3.4.6
-             */
-            function sociallocker_show_page_for_addons() {
-                global $sociallocker;
-                $url = $sociallocker->options['addons'];
-                ?>
-                <div style="padding-top: 20px;">
-                    <?php echo sprintf( __('Please visit: <a href="%s">%s</a>'), $url, $url ) ?>
-                </div>
-                <?php
-            }
-            
-            /**
-             * Shows a page with the offer to visit the add-on page.
-             * 
-             * @since 3.4.6
-             */
-            function sociallocker_addons_redirect() {
-                $page = isset( $_GET['page'] ) ? $_GET['page'] : null;
-                if ( $page !== 'sociallocker-addons' ) return;
-                
-                global $sociallocker;
-                wp_redirect( $sociallocker->options['addons'] );
-                exit;
-            }
-            add_action('admin_init', 'sociallocker_addons_redirect');
-        
-}
+        /**
+         * Adds the "Add-ons" menu item.
+         * 
+         * @since 3.4.6
+         */
+        function sociallocker_addon_menu(){
+            add_submenu_page(
+              'edit.php?post_type=social-locker',
+               __('&equiv; Add-Ons', 'sociallocker'), 
+               __('&equiv; Add-Ons', 'sociallocker'),
+               'manage_options', 
+               'sociallocker-addons', 
+               'sociallocker_show_page_for_addons'); 
 
+            
+        }
+        add_action('admin_menu', 'sociallocker_addon_menu');
+
+        /**
+         * Shows a page with the offer to visit the add-on page.
+         * 
+         * @since 3.4.6
+         */
+        function sociallocker_show_page_for_addons() {
+            global $sociallocker;
+            $url = $sociallocker->options['addons'];
+            ?>
+            <div style="padding-top: 20px;">
+                <?php echo sprintf( __('Please visit: <a href="%s">%s</a>'), $url, $url ) ?>
+            </div>
+            <?php
+        }
+
+        /**
+         * Shows a page with the offer to visit the add-on page.
+         * 
+         * @since 3.4.6
+         */
+        function sociallocker_addons_redirect() {
+            $page = isset( $_GET['page'] ) ? $_GET['page'] : null;
+            if ( $page !== 'sociallocker-addons' ) return;
+
+            global $sociallocker;
+            wp_redirect( $sociallocker->options['addons'] );
+            exit;
+        }
+        add_action('admin_init', 'sociallocker_addons_redirect');
     
+}
 
 
 
@@ -95,7 +97,7 @@ function sociallocker_admin_assets( $hook ) {
 
     // sytles for the plugin notices
     if ( $hook == 'index.php' || $hook == 'plugins.php' || $hook == 'edit.php' )
-        wp_enqueue_style( 'onp-sl-notices', ONP_SL_PLUGIN_URL . '/assets/admin/css/notices.030100.css' ); 
+        wp_enqueue_style( 'onp-sl-notices', ONP_SL_PLUGIN_URL . '/assets/admin/css/notices.030605.css' ); 
     
     // styles for the plugin shorcodes
     if ( in_array( $hook, array('edit.php', 'post.php', 'post-new.php')) ) {
@@ -116,18 +118,18 @@ if ( in_array( $sociallocker->license->type, array( 'free' ) ) ) {
 }
 
 
-
-
 add_filter('mce_external_plugins', 'sociallocker_add_plugin'); 
 add_filter('mce_buttons', 'sociallocker_register_button'); 
 
 function sociallocker_register_button($buttons) {  
+    
     if ( !current_user_can('edit_social-locker') ) return $buttons;
     array_push($buttons, "sociallocker");
     return $buttons;
 }  
 
 function sociallocker_add_plugin($plugin_array) {  
+    
     if ( !current_user_can('edit_social-locker') ) return $plugin_array;
     global $wp_version;
 
@@ -143,7 +145,7 @@ function sociallocker_add_plugin($plugin_array) {
     
 add_action('wp_ajax_get_sociallocker_lockers', 'sociallocker_get_lockers');
 function sociallocker_get_lockers() {
-
+    
     $lockers = get_posts(array('post_type' => 'social-locker'));
 
     $result = array();
@@ -179,9 +181,9 @@ function sociallocker_quicktags()
  * @return string
  */
 function onp_sl_license_manager_success_button() {
-    return 'Learn how to use the plugin <i class="fa fa-lightbulb-o"></i>';
+    return __('Learn how to use the plugin <i class="fa fa-lightbulb-o"></i>', 'sociallocker');
 }
-add_action('onp_license_manager_success_button_sociallocker-next', 'onp_sl_license_manager_success_button');
+add_action('onp_license_manager_success_button_' . $sociallocker->pluginName, 'onp_sl_license_manager_success_button');
 
 /**
  * Returns an URL where we should redirect a user after success activation of the plugin.
@@ -199,7 +201,9 @@ function onp_sl_license_manager_success_redirect() {
 
     return admin_url( 'edit.php?' . http_build_query( $args ) );
 }
-add_action('onp_license_manager_success_redirect_sociallocker-next',  'onp_sl_license_manager_success_redirect');
+add_action('onp_license_manager_success_redirect_' . $sociallocker->pluginName,  'onp_sl_license_manager_success_redirect');
+
+
 
 /**
  * Registers default themes.
@@ -226,7 +230,7 @@ function onp_sl_register_default_themes() {
             'title' => 'Secrets',
             'path' => ONP_SL_PLUGIN_DIR . '/themes/secrets'
         )); 
-
+        
         OnpSL_ThemeManager::registerTheme(array(
             'name' => 'dandyish',
             'title' => 'Dandyish',
@@ -250,7 +254,7 @@ function onp_sl_register_default_themes() {
 }
 add_action('onp_sl_register_themes', 'onp_sl_register_default_themes');
     
-    /**
+        /**
      * Shows offers to purhcase the StyleRoller from time to time.
      * 
      * @since 3.5.0
@@ -259,7 +263,7 @@ add_action('onp_sl_register_themes', 'onp_sl_register_default_themes');
         if ( defined('ONP_SL_STYLER_PLUGIN_ACTIVE') ) return $notices;
 
         // show messages only for administrators
-        if ( !factory_320_is_administrator() ) return $notices; global $sociallocker;
+        if ( !factory_324_is_administrator() ) return $notices; global $sociallocker;
 if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
 
             return $notices;
@@ -282,7 +286,8 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
         $inDays = $inSeconds / $secondsInDay;
              
         $forceToShow = defined('ONP_DEBUG_SHOW_STYLEROLLER_MESSAGE') && ONP_DEBUG_SHOW_STYLEROLLER_MESSAGE;
-
+        $lang = $sociallocker->options['lang'];
+        
         // offers a discount for new users who purchased the Social Locker a day ago
         if ( ( $isNewUser && $inDays >= 1 && $inDays <= 3 && !isset( $closed['sociallocker-styleroller-after-a-day'] ) )
               || $forceToShow ) {
@@ -294,9 +299,9 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
                 'id'        => 'sociallocker-styleroller-after-a-day',
 
                 // content and color
-                'class'     => 'call-to-action sociallocker-styleroller-banner',
-                'header'    => '<span class="onp-hightlight">' . __('You\'ve got a discount! Get StyleRoller For $10 Off Now!', 'sociallocker') . '</span>' . sprintf( __('(Expires In %sh)', 'sociallocker'), $expiresIn ),
-                'message'   => __('It\'s a day since you activated the premium versoin of Social Locker. We offer you, as for a new user, a discount for the StyleRoller, a powerful add-on for creating your own attention-grabbing themes for Social Locker. Improve conversions of your lockers by up to 300%!', 'sociallocker'),   
+                'class'     => 'call-to-action sociallocker-styleroller-banner onp-sl-'.$lang,
+                'header'    => '<span class="onp-hightlight">' . __('You\'ve got the 40% discount on the StyleRoller Add-On!', 'sociallocker') . '</span>' . sprintf( __('(Expires In %sh)', 'sociallocker'), $expiresIn ),
+                'message'   => __('<p>It\'s a day since you activated the Social Locker. We\'re really glad to see you on board. We would like to make you a small gift, the 40% discount on the StyleRoller Add-on. This is a time-limited offer which will be valid within 2 days.</p><p>The StyleRoller Add-on will help you to brand the Social Locker to fit the look and feel of your website, create your own unique attention-grabbing themes and, as a result, increase the number of likes and shares.</p>', 'sociallocker'),   
                 'plugin'    => $sociallocker->pluginName,
                 'where'     => array('plugins','dashboard', 'edit'),
                 
@@ -304,7 +309,7 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
                 'buttons'   => array(
                     array(
                         'class'     => 'btn btn-primary',
-                        'title'     => 'Get StyleRoller For $10 Off',
+                        'title'     => __('Get StyleRoller For 40% Off', 'sociallocker'),
                         'action'    => 'http://sociallocker.org/styleroller-special' . '?' . http_build_query(array(
                             'onp_special' => md5( $premiumActivated ) . $premiumActivated,
                             'onp_target' => base64_encode( get_site_url() ),
@@ -314,7 +319,7 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
                         ))
                     ),
                     array(
-                        'title'     => __('Hide this message', 'onepress-ru'),
+                        'title'     => __('Hide this message', 'sociallocker'),
                         'class'     => 'btn btn-default',
                         'action'    => 'x'
                     )
@@ -332,9 +337,9 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
                 'id'        => 'sociallocker-styleroller-after-a-week',
 
                 // content and color
-                'class'     => 'call-to-action sociallocker-styleroller-banner',
+                'class'     => 'call-to-action sociallocker-styleroller-banner onp-sl-'.$lang,
                 'icon'      => 'fa fa-frown-o',  
-                'header'    => '<span class="onp-hightlight">' . __('Last Chance To Get StyleRoller For $10 Off!', 'sociallocker') . '</span>' . sprintf( __('(Expires In %sh)', 'sociallocker'), $expiresIn ),
+                'header'    => '<span class="onp-hightlight">' . __('Last Chance To Get StyleRoller For 40% Off!', 'sociallocker') . '</span>' . sprintf( __('(Expires In %sh)', 'sociallocker'), $expiresIn ),
                 'message'   => __('We have noticed you have been using the Social Locker already more than a week. Did you know what via the StyleRoller, an add-on for creating own attention-grabbing themes, you can improve conversions of your lockers by up to 300%? Learn how, click the button below.', 'sociallocker'),   
                 'plugin'    => $sociallocker->pluginName,
                 'where'     => array('plugins','dashboard', 'edit'),
@@ -343,7 +348,7 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
                 'buttons'   => array(
                     array(
                         'class'     => 'btn btn-primary',
-                        'title'     => 'Get StyleRoller For $10 Off',
+                        'title'     => __('Get StyleRoller For 40% Off', 'sociallocker'),
                         'action'    => 'http://sociallocker.org/styleroller-special' . '?' . http_build_query(array(
                             'onp_special' => md5( $premiumActivated ) . $premiumActivated,
                             'onp_target' => base64_encode( get_site_url() ),
@@ -353,7 +358,7 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
                         ))
                     ),
                     array(
-                        'title'     => __('Hide this message', 'onepress-ru'),
+                        'title'     => __('Hide this message', 'sociallocker'),
                         'class'     => 'btn btn-default',
                         'action'    => 'x'
                     )
@@ -382,10 +387,10 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
                     'id'        => 'sociallocker-styleroller-new-addon',
 
                     // content and color
-                    'class'     => 'call-to-action sociallocker-styleroller-banner',
+                    'class'     => 'call-to-action sociallocker-styleroller-banner onp-sl-'.$lang,
                     'icon'      => 'fa fa-frown-o',  
-                    'header'    => '<span class="onp-hightlight">' . __('You\'ve got a discount! Get StyleRoller For $10 Off Now!', 'sociallocker') . '</span>' . sprintf( __('(Expires In %sh)', 'sociallocker'), $expiresIn ),
-                    'message'   => __('Hi there! Have you checked our new add-on which improves conversions of Social Locker by up to 300%? It\'s called "StyleRoller" and allows to create your own attention-grabbing themes for your lockers. Click the button to learn more and get the discount.', 'sociallocker'),   
+                'header'    => '<span class="onp-hightlight">' . __('You\'ve got the 40% discount on the StyleRoller Add-On!', 'sociallocker') . '</span>' . sprintf( __('(Expires In %sh)', 'sociallocker'), $expiresIn ),
+                    'message'   => __('Have you checked our new add-on which improves conversions of Social Locker by up to 300%? It\'s called "StyleRoller" and allows to create your own attention-grabbing themes for your lockers. Click the button to learn more and get the discount.', 'sociallocker'),   
                     'plugin'    => $sociallocker->pluginName,
                     'where'     => array('plugins','dashboard', 'edit'),
                     
@@ -393,8 +398,8 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
                     'buttons'   => array(
                         array(
                             'class'     => 'btn btn-primary',
-                            'title'     => 'Get StyleRoller For $10 Off',
-                        'action'    => 'http://sociallocker.org/styleroller-special' . '?' . http_build_query(array(
+                            'title'     => __('Get StyleRoller For 40% Off', 'sociallocker'),
+                            'action'    => 'http://sociallocker.org/styleroller-special' . '?' . http_build_query(array(
                                 'onp_special' => md5( $firstShowTime ) . $firstShowTime,
                                 'onp_target' => base64_encode( get_site_url() ),
                                 'utm_source' => 'plugin',
@@ -403,7 +408,7 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
                             ))
                         ),
                         array(
-                            'title'     => __('Hide this message', 'onepress-ru'),
+                            'title'     => __('Hide this message', 'sociallocker'),
                             'class'     => 'btn btn-default',
                             'action'    => 'x'
                         )
@@ -421,9 +426,9 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
                         'id'        => 'sociallocker-styleroller-new-addon-after-a-week',
 
                     // content and color
-                    'class'     => 'call-to-action sociallocker-styleroller-banner',
+                    'class'     => 'call-to-action sociallocker-styleroller-banner onp-sl-'.$lang,
                     'icon'      => 'fa fa-frown-o',  
-                    'header'    => '<span class="onp-hightlight">' . __('Last Chance To Get StyleRoller For $10 Off!', 'sociallocker') . '</span>' . sprintf( __('(Expires In %sh)', 'sociallocker'), $expiresIn ),
+                'header'    => '<span class="onp-hightlight">' . __('Last Chance To Get StyleRoller For 40% Off!', 'sociallocker') . '</span>' . sprintf( __('(Expires In %sh)', 'sociallocker'), $expiresIn ),
                     'message'   => __('Did you know what via the StyleRoller, an add-on for creating own attention-grabbing themes for Social Locker, you can improve conversions of your lockers by up to 300%? Click the button to learn more and get the discount.', 'sociallocker'),   
                     'plugin'    => $sociallocker->pluginName,
                     'where'     => array('plugins','dashboard', 'edit'),
@@ -432,7 +437,7 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
                     'buttons'   => array(
                         array(
                             'class'     => 'btn btn-primary',
-                            'title'     => 'Get StyleRoller For $10 Off',
+                            'title'     => __('Get StyleRoller For 40% Off', 'sociallocker'),
                             'action'    => 'http://sociallocker.org/styleroller-special' . '?' . http_build_query(array(
                                     'onp_special' => md5( $firstShowTime ) . $firstShowTime,
                                     'onp_target' => base64_encode( get_site_url() ),
@@ -442,7 +447,7 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
                             ))
                         ),
                         array(
-                            'title'     => __('Hide this message', 'onepress-ru'),
+                            'title'     => __('Hide this message', 'sociallocker'),
                             'class'     => 'btn btn-default',
                             'action'    => 'x'
                         )
@@ -459,3 +464,30 @@ if ( in_array( $sociallocker->license->type, array( 'free','trial' ) ) ) {
 
 
 
+/**
+ * Returns an url for purchasing the StyleRoller add-on.
+ * 
+ * @since 3.5.8
+ * @param string $medium
+ * @param string $campaign
+ * @return string
+ */
+function onp_sl_get_styleroller_url( $medium, $campaign ) {
+    global $sociallocker;
+    return $sociallocker->options['styleroller'] . '?' . http_build_query(array(
+        'utm_source' => 'plugin',
+        'utm_medium' => $medium,
+        'utm_campaign' => $campaign
+    ));
+}
+
+function onp_sl_get_premium_url( ) {
+    global $sociallocker;
+        $url = admin_url( 'admin.php' );
+        return add_query_arg(array(
+            'page' => 'how-to-use-' . $sociallocker->pluginName,
+            'onp_sl_page' => 'premium'
+        ), $url);
+    
+
+}

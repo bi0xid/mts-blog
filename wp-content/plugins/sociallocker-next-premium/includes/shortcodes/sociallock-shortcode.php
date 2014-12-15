@@ -36,7 +36,16 @@ class OnpSL_Shortcode extends FactoryShortcodes320_Shortcode {
     // -------------------------------------------------------------------------------------
         
     public function html($attr, $content) { 
-        global $post;
+        global $post; global $sociallocker;
+if ( in_array( $sociallocker->license->type, array( 'free' ) ) ) {
+
+                echo $content;
+                return;
+            
+}
+
+        
+
 
         $id = isset( $attr['id'] ) 
             ? (int)$attr['id'] 
@@ -145,11 +154,14 @@ class OnpSL_Shortcode extends FactoryShortcodes320_Shortcode {
 
         $this->lockId = "onpLock" . rand(100000, 999999);
         $this->lockData = $lockData;
+        
+        $overlap = $lockData['options']['overlap']['mode'];
+        $hideContent = $overlap === 'full';
 
         if ($isAjax) { ?>
             <div class="onp-sociallocker-call" style="display: none;" data-lock-id="<?php echo $this->lockId ?>"></div>
         <?php } else { ?>           
-            <div class="onp-sociallocker-call" style="display: none;" data-lock-id="<?php echo $this->lockId ?>">
+            <div class="onp-sociallocker-call" <?php if ( $hideContent ) { ?>style="display: none;"<?php } ?> data-lock-id="<?php echo $this->lockId ?>">
                 <p><?php echo  $content ?></p>
             </div>
         <?php } ?> 

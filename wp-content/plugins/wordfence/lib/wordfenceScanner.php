@@ -101,6 +101,9 @@ class wordfenceScanner {
 				if(preg_match('/^(?:jpg|jpeg|mp3|avi|m4v|gif|png)$/', $fileExt) && (! wfConfig::get('scansEnabled_scanImages')) ){
 					continue;
 				}
+				if( (! wfConfig::get('scansEnabled_highSense')) && strtolower($fileExt) == 'sql'){ //
+					continue;
+				}
 				if(wfUtils::fileTooBig($this->path . $file)){ //We can't use filesize on 32 bit systems for files > 2 gigs
 					//We should not need this check because files > 2 gigs are not hashed and therefore won't be received back as unknowns from the API server
 					//But we do it anyway to be safe.
@@ -177,7 +180,7 @@ class wordfenceScanner {
 									'severity' => 1,
 									'ignoreP' => $this->path . $file,
 									'ignoreC' => $fileSum,
-									'shortMsg' => "This file may contain malicious executable code",
+									'shortMsg' => "This file may contain malicious executable code: " . $this->path . $file,
 									'longMsg' => "This file is a PHP executable file and contains an " . $this->patterns['word1'] . " function and " . $this->patterns['word2'] . " decoding function on the same line. This is a common technique used by hackers to hide and execute code. If you know about this file you can choose to ignore it to exclude it from future scans.",
 									'data' => array(
 										'file' => $file,
@@ -206,7 +209,7 @@ class wordfenceScanner {
 										'severity' => 1,
 										'ignoreP' => $this->path . $file,
 										'ignoreC' => $fileSum,
-										'shortMsg' => "This file may contain malicious executable code",
+										'shortMsg' => "This file may contain malicious executable code" . $this->path . $file,
 										'longMsg' => "This file is a PHP executable file and contains the word 'eval' (without quotes) and the word '" . $badStringFound . "' (without quotes). The eval() function along with an encoding function like the one mentioned are commonly used by hackers to hide their code. If you know about this file you can choose to ignore it to exclude it from future scans.",
 										'data' => array(
 											'file' => $file,

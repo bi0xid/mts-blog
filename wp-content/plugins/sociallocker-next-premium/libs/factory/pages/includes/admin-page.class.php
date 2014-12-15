@@ -25,6 +25,7 @@ class FactoryPages320_AdminPage extends FactoryPages320_Page {
     /**
      * Menu icon (only if a page is placed as a main menu).
      * For example: '~/assets/img/menu-icon.png'
+     * For example dashicons: '\f321'
      * @var string 
      */
     public $menuIcon = null;
@@ -49,6 +50,12 @@ class FactoryPages320_AdminPage extends FactoryPages320_Page {
      * @var string
      */
     public $menuTarget = null;
+    
+    /**
+     * if true, then admin.php is used as a base url.
+     * @var bool 
+     */
+    public $customTarget = false;
     
     /**
      * Capabilities for roles that have access to work with this page.
@@ -245,15 +252,17 @@ class FactoryPages320_AdminPage extends FactoryPages320_Page {
     
     protected function getActionUrl($action = null, $queryArgs = array()) {
         $baseUrl = $this->getBaseUrl();
-        
+
         if ( !empty( $action )) $queryArgs['action'] = $action;
-        return add_query_arg($queryArgs, $baseUrl);    
+        $url = add_query_arg($queryArgs, $baseUrl);
+        return $url;
     }
     
     protected function getBaseUrl() {
         $resultId = $this->getResultId();
                 
         if ( $this->menuTarget ) {
+            if ( $this->customTarget ) return admin_url('admin.php') . '?page=' . $resultId;
             return $this->menuTarget . '&page=' . $resultId;     
         } else {
             return 'admin.php?&page=' . $resultId;     
@@ -264,8 +273,14 @@ class FactoryPages320_AdminPage extends FactoryPages320_Page {
     {     
         $resultId = $this->getResultId();
         
-        if (!empty($this->menuIcon))
-            $iconUrl = str_replace('~/', $this->plugin->pluginUrl . '/', $this->menuIcon);   
+        if (!empty($this->menuIcon)) {
+            
+            if(preg_match('/\\\f\d{3}/', $this->menuIcon)) {              
+                $iconCode = $this->menuIcon;                
+            } else {
+                $iconUrl = str_replace('~/', $this->plugin->pluginUrl . '/', $this->menuIcon); 
+            }            
+        }          
         
         global $wp_version;
         if ( version_compare( $wp_version, '3.7.3', '>'  ) ) {
@@ -281,9 +296,10 @@ class FactoryPages320_AdminPage extends FactoryPages320_Page {
                 <?php } ?>
 
                 a.toplevel_page_<?php echo $resultId ?> .wp-menu-image:before {
-                    content: "" !important;
+                    content: "<?php echo !empty($iconCode) ? $iconCode : ''; ?>" !important;
                 }
                 a.toplevel_page_<?php echo $resultId ?>:hover .wp-menu-image, 
+                a.toplevel_page_<?php echo $resultId ?>.wp-has-current-submenu .wp-menu-image,                 
                 a.toplevel_page_<?php echo $resultId ?>.current .wp-menu-image {
                     background-position:10px 2px !important;
                 }

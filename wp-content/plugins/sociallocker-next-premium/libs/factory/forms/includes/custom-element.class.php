@@ -14,7 +14,7 @@
  * 
  * @since 1.0.0
  */
-abstract class FactoryForms320_CustomElement extends FactoryForms320_FormElement {
+abstract class FactoryForms324_CustomElement extends FactoryForms324_FormElement {
     
     /**
      * Is this element a custom form element?
@@ -25,6 +25,11 @@ abstract class FactoryForms320_CustomElement extends FactoryForms320_FormElement
     public $isCustom = true;
     
     public function render() {
+        
+        // if the control is off, then ignore it
+        $off = $this->getOption('off', false);
+        if ( $off ) return;
+        
         $this->html();
     }
 }
