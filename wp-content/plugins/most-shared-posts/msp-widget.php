@@ -217,7 +217,7 @@ class Most_Shared_Posts extends WP_Widget {
 			
 			if (!$suppress_icons)
 			{
-				echo '<div class="share-counts ' . $css_class_font . '">';
+				echo '<div class="share-counts ' . $css_class_font . '" style="width: 235px;">';
 				
 				
 				/*
