@@ -1,13 +1,8 @@
 <?php
 
-// pluginname Insights for WordPress
-// shortname WPInsights
-// dashname insights
-
-
 /*
 Plugin Name: Insights
-Version: 1.0.7
+Version: 1.0.8
 Plugin URI: http://www.prelovac.com/vladimir/wordpress-plugins/insights
 Author: Vladimir Prelovac
 Author URI: http://www.prelovac.com/vladimir
@@ -15,10 +10,6 @@ Description: Insights allows you to quickly search and insert information (links
 
 
 */
-
-// todo: more for images (page)
-// auto tags
-
 
 
 global $wp_version;	
@@ -42,7 +33,7 @@ class WPInsights {
 	
 	// Initialize WordPress hooks
 	function WPInsights() {	
-		$this->plugin_url = defined('WP_PLUGIN_URL') ? WP_PLUGIN_URL . '/' . dirname(plugin_basename(__FILE__)) : trailingslashit(get_bloginfo('wpurl')) . PLUGINDIR . '/' . dirname(plugin_basename(__FILE__)); 
+		$this->plugin_url = trailingslashit(plugins_url(null, __FILE__)); 
 				
 		// Add Options Page
 		add_action('admin_menu',  array(&$this, 'admin_menu'));
@@ -226,7 +217,8 @@ if ($options['gmaps'])
 
 
 		$action_url = $_SERVER['REQUEST_URI'];	
-		$imgpath=$this->plugin_url.'/img';	
+		$imgpath=$this->plugin_url.'img/';	
+	
 
 		
 		include('insights-options.php');

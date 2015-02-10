@@ -3,7 +3,7 @@
 Plugin Name: Disable XML-RPC
 Plugin URI: http://www.philerb.com/wp-plugins/
 Description: This plugin disables XML-RPC API in WordPress 3.5+, which is enabled by default.
-Version: 1.0
+Version: 1.0.1
 Author: Philip Erb
 Author URI: http://www.philerb.com
 License: GPLv2

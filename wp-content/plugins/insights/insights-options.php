@@ -4,8 +4,9 @@
 	<div id="poststuff" style="margin-top:10px;">
 		<div id="sideblock" style="float:right;width:270px;margin-left:10px;"> 
 
-		 <iframe width=270 height=800 frameborder="0" src="http://www.prelovac.com/plugin/news.php?id=8&utm_source=plugin&utm_medium=plugin&utm_campaign=Insights"></iframe>
-
+		 <div class="ad">
+					<a href="https://managewp.com/?utm_source=Plugins&amp;utm_medium=Banner&amp;utm_content=mwp250_2&amp;utm_campaign=Insights" title="ManageWP.com - Manage your sites from one dashboard"><img src="<?php echo $imgpath ?>mwp250_2.png" alt="ManageWP.com - Manage Multiple WordPress Sites"></a>
+					</div>
  	</div>
 
 	 <div id="mainblock" style="width:710px">
@@ -48,6 +49,6 @@
 
 	</div>
 	
-<h5>WordPress plugin by <a href="http://www.prelovac.com/vladimir/">Vladimir Prelovac</a></h5>
+<h5>Another fine WordPress plugin by <a href="http://www.prelovac.com/vladimir/">Vladimir Prelovac</a></h5>
 </div>
 
