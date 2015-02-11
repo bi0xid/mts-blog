@@ -2,6 +2,8 @@
 /**
  * File for xml api.
  */
+ini_set('display_errors', false);
+error_reporting(0);
 
 include('./wp-load.php');
         
@@ -29,7 +31,7 @@ class xmlRender
     
     public static function getXmlForPosts($posts = array())
     {
-        $res = '<posts>';
+        $res = '';
         
         if(!empty($posts))
         {
@@ -37,16 +39,14 @@ class xmlRender
                 $res .= self::getXmlForSinglePost($post);
         }
         
-        $res .= '</posts>';
-        
-        return $res;
+        return '<posts>' . $res . '</posts>';
     }
     
     private static function getXmlForSinglePost($post = null)
     {
         if(!$post) return '';
 
-        $res = '<post>';        
+        $res = '';        
         $res .= '<title>'. apply_filters('the_title' , $post->post_title ) .'</title>';
         $res .= '<publish_date>'. apply_filters('get_the_time' , $post->post_date ) .'</publish_date>';
         $res .= '<content>
@@ -66,19 +66,48 @@ class xmlRender
         
         $res .= '<author>'. get_the_author_meta('display_name', $post->post_author) .'</author>'; 
         
-        $res .= '<authorSlug>'. get_the_author_meta('user_nicename' , $post->post_author) .'</authorSlug>'; 
+        $res .= '<authorUrl>'. get_the_author_meta('user_nicename' , $post->post_author) .'</authorUrl>'; 
         
         $res .= '<authorAvatar>'. get_the_author_meta('avatar' , $post->post_author) .'</authorAvatar>'; 
         
-        $res .= '<slug>'. $post->post_name .'</slug>'; 
+        $res .= '<url>'. $post->post_name .'</url>'; 
+                
+        return '<post>' . $res . '</post>';
+    }
+    
+    public static function getXmlForCategories($categories = array())
+    {
+        $res = '';
         
-        $res .= '</post>';
+        if(!empty($categories))
+        {
+            foreach($categories as $category)
+                $res .= self::getXmlForSingleCategory($category);
+        }
+                
+        return '<categories>' . $res . '</categories>';
+    }
+    
+    private static function getXmlForSingleCategory($category = null)
+    {
+        if(empty($category)) return '';
+
+        $res = '';
         
-        return $res;
+        $res .= '<name>' . $category->cat_name . '</name>';
+        
+        $res .= '<url>' . $category->slug . '</url>';
+        
+        $res .= '<postCount>' . $category->count . '</postCount>';
+        
+        if(property_exists ($category, 'postsResult') && is_array($category->postsResult))
+                $res .= self::getXmlForPosts($category->postsResult);
+        
+        return '<category>' . $res . '</category>';
     }
 }
 
-class controller
+class CoreController
 {
     const PER_PAGE = 10;
     
@@ -109,7 +138,7 @@ class controller
     {
         $this->type = isset($_GET['type']) ? (string)$_GET['type'] : 'post';
         $this->url = isset($_GET['url']) ? (string)$_GET['url'] : '';
-        $this->page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $this->page = (int)abs(isset($_GET['page']) ? (int)$_GET['page'] : 1);
     }
     
     public function isValid()
@@ -127,13 +156,30 @@ class controller
                 
                 $this->xmlRender->addXml(
                                 xmlRender::getXmlForPosts($posts)
-                            );  
-                
-                
+                            );
             break;
             
             case 'category':
                 
+                $categories = array();
+                
+                if($this->url != '')
+                {
+                    $category = get_category_by_slug($this->url);          
+                    
+                    if($category)
+                    {
+                        $category->postsResult = $this->getPosts($category->term_id);
+                        $categories = array($category);
+                    }
+                    
+                }else{                
+                    $categories = $this->getCategories();
+                }
+                
+                $this->xmlRender->addXml(
+                                xmlRender::getXmlForCategories($categories)
+                            );
             break;
         
             default:
@@ -154,18 +200,44 @@ class controller
         $args = array(
             'post_type'      => 'post',
             'post_status'    => 'publish',
-            'posts_per_page' => self::PER_PAGE
+            'posts_per_page' => self::PER_PAGE,
+            'offset'           => (int)(($this->page - 1)*self::PER_PAGE),
         );
         
         if($this->url != '')
             $args['name'] = $this->url;
         
         if($categoryId)
+        {
             $args['category'] =  $categoryId;
-                
+            unset($args['name']);
+        }
+        
         $result = get_posts($args);
         
         return $result;
+    }
+    
+    public function getCategories()
+    {
+        $args = array(
+                'type'                     => 'post',
+                'child_of'                 => 0,
+                'parent'                   => '',
+                'orderby'                  => 'name',
+                'order'                    => 'ASC',
+                'hide_empty'               => 1,
+                'hierarchical'             => 1,
+                'exclude'                  => '',
+                'include'                  => '75,76,204,205,206',
+                'number'                   => '',
+                'taxonomy'                 => 'category',
+                'pad_counts'               => false 
+        ); 
+        
+        $categories = get_categories($args);
+        
+        return $categories;
     }
     
     private function forbidden()
@@ -175,44 +247,8 @@ class controller
     }
 }
 
-$object = new controller();
+$object = new CoreController();
 $object->render();
 die();
 
-//header('Content-Type: application/xml; charset=' . get_option('blog_charset'), true);        
-        
-$categories = get_categories();
-
-
-
-
-die('here');
 ?>
-<<?php echo '?'; ?>xml version="1.0" encoding="<?php echo get_option('blog_charset'); ?>"?>
-<root>
-    <?php foreach($categories as $category): ?>
-        <category>
-            <name><?php echo $category->cat_name ?></name>
-            <?php
-                $args = array('offset'=> -1, 'category' =>  $category->term_id );
-                $posts = get_posts(
-                        array(
-                            'posts_per_page' => -1,
-                            'offset'=> -1, 
-                            'category' =>  $category->term_id
-                            )
-                        );
-            ?>
-            
-            <?php if(!empty($posts)): ?>
-                <posts>
-                    <?php foreach ( $posts as $post ) : setup_postdata( $post ); ?>
-                        <post>
-                            <title><?php the_title(); ?></title>
-                        </post>
-                    <?php endforeach; ?>
-                </posts>
-            <?php endif; ?>
-        </category>    
-    <?php endforeach; ?>    
-</root>
