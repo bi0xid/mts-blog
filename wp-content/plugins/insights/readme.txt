@@ -1,9 +1,9 @@
 === Insights ===
 Contributors: freediver
 Donate link: https://www.networkforgood.org/donation/MakeDonation.aspx?ORGID2=520781390
-Tags:  admin, posts, images, links, google, ajax, jquery, youtube, video, play, media, Post, posts
+Tags:  admin, posts, images, links, google, ajax, jquery, youtube, video, play, media, Post, posts, image, photo, picture, map, wikipedia, youtube, flickr, books, news
 Requires at least: 2.3
-Tested up to: 4.0
+Tested up to: 4.2
 Stable tag: trunk
 
 Insights allows you to quickly access and insert information (links, images, videos, maps..) into your blog posts.
@@ -11,7 +11,7 @@ Insights allows you to quickly access and insert information (links, images, vid
 
 == Description ==
 
-Insights brings a **powerful** new way to write your blog posts. It increases productivity and at the same time quality of your posts.
+Insights brings a powerful new way to write your blog posts. It increases productivity and at the same time quality of your posts.
 
 Insights performs following functions in real-time:
 
@@ -32,6 +32,10 @@ Insights allows you to do all this using dynamic AJAX interface which loads the 
 Plugin by Vladimir Prelovac. Also check out <a href="https://managewp.com">ManageWP</a>.
 
 == Changelog ==
+
+= 1.0.8 =
+* WordPress 4.1 compatibility
+
 
 = 1.0.7 =
 * Fixed images search

@@ -1,0 +1,48 @@
+#opanda-leads-page .opanda_lead_way ul {
+    padding: 0px;
+    margin: 0px;
+}
+#opanda-leads-page .opanda_lead_way li {
+    margin: 0px;
+}
+#opanda-leads-page .opanda_lead_way li + li {
+    margin-top: 5px;
+}
+
+#opanda-leads-page .opanda_lead_confirmed {
+    cursor: help;
+}
+
+#opanda-leads-page .opanda_lead_checkbox {
+    width: 1%;
+}
+
+#opanda-leads-page .column-opanda_lead_email,
+#opanda-leads-page .column-opanda_lead_name,
+#opanda-leads-page .column-opanda_lead_date {
+    width: 1%;
+    padding-right: 50px !important;
+    min-width: 80px;
+}
+
+#opanda-leads-page .opanda_lead_checkbox,
+#opanda-leads-page .opanda_lead_how,
+#opanda-leads-page .column-opanda_lead_confirmed {
+    width: 1%; 
+}
+
+#opanda-leads-page .opanda_lead_how {
+    white-space: nowrap;
+    padding-right: 50px !important;
+}
+
+#opanda-leads-page table.fixed {
+    table-layout: auto;
+}
+
+#opanda-leads-page table {
+    margin-top: 15px;
+}
+#opanda-leads-page .tablenav {
+    display: none;
+}

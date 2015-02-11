@@ -3,8 +3,8 @@ Contributors: solvethenet, philerb
 Donate link: http://www.philerb.com/wp-plugins/appreciation/
 Tags: xmlrpc
 Requires at least: 3.5
-Tested up to: 3.8
-Stable tag: 1.0
+Tested up to: 4.1
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,9 @@ There are two easy methods for checking if XML-RPC is off. First, try using an X
 == Screenshots ==
 
 == Changelog ==
+
+= 1.0.1 =
+* Blank lines removed from the plugin file.
 
 = 1.0 =
 * Initial release
