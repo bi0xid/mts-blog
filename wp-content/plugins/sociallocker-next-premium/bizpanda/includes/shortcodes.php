@@ -156,9 +156,9 @@ if ( in_array( $sociallocker->license->type, array( 'free' ) ) ) {
         $hideContent = $overlap === 'full';
 
         if ($isAjax) { ?>
-            <div class="onp-optinpanda-call" style="display: none;" data-lock-id="<?php echo $this->lockId ?>"></div>
+            <div class="onp-locker-call" style="display: none;" data-lock-id="<?php echo $this->lockId ?>"></div>
         <?php } else { ?>           
-            <div class="onp-optinpanda-call" <?php if ( $hideContent ) { ?>style="display: none;"<?php } ?> data-lock-id="<?php echo $this->lockId ?>">
+            <div class="onp-locker-call" <?php if ( $hideContent ) { ?>style="display: none;"<?php } ?> data-lock-id="<?php echo $this->lockId ?>">
                 <p><?php echo  $content ?></p>
             </div>
         <?php } ?> 
