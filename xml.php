@@ -45,24 +45,53 @@ class xmlRender
     private static function getXmlForSinglePost($post = null)
     {
         if(!$post) return '';
-
+        
         $res = '';        
         $res .= '<title>'. apply_filters('the_title' , $post->post_title ) .'</title>';
         $res .= '<publish_date>'. apply_filters('get_the_time' , $post->post_date ) .'</publish_date>';
         $res .= '<content>
 			<![CDATA['. apply_filters('get_the_content' , $post->post_content ) .']]>
 		</content>';
+
         $res .= '<link>'. get_permalink($post->ID)  .'</link>'; 
         
-        $imgLink = '';
+        $imagesTypes = array('thumbnail', 'medium', 'large', 'full');
         
-        $large_image_urls = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'thumbnail');
-
-        if(!empty($large_image_urls) && isset($large_image_urls[0]))
+        $imageContent = '';
+        
+        foreach($imagesTypes as $imageType)
         {
-            $imgLink = $large_image_urls[0];
+            $imgLink = '';
+        
+            $large_image_urls = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), $imageType);
+
+            if(!empty($large_image_urls) && isset($large_image_urls[0]))
+            {
+                $imgLink = $large_image_urls[0];
+            }
+            $imageContent .= "<{$imageType}>{$imgLink}</{$imageType}>"; 
         }
-        $res .= '<thumbnail>'. $imgLink .'</thumbnail>'; 
+        
+        $attachmentContent = '';
+        
+        $attachments = get_children(array('post_parent' => $post->ID,
+                        'post_status' => 'inherit',
+                        'post_type' => 'attachment',
+                        'post_mime_type' => 'image',
+                        'order' => 'ASC',
+                        'orderby' => 'menu_order ID'));
+        
+        foreach($attachments as $att_id => $attachment) 
+        {
+            $attachmentContent .= '<attachment>' . wp_get_attachment_url($attachment->ID) . '</attachment>';
+        }
+        
+        $res .= '<images>'. 
+                    $imageContent  . 
+                    '<attachments>' 
+                        . $attachmentContent . 
+                    '</attachments>' .
+                '</images>'; 
         
         $res .= '<author>'. get_the_author_meta('display_name', $post->post_author) .'</author>'; 
         
