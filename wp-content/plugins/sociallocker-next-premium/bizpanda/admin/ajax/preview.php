@@ -77,8 +77,8 @@ function onp_lock_preview() {
          <script type="text/javascript" src="<?php echo OPANDA_BIZPANDA_URL ?>/assets/admin/js/libs/json2.js"></script>    
          
          <?php ?>
-         <script type="text/javascript" src="<?php echo OPANDA_BIZPANDA_URL ?>/assets/js/lockers.010002.min.js"></script>  
-         <link rel="stylesheet" type="text/css" href="<?php echo OPANDA_BIZPANDA_URL ?>/assets/css/lockers.010000.min.css">  
+         <script type="text/javascript" src="<?php echo OPANDA_BIZPANDA_URL ?>/assets/js/lockers.010003.min.js"></script>  
+         <link rel="stylesheet" type="text/css" href="<?php echo OPANDA_BIZPANDA_URL ?>/assets/css/lockers.010003.min.css">  
          <?php 
  ?>
          

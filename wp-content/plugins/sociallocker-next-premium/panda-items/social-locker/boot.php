@@ -115,12 +115,22 @@ function opanda_social_locker_options( $options, $id ) {
     
 
     
+    $allowedButtons = array('facebook-like', 'facebook-share', 'twitter-tweet', 'twitter-follow', 'google-plus', 'google-share', 'linkedin-share');
+    $allowedButtons = apply_filters('opanda_social-locker_allowed_buttons', $allowedButtons);
+    
     if ( $options['socialButtons']['order'] ) {
         $options['socialButtons']['order'] = explode( ',', $options['socialButtons']['order'] );
     }
     
     if ( empty( $options['socialButtons']['order'] ) ) {
         unset( $options['socialButtons']['order'] );
+    } else {
+        $filteredButtons = array();
+        foreach( $options['socialButtons']['order'] as $buttonName ) {
+            if ( !in_array( $buttonName, $allowedButtons ) ) continue;
+            $filteredButtons[] = $buttonName;
+        }
+        $options['socialButtons']['order'] = $filteredButtons;
     }
     
     unset( $options['terms'] );
