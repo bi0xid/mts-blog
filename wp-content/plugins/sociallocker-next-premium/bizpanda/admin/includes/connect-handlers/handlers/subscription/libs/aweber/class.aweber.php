@@ -111,7 +111,7 @@ class OPanda_AweberSubscriptionService extends OPanda_Subscription {
     /**
      * Subscribes the person.
      */
-    public function subscribe( $identityData, $listId, $doubleOptin ) {
+    public function subscribe( $identityData, $listId, $doubleOptin, $contextData ) {
 
         if ( !$doubleOptin )
             throw new OPanda_SubscriptionException ('Aweber requires the double opt-in. But the option "doubleOptin" set to false.');
@@ -161,7 +161,7 @@ class OPanda_AweberSubscriptionService extends OPanda_Subscription {
     /**
      * Checks if the user subscribed.
      */  
-    public function check( $identityData, $listId ) { 
+    public function check( $identityData, $listId, $contextData ) { 
         
         try {
             

@@ -13,7 +13,7 @@ class OPanda_NewPandaItemPage extends OPanda_AdminPage  {
  
     public function __construct( $plugin  ) {    
         
-        $this->menuTitle = __('+ New Item', 'optinpanda');
+        $this->menuTitle = __('+ New Locker', 'optinpanda');
         $this->menuPostType = OPANDA_POST_TYPE;
         $this->id = "new-item";
     

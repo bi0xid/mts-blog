@@ -11,10 +11,6 @@ class OPanda_SignupHandler extends OPanda_Handler {
      */
     public function handleRequest() {
         
-        if ( is_user_logged_in() ) {
-            return false;
-        }
-        
         // - context data
         
         $contextData = isset( $_POST['opandaContextData'] ) ? $_POST['opandaContextData'] : array();
@@ -24,7 +20,13 @@ class OPanda_SignupHandler extends OPanda_Handler {
         
         $identityData = isset( $_POST['opandaIdentityData'] ) ? $_POST['opandaIdentityData'] : array();
         $identityData = $this->normilizeValues( $identityData );
+
+        do_action('opanda_lead_catched', $identityData, $contextData);
         
+        if ( is_user_logged_in() ) {
+            return false;
+        }
+
         $email = $identityData['email'];
         if ( empty( $email ) ) return;
         
@@ -42,7 +44,12 @@ class OPanda_SignupHandler extends OPanda_Handler {
             $user = get_user_by( 'email', $email );
             $userId = $user->ID;
         }
-
+    
+        /* 
+         * Unsafe code, should be re-written
+         */
+        
+        /*
         if ( !is_user_logged_in() ) {
 
             $mode = $this->options['mode'];
@@ -50,7 +57,7 @@ class OPanda_SignupHandler extends OPanda_Handler {
             if ( in_array( $mode, array('hidden', 'obvious')) ) {
                 wp_set_auth_cookie( $userId, true );
             }  
-        }
+        }*/
     }
     
     protected function generateUsername( $email ) {

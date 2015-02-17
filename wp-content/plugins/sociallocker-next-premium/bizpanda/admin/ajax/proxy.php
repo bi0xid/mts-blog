@@ -67,7 +67,7 @@ function opanda_get_subscrtiption_lists() {
         echo json_encode($lists); 
         
     } catch (Exception $ex) {
-        echo json_encode( array('error' => 'Unable to get the lists due to the error: ' . $ex->getMessage() ) ); 
+        echo json_encode( array('error' => 'Unable to get the lists: ' . $ex->getMessage() ) ); 
     }
 
     exit;

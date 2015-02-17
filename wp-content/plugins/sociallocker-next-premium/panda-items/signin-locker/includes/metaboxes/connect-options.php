@@ -82,6 +82,28 @@ class OPanda_ConnectOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
             'html'      => array( $this, 'showConnectButtonsControl' )
         );
         
+        // leads options
+        
+        $options[] =  array(
+            'type'      => 'div',
+            'id'        => 'opanda-lead-options',
+            'cssClass'  => 'opanda-connect-buttons-options opanda-off factory-fontawesome-320',
+            
+            'items'     => array(
+                array(
+                    'type' => 'html',
+                    'html' => $this->getOptionsHeaderHtml(
+                        __('Action: Save Email', 'optinpanda'),
+                        __('This action retrieves an email and some other personal data of the user and saves it in the database.', 'optinpanda')
+                    )
+                ),
+                array(
+                    'type' => 'html',
+                    'html' => array($this,'getLeadExplanationOption')
+                )
+            )
+        );
+        
         // subscription options
         
         $subscription = array();
@@ -97,28 +119,31 @@ class OPanda_ConnectOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
         require_once OPANDA_BIZPANDA_DIR . '/admin/includes/subscriptions.php';
         $service = OPanda_SubscriptionServices::getService();
         
-        $subscription[] = array(
-            'type' => 'html',
-            'html' => array($this, 'showSubscriptionService')
-        );
-        
-        if ( 'none' !== $service->name ) {
+        if ( BizPanda::hasPlugin('optinpanda') ) {
             
             $subscription[] = array(
-                'type' => 'dropdown',
-                'name' => 'subscribe_list',
-                'data' => array(
-                    'ajax' => true,
-                    'url' => admin_url('admin-ajax.php'),
-                    'data' => array(
-                        'action' => 'opanda_get_subscrtiption_lists',
-                        'opanda_service' => $service->name
-                    )
-                ),
-                'empty' => sprintf( '- empty -', $service->title ),
-                'title' => __('List', 'opanda'),
-                'hint' => sprintf( 'Select the list in your %s account to add subscribers.', $service->title )
+                'type' => 'html',
+                'html' => array($this, 'showSubscriptionService')
             );
+
+            if ( 'none' !== $service->name ) {
+
+                $subscription[] = array(
+                    'type' => 'dropdown',
+                    'name' => 'subscribe_list',
+                    'data' => array(
+                        'ajax' => true,
+                        'url' => admin_url('admin-ajax.php'),
+                        'data' => array(
+                            'action' => 'opanda_get_subscrtiption_lists',
+                            'opanda_service' => $service->name
+                        )
+                    ),
+                    'empty' => sprintf( '- empty -', $service->title ),
+                    'title' => __('List', 'opanda'),
+                    'hint' => sprintf( 'Select the list in your %s account to add subscribers.', $service->title )
+                );
+            } 
         }
 
         $subscription[] = array(
@@ -200,7 +225,7 @@ class OPanda_ConnectOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
                     'hasGroups' => false,
                     'hasHints' => true,
                     'data' => array(
-                        array('hidden', __('Auto (Recommended)', 'bizpanda'), __('The user will be logged in automatically after clicking on the Sign-In Buttons.', 'bizpanda')),
+                        // array('hidden', __('Auto (Recommended)', 'bizpanda'), __('The user will be logged in automatically after clicking on the Sign-In Buttons.', 'bizpanda')),
                         array('postponed', __('Manual', 'bizpanda'), __('The account will be created but the user will not be logged in. The user will have to log in manually by using the login details sent via email. The locked content will get available instantly after clicking on the Sign-In buttons.', 'bizpanda'))
                     ),
                     'title' => __('Login Mode', 'bizpanda'),
@@ -332,32 +357,38 @@ class OPanda_ConnectOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
         $options[] = array(
             'type'      => 'hidden',
             'name'      => 'facebook_actions',
-            'default'   => 'subscribe'
+            'default'   => 'lead'
         ); 
         
         $options[] = array(
             'type'      => 'hidden',
             'name'      => 'twitter_actions',
-            'default'   => 'subscribe'
+            'default'   => 'lead'
         );
         
         $options[] = array(
             'type'      => 'hidden',
             'name'      => 'google_actions',
-            'default'   => 'subscribe'
+            'default'   => 'lead'
         ); 
         
         $options[] = array(
             'type'      => 'hidden',
             'name'      => 'linkedin_actions',
-            'default'   => 'subscribe'
+            'default'   => 'lead'
         );
         
         $options[] = array(
             'type'      => 'hidden',
             'name'      => 'email_actions',
-            'default'   => 'subscribe'
+            'default'   => 'lead'
         );   
+        
+        $options[] = array(
+            'type'      => 'hidden',
+            'name'      => 'catch_leads',
+            'default'   => true
+        );    
         
         $options = apply_filters('onp_sl_connect_options', $options);
         $form->add( $options ); 
@@ -368,6 +399,31 @@ class OPanda_ConnectOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
         $description = empty( $description ) ? '' : '<p>' . $description . '</p>';
         
         return '<div class="form-group opanda-header"><label class="col-sm-2 control-label"></label><div class="control-group col-sm-10"><div class="opanda-inner-wrap">' . $title . $description . '</div></div></div>';
+    }
+    
+    public function getLeadExplanationOption() {
+        
+        $socialItem = opanda_fetch_panda_items('optinpanda');
+        $url = $socialItem['url'];
+            
+        ?>
+
+        <div class="form-group" style="margin-bottom: 10px;">
+            <label class="col-sm-2 control-label">
+                 <?php _e('How to use', 'opanda') ?>
+            </label>
+            <div class="control-group col-sm-10">
+                <p style="padding-top: 3px;">
+                    <?php printf( __('<a href="%s" class="button" target="_blank">See emails</a> of users who already signed-up or <a href="%s" class="button" target="_blank">export emails</a> in the CSV format.', 'opanda'), admin_url('edit.php?post_type=opanda-item&page=leads-bizpanda'), admin_url('admin.php?page=leads-bizpanda&action=export') ) ?>
+                </p>
+                <p>
+                    <?php printf( __('Install the plugin <a href="%s" target="_blank">Opt-In Panda</a> to automatically subscribe all the signed-up users to your mailing list.'), $url ) ?>
+                </p>
+            </div>
+        </div>
+
+        <?php
+   
     }
     
     public function getSignupRoleOption() {
@@ -426,6 +482,11 @@ class OPanda_ConnectOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
                 'title' => __('Facebook', 'optinpanda'),
                 'errors' => array($this, 'getFacebookErrors'),
                 'actions' => array(
+                    'lead' => array(
+                        'on'    => true,
+                        'title' => __('Save Email', 'bizpanda'),
+                        'always' => true
+                    ),
                     'subscribe' => array(
                         'title' => __('Subscribe', 'bizpanda')
                     ),
@@ -440,6 +501,11 @@ class OPanda_ConnectOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
                 'title' => __('Twitter', 'optinpanda'),
                 'errors' => array($this, 'getTwitterErrors'),
                 'actions' => array(
+                    'lead' => array(
+                        'on'    => true,
+                        'title' => __('Save Email', 'bizpanda'),
+                        'always' => true
+                    ),
                     'subscribe' => array(
                         'title' => __('Subscribe', 'bizpanda')
                     ),
@@ -462,6 +528,11 @@ class OPanda_ConnectOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
                 'title' => __('Google', 'optinpanda'),
                 'errors' => array($this, 'getGoogleErrors'),
                 'actions' => array(
+                    'lead' => array(
+                        'on'    => true,
+                        'title' => __('Save Email', 'bizpanda'),
+                        'always' => true
+                    ),
                     'subscribe' => array(
                         'title' => __('Subscribe', 'bizpanda')
                     ),
@@ -480,6 +551,11 @@ class OPanda_ConnectOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
                 'title' => __('LinkedIn', 'optinpanda'),
                 'errors' => array($this, 'getLinkedInErrors'),
                 'actions' => array(
+                    'lead' => array(
+                        'on'    => true,
+                        'title' => __('Save Email', 'bizpanda'),
+                        'always' => true
+                    ),
                     'subscribe' => array(
                         'title' => __('Subscribe', 'bizpanda')
                     ),
@@ -497,6 +573,11 @@ class OPanda_ConnectOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
             'email' => array(
                 'title' => __('Email Form', 'optinpanda'),
                 'actions' => array(
+                    'lead' => array(
+                        'on'    => true,
+                        'title' => __('Save Email', 'bizpanda'),
+                        'always' => true
+                    ),
                     'subscribe' => array(
                         'title' => __('Subscribe', 'bizpanda')
                     ),
@@ -555,7 +636,7 @@ class OPanda_ConnectOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
         }    
         
         $buttons = apply_filters('opanda_connect_buttons_options', $buttons);
-        $commonActions = array('subscribe', 'signup');
+        $commonActions = array('subscribe', 'signup', 'lead');
         ?>
         <div class="opanda-connect-buttons factory-fontawesome-320">
 
@@ -587,8 +668,18 @@ class OPanda_ConnectOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
                                     $actionTitle = $actionData['title'];
                                 ?>
                                 <?php $isCommon = in_array( $actionName, $commonActions ); ?>
+                            
                                 <li class='opanda-action opanda-action-<?php echo $actionName ?>'>
-                                    <span><input type="checkbox" value="1" data-common="<?php echo ( $isCommon ? '1' : '0' ); ?>" data-button="<?php echo $name ?>" data-action="<?php echo $actionName ?>" disabled="disabled" /></span>
+                                    <span>
+                                        <input 
+                                            type="checkbox" 
+                                            value="1" 
+                                            data-common="<?php echo ( $isCommon ? '1' : '0' ); ?>" 
+                                            data-button="<?php echo $name ?>" 
+                                            data-action="<?php echo $actionName ?>" 
+                                            disabled="disabled" />
+                                    </span>
+                                    
                                     <a href="#" class="opanda-action-link" data-common="<?php echo ( $isCommon ? '1' : '0' ); ?>" data-button="<?php echo $name ?>" data-action="<?php echo $actionName ?>"><?php echo $actionTitle ?></a>
                                 </li>
                             <?php } ?>
@@ -710,6 +801,30 @@ class OPanda_ConnectOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
             </div>
         </div>
         <?php
+    }
+    
+    /**
+     * Removes the action 'lead' from options of the buttons because it's a virtual action.
+     */
+    public function onSavingForm( $postId ) {
+
+        $buttons = array('facebook', 'twitter', 'google', 'linkedin', 'email');
+        foreach( $buttons as $buttonName ) {
+            
+            $strActions = isset( $_POST['opanda_' . $buttonName . '_actions'] ) 
+                            ? $_POST['opanda_' . $buttonName . '_actions'] 
+                            : '';
+            
+            $rawActions = explode(',', $strActions);
+            $filteredActions = array();
+            
+            foreach( $rawActions as $action ) {
+                if ( 'lead' == $action ) continue;
+                $filteredActions[] = $action;
+            } 
+            
+            $_POST['opanda_' . $buttonName . '_actions'] = implode(',', $filteredActions);
+        }
     }
 }
 

@@ -21,12 +21,14 @@ abstract class OPanda_Subscription {
         return filter_var($email, FILTER_VALIDATE_EMAIL);       
     }
     
-    public abstract function getOptions();
+    public function getOptions() {
+        return array();
+    }
 
     public abstract function getOptInModes();
     public abstract function getLists();
-    public abstract function subscribe( $identityData, $listId, $doubleOptin );
-    public abstract function check( $identityData, $listId );
+    public abstract function subscribe( $identityData, $listId, $doubleOptin, $contextData );
+    public abstract function check( $identityData, $listId, $contextData );
 }
 
 /**

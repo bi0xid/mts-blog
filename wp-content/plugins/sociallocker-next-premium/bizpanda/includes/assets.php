@@ -159,7 +159,7 @@ class OPanda_AssetsManager {
 
             wp_enqueue_script( 
                 'onp-optinpanda', 
-                OPANDA_BIZPANDA_URL . '/assets/js/lockers.010003.min.js', 
+                OPANDA_BIZPANDA_URL . '/assets/js/lockers.010004.min.js', 
                 array('jquery', 'jquery-effects-core', 'jquery-effects-highlight'), false, true
             );  
         
@@ -431,6 +431,11 @@ class OPanda_AssetsManager {
                 
         foreach($bulkLockers as $id => $options) {
             
+            $itemType = get_post_meta( $id, 'opanda_item', true );
+
+            if ( 'social-locker' == $itemType && !BizPanda::hasPlugin('sociallocker') ) continue;
+            if ( 'email-locker' == $itemType && !BizPanda::hasPlugin('optinpanda') ) continue;
+            
             // if we have bulk lockers based on css selectors, then we have to include
             // assets on every page and also print which css selectors we will use for the
             // Opt-In Panda creater script
@@ -532,6 +537,10 @@ class OPanda_AssetsManager {
             if ( self::isPageExcluded( $id, $options ) ) continue;
                         
             $itemType = get_post_meta( $id, 'opanda_item', true );
+
+            if ( 'social-locker' == $itemType && !BizPanda::hasPlugin('sociallocker') ) continue;
+            if ( 'email-locker' == $itemType && !BizPanda::hasPlugin('optinpanda') ) continue;
+            
             switch ( $itemType ) {
                 case 'email-locker':
                     $shortcodeName = 'emaillocker-bulk';

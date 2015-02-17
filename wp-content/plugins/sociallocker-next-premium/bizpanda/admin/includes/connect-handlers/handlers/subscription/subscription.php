@@ -17,7 +17,7 @@ class OPanda_SubscriptionHandler extends OPanda_Handler {
         // - service name
         
         $service = $this->options['service'];
-        $allowed = array( 'database', 'mailchimp', 'aweber', 'getresponse' );
+        $allowed = array( 'database', 'mailchimp', 'aweber', 'getresponse', 'mymail', 'mailpoet' );
         
         if ( !in_array( $service, $allowed ) ) {
            throw new Opanda_HandlerInternalException( sprintf( 'The subscription service "%s" not found.', $service ));
@@ -97,15 +97,15 @@ class OPanda_SubscriptionHandler extends OPanda_Handler {
             $result = array();
             
             if ( 'subscribe' === $requestType ) {
-                $result = $service->subscribe( $identityData, $listId, $doubleOptin, $confirm );
-                
+                $result = $service->subscribe( $identityData, $listId, $doubleOptin, $contextData );
+
                 do_action('opanda_subscribe', 
                     ( $result && isset( $result['status'] ) ) ? $result['status'] : 'error', 
                     $identityData, $contextData
                 );
                 
             } elseif ( 'check' === $requestType ) {
-                $result = $service->check( $identityData, $listId );
+                $result = $service->check( $identityData, $listId, $contextData );
 
                 do_action('opanda_check', 
                     ( $result && isset( $result['status'] ) ) ? $result['status'] : 'error', 

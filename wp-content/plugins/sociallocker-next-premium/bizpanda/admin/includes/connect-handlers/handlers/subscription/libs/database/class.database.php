@@ -33,14 +33,14 @@ class OPanda_DatabaseSubscriptionService extends OPanda_Subscription {
     /**
      * Subscribes the person.
      */
-    public function subscribe( $identityData, $listId, $doubleOptin ) {
+    public function subscribe( $identityData, $listId, $doubleOptin, $contextData ) {
         return array('status' => 'subscribed');
     }
     
     /**
      * Checks if the user subscribed.
      */  
-    public function check( $identityData, $listId ) { 
+    public function check( $identityData, $listId, $contextData ) { 
         return array('status' => 'subscribed');
     }
 }

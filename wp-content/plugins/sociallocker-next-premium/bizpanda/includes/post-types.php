@@ -49,8 +49,8 @@ if ( in_array( $sociallocker->license->type, array( 'paid','trial' ) ) ) {
     function __construct($plugin) {
         parent::__construct($plugin);
         
-        $this->pluralTitle = __('Panda Items', 'optinpanda');
-        $this->singularTitle = __('Panda Item', 'optinpanda');
+        $this->pluralTitle = __('Lockers', 'optinpanda');
+        $this->singularTitle = __('Locker', 'optinpanda');
     }
     
     /**
@@ -69,8 +69,8 @@ if ( in_array( $sociallocker->license->type, array( 'paid','trial' ) ) ) {
         $labels = array(
             'singular_name' => $this->singularTitle,
             'name' => $this->pluralTitle,          
-            'all_items' => sprintf( __('Panda Items', 'optinpanda'), $pluralName ),
-            'add_new' => sprintf( __('+ New Item', 'optinpanda'), $singularName ),
+            'all_items' => sprintf( __('All Lockers', 'optinpanda'), $pluralName ),
+            'add_new' => sprintf( __('+ New Locker', 'optinpanda'), $singularName ),
             'add_new_item' => sprintf( __('Add new', 'optinpanda'), $singularName ),
             'edit' => sprintf( __('Edit', 'optinpanda') ),
             'edit_item' => sprintf( __('Edit Item', 'optinpanda'), $singularName ),
@@ -129,7 +129,7 @@ if ( in_array( $sociallocker->license->type, array( 'paid','trial' ) ) ) {
         
         $this->scripts->add( OPANDA_BIZPANDA_URL . '/assets/admin/js/libs/json2.js');
         $this->scripts->add( OPANDA_BIZPANDA_URL . '/assets/admin/js/preview.010000.js');
-        $this->scripts->add( OPANDA_BIZPANDA_URL . '/assets/admin/js/item-edit.010000.js')->request('jquery-ui-sortable');       
+        $this->scripts->add( OPANDA_BIZPANDA_URL . '/assets/admin/js/item-edit.010007.js')->request('jquery-ui-sortable');       
         $this->styles->add( OPANDA_BIZPANDA_URL . '/assets/admin/css/item-edit.010000.css');
             $this->styles->add( OPANDA_BIZPANDA_URL . '/assets/admin/css/item-edit.010000-en_US.css');  
         

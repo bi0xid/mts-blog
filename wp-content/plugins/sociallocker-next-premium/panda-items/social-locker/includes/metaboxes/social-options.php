@@ -250,48 +250,6 @@ class OPanda_SocialOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
                     'hint'  => __('Optional. A title of the button that is situated on the covers in the themes "Secrets" and "Flat".', 'optinpanda'),
                     'name'  => 'facebook_share_title',
                     'default' => __('share', 'optinpanda')
-                ),
-            
-                array(
-                    'type'      => 'more-link',
-                    'name'      => 'share-button-options',
-                    'title'     => __('Show more options', 'optinpanda'),
-                    'count'     => 5,
-                    'items'     => array(
-                        
-                       array(
-                           'type'  => 'form-group',
-                           'title' => __('Data To Share', 'optinpanda'),
-                           'hint'  => __('By default data extracted from the URL will be used to publish a message on a user wall. But you can specify other data you want users to share.', 'optinpanda'),
-                           'items' => array(
-                               
-                                array(
-                                    'type'  => 'textbox',
-                                    'title' => __('Name', 'optinpanda'),
-                                    'hint'  => __('Optional. The name of the link attachment.', 'optinpanda'),
-                                    'name'  => 'facebook_share_message_name'
-                                ),
-                                array(
-                                    'type'  => 'textbox',
-                                    'title' => __('Caption', 'optinpanda'),
-                                    'hint'  => __('Optional. The caption of the link (appears beneath the link name). If not specified, this field is automatically populated with the URL of the link.', 'optinpanda'),
-                                    'name'  => 'facebook_share_message_caption'
-                                ),
-                                array(
-                                    'type'  => 'textbox',
-                                    'title' => __('Description', 'optinpanda'),
-                                    'hint'  => __('Optional. The description of the link (appears beneath the link caption). If not specified, this field is automatically populated by information scraped from the link, typically the title of the page.', 'optinpanda'),
-                                    'name'  => 'facebook_share_message_description'
-                                ),  
-                                array(
-                                    'type'  => 'textbox',
-                                    'title' => __('Image', 'optinpanda'),
-                                    'hint'  => __('Optional. The URL of a picture attached to this post. The picture must be at least 50px by 50px (though minimum 200px by 200px is preferred) and have a maximum aspect ratio of 3:1.', 'optinpanda'),
-                                    'name'  => 'facebook_share_message_image'
-                                ),  
-                           )
-                       )
-                    )
                 )
             )
         );

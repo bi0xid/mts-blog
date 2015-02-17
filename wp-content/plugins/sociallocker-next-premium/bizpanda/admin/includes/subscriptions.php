@@ -28,6 +28,16 @@ class OPanda_SubscriptionServices {
                 'title' => __('GetResponse', 'optinpanda'),
                 'class' => 'OPanda_GetResponseSubscriptionService',
                 'path' => OPANDA_BIZPANDA_DIR . '/admin/includes/connect-handlers/handlers/subscription/libs/getresponse/class.getresponse.php',
+            ),
+            'mymail' => array(
+                'title' => __('MyMail', 'optinpanda'),
+                'class' => 'OPanda_MyMailSubscriptionService',
+                'path' => OPANDA_BIZPANDA_DIR . '/admin/includes/connect-handlers/handlers/subscription/libs/mymail/class.mymail.php',
+            ),
+            'mailpoet' => array(
+                'title' => __('MailPoet', 'optinpanda'),
+                'class' => 'OPanda_MailPoetSubscriptionService',
+                'path' => OPANDA_BIZPANDA_DIR . '/admin/includes/connect-handlers/handlers/subscription/libs/mailpoet/class.mailpoet.php',
             )
         );
         

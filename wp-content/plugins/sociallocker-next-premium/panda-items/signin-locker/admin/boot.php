@@ -50,6 +50,7 @@ function opanda_signin_locker_activation( $plugin, $helper ) {
             'opanda_header' => __('Sign In To Unlock This Content', 'optinpanda'),       
             'opanda_message' => __('Please sign in. It\'s free. Just click one of the buttons below to get instant access.', 'optinpanda'),
             'opanda_style' => 'great-attractor',
+            'opanda_catch_leads' => 1,
             'opanda_connect_buttons' => 'facebook,twitter,google',
             'opanda_facebook_actions' => BizPanda::hasPlugin('optinpanda') ? 'subscribe,signup' : 'signup',
             'opanda_twitter_actions' => BizPanda::hasPlugin('optinpanda') ? 'subscribe,signup' : 'signup',

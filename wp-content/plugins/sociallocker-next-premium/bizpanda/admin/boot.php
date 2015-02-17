@@ -13,9 +13,7 @@ require OPANDA_BIZPANDA_DIR . '/admin/bulk-lock.php';
 require OPANDA_BIZPANDA_DIR . '/admin/pages/base.php';
 require OPANDA_BIZPANDA_DIR . '/admin/pages/new-item.php';
 
-if ( defined('OPTINPANDA_PLUGIN_ACTIVE') ) {  
-    require OPANDA_BIZPANDA_DIR . '/admin/pages/leads.php';
-}
+require OPANDA_BIZPANDA_DIR . '/admin/pages/leads.php';
     
 require OPANDA_BIZPANDA_DIR . '/admin/pages/stats.php';    
 require OPANDA_BIZPANDA_DIR . '/admin/pages/settings.php';    
@@ -35,6 +33,9 @@ if ( isset( $_REQUEST['action'] ) ) {
         case 'onp_sl_preview':
             require OPANDA_BIZPANDA_DIR . '/admin/ajax/preview.php';  
             break;
+        case 'opanda_avatar':
+            require OPANDA_BIZPANDA_DIR . '/admin/ajax/avatar.php';
+            break;      
         case 'opanda_connect':
         case 'opanda_get_subscrtiption_lists':
             require OPANDA_BIZPANDA_DIR . '/admin/ajax/proxy.php';
@@ -201,12 +202,27 @@ add_filter('mce_external_plugins', 'opanda_add_plugin');
  */
 
 /**
+ * Calls always when we receive contact data of a visitor.
+ */
+function opanda_lead_catched( $identity, $context, $emailConfirmed = false, $subscriptionConfirmed = false ) {
+    $itemId = isset( $context['itemId'] ) ? intval( $context['itemId'] ) : 0;
+    
+    if ( empty( $itemId ) || get_post_meta($itemId, 'opanda_catch_leads', true) ) {
+        
+        require_once OPANDA_BIZPANDA_DIR . '/admin/includes/leads.php';
+        require_once OPANDA_BIZPANDA_DIR . '/admin/includes/stats.php';
+
+        OPanda_Leads::add( $identity, $context, $emailConfirmed, $subscriptionConfirmed );
+    }
+}
+
+add_action('opanda_lead_catched', 'opanda_lead_catched', 10, 4);
+
+/**
  * Calls always when we subscribe an user.
  */
 function opanda_subscribe( $status, $identity, $context ) {
-    require_once OPANDA_BIZPANDA_DIR . '/admin/includes/leads.php';
-    require_once OPANDA_BIZPANDA_DIR . '/admin/includes/stats.php'; 
-    
+
     if ( 'subscribed' == $status ) {
         
         // if the current service is 'database', 
@@ -215,10 +231,10 @@ function opanda_subscribe( $status, $identity, $context ) {
         $serviceName = BizPanda::getSubscriptionServiceName();
         $confirmed = $serviceName === 'database' ? false : true;
         
-        OPanda_Leads::add( $identity, $context, $confirmed );
+        do_action('opanda_lead_catched', $identity, $context, $confirmed, $confirmed );
         
     } elseif ( 'pending' == $status ) {
-        OPanda_Leads::add( $identity, $context, false );
+        do_action('opanda_lead_catched', $identity, $context, false, false  );
     }
 }
 
@@ -228,11 +244,9 @@ add_action('opanda_subscribe', 'opanda_subscribe', 10, 3);
  * Calls always when we check the subscription status of the user.
  */
 function opanda_check( $status, $identity, $context ) {
-    require_once OPANDA_BIZPANDA_DIR . '/admin/includes/leads.php';
-    require_once OPANDA_BIZPANDA_DIR . '/admin/includes/stats.php'; 
-    
+
     if ( 'subscribed' == $status ) {
-        OPanda_Leads::add( $identity, $context, true );
+        do_action('opanda_lead_catched', $identity, $context, true, true );
     }
 }
 
@@ -243,10 +257,10 @@ add_action('opanda_check', 'opanda_check', 10, 3);
  */
 function opanda_registered( $identity, $context = array() ) {
     require_once OPANDA_BIZPANDA_DIR . '/admin/includes/stats.php'; 
-    
+
     $itemId = isset( $context['itemId'] ) ? intval( $context['itemId'] ) : 0;
     $postId = isset( $context['postId'] ) ? intval( $context['postId'] ) : null;
-
+    
     OPanda_Stats::countMetrict( $itemId, $postId, 'account-registered');
 }
 add_action('opanda_registered', 'opanda_registered', 10, 2 );

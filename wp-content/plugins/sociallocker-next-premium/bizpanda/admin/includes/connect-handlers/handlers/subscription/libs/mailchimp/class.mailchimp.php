@@ -75,7 +75,7 @@ class OPanda_MailchimpSubscriptionService extends OPanda_Subscription {
     /**
      * Subscribes the person.
      */
-    public function subscribe( $identityData, $listId, $doubleOptin ) {
+    public function subscribe( $identityData, $listId, $doubleOptin, $contextData ) {
 
         $vars = array();
         if ( !empty( $identityData['name'] ) ) $vars['FNAME'] = $identityData['name'];
@@ -102,7 +102,7 @@ class OPanda_MailchimpSubscriptionService extends OPanda_Subscription {
     /**
      * Checks if the user subscribed.
      */  
-    public function check( $identityData, $listId ) { 
+    public function check( $identityData, $listId, $contextData ) { 
         
         $MailChimp = $this->initMailChimpLibs();
         $response = $MailChimp->call('/lists/member-info', array( 

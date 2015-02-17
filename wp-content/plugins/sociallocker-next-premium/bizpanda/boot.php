@@ -17,7 +17,12 @@ global $optinpanda;
 
 
 global $bizpanda;
-$bizpanda = new Factory325_Plugin(__FILE__, array( 'name' => 'bizpanda', 'lang' => 'en_US' ));
+$bizpanda = new Factory325_Plugin(__FILE__, array( 
+    'name' => 'bizpanda', 
+    'lang' => 'en_US',
+    'version' => '1.0.7',
+    'updates' => OPANDA_BIZPANDA_DIR . '/plugin/updates/'
+));
 
 // requires factory modules
 $bizpanda->load(array(

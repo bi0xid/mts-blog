@@ -106,30 +106,41 @@ class OPanda_Activation extends Factory325_Activator {
         global $wpdb;
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         
-        // leads & emails
+        // leads
         
         $leads = "
             CREATE TABLE {$wpdb->prefix}opanda_leads (
               ID int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-              lead_display_name varchar(255) NOT NULL,
+              lead_display_name varchar(255) DEFAULT NULL,
               lead_name varchar(100) DEFAULT NULL,
               lead_family varchar(100) DEFAULT NULL,
               lead_email varchar(50) NOT NULL,
               lead_date int(11) NOT NULL,
-              lead_post_id int(11) DEFAULT NULL,
-              lead_post_url varchar(255) DEFAULT NULL,
-              lead_post_title varchar(255) DEFAULT NULL,
+              lead_email_confirmed int(1) NOT NULL DEFAULT 0 COMMENT 'email',
+              lead_subscription_confirmed int(1) NOT NULL DEFAULT 0 COMMENT 'subscription',
+              lead_ip varchar(45) DEFAULT NULL,
               lead_item_id int(11) DEFAULT NULL,
+              lead_post_id int(11) DEFAULT NULL,
               lead_item_title varchar(255) DEFAULT NULL,
-              lead_confirmed int(1) NOT NULL DEFAULT 0,
-              lead_catcher varchar(50) DEFAULT NULL,
-              lead_catcher_data text DEFAULT NULL,
-              lead_social_profile varchar(255) DEFAULT NULL,
+              lead_post_title varchar(255) DEFAULT NULL,
+              lead_referer text DEFAULT NULL,
               PRIMARY KEY  (ID),
               UNIQUE KEY lead_email (lead_email)
             );";
 
         dbDelta($leads); 
+        
+        // leads fields
+        
+        $leadsFields = "
+            CREATE TABLE {$wpdb->prefix}opanda_leads_fields (
+                lead_id int(10) UNSIGNED NOT NULL,
+                field_name varchar(255) NOT NULL,
+                field_value text NOT NULL,
+                UNIQUE KEY UK_wp_opanda_leads_fields (lead_id,field_name)
+            );";
+
+        dbDelta($leadsFields); 
         
         // stats
         

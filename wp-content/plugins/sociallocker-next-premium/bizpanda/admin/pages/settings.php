@@ -47,14 +47,15 @@ class OPanda_SettingsPage extends FactoryPages321_AdminPage  {
         $this->scripts->request( array( 
             'control.checkbox',
             'control.dropdown',
+            'plugin.ddslick',
             ), 'bootstrap' );
-        
+
         $this->styles->request( array( 
             'bootstrap.core', 
             'bootstrap.form-group',
             'bootstrap.separator',
             'control.dropdown',
-            'control.checkbox'
+            'control.checkbox',
             ), 'bootstrap' ); 
         
         $this->scripts->add(OPANDA_BIZPANDA_URL . '/assets/admin/js/settings.010000.js');

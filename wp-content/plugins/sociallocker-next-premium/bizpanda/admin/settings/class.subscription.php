@@ -53,16 +53,49 @@ class OPanda_SubscriptionSettings extends OPanda_Settings  {
         
         $options[] = array(
             'type' => 'dropdown',
-            'way'  => 'buttons',
             'name' => 'subscription_service',
+            'way' => 'ddslick',
+            'width' => 400,
             'data' => array(
-                array('database', __('None', 'optinpanda'), sprintf( __('The emails will be saved in the <a href="%s" target="_blank">database</a> only. You will be able to import them later.', 'optinpanda'), opanda_get_subscribers_url() ) ),
-                array('mailchimp', __('MailChimp', 'optinpanda'), sprintf( __('The emails will be added automatically to your MailChimp account and also saved in the <a href="%s" target="_blank">database</a>.', 'optinpanda'), opanda_get_subscribers_url() ) ),
-                array('aweber', __('Aweber', 'optinpanda'), sprintf( __('The emails will be added automatically to your Aweber account and also saved in the <a href="%s" target="_blank">database</a>.', 'optinpanda'), opanda_get_subscribers_url() ) ),
-                array('getresponse', __('GetResponse', 'optinpanda'), sprintf( __('The emails will be added automatically to your GetResponse account and also saved in the <a href="%s" target="_blank">database</a>.', 'optinpanda'), opanda_get_subscribers_url() ) ),
+                
+                array(
+                    'value' => 'database',
+                    'title' => 'None',
+                    'hint' => sprintf( __('Emails of subscribers will be saved in the WP database.', 'optinpanda'), opanda_get_subscribers_url() )
+                ),
+                array(
+                    'value' => 'mailchimp',
+                    'title' => 'MailChimp',
+                    'hint' => sprintf( __('Adds subscribers to your MailChimp account.', 'optinpanda'), opanda_get_subscribers_url() ),
+                    'image' => OPTINPANDA_URL . '/plugin/admin/assets/img/mailing-services/mailchimp.png'
+                ),
+                array(
+                    'value' => 'aweber',
+                    'title' => 'Aweber',
+                    'hint' => sprintf( __('Adds subscribers to your Aweber account.', 'optinpanda'), opanda_get_subscribers_url() ),
+                    'image' => OPTINPANDA_URL . '/plugin/admin/assets/img/mailing-services/aweber.png'
+                ),
+                array(
+                    'value' => 'getresponse',
+                    'title' => 'GetResponse',
+                    'hint' => sprintf( __('Adds subscribers to your GetResponse account.', 'optinpanda'), opanda_get_subscribers_url() ),
+                    'image' => OPTINPANDA_URL . '/plugin/admin/assets/img/mailing-services/getresponse.png'
+                ),
+                array(
+                    'value' => 'mymail',
+                    'title' => 'MyMail',
+                    'hint' => sprintf( __('Adds subscribers to the plugin MyMail.', 'optinpanda'), opanda_get_subscribers_url() ),
+                    'image' => OPTINPANDA_URL . '/plugin/admin/assets/img/mailing-services/mymail.png'
+                ),
+                array(
+                    'value' => 'mailpoet',
+                    'title' => 'MailPoet',
+                    'hint' => sprintf( __('Adds subscribers to the plugin MailPoet.', 'optinpanda'), opanda_get_subscribers_url() ),
+                    'image' => OPTINPANDA_URL . '/plugin/admin/assets/img/mailing-services/mailpoet.png'
+                )
             ),
             'default' => 'none',
-            'title' => __('Mail Service', 'optinpanda')
+            'title' => __('Mailing Service', 'optinpanda')
         );
         
         $options[] = array(
@@ -144,7 +177,44 @@ class OPanda_SubscriptionSettings extends OPanda_Settings  {
                 )
             )
         );
-
+        
+        $options[] = array(
+            'type'      => 'div',
+            'id'        => 'opanda-mymail-options',
+            'class'     => 'opanda-mail-service-options opanda-hidden',
+            'items'     => array(
+                
+       
+                array(
+                    'type' => 'html',
+                    'html' => array($this, 'showMyMailHtml')
+                ),
+                array(
+                    'type' => 'separator'
+                ),
+                array(
+                    'type'      => 'checkbox',
+                    'way'       => 'buttons',
+                    'name'      => 'mymail_redirect',
+                    'title'     => __( 'Redirect To Locker', 'optinpanda' ),
+                    'hint'      => sprintf( __( 'Set On, to redirect the user to the same page where the locker is located after clicking on the confirmation link.<br />If Off, the MyMail will redirect the user to the page specified in the option <a href="%s" target="_blank">Newsletter Homepage</a>.', 'optinpanda' ), admin_url('options-general.php?page=newsletter-settings&settings-updated=true#frontend') )
+                )
+            )
+        );
+        
+        $options[] = array(
+            'type'      => 'div',
+            'id'        => 'opanda-mailpoet-options',
+            'class'     => 'opanda-mail-service-options opanda-hidden',
+            'items'     => array(
+     
+                array(
+                    'type' => 'html',
+                    'html' => array($this, 'showMailPoetHtml')
+                )   
+            )
+        );
+        
         $options[] = array(
             'type' => 'separator'
         );
@@ -183,7 +253,65 @@ class OPanda_SubscriptionSettings extends OPanda_Settings  {
         <?php  
         }
     }
-
+    
+    /**
+     * Shows HTML for MyMail.
+     * 
+     * @since 1.0.7
+     * @return void
+     */
+    public function showMyMailHtml() {
+        
+        if ( !defined('MYMAIL_VERSION') ) {
+            ?>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="control-group controls col-sm-10">
+                    <p><strong><?php _e('The MyMail plugin is not found on your website. Emails will be added to the WP database only.', 'opanda') ?></strong></p>
+                </div>
+            </div>
+            <?php
+        } else {
+            ?>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="control-group controls col-sm-10">
+                    <p><?php _e('You can set a list where the subscribers should be added in the settings of a particular locker.', 'opanda') ?></p>
+                </div>
+            </div>
+        <?php
+        }
+    }
+    
+    /**
+     * Shows HTML for MyMail.
+     * 
+     * @since 1.0.7
+     * @return void
+     */
+    public function showMailPoetHtml() {
+        
+        if ( !defined('WYSIJA') ) {
+            ?>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="control-group controls col-sm-10">
+                    <p><strong><?php _e('The MailPoet plugin is not found on your website. Emails will be added to the WP database only.', 'opanda') ?></strong></p>
+                </div>
+            </div>
+            <?php
+        } else {
+            ?>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="control-group controls col-sm-10">
+                    <p><?php _e('You can set a list where the subscribers should be added in the settings of a particular locker.', 'opanda') ?></p>
+                </div>
+            </div>
+        <?php
+        }
+    }
+    
     /**
      * Calls before saving the settings.
      * 

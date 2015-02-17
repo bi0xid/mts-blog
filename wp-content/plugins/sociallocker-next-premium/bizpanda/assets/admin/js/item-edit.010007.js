@@ -515,6 +515,22 @@ if ( !window.bizpanda.lockerEditor ) window.bizpanda.lockerEditor = {};
                 this.$buttons.each(function(){
                     self.initButtonActions( $(this).data('name') )
                 });
+                
+                this.initActionSaveEmail();
+            },
+            
+            initActionSaveEmail: function () {
+
+                
+                $("input[data-action='lead']").change(function(){
+                    $("#opanda_catch_leads").val( $(this).is(":checked") ? "1" : "0" );
+                });
+                
+                if ( $("#opanda_catch_leads").val() == "1" ) {
+                    $("input[data-action='lead']").attr('checked', 'checked');
+                } else {
+                    $("input[data-action='lead']").removeAttr('checked');
+                }
             },
             
             initButtonActions: function( buttonName ) {

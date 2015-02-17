@@ -183,3 +183,9 @@ textarea {
     vertical-align: bottom;
     line-height: 28px;
 }
+
+.opanda-screen-subscription  .dd-option-image, 
+.opanda-screen-subscription  .dd-selected-image {
+    max-width: 110px !important;
+    margin-left: 20px;
+}

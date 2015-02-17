@@ -7,7 +7,8 @@
  * @since 1.0.0
  */
 function sociallocker_admin_assets( $hook ) {
-
+    return;
+    
     // sytles for the plugin notices
     if ( $hook == 'index.php' || $hook == 'plugins.php' || $hook == 'edit.php' )
         wp_enqueue_style( 'sociallocker-notices', SOCIALLOCKER_URL . '/assets/admin/css/notices.010000.css' ); 
