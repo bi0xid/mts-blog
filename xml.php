@@ -55,6 +55,20 @@ class xmlRender
 
         $res .= '<link>'. get_permalink($post->ID)  .'</link>'; 
         
+        $categories = '';
+        
+        foreach(wp_get_post_categories($post->ID) as $category)
+        {
+            $postCategory = get_category( $category );
+            
+            $categories .= '<category>
+                    <name>' . $postCategory->name . '</name>
+                    <slug>' . $postCategory->slug . '</slug>
+                 </category>';
+        }
+        
+        $res .= '<categories>' . $categories . '</categories>';
+        
         $imagesTypes = array('thumbnail', 'medium', 'large', 'full');
         
         $imageContent = '';
@@ -97,11 +111,23 @@ class xmlRender
         
         $res .= '<authorUrl>'. get_the_author_meta('user_nicename' , $post->post_author) .'</authorUrl>'; 
         
-        $res .= '<authorAvatar>'. get_the_author_meta('avatar' , $post->post_author) .'</authorAvatar>'; 
+        $res .= '<authorAvatar>'. self::getAuthorAvatarUrl(get_avatar($post->post_author, 100)) .'</authorAvatar>'; 
         
         $res .= '<url>'. $post->post_name .'</url>'; 
                 
         return '<post>' . $res . '</post>';
+    }
+    
+    public static function getAuthorAvatarUrl($img)
+    {
+        $url = '';
+        
+        if(preg_match('/src="(?<img>[^"]+)"/i', $img, $matches))
+        {
+            $url = isset($matches['img']) ? $matches['img'] : '';
+        }
+        
+        return $url;
     }
     
     public static function getXmlForCategories($categories = array())
