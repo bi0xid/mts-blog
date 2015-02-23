@@ -42,6 +42,18 @@ class xmlRender
         return '<posts>' . $res . '</posts>';
     }
     
+    public static function getImageNameFromUrl($sUrl = '')
+    {
+        $imageName = '';
+        
+        if(preg_match('/\/(?<imageName>[^\/]+)$/', $sUrl, $m))
+        {
+            $imageName = $m['imageName'];
+        }
+
+        return $imageName;
+    }
+    
     private static function getXmlForSinglePost($post = null)
     {
         if(!$post) return '';
@@ -49,8 +61,21 @@ class xmlRender
         $res = '';        
         $res .= '<title>'. apply_filters('the_title' , $post->post_title ) .'</title>';
         $res .= '<publish_date>'. apply_filters('get_the_time' , $post->post_date ) .'</publish_date>';
+        
+        $postContent = apply_filters('get_the_content' , $post->post_content );
+        
+        $customThumbnailName = '';
+
+        if(preg_match('/^.*(?<img><img[^>]+>)/', $postContent, $tmpMatches))
+        {
+            if(preg_match('/src="(?<img1>[^"]+)"/i', $tmpMatches['img'], $tm))
+            {
+                $customThumbnailName = self::getImageNameFromUrl($tm['img1']);
+            }
+        }
+
         $res .= '<content>
-			<![CDATA['. apply_filters('get_the_content' , $post->post_content ) .']]>
+			<![CDATA['. $postContent .']]>
 		</content>';
 
         $res .= '<link>'. get_permalink($post->ID)  .'</link>'; 
@@ -99,14 +124,42 @@ class xmlRender
                         'order' => 'ASC',
                         'orderby' => 'menu_order ID'));
         
+        $tmpAttachments = array();
+        
+        $isSet = false;
+        
         foreach($attachments as $att_id => $attachment) 
         {
+            $isConsideredAsThumbnail = 0;
+            
             $large_image_urls = wp_get_attachment_image_src($attachment->ID, 'large');
 
             if(!empty($large_image_urls) && isset($large_image_urls[0]))
             {
-                $attachmentContent .= '<attachment isThumbnail="' . (($attachment->ID == $post_thumbnail_id) ? '1' : '0') . '">' . $large_image_urls[0] . '</attachment>';
+                $imageName = self::getImageNameFromUrl($large_image_urls[0]);
+                
+                if($customThumbnailName && $imageName && $customThumbnailName == $imageName && !$isSet)
+                {
+                    $isConsideredAsThumbnail = 1;
+                    $isSet = true;
+                }
+            
+                $tmpAttachments[] = array(
+                    'isConsideredAsThumbnail' => $isConsideredAsThumbnail,
+                    'url' => $large_image_urls[0],
+                    'isThumbnail' => ($attachment->ID == $post_thumbnail_id) ? 1 : 0
+                );
             }
+        }
+        
+        if(!$isSet && isset($tmpAttachments[0]))
+        {
+            $tmpAttachments[0]['isConsideredAsThumbnail'] = 1;
+        }
+        
+        foreach($tmpAttachments as $tmpAttachment)
+        {
+            $attachmentContent .= '<attachment isThumbnail="' . $tmpAttachment['isThumbnail'] . '" isConsideredAsThumbnail="' . $tmpAttachment['isConsideredAsThumbnail'] . '">' . $tmpAttachment['url'] . '</attachment>';
         }
         
         $res .= '<images>'. 
