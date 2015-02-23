@@ -73,11 +73,15 @@ class xmlRender
         
         $imageContent = '';
         
+        $post_thumbnail_id = -1;
+        
         foreach($imagesTypes as $imageType)
         {
             $imgLink = '';
         
-            $large_image_urls = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), $imageType);
+            $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
+            
+            $large_image_urls = wp_get_attachment_image_src($post_thumbnail_id , $imageType);
 
             if(!empty($large_image_urls) && isset($large_image_urls[0]))
             {
@@ -97,7 +101,12 @@ class xmlRender
         
         foreach($attachments as $att_id => $attachment) 
         {
-            $attachmentContent .= '<attachment>' . wp_get_attachment_url($attachment->ID) . '</attachment>';
+            $large_image_urls = wp_get_attachment_image_src($attachment->ID, 'large');
+
+            if(!empty($large_image_urls) && isset($large_image_urls[0]))
+            {
+                $attachmentContent .= '<attachment isThumbnail="' . (($attachment->ID == $post_thumbnail_id) ? '1' : '0') . '">' . $large_image_urls[0] . '</attachment>';
+            }
         }
         
         $res .= '<images>'. 
