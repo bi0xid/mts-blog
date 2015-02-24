@@ -6,7 +6,7 @@ ini_set('display_errors', false);
 error_reporting(0);
 
 include('./wp-load.php');
-        
+
 class xmlRender
 {
     private $xml = '';
@@ -226,7 +226,7 @@ class xmlRender
 
 class CoreController
 {
-    const PER_PAGE = 10;
+    const PER_PAGE = 12;
     
     private $type = 'post';
     
@@ -235,6 +235,8 @@ class CoreController
     private $page = '';
     
     private $xmlRender = null;
+    
+    private $s = '';
 
     public function __construct()
     {
@@ -256,11 +258,12 @@ class CoreController
         $this->type = isset($_GET['type']) ? (string)$_GET['type'] : 'post';
         $this->url = isset($_GET['url']) ? (string)$_GET['url'] : '';
         $this->page = (int)abs(isset($_GET['page']) ? (int)$_GET['page'] : 1);
+        $this->s = isset($_GET['s']) ? (string)$_GET['s'] : '';
     }
     
     public function isValid()
     {
-        return (in_array($this->type, array('post', 'category')) && preg_match('/^[-\w\d]*$/', $this->url));
+        return (in_array($this->type, array('post', 'category', 'search')) && preg_match('/^[-\w\d]*$/', $this->url));
     }
     
     private function process()
@@ -298,6 +301,16 @@ class CoreController
                                 xmlRender::getXmlForCategories($categories)
                             );
             break;
+            
+            case 'search':
+               
+                $posts = $this->getSearch();
+                
+                $this->xmlRender->addXml(
+                                xmlRender::getXmlForPosts($posts)
+                            );                
+            break;
+
         
             default:
                 $this->forbidden(); die();                
@@ -310,6 +323,19 @@ class CoreController
         header('Content-Type: application/xml; charset=' . get_option('blog_charset'), true);  
         echo $this->xmlRender->getXml();
         die();
+    }
+    
+    public function getSearch()
+    {
+        $query_args = array('s' => $this->s,  
+                            'post_type'      => 'any',
+                            'post_status'    => 'publish',
+                            'posts_per_page' => self::PER_PAGE,
+                            'offset'         => (int)(($this->page - 1)*self::PER_PAGE));
+        
+        $query = new WP_Query( $query_args );
+
+        return $query->get_posts();
     }
     
     public function getPosts($categoryId = 0)
