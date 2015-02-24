@@ -226,7 +226,7 @@ class xmlRender
 
 class CoreController
 {
-    const PER_PAGE = 12;
+    const PER_PAGE = 10;
     
     private $type = 'post';
     
