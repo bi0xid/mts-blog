@@ -21,3 +21,9 @@
 /wp-content/plugins/wordfence/tmp/*
 /wp-content/w3tc-config/master.php
 /wp-content/w3tc-config/master_copy.php
+/cdn.php
+/cdn1.php
+/img
+/cdn2.php
+/checkImages.php
+
