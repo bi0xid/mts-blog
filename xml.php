@@ -123,7 +123,7 @@ class xmlRender
         
         $customThumbnailName = '';
 
-        if(preg_match('/^.*(?<img><img[^>]+>)/', $postContent, $tmpMatches))
+        if(preg_match('/(?<img><img[^>]+>)/', $postContent, $tmpMatches))
         {
             if(preg_match('/src="(?<img1>[^"]+)"/i', $tmpMatches['img'], $tm))
             {
