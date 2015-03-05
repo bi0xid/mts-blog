@@ -11,12 +11,14 @@ class xmlRender
 {
     private $xml = '';
     
-    public static $imagesTypes = array('thumbnail', 'medium', 'large', 'full');
+    private static $dom = null;
     
     private static $counter = 0;
     
     public function __construct()
-    {        
+    {
+        self::$dom = new domDocument;
+        
         /* add xml header */
         $this->xml .= '<?xml version="1.0" encoding="'. get_option('blog_charset') .'"?>
                             <root>';
@@ -94,29 +96,10 @@ class xmlRender
             }
         }
         
-        $tags = "<h1></h1><blockquote></blockquote><p></p><strong></strong><em></em><br><br/><img><a></a>";
-        
         $result = array(
-            'content' => strip_tags($content, $tags),
+            'content' => $content,
             'youtubeUlr' => $youtubeUlrs
         );
-        
-        return $result;
-    }
-    
-    public static function getAllSizeOfAttachmentsById($id)
-    {
-        $result = array();
-        
-        foreach(self::$imagesTypes as $type)
-        {
-            $img = wp_get_attachment_image_src($id, $type);
-            
-            if(!empty($img) && isset($img[0]))
-            {
-                $result[$type] = $img[0];
-            }
-        }
         
         return $result;
     }
@@ -146,7 +129,7 @@ class xmlRender
         $reformatContent = self::reformatPostContent($postContent);
         
         $res .= '<content>
-			<![CDATA['. $reformatContent['content'] .']]>
+			<![CDATA['. $postContent .']]>
 		</content>';
 
         $res .= '<link>'. get_permalink($post->ID)  .'</link>'; 
@@ -177,6 +160,27 @@ class xmlRender
         
         $res .= "<youtube>{$youtubeVideo}</youtube>";
         
+        $imagesTypes = array('thumbnail', 'medium', 'large', 'full');
+        
+        $imageContent = '';
+        
+        $post_thumbnail_id = -1;
+        
+        foreach($imagesTypes as $imageType)
+        {
+            $imgLink = '';
+        
+            $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
+            
+            $large_image_urls = wp_get_attachment_image_src($post_thumbnail_id , $imageType);
+
+            if(!empty($large_image_urls) && isset($large_image_urls[0]))
+            {
+                $imgLink = $large_image_urls[0];
+            }
+            $imageContent .= "<{$imageType}>{$imgLink}</{$imageType}>"; 
+        }
+        
         $attachmentContent = '';
         
         $attachments = get_children(array('post_parent' => $post->ID,
@@ -190,17 +194,15 @@ class xmlRender
         
         $isSet = false;
         
-        $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
-        
         foreach($attachments as $att_id => $attachment) 
         {
-            $imgs = self::getAllSizeOfAttachmentsById($attachment->ID);
-            
             $isConsideredAsThumbnail = 0;
             
-            if(isset($imgs['full']) && $imgs['full'] != '')
+            $large_image_urls = wp_get_attachment_image_src($attachment->ID, 'large');
+
+            if(!empty($large_image_urls) && isset($large_image_urls[0]))
             {
-                $imageName = self::getImageNameFromUrl($imgs['full']);
+                $imageName = self::getImageNameFromUrl($large_image_urls[0]);
                 
                 if($customThumbnailName && $imageName && $customThumbnailName == $imageName && !$isSet)
                 {
@@ -210,7 +212,7 @@ class xmlRender
             
                 $tmpAttachments[] = array(
                     'isConsideredAsThumbnail' => $isConsideredAsThumbnail,
-                    'imgs' => $imgs,
+                    'url' => $large_image_urls[0],
                     'isThumbnail' => ($attachment->ID == $post_thumbnail_id) ? 1 : 0
                 );
             }
@@ -223,18 +225,15 @@ class xmlRender
         
         foreach($tmpAttachments as $tmpAttachment)
         {
-            $attachmentsTypes = '';
-            
-            foreach(self::$imagesTypes as $type)
-            {
-                $src = isset($tmpAttachment['imgs'][$type]) ? $tmpAttachment['imgs'][$type] : '';
-                $attachmentsTypes .= "<{$type}>{$src}</{$type}>";
-            }
-            
-            $attachmentContent .= '<image isThumbnail="' . $tmpAttachment['isThumbnail'] . '" isConsideredAsThumbnail="' . $tmpAttachment['isConsideredAsThumbnail'] . '">' . $attachmentsTypes . '</image>';
+            $attachmentContent .= '<attachment isThumbnail="' . $tmpAttachment['isThumbnail'] . '" isConsideredAsThumbnail="' . $tmpAttachment['isConsideredAsThumbnail'] . '">' . $tmpAttachment['url'] . '</attachment>';
         }
         
-        $res .= "<images>{$attachmentContent}</images>"; 
+        $res .= '<images>'. 
+                    $imageContent  . 
+                    '<attachments>' 
+                        . $attachmentContent . 
+                    '</attachments>' .
+                '</images>'; 
         
         $res .= '<author>'. get_the_author_meta('display_name', $post->post_author) .'</author>'; 
         
