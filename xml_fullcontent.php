@@ -96,10 +96,8 @@ class xmlRender
             }
         }
         
-        $tags = "<h1></h1><blockquote></blockquote><p></p><strong></strong><em></em><br><br/><img><a></a>";
-        
         $result = array(
-            'content' => strip_tags($content, $tags),
+            'content' => $content,
             'youtubeUlr' => $youtubeUlrs
         );
         
@@ -131,7 +129,7 @@ class xmlRender
         $reformatContent = self::reformatPostContent($postContent);
         
         $res .= '<content>
-			<![CDATA['. $reformatContent['content'] .']]>
+			<![CDATA['. $postContent .']]>
 		</content>';
 
         $res .= '<link>'. get_permalink($post->ID)  .'</link>'; 
