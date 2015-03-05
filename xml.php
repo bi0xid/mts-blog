@@ -45,19 +45,7 @@ class xmlRender
         
         return '<posts>' . $res . '</posts>';
     }
-    
-    public static function getImageNameFromUrl($sUrl = '')
-    {
-        $imageName = '';
         
-        if(preg_match('/\/(?<imageName>[^\/]+)$/', $sUrl, $m))
-        {
-            $imageName = $m['imageName'];
-        }
-
-        return $imageName;
-    }
-    
     private static function reformatPostContent($content = '')
     {
         $youtubeUlrs = array();
@@ -139,7 +127,7 @@ class xmlRender
         {
             if(preg_match('/src="(?<img1>[^"]+)"/i', $tmpMatches['img'], $tm))
             {
-                $customThumbnailName = self::getImageNameFromUrl($tm['img1']);
+                $customThumbnailName = $tm['img1'];
             }
         }
 
@@ -186,55 +174,21 @@ class xmlRender
                         'order' => 'ASC',
                         'orderby' => 'menu_order ID'));
         
-        $tmpAttachments = array();
+        global $wpdb;
         
-        $isSet = false;
+        $imageObject = $wpdb->get_row("SELECT * FROM $wpdb->posts WHERE guid Like '%$customThumbnailName'");
         
-        $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
+        $image = self::getAllSizeOfAttachmentsById($imageObject->ID);
         
-        foreach($attachments as $att_id => $attachment) 
+        $attachmentsTypes = '';
+        
+        foreach(self::$imagesTypes as $type)
         {
-            $imgs = self::getAllSizeOfAttachmentsById($attachment->ID);
-            
-            $isConsideredAsThumbnail = 0;
-            
-            if(isset($imgs['full']) && $imgs['full'] != '')
-            {
-                $imageName = self::getImageNameFromUrl($imgs['full']);
-                
-                if($customThumbnailName && $imageName && $customThumbnailName == $imageName && !$isSet)
-                {
-                    $isConsideredAsThumbnail = 1;
-                    $isSet = true;
-                }
-            
-                $tmpAttachments[] = array(
-                    'isConsideredAsThumbnail' => $isConsideredAsThumbnail,
-                    'imgs' => $imgs,
-                    'isThumbnail' => ($attachment->ID == $post_thumbnail_id) ? 1 : 0
-                );
-            }
+            $src = isset($image[$type]) ? $image[$type] : '';
+            $attachmentsTypes .= "<{$type}>{$src}</{$type}>";
         }
         
-        if(!$isSet && isset($tmpAttachments[0]))
-        {
-            $tmpAttachments[0]['isConsideredAsThumbnail'] = 1;
-        }
-        
-        foreach($tmpAttachments as $tmpAttachment)
-        {
-            $attachmentsTypes = '';
-            
-            foreach(self::$imagesTypes as $type)
-            {
-                $src = isset($tmpAttachment['imgs'][$type]) ? $tmpAttachment['imgs'][$type] : '';
-                $attachmentsTypes .= "<{$type}>{$src}</{$type}>";
-            }
-            
-            $attachmentContent .= '<image isThumbnail="' . $tmpAttachment['isThumbnail'] . '" isConsideredAsThumbnail="' . $tmpAttachment['isConsideredAsThumbnail'] . '">' . $attachmentsTypes . '</image>';
-        }
-        
-        $res .= "<images>{$attachmentContent}</images>"; 
+        $res .= "<image>{$attachmentsTypes}</image>"; 
         
         $res .= '<author>'. get_the_author_meta('display_name', $post->post_author) .'</author>'; 
         
