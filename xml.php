@@ -2,8 +2,8 @@
 /**
  * File for xml api.
  */
-//ini_set('display_errors', false);
-//error_reporting(0);
+ini_set('display_errors', false);
+error_reporting(0);
 
 include('./wp-load.php');
 
@@ -165,20 +165,26 @@ class xmlRender
         
         $res .= "<youtube>{$youtubeVideo}</youtube>";
         
-        $attachmentContent = '';
-        
-        $attachments = get_children(array('post_parent' => $post->ID,
-                        'post_status' => 'inherit',
-                        'post_type' => 'attachment',
-                        'post_mime_type' => 'image',
-                        'order' => 'ASC',
-                        'orderby' => 'menu_order ID'));
-        
         global $wpdb;
+                
+        $imageObject = null;
+        $isRealThumbnail = 0;
         
-        $imageObject = $wpdb->get_row("SELECT * FROM $wpdb->posts WHERE guid Like '%$customThumbnailName'");
+        if($customThumbnailName != ''){
+            $imageObject = $wpdb->get_row("SELECT * FROM $wpdb->posts WHERE guid Like '%$customThumbnailName'");
+        }
         
-        $image = self::getAllSizeOfAttachmentsById($imageObject->ID);
+        $thumbnail_id = -1;
+        
+        if(!$imageObject)
+        {
+            $isRealThumbnail = 1;
+            $thumbnail_id = get_post_thumbnail_id($post->ID);            
+        }else{
+            $thumbnail_id = $imageObject->ID;
+        }
+        
+        $image = self::getAllSizeOfAttachmentsById($thumbnail_id);
         
         $attachmentsTypes = '';
         
@@ -188,7 +194,7 @@ class xmlRender
             $attachmentsTypes .= "<{$type}>{$src}</{$type}>";
         }
         
-        $res .= "<image>{$attachmentsTypes}</image>"; 
+        $res .= "<image isRealThumbnail='{$isRealThumbnail}'>{$attachmentsTypes}</image>"; 
         
         $res .= '<author>'. get_the_author_meta('display_name', $post->post_author) .'</author>'; 
         
