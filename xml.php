@@ -191,6 +191,8 @@ class xmlRender
         foreach(self::$imagesTypes as $type)
         {
             $src = isset($image[$type]) ? $image[$type] : '';
+            $src = str_replace('http://mytinysecrets.com/', 'http://cdn.mytinysecrets.com/', $src);
+            
             $attachmentsTypes .= "<{$type}>{$src}</{$type}>";
         }
         
