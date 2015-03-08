@@ -109,6 +109,17 @@ class xmlRender
         return $result;
     }
     
+    private static function removePluginTags($content)
+    {
+        $content = preg_replace('/\[sociallocker id="?\d+\"?]/', '', $content);
+        $content = preg_replace('/\[\/sociallocker\]/', '', $content);
+        $content = preg_replace('/\[caption[^\]]+/', '', $content);
+        $content = preg_replace('/\[\/caption\]/', '', $content);
+        $content = preg_replace('/activate javascript/', '', $content);        
+        
+        return $content;
+    }
+    
     private static function getXmlForSinglePost($post = null)
     {
         if(!$post) return '';
@@ -132,6 +143,8 @@ class xmlRender
         }
 
         $reformatContent = self::reformatPostContent($postContent);
+        
+        $reformatContent = self::removePluginTags($reformatContent);
         
         $res .= '<content>
 			<![CDATA['. $reformatContent['content'] .']]>
