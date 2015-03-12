@@ -18,20 +18,24 @@ class NoLoginAuthor
 
     public static function pre_get_users($obj)
     {
-        if (!$obj->query_vars['role']) {
-            $obj->query_vars['role'] = 'nologin_author';
+        $user = wp_get_current_user();
+        if ( in_array( 'editor', $user->roles ) ) {
+            if (!$obj->query_vars['role']) {
+                $obj->query_vars['role'] = 'nologin_author';
+            }
         }
-
     }
 
     public function views_users($views)
     {
-        foreach ($views as $k=>$v) {
-            if (!in_array($k, array('all', 'nologin_author'))) {
-                unset($views[$k]);
+        $user = wp_get_current_user();
+        if ( in_array( 'editor', $user->roles ) ) {
+            foreach ($views as $k=>$v) {
+                if (!in_array($k, array('all', 'nologin_author'))) {
+                    unset($views[$k]);
+                }
             }
         }
-
 
         return $views;
     }
