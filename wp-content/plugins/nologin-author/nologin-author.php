@@ -12,16 +12,29 @@ class NoLoginAuthor
         add_filter( 'editable_roles', array('NoLoginAuthor', 'editors_edit_users_filter_roles'));
         add_filter( 'map_meta_cap', array('NoLoginAuthor', 'map_meta_cap'),10,4);
         add_filter( 'hidden_meta_boxes', array('NoLoginAuthor', 'hidden_meta_boxes'));
-//        add_action( 'pre_get_users', array('NoLoginAuthor','pre_get_users'));
+        add_filter( 'views_users', array('NoLoginAuthor', 'views_users'));
+        add_action( 'pre_get_users', array('NoLoginAuthor','pre_get_users'));
     }
 
-//    public static function pre_get_users($obj)
-//    {
-//        if (!$obj->query_vars['role']) {
-//            $obj->query_vars['role'] = 'nologin_author';
-//        }
-//
-//    }
+    public static function pre_get_users($obj)
+    {
+        if (!$obj->query_vars['role']) {
+            $obj->query_vars['role'] = 'nologin_author';
+        }
+
+    }
+
+    public function views_users($views)
+    {
+        foreach ($views as $k=>$v) {
+            if (!in_array($k, array('all', 'nologin_author'))) {
+                unset($views[$k]);
+            }
+        }
+
+
+        return $views;
+    }
 
     public static function hidden_meta_boxes($hidden)
     {
