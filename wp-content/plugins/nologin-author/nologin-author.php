@@ -13,7 +13,31 @@ class NoLoginAuthor
         add_filter( 'map_meta_cap', array('NoLoginAuthor', 'map_meta_cap'),10,4);
         add_filter( 'hidden_meta_boxes', array('NoLoginAuthor', 'hidden_meta_boxes'));
         add_filter( 'views_users', array('NoLoginAuthor', 'views_users'));
+        add_filter('show_password_fields', array('NoLoginAuthor', 'show_password_fields'));
+        add_action( 'user_profile_update_errors', array('NoLoginAuthor', 'remove_user_profile_update_errors') );
         add_action( 'pre_get_users', array('NoLoginAuthor','pre_get_users'));
+    }
+
+
+
+    public static function remove_user_profile_update_errors(WP_Error $errors)
+    {
+        $user = wp_get_current_user();
+        if ( in_array( 'editor', $user->roles ) ) {
+            if (in_array('pass', $errors->get_error_codes())) {
+                $errors->remove('pass');
+            }
+        }
+    }
+
+    public static function show_password_fields($resolve)
+    {
+        $user = wp_get_current_user();
+        if ( in_array( 'editor', $user->roles ) ) {
+            return false;
+        }
+
+        return $resolve;
     }
 
     public static function pre_get_users($obj)
