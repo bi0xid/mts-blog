@@ -7,6 +7,112 @@ error_reporting(0);
 
 include('./wp-load.php');
 
+function addPTag($content = '')
+{
+    $content = preg_replace(array("/\r/", "/\n/"), '|#&newLineTag&#|', $content);
+    
+    $lines = explode('|#&newLineTag&#|', $content);
+    
+    foreach($lines as $key => &$line){
+        if($line == ''){
+            unset($lines[$key]);
+            continue;
+        }
+        
+        if(
+            !preg_match('/^<p/', $line) && 
+            !preg_match('/^<h1/', $line) &&
+            !preg_match('/^<blockquote/', $line)
+          ){
+            $line = "<p>{$line}</p>";
+          }
+    }
+    
+    return implode("\n", $lines);
+}
+
+function removePluginTags($content = '')
+{
+    $content = preg_replace('/\[sociallocker id="?\d+\"?]/', '', $content);
+    $content = preg_replace('/\[\/sociallocker\]/', '', $content);
+    $content = preg_replace('/\[caption[^\]]+/', '', $content);
+    $content = preg_replace('/\[\/caption\]/', '', $content);
+    $content = preg_replace('/activate javascript/', '', $content);        
+
+    return $content;
+}
+
+function onlyImagesAndLinks($string = '')
+{
+    return preg_match('/<img/', $string) || preg_match('/<a/', $string);
+}
+
+function replaceH1($string = '')
+{
+    $paterns = array('/<h[2-6]+([^>]*)>/', '/<\/h[2-6]>/s');
+    $replacements = array('<h1$1>', '</h1>');
+    return preg_replace($paterns, $replacements, $string);
+}
+
+function replaceTag($tag, $content = '')
+{
+    $patern = "/<{$tag}(?<attr>[^>]*)>(?<value>.*?)<\/{$tag}>/s";
+    
+    return preg_replace_callback(
+                $patern,
+                function ($matches) use ($tag) {
+                    $value = $matches['value'];
+                    $attr = $matches['attr'];
+                    
+                    $string = str_replace(array("\r", "\n"), '', $value);    
+                    
+                    if(onlyImagesAndLinks($string)){
+                        $tag = 'p';
+                    }else{
+                        $string = strip_tags($string);
+                    }
+                    
+                    return "<{$tag}{$attr}>" .  $string . "</{$tag}>";
+                },
+                $content
+            ); 
+}
+
+function removeTags($string = '')
+{
+    $tags = "<h1></h1><blockquote></blockquote><p></p><strong></strong><em></em><br><br/><img><a></a>";
+        
+    return strip_tags($string, $tags);
+}
+
+function getReplaceYoutubeVideos($content = '')
+{
+    $pattern = '/<iframe(?P<content>[^>]*)>.*(<\/iframe>)?/i';      
+        
+    $counter = 0;
+    $videos = array();
+    
+    $content = preg_replace_callback(
+            $pattern,
+            function ($matches) use (&$counter, &$videos) {
+                $counter++;
+                
+                $src = '';
+                if(preg_match('/src="(?P<video>[^"]+)"/', $matches['content'], $video)){
+                    $videos[$counter] = $video['video'];
+                }
+                
+                return "#|video_{$counter}|#";
+            }, 
+            $content
+        );
+            
+    return array(
+            'content' => $content,
+            'youtubeUlr' => $videos
+        );
+}
+
 class xmlRender
 {
     private $xml = '';
@@ -45,52 +151,6 @@ class xmlRender
         
         return '<posts>' . $res . '</posts>';
     }
-        
-    private static function reformatPostContent($content = '')
-    {
-        $youtubeUlrs = array();
-                
-        //Replace all h[2-6] tag to h1 tag
-        $paterns = array('/<h[2-6]+([^>]*)>/', '/<\/h[2-6]>/');
-        $replacements = array('<h1$1>', '</h1>');
-        $content = preg_replace($paterns, $replacements, $content);
-        
-        
-        //Replace all iframes
-        $pattern = '/<iframe(?P<content>[^>]*)>.*(<\/iframe>)?/i';      
-        
-        if(preg_match_all($pattern, $content, $youtubeMatches)){
-            
-            self::$counter = 0;
-
-            $content = preg_replace_callback(
-                $pattern,
-                function ($matches) {
-                    $c = ++self::$counter;
-                    return "#|video_{$c}|#";
-                },
-                $content
-            );
-            
-            foreach($youtubeMatches['content'] as $value){
-                $src = '';
-                if(preg_match('/src="(?P<video>[^"]+)"/', $value, $video)){
-                    $src = $video['video'];
-                }
-                
-                $youtubeUlrs[] = $src;
-            }
-        }
-        
-        $tags = "<h1></h1><blockquote></blockquote><p></p><strong></strong><em></em><br><br/><img><a></a>";
-        
-        $result = array(
-            'content' => strip_tags($content, $tags),
-            'youtubeUlr' => $youtubeUlrs
-        );
-        
-        return $result;
-    }
     
     public static function getAllSizeOfAttachmentsById($id)
     {
@@ -107,17 +167,6 @@ class xmlRender
         }
         
         return $result;
-    }
-    
-    private static function removePluginTags($content)
-    {
-        $content = preg_replace('/\[sociallocker id="?\d+\"?]/', '', $content);
-        $content = preg_replace('/\[\/sociallocker\]/', '', $content);
-        $content = preg_replace('/\[caption[^\]]+/', '', $content);
-        $content = preg_replace('/\[\/caption\]/', '', $content);
-        $content = preg_replace('/activate javascript/', '', $content);        
-        
-        return $content;
     }
     
     private static function getXmlForSinglePost($post = null)
@@ -142,12 +191,25 @@ class xmlRender
             }
         }
 
-        $reformatContent = self::reformatPostContent($postContent);
-        
-        $reformatContent = self::removePluginTags($reformatContent);
+        $content = removePluginTags($postContent);
+
+        $result = getReplaceYoutubeVideos($content);
+
+        $content = $result['content'];
+        $youtubeUlrs = $result['youtubeUlr'];
+
+        $content = replaceH1($content);
+
+        $content = replaceTag('blockquote', $content);
+
+        $content = replaceTag('h1', $content);
+
+        $content = removeTags($content);
+
+        $reformatContent = addPTag($content);
         
         $res .= '<content>
-			<![CDATA['. $reformatContent['content'] .']]>
+			<![CDATA['. $reformatContent .']]>
 		</content>';
 
         $res .= '<link>'. get_permalink($post->ID)  .'</link>'; 
@@ -168,11 +230,9 @@ class xmlRender
         
         $youtubeVideo = '';
         
-        if(isset($reformatContent['youtubeUlr']) && !empty($reformatContent['youtubeUlr'])){
-            $c = 1;
-            foreach($reformatContent['youtubeUlr'] as $url){
-                $youtubeVideo .= "<url tagName='#|video_{$c}|#'>{$url}</url>";
-                $c++;
+        if(isset($youtubeUlrs) && !empty($youtubeUlrs)){
+            foreach($youtubeUlrs as $youtubeKey => $url){
+                $youtubeVideo .= "<url tagName='#|video_{$youtubeKey}|#'>{$url}</url>";
             }
         }
         
@@ -219,6 +279,18 @@ class xmlRender
         
         $res .= '<url>'. $post->post_name .'</url>'; 
                 
+        $socialCounters = 0;
+        $socialCounters += (int)get_post_meta($post->ID, 'fblikecount_shares_count', true);
+        $socialCounters += (int)get_post_meta($post->ID, 'fbsharecount_shares_count', true);
+        $socialCounters += (int)get_post_meta($post->ID, 'twitter_shares_count', true);
+        $socialCounters += (int)get_post_meta($post->ID, 'google_shares_count', true); 
+        $socialCounters += (int)get_post_meta($post->ID, 'pinterest_shares_count', true);
+        $socialCounters += (int)get_post_meta($post->ID, 'stumble_shares_count', true);
+        $socialCounters += (int)get_post_meta($post->ID, 'digg_post_type', true);
+        $socialCounters += (int)get_post_meta($post->ID, 'mail_post_type', true);
+        
+        $res .= '<countOfSocialShares>'. $socialCounters .'</countOfSocialShares>'; 
+        
         wp_reset_postdata();
         
         return '<post>' . $res . '</post>';
