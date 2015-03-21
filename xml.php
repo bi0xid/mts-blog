@@ -7,12 +7,122 @@ error_reporting(0);
 
 include('./wp-load.php');
 
+function addPTag($content = '')
+{
+    $content = preg_replace(array("/\r/", "/\n/"), '|#&newLineTag&#|', $content);
+    
+    $lines = explode('|#&newLineTag&#|', $content);
+    
+    foreach($lines as $key => &$line){
+        if($line == ''){
+            unset($lines[$key]);
+            continue;
+        }
+        
+        if(
+            !preg_match('/^<p/', $line) && 
+            !preg_match('/^<h1/', $line) &&
+            !preg_match('/^<blockquote/', $line)
+          ){
+            $line = "<p>{$line}</p>";
+          }
+    }
+    
+    return implode("\n", $lines);
+}
+
+function removePluginTags($content = '')
+{
+    $content = preg_replace('/\[sociallocker id="?\d+\"?]/', '', $content);
+    $content = preg_replace('/\[\/sociallocker\]/', '', $content);
+    $content = preg_replace('/\[caption[^\]]+/', '', $content);
+    $content = preg_replace('/\[\/caption\]/', '', $content);
+    $content = preg_replace('/activate javascript/', '', $content);        
+
+    return $content;
+}
+
+function onlyImagesAndLinks($string = '')
+{
+    return preg_match('/<img/', $string) || preg_match('/<a/', $string);
+}
+
+function replaceH1($string = '')
+{
+    $paterns = array('/<h[2-6]+([^>]*)>/', '/<\/h[2-6]>/s');
+    $replacements = array('<h1$1>', '</h1>');
+    return preg_replace($paterns, $replacements, $string);
+}
+
+function replaceTag($tag, $content = '')
+{
+    $patern = "/<{$tag}(?<attr>[^>]*)>(?<value>.*?)<\/{$tag}>/s";
+    
+    return preg_replace_callback(
+                $patern,
+                function ($matches) use ($tag) {
+                    $value = $matches['value'];
+                    $attr = $matches['attr'];
+                    
+                    $string = str_replace(array("\r", "\n"), '', $value);    
+                    
+                    if(onlyImagesAndLinks($string)){
+                        $tag = 'p';
+                    }else{
+                        $string = strip_tags($string);
+                    }
+                    
+                    return "<{$tag}{$attr}>" .  $string . "</{$tag}>";
+                },
+                $content
+            ); 
+}
+
+function removeTags($string = '')
+{
+    $tags = "<h1></h1><blockquote></blockquote><p></p><strong></strong><em></em><br><br/><img><a></a>";
+        
+    return strip_tags($string, $tags);
+}
+
+function getReplaceYoutubeVideos($content = '')
+{
+    $pattern = '/<iframe(?P<content>[^>]*)>.*(<\/iframe>)?/i';      
+        
+    $counter = 0;
+    $videos = array();
+    
+    $content = preg_replace_callback(
+            $pattern,
+            function ($matches) use (&$counter, &$videos) {
+                $counter++;
+                
+                $src = '';
+                if(preg_match('/src="(?P<video>[^"]+)"/', $matches['content'], $video)){
+                    $videos[$counter] = $video['video'];
+                }
+                
+                return "#|video_{$counter}|#";
+            }, 
+            $content
+        );
+            
+    return array(
+            'content' => $content,
+            'youtubeUlr' => $videos
+        );
+}
+
 class xmlRender
 {
     private $xml = '';
     
+    public static $imagesTypes = array('thumbnail', 'medium', 'large', 'full');
+    
+    private static $counter = 0;
+    
     public function __construct()
-    {
+    {        
         /* add xml header */
         $this->xml .= '<?xml version="1.0" encoding="'. get_option('blog_charset') .'"?>
                             <root>';
@@ -42,40 +152,64 @@ class xmlRender
         return '<posts>' . $res . '</posts>';
     }
     
-    public static function getImageNameFromUrl($sUrl = '')
+    public static function getAllSizeOfAttachmentsById($id)
     {
-        $imageName = '';
+        $result = array();
         
-        if(preg_match('/\/(?<imageName>[^\/]+)$/', $sUrl, $m))
+        foreach(self::$imagesTypes as $type)
         {
-            $imageName = $m['imageName'];
+            $img = wp_get_attachment_image_src($id, $type);
+            
+            if(!empty($img) && isset($img[0]))
+            {
+                $result[$type] = $img[0];
+            }
         }
-
-        return $imageName;
+        
+        return $result;
     }
     
     private static function getXmlForSinglePost($post = null)
     {
         if(!$post) return '';
         
+        setup_postdata( $post );
+                
         $res = '';        
-        $res .= '<title>'. apply_filters('the_title' , $post->post_title ) .'</title>';
+        $res .= '<title>'. get_the_title($post) .'</title>';
         $res .= '<publish_date>'. apply_filters('get_the_time' , $post->post_date ) .'</publish_date>';
         
-        $postContent = apply_filters('get_the_content' , $post->post_content );
+        $postContent = get_the_content();
         
         $customThumbnailName = '';
 
-        if(preg_match('/^.*(?<img><img[^>]+>)/', $postContent, $tmpMatches))
+        if(preg_match('/(?<img><img[^>]+>)/', $postContent, $tmpMatches))
         {
             if(preg_match('/src="(?<img1>[^"]+)"/i', $tmpMatches['img'], $tm))
             {
-                $customThumbnailName = self::getImageNameFromUrl($tm['img1']);
+                $customThumbnailName = $tm['img1'];
             }
         }
 
+        $content = removePluginTags($postContent);
+
+        $result = getReplaceYoutubeVideos($content);
+
+        $content = $result['content'];
+        $youtubeUlrs = $result['youtubeUlr'];
+
+        $content = replaceH1($content);
+
+        $content = replaceTag('blockquote', $content);
+
+        $content = replaceTag('h1', $content);
+
+        $content = removeTags($content);
+
+        $reformatContent = addPTag($content);
+        
         $res .= '<content>
-			<![CDATA['. $postContent .']]>
+			<![CDATA['. $reformatContent .']]>
 		</content>';
 
         $res .= '<link>'. get_permalink($post->ID)  .'</link>'; 
@@ -94,80 +228,48 @@ class xmlRender
         
         $res .= '<categories>' . $categories . '</categories>';
         
-        $imagesTypes = array('thumbnail', 'medium', 'large', 'full');
+        $youtubeVideo = '';
         
-        $imageContent = '';
-        
-        $post_thumbnail_id = -1;
-        
-        foreach($imagesTypes as $imageType)
-        {
-            $imgLink = '';
-        
-            $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
-            
-            $large_image_urls = wp_get_attachment_image_src($post_thumbnail_id , $imageType);
-
-            if(!empty($large_image_urls) && isset($large_image_urls[0]))
-            {
-                $imgLink = $large_image_urls[0];
+        if(isset($youtubeUlrs) && !empty($youtubeUlrs)){
+            foreach($youtubeUlrs as $youtubeKey => $url){
+                $youtubeVideo .= "<url tagName='#|video_{$youtubeKey}|#'>{$url}</url>";
             }
-            $imageContent .= "<{$imageType}>{$imgLink}</{$imageType}>"; 
         }
         
-        $attachmentContent = '';
+        $res .= "<youtube>{$youtubeVideo}</youtube>";
         
-        $attachments = get_children(array('post_parent' => $post->ID,
-                        'post_status' => 'inherit',
-                        'post_type' => 'attachment',
-                        'post_mime_type' => 'image',
-                        'order' => 'ASC',
-                        'orderby' => 'menu_order ID'));
-        
-        $tmpAttachments = array();
-        
-        $isSet = false;
-        
-        foreach($attachments as $att_id => $attachment) 
-        {
-            $isConsideredAsThumbnail = 0;
-            
-            $large_image_urls = wp_get_attachment_image_src($attachment->ID, 'large');
-
-            if(!empty($large_image_urls) && isset($large_image_urls[0]))
-            {
-                $imageName = self::getImageNameFromUrl($large_image_urls[0]);
+        global $wpdb;
                 
-                if($customThumbnailName && $imageName && $customThumbnailName == $imageName && !$isSet)
-                {
-                    $isConsideredAsThumbnail = 1;
-                    $isSet = true;
-                }
+        $imageObject = null;
+        $isRealThumbnail = 0;
+        
+        if($customThumbnailName != ''){
+            $imageObject = $wpdb->get_row("SELECT * FROM $wpdb->posts WHERE guid Like '%$customThumbnailName'");
+        }
+        
+        $thumbnail_id = -1;
+        
+        if(!$imageObject)
+        {
+            $isRealThumbnail = 1;
+            $thumbnail_id = get_post_thumbnail_id($post->ID);            
+        }else{
+            $thumbnail_id = $imageObject->ID;
+        }
+        
+        $image = self::getAllSizeOfAttachmentsById($thumbnail_id);
+        
+        $attachmentsTypes = '';
+        
+        foreach(self::$imagesTypes as $type)
+        {
+            $src = isset($image[$type]) ? $image[$type] : '';
+            $src = str_replace('http://mytinysecrets.com/', 'http://cdn.mytinysecrets.com/', $src);
             
-                $tmpAttachments[] = array(
-                    'isConsideredAsThumbnail' => $isConsideredAsThumbnail,
-                    'url' => $large_image_urls[0],
-                    'isThumbnail' => ($attachment->ID == $post_thumbnail_id) ? 1 : 0
-                );
-            }
+            $attachmentsTypes .= "<{$type}>{$src}</{$type}>";
         }
         
-        if(!$isSet && isset($tmpAttachments[0]))
-        {
-            $tmpAttachments[0]['isConsideredAsThumbnail'] = 1;
-        }
-        
-        foreach($tmpAttachments as $tmpAttachment)
-        {
-            $attachmentContent .= '<attachment isThumbnail="' . $tmpAttachment['isThumbnail'] . '" isConsideredAsThumbnail="' . $tmpAttachment['isConsideredAsThumbnail'] . '">' . $tmpAttachment['url'] . '</attachment>';
-        }
-        
-        $res .= '<images>'. 
-                    $imageContent  . 
-                    '<attachments>' 
-                        . $attachmentContent . 
-                    '</attachments>' .
-                '</images>'; 
+        $res .= "<image isRealThumbnail='{$isRealThumbnail}'>{$attachmentsTypes}</image>"; 
         
         $res .= '<author>'. get_the_author_meta('display_name', $post->post_author) .'</author>'; 
         
@@ -177,6 +279,20 @@ class xmlRender
         
         $res .= '<url>'. $post->post_name .'</url>'; 
                 
+        $socialCounters = 0;
+        $socialCounters += (int)get_post_meta($post->ID, 'fblikecount_shares_count', true);
+        $socialCounters += (int)get_post_meta($post->ID, 'fbsharecount_shares_count', true);
+        $socialCounters += (int)get_post_meta($post->ID, 'twitter_shares_count', true);
+        $socialCounters += (int)get_post_meta($post->ID, 'google_shares_count', true); 
+        $socialCounters += (int)get_post_meta($post->ID, 'pinterest_shares_count', true);
+        $socialCounters += (int)get_post_meta($post->ID, 'stumble_shares_count', true);
+        $socialCounters += (int)get_post_meta($post->ID, 'digg_post_type', true);
+        $socialCounters += (int)get_post_meta($post->ID, 'mail_post_type', true);
+        
+        $res .= '<countOfSocialShares>'. $socialCounters .'</countOfSocialShares>'; 
+        
+        wp_reset_postdata();
+        
         return '<post>' . $res . '</post>';
     }
     
@@ -226,7 +342,7 @@ class xmlRender
 
 class CoreController
 {
-    const PER_PAGE = 10;
+    const PER_PAGE = 5;
     
     private $type = 'post';
     
