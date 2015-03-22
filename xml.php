@@ -145,8 +145,9 @@ class xmlRender
         
         if(!empty($posts))
         {
-            foreach($posts as $post)
+            foreach($posts as $post){
                 $res .= self::getXmlForSinglePost($post);
+            }
         }
         
         return '<posts>' . $res . '</posts>';
@@ -169,9 +170,37 @@ class xmlRender
         return $result;
     }
     
+    private static function getXmlForSingYoutubeVideo($post = null)
+    {           
+        if(!$post) return '';
+        
+        setup_postdata( $post );
+        
+        $res = '';
+        $res .= '<id>'. $post->post_excerpt .'</id>';
+        $res .= '<title>'. get_the_title($post) .'</title>';
+        $res .= '<publish_date>'. apply_filters('get_the_time' , $post->post_date ) .'</publish_date>';
+        
+        $res .= '<content>
+			<![CDATA['. get_the_content() .']]>
+		</content>';
+        
+        $res .= '<link>'. $post->guid  .'</link>'; 
+        
+        $res .= '<viewCount>' . $post->comment_count . '</viewCount>';
+        
+        wp_reset_postdata();
+        
+        return '<post isYoutube="1">' . $res . '</post>';
+    }
+    
     private static function getXmlForSinglePost($post = null)
     {
         if(!$post) return '';
+                
+        if($post->post_type == 'youtube-video'){
+            return self::getXmlForSingYoutubeVideo($post);
+        }
         
         setup_postdata( $post );
                 
@@ -283,17 +312,13 @@ class xmlRender
         $socialCounters += (int)get_post_meta($post->ID, 'fblikecount_shares_count', true);
         $socialCounters += (int)get_post_meta($post->ID, 'fbsharecount_shares_count', true);
         $socialCounters += (int)get_post_meta($post->ID, 'twitter_shares_count', true);
-        $socialCounters += (int)get_post_meta($post->ID, 'google_shares_count', true); 
-        $socialCounters += (int)get_post_meta($post->ID, 'pinterest_shares_count', true);
-        $socialCounters += (int)get_post_meta($post->ID, 'stumble_shares_count', true);
-        $socialCounters += (int)get_post_meta($post->ID, 'digg_post_type', true);
         $socialCounters += (int)get_post_meta($post->ID, 'mail_post_type', true);
         
         $res .= '<countOfSocialShares>'. $socialCounters .'</countOfSocialShares>'; 
         
         wp_reset_postdata();
         
-        return '<post>' . $res . '</post>';
+        return '<post isYoutube="0">' . $res . '</post>';
     }
     
     public static function getAuthorAvatarUrl($img)
@@ -457,7 +482,7 @@ class CoreController
     public function getPosts($categoryId = 0)
     {
         $args = array(
-            'post_type'      => 'post',
+            'post_type'      => array('post', 'youtube-video'),
             'post_status'    => 'publish',
             'posts_per_page' => self::PER_PAGE,
             'offset'           => (int)(($this->page - 1)*self::PER_PAGE),
