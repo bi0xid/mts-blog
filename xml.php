@@ -469,7 +469,7 @@ class CoreController
     public function getSearch()
     {
         $query_args = array('s' => $this->s,  
-                            'post_type'      => 'any',
+                            'post_type'      => array('page', 'post', 'youtube-video'),
                             'post_status'    => 'publish',
                             'posts_per_page' => self::PER_PAGE,
                             'offset'         => (int)(($this->page - 1)*self::PER_PAGE));
