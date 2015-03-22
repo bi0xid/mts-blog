@@ -7,7 +7,7 @@
 ini_set('display_errors', false);
 error_reporting(0);
 
-include('./wp-load.php');
+include(realpath(__DIR__) . './../wp-load.php');
 
 //TODO: add code to retrieve more than 50 videos plus retrieve video with inappropriate content
 $url = "http://gdata.youtube.com/feeds/api/videos?author=MyTinySecretsTV&alt=json&max-results=50";
