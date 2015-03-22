@@ -1,5 +1,4 @@
 jQuery(document).ready(function($){
-	
 	jQuery.fn.essb_get_counters = function(){
 		return this.each(function(){
 			
@@ -162,7 +161,6 @@ jQuery(document).ready(function($){
 	
         
         $('.essb_link_digg').click(function(){
-            
             var plugin_url  = $('.essb_links.essb_counters').find('.essb_info_plugin_url').val();
             if (typeof(plugin_url) == 'undefined')
                 plugin_url = $('#additonal_easy_share_button_url').val();
@@ -170,7 +168,15 @@ jQuery(document).ready(function($){
             if (!postId)
                 postId = parseInt(window._wp_rp_post_id);
             var ajaxUrlEasyButton = plugin_url + "/public/setCounter.php?action=setCount&iPostId=" + postId + "&type=digg";            
-            $.ajax({ url: ajaxUrlEasyButton });
+            $.ajax({ 
+                url: ajaxUrlEasyButton,
+                type: "POST",
+                data: {
+                    action: 'setCount',
+                    iPostId: postId,
+                    type: 'digg'
+                }
+            });
         });        
         $('.essb_link_mail').click(function(){
             var plugin_url  = $('.essb_links.essb_counters').find('.essb_info_plugin_url').val();
@@ -180,7 +186,15 @@ jQuery(document).ready(function($){
             if (!postId)
                 postId = parseInt(window._wp_rp_post_id);
             var ajaxUrlEasyButton = plugin_url + "/public/setCounter.php?action=setCount&iPostId=" + postId + "&type=mail";            
-            $.ajax({ url: ajaxUrlEasyButton });
+            $.ajax({
+                type: "POST",
+                url: ajaxUrlEasyButton,                
+                data: {
+                    action: 'setCount',
+                    iPostId: postId,
+                    type: 'mail'
+                }
+            });
         });
         
 	//$('.essb_links.essb_counters').essb_get_counters();
