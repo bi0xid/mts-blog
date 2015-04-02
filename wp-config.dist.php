@@ -26,7 +26,7 @@ define('W3TC_EDGE_MODE', true); // Added by W3 Total Cache
  //Added by WP-Cache Manager
  //Added by WP-Cache Manager
 
-# mysql -umytiuser -p -h10.39.136.84
+# mysql -umytiuser -p -h10.30.200.51
 
 define( 'WPCACHEHOME', '/home/mytinyse/public_html/wp-content/plugins/wp-super-cache/' ); //Added by WP-Cache Manager
 define('DB_NAME', 'mytinyse_wp224');
@@ -38,7 +38,7 @@ define('DB_USER', 'mytiuser');
 define('DB_PASSWORD', 'Q2w3e4r5t');
 
 /** MySQL hostname */
-define('DB_HOST', '10.39.136.84');
+define('DB_HOST', '10.30.200.51');
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
