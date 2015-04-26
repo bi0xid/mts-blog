@@ -619,6 +619,7 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 
 
 			foreach ( $entries->entry as $entry ) {
+ 
 				// get nodes in media: namespace for media information
 				$media = $entry->children( 'http://search.yahoo.com/mrss/' );
 
@@ -629,6 +630,8 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 				$yt = $media->children( 'http://gdata.youtube.com/schemas/2007' );
 				$youtubeid = $yt->videoid;
 
+                                if('UKY3scPIMd8' == $youtubeid) continue;
+                                
 				// get video title
 				$title = $media->group->title;
 
