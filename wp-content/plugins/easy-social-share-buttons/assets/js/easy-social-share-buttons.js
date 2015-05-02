@@ -1,3 +1,17 @@
+function setCounter(postId, type)
+{    
+    var plugin_url  = $('.essb_links.essb_counters').find('.essb_info_plugin_url').val();
+    if (typeof(plugin_url) == 'undefined')
+        plugin_url = $('#additonal_easy_share_button_url').val();
+    
+    var ajaxUrlEasyButton = plugin_url + "/public/setCounter.php?action=setCount&iPostId=" + postId + "&type=" + type;            
+    
+    $.ajax({
+        type: "POST",
+        url: ajaxUrlEasyButton
+    });
+}
+
 jQuery(document).ready(function($){
 	jQuery.fn.essb_get_counters = function(){
 		return this.each(function(){
@@ -35,24 +49,6 @@ jQuery(document).ready(function($){
 			var stumble_url		= plugin_url+"/public/get-noapi-counts.php?nw=stumble&url=" + url;
 			var vk_url              = plugin_url+"/public/get-noapi-counts.php?nw=vk&url=" + url;
 			
-                        var dig_url              = plugin_url + "/public/setCounter.php?action=getCount&iPostId=" + parseInt(window._wp_rp_post_id) + "&type=digg";
-                        var mail_url             = plugin_url + "/public/setCounter.php?action=getCount&iPostId=" + parseInt(window._wp_rp_post_id) + "&type=mail";
-                        
-                        if ( $digg.length ) {
-				$.getJSON(dig_url)
-					.done(function(data){
-						$digg.prepend('<span class="essb_counter">' + data.count + '</span>');
-					});
-			}
-                        
-                        if ( $mail.length ) {
-				$.getJSON(mail_url)
-					.done(function(data){
-						$mail.prepend('<span class="essb_counter">' + data.count + '</span>');
-					});
-			}
-                        
-
 			if ( $twitter.length ) {
 				$.getJSON(twitter_url)
 					.done(function(data){
@@ -159,42 +155,20 @@ jQuery(document).ready(function($){
 		});
 	}; 
 	
-        
-        $('.essb_link_digg').click(function(){
-            var plugin_url  = $('.essb_links.essb_counters').find('.essb_info_plugin_url').val();
-            if (typeof(plugin_url) == 'undefined')
-                plugin_url = $('#additonal_easy_share_button_url').val();
+        $('.essb_link_digg').click(function(){           
             var postId = parseInt($(this).find('#home_page_post_id').val());
             if (!postId)
                 postId = parseInt(window._wp_rp_post_id);
-            var ajaxUrlEasyButton = plugin_url + "/public/setCounter.php?action=setCount&iPostId=" + postId + "&type=digg";            
-            $.ajax({ 
-                url: ajaxUrlEasyButton,
-                type: "POST",
-                data: {
-                    action: 'setCount',
-                    iPostId: postId,
-                    type: 'digg'
-                }
-            });
-        });        
+            
+            setCounter(postId, 'digg');
+        });   
+
         $('.essb_link_mail').click(function(){
-            var plugin_url  = $('.essb_links.essb_counters').find('.essb_info_plugin_url').val();
-            if (typeof(plugin_url) == 'undefined')
-                plugin_url = $('#additonal_easy_share_button_url').val();
             var postId = parseInt($(this).find('#home_page_post_id').val());
             if (!postId)
                 postId = parseInt(window._wp_rp_post_id);
-            var ajaxUrlEasyButton = plugin_url + "/public/setCounter.php?action=setCount&iPostId=" + postId + "&type=mail";            
-            $.ajax({
-                type: "POST",
-                url: ajaxUrlEasyButton,                
-                data: {
-                    action: 'setCount',
-                    iPostId: postId,
-                    type: 'mail'
-                }
-            });
+            
+            setCounter(postId, 'mail');
         });
         
 	//$('.essb_links.essb_counters').essb_get_counters();
@@ -251,8 +225,5 @@ jQuery(document).ready(function($){
                     $('.essb_links_list').find('.essb_link_mail').find('.essb_counter').html(mail_post_type);
                 }
             });
-            
-            
-            
         }
 });

@@ -246,9 +246,8 @@ $(document).ready(function(){
             }
         });
     }
-})
+});
 
 function custom_social_window(sUrl){
     window.open(sUrl, "My Tiny Secrets share window", "height=300,width=550,resizable=1");
-    return false;
 }

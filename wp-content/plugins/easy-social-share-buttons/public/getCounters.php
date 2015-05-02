@@ -151,7 +151,7 @@ if($aAction == 'getForHomePage'){
                 <a href='http://digg.com/submit?phase=2%20&amp;url=<?php echo $sPermaLink; ?>&amp;title=<?php echo $sPostTitle; ?>' 
                    rel="nofollow" 
                    title="Share this article on Digg"
-                   onclick="custom_social_window('http://digg.com/submit?phase=2%20&amp;url=<?php echo $sPermaLink; ?>&amp;title=<?php echo $sPostTitle; ?>'); return false;">
+                   onclick="setCounter(<?php echo get_the_ID(); ?>, 'digg'); custom_social_window('http://digg.com/submit?phase=2%20&amp;url=<?php echo $sPermaLink; ?>&amp;title=<?php echo $sPostTitle; ?>'); return false;">
                     <span class='essb_icon'></span>
                     <span class="essb_network_name">Digg</span>
                 </a>
@@ -164,7 +164,9 @@ if($aAction == 'getForHomePage'){
                 <input type='hidden' value='<?php echo get_the_ID(); ?>' id='home_page_post_id' style="display: none; visibility: hidden;">
                 <a href="mailto:?subject=Visit this site <?php echo $sSiteUrl; ?>&body=Hi, this may be intersting you: '<?php echo $sPostTitle; ?>'! This is the link: <?php echo $sPermaLink; ?>"
                    rel="nofollow" 
-                   title="Share this article with a friend (email)">
+                   title="Share this article with a friend (email)"
+                   onclick="setCounter(<?php echo get_the_ID(); ?>, 'mail');"
+                   >
                     <span class='essb_icon'></span>
                     <span class="essb_network_name">E-mail</span>
                 </a>
