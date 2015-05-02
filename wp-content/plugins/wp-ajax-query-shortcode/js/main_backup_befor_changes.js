@@ -14,7 +14,7 @@ function wp_ajax_query_shortcodeclassic(ajaxParam){
                 param['ajax_runnig'] = true;
 		$j.ajax({
 			type: "GET",
-			url: ajaxParam['home_url']+"ajax.php",
+			url: ajaxParam['home_url']+"wp-admin/admin-ajax.php",
 			dataType: 'html',
 			data: (param),
 			success: function(data){
@@ -49,7 +49,7 @@ function wp_ajax_query_shortcodemodern(ajaxParam){
                 param['ajax_runnig'] = true;
 		$j.ajax({
 			type: "GET",
-			url: ajaxParam['home_url']+"ajax.php",
+			url: ajaxParam['home_url']+"wp-admin/admin-ajax.php",
 			dataType: 'html',
 			data: (param),
 			success: function(data){
