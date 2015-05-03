@@ -59,17 +59,18 @@ function addPTag($content = '')
     $lines = explode('|#&newLineTag&#|', $content);
     
     foreach($lines as $key => &$line){
-        
+
         if($line == ''){
             unset($lines[$key]);
             continue;
         }
 
         /* if line contains image then parse it */        
-        if(preg_match('/<img/', $line)){
-                    
+        
+        $tmpLine = '';
+        
+        if(preg_match('/<img/', $line)){                    
             $line = preg_replace(array('/<p>/', '/<\/p>/'), '', $line);
-            $tmpLine = '';
             preg_match_all('/(?<images><img[^>]*>)/', $line, $matches);
             
             if(isset($matches['images'])){
@@ -93,21 +94,19 @@ function addPTag($content = '')
             /* if line contains only empty tag - remove this line */                
             if(preg_replace('/\s+/', '', strip_tags($line)) == ''){
                     $line = '';
-            }else{
-                $line = "<p>{$line}</p>";
-            }
-                         
-            $line = $tmpLine . $line;
-            
-        }else{
-            if(
-                !preg_match('/^<p/', $line) && 
-                !preg_match('/^<h1/', $line) &&
-                !preg_match('/^<blockquote/', $line)
-              ){
-                $line = "<p>{$line}</p>";
-              }
+            }            
         }
+        
+        if(
+            !preg_match('/^<p/', $line) && 
+            !preg_match('/^<h1/', $line) &&
+            !preg_match('/^<blockquote/', $line)
+          ){
+            $line = "<p>{$line}</p>";
+          }
+          
+          $line = $tmpLine.$line;
+                
     }    
     
     return implode("\n", $lines);
