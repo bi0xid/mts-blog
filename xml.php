@@ -404,7 +404,7 @@ class CoreController
     
     public function isValid()
     {
-        return (in_array($this->type, array('post', 'category', 'search')) && preg_match('/^[-\w\d]*$/', $this->url));
+        return (in_array($this->type, array('post', 'category', 'search', 'youtube')) && preg_match('/^[-;\w\d]*$/', $this->url));
     }
     
     private function process()
@@ -414,12 +414,19 @@ class CoreController
             case 'post':
                 
                 $posts = $this->getPosts();
-                
+
                 $this->xmlRender->addXml(
                                 xmlRender::getXmlForPosts($posts)
                             );
             break;
-            
+                
+            case 'youtube':
+                $youtubeVideos = $this->getYoutubeVideos();
+                $this->xmlRender->addXml(
+                                xmlRender::getXmlForPosts($youtubeVideos)
+                            );
+            break; 
+                
             case 'category':
                 
                 $categories = array();
@@ -488,14 +495,46 @@ class CoreController
             'offset'           => (int)(($this->page - 1)*self::PER_PAGE),
         );
         
-        if($this->url != '')
-            $args['name'] = $this->url;
+        $names = [];
         
+        if($this->url != ''){
+            $names = array_unique(explode(';', $this->url));
+        }
+
         if($categoryId)
         {
             $args['category'] =  $categoryId;
             unset($args['name']);
         }
+        
+        $result = [];
+        
+        if(!empty($names)){
+            
+            foreach($names as $name)
+            {
+                $args['name'] = $name;
+                if(($post = (get_posts($args)))){
+                    $result = array_merge($result, $post);
+                }
+            }
+
+            return $result;
+        }
+        
+        $result = get_posts($args);
+        
+        return $result;
+    }
+    
+    public function getYoutubeVideos()
+    {
+        $args = array(
+            'post_type'      => array('youtube-video'),
+            'post_status'    => 'publish',
+            'posts_per_page' => self::PER_PAGE,
+            'offset'           => (int)(($this->page - 1)*self::PER_PAGE),
+        );
         
         $result = get_posts($args);
         
