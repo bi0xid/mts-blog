@@ -18,16 +18,51 @@ function addPTag($content = '')
             unset($lines[$key]);
             continue;
         }
-        
-        if(
-            !preg_match('/^<p/', $line) && 
-            !preg_match('/^<h1/', $line) &&
-            !preg_match('/^<blockquote/', $line)
-          ){
-            $line = "<p>{$line}</p>";
-          }
-    }
-    
+
+        /* if line contains image then parse it */        
+        if(preg_match('/<img/', $line)){
+                    
+            $line = preg_replace(array('/<p>/', '/<\/p>/'), '', $line);
+            $tmpLine = '';
+            preg_match_all('/(?<images><img[^>]*>)/', $line, $matches);
+            
+            if(isset($matches['images'])){
+                foreach($matches['images'] as $image){
+                    $tmpLine .= $image . "\n";
+                    $line = str_replace($image, '', $line);
+                }
+            }
+            
+            /* check if there is link and it is not empty */
+            preg_match_all('/(?<links><a[^>]*>[^<]*<\/a>)/', $line, $matches);
+                
+            if(isset($matches['links'])){
+                 foreach($matches['links'] as $link){
+                     if(preg_replace('/\s+/', '', strip_tags($link)) == ''){
+                         $line = str_replace($link, '', $line);
+                     }
+                 }
+            }
+
+            /* if line contains only empty tag - remove this line */                
+            if(preg_replace('/\s+/', '', strip_tags($line)) == ''){
+                    $line = '';
+            }else{
+                $line = "<p>{$line}</p>";
+            }
+                         
+            $line = $tmpLine . $line;
+            
+        }else{
+            if(
+                !preg_match('/^<p/', $line) && 
+                !preg_match('/^<h1/', $line) &&
+                !preg_match('/^<blockquote/', $line)
+              ){
+                $line = "<p>{$line}</p>";
+              }
+        }
+    }    
     return implode("\n", $lines);
 }
 
@@ -66,7 +101,7 @@ function replaceTag($tag, $content = '')
                     
                     $string = str_replace(array("\r", "\n"), '', $value);    
                     
-                    if(onlyImagesAndLinks($string)){
+                    if($tag != 'blockquote' && onlyImagesAndLinks($string)){
                         $tag = 'p';
                     }else{
                         $string = strip_tags($string);
@@ -209,7 +244,7 @@ class xmlRender
         $res .= '<publish_date>'. apply_filters('get_the_time' , $post->post_date ) .'</publish_date>';
         
         $postContent = get_the_content();
-        
+
         $customThumbnailName = '';
 
         if(preg_match('/(?<img><img[^>]+>)/', $postContent, $tmpMatches))
@@ -225,6 +260,7 @@ class xmlRender
         $result = getReplaceYoutubeVideos($content);
 
         $content = $result['content'];
+        
         $youtubeUlrs = $result['youtubeUlr'];
 
         $content = replaceH1($content);
@@ -236,7 +272,7 @@ class xmlRender
         $content = removeTags($content);
 
         $reformatContent = addPTag($content);
-        
+
         $res .= '<content>
 			<![CDATA['. $reformatContent .']]>
 		</content>';
