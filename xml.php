@@ -7,6 +7,37 @@ error_reporting(0);
 
 include('./wp-load.php');
 
+function removeAuthorNotes($content = '')
+{
+    $pattern = "/(?<authorTags><h6(?<attr>[^>]*)>(?<value>.*?)<\/h6>)/s";
+    
+    preg_match_all($pattern, $content, $m);
+    
+    $toRemove = [];
+    
+    if(isset($m['authorTags'])){
+        foreach($m['authorTags'] as $tag){
+            if(preg_match('/^<h6>(<[^>]>)*[ ]?[b|B]y/', $tag)){
+                    $toRemove[] = $tag;
+            }
+        }
+    }
+    
+    if(count($toRemove) == 1){
+        if(isset($toRemove[0])){
+            $tag = $toRemove[0];
+            $pos = strpos($content, $tag);
+            $end = substr ($content, $pos);
+            
+            if(mb_strlen($end) < 1100){
+                $content = substr ($content, 0, $pos);
+            }
+        }
+    }
+    
+    return $content;
+}
+
 function addPTag($content = '')
 {
     $content = preg_replace(array("/\r/", "/\n/"), '|#&newLineTag&#|', $content);
@@ -14,6 +45,7 @@ function addPTag($content = '')
     $lines = explode('|#&newLineTag&#|', $content);
     
     foreach($lines as $key => &$line){
+        
         if($line == ''){
             unset($lines[$key]);
             continue;
@@ -63,6 +95,7 @@ function addPTag($content = '')
               }
         }
     }    
+    
     return implode("\n", $lines);
 }
 
@@ -73,7 +106,8 @@ function removePluginTags($content = '')
     $content = preg_replace('/\[caption[^\]]+/', '', $content);
     $content = preg_replace('/\[\/caption\]/', '', $content);
     $content = preg_replace('/activate javascript/', '', $content);        
-
+    $content = preg_replace(array('/<noscript>/', '/<\/noscript>/'), '', $content);        
+    
     return $content;
 }
 
@@ -254,8 +288,10 @@ class xmlRender
                 $customThumbnailName = $tm['img1'];
             }
         }
-
+        
         $content = removePluginTags($postContent);
+        
+        $content = removeAuthorNotes($content);
 
         $result = getReplaceYoutubeVideos($content);
 
