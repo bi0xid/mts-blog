@@ -8,16 +8,16 @@ error_reporting(0);
 include('./wp-load.php');
 
 function removeAuthorNotes($content = '')
-{
+{   
     $pattern = "/(?<authorTags><h6(?<attr>[^>]*)>(?<value>.*?)<\/h6>)/s";
     
     preg_match_all($pattern, $content, $m);
     
     $toRemove = [];
-    
+
     if(isset($m['authorTags'])){
         foreach($m['authorTags'] as $tag){
-            if(preg_match('/^<h6>(<[^>]>)*[ ]?[b|B]y/', $tag)){
+            if(preg_match('/^<h6>(<[^>]*>)*[ ]?[b|B]y/s', $tag)){
                     $toRemove[] = $tag;
             }
         }
@@ -40,6 +40,20 @@ function removeAuthorNotes($content = '')
 
 function addPTag($content = '')
 {
+    $content = preg_replace_callback(
+            '/(?<tag1><[^>]*>)(?<value>.*?)(?<tag2><\/[^>]*>)/s',
+            function ($matches) {
+                $tag1 = $matches['tag1'];
+                $value = $matches['value'];
+                $tag2 = $matches['tag2'];
+
+                $string = str_replace(array("\r", "\n"), '', $value);    
+
+                return $tag1 .  $string . $tag2;
+            },
+            $content
+        ); 
+    
     $content = preg_replace(array("/\r/", "/\n/"), '|#&newLineTag&#|', $content);
     
     $lines = explode('|#&newLineTag&#|', $content);
