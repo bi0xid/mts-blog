@@ -40,26 +40,12 @@ function removeAuthorNotes($content = '')
 
 function addPTag($content = '')
 {
-    $content = preg_replace_callback(
-            '/(?<tag1><[^>]*>)(?<value>.*?)(?<tag2><\/[^>]*>)/s',
-            function ($matches) {
-                $tag1 = $matches['tag1'];
-                $value = $matches['value'];
-                $tag2 = $matches['tag2'];
-
-                $string = str_replace(array("\r", "\n"), '', $value);    
-
-                return $tag1 .  $string . $tag2;
-            },
-            $content
-        ); 
-    
     $content = preg_replace(array("/\r/", "/\n/"), '|#&newLineTag&#|', $content);
     
     $lines = explode('|#&newLineTag&#|', $content);
     
     foreach($lines as $key => &$line){
-
+        
         if($line == ''){
             unset($lines[$key]);
             continue;
@@ -158,6 +144,32 @@ function replaceTag($tag, $content = '')
                 },
                 $content
             ); 
+}
+
+function removeNewLineInsideTags($content = '')
+{
+    $tags = ['h1', 'blockquote', 'p', 'strong', 'em', 'a'];
+    
+    foreach($tags as $tag){
+        
+        $patern = "/<{$tag}(?<attr>[^>]*)>(?<value>.*?)<\/{$tag}>/s";
+        
+        $content = preg_replace_callback(
+                $patern,
+                function ($matches) use ($tag) {
+                    $value = $matches['value'];
+                    $attr = $matches['attr'];
+                    
+                    $string = str_replace(array("\r", "\n"), '', $value);    
+                    
+                    return "<{$tag}{$attr}>" .  $string . "</{$tag}>";
+                },
+                $content
+            ); 
+    }
+    
+    
+    return $content;    
 }
 
 function removeTags($string = '')
@@ -320,6 +332,8 @@ class xmlRender
 
         $content = removeTags($content);
 
+        $content = removeNewLineInsideTags($content);
+        
         $reformatContent = addPTag($content);
 
         $res .= '<content>
