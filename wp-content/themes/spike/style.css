@@ -910,6 +910,7 @@ nav #searchform fieldset {
     clear: both;
     float: left;
     width: 100%;
+    list-style: none;
 }
 .widget .title {
     font-weight: bold;

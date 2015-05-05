@@ -617,7 +617,6 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 			array_unshift( $namespaces, "" ); // add a blank at the beginning of the array to deal with the unprefixed default
 
 
-
 			foreach ( $entries->entry as $entry ) {
  
 				// get nodes in media: namespace for media information
