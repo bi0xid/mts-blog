@@ -553,7 +553,10 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 
 			$videos_result = $this->get_rss_data ( $ytchag_cache, $transientId, $ytchag_rss_url, $ytchag_cache_time );
 
-			$rss = simplexml_load_string( $videos_result['body'] );
+                        $filePath = realpath(__DIR__) . '/videos.xml';
+                        $xmlContent = file_get_contents($filePath);
+                        
+			$rss = simplexml_load_string( $xmlContent );
 
 			$response_code = wp_remote_retrieve_response_code( $videos_result );
 			$response_message = wp_remote_retrieve_response_message( $videos_result );
