@@ -4,18 +4,16 @@
  * 
  * run via console php -f get_youtube_video.php
  */
-ini_set('display_errors', true);
-error_reporting(E_ALL);
+ini_set('display_errors', false);
+error_reporting(0);
 
 include(realpath(__DIR__) . './../wp-load.php');
 require_once realpath(__DIR__) . '/Google/autoload.php';
-
-
-//TODO: add code to retrieve more than 50 videos plus retrieve video with inappropriate content
+require_once realpath(__DIR__) . '/youtube_config.php';
 
 $client = new Google_Client();
 $client->setScopes('https://www.googleapis.com/auth/youtube.readonly');
-$client->setDeveloperKey('AIzaSyDydBiWChdDPZWQcpwjMkT-Lh1_EKGuKws');
+$client->setDeveloperKey(Developer_key);
 
 $youtube = new Google_Service_YouTube($client);
 
@@ -49,7 +47,6 @@ do {
     foreach ($youtube->videos->listVideos('statistics', array('id'=>implode(',', $videosStatistics))) as $item) {
         $videos[strtolower($item->id)]['viewCount'] = $item->statistics->viewCount;
     }
-
 
 } while ($pageToken = $playlistItemList->nextPageToken);
 
