@@ -37,8 +37,8 @@ do {
     foreach ($playlistItemList->getItems() as $item) {
         $videosStatistics[] = $item->snippet->resourceId->videoId;
 
-        $videos[$item->snippet->resourceId->videoId] = array(
-            'published' => $item->snippet->publishedAt,
+        $videos[strtolower($item->snippet->resourceId->videoId)] = array(
+            'published' => date("Y-m-d H:i:s", strtotime($item->snippet->publishedAt)),
             'title' => $item->snippet->title,
             'content' => $item->snippet->description,
             'link' => sprintf('https://www.youtube.com/watch?v=%s', $item->snippet->resourceId->videoId),
@@ -47,7 +47,7 @@ do {
     }
 
     foreach ($youtube->videos->listVideos('statistics', array('id'=>implode(',', $videosStatistics))) as $item) {
-        $videos[$item->id]['viewCount'] = $item->statistics->viewCount;
+        $videos[strtolower($item->id)]['viewCount'] = $item->statistics->viewCount;
     }
 
 
@@ -77,7 +77,7 @@ foreach($existsPosts as $existsPost)
     {
         $removePosts[] = $existsPost;
     } else {
-        $youtubePost = $aVideos[$postName];
+        $youtubePost = $videos[$postName];
 
         if(
               $youtubePost['published'] !=   $existsPost->post_date ||
@@ -156,18 +156,18 @@ foreach($videos as $key => $video)
 
      $idPost = wp_insert_post($post);
 
-//     if($idPost){
-//         $wpdb->query(
-//            $wpdb->prepare(
-//                    "UPDATE {$wpdb->posts}
-//                        SET
-//                        `comment_count`     = %d
-//                     WHERE ID = %d",
-//                        $aVideo['viewCount'],
-//                        $idPost
-//            )
-//        );
-//     }
+     if($idPost){
+         $wpdb->query(
+            $wpdb->prepare(
+                    "UPDATE {$wpdb->posts}
+                        SET
+                        `comment_count`     = %d
+                     WHERE ID = %d",
+                        $video['viewCount'],
+                        $idPost
+            )
+        );
+     }
 }
 
 echo "Youtube videos updated!!!\n";
