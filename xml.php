@@ -596,7 +596,7 @@ class CoreController
         
         $names = [];
         
-        if($this->url != ''){
+        if($this->url != '' && !$categoryId){
             $names = array_unique(explode(';', $this->url));
         }
 
