@@ -8,56 +8,51 @@ ini_set('display_errors', false);
 error_reporting(0);
 
 include(realpath(__DIR__) . './../wp-load.php');
+require_once realpath(__DIR__) . '/Google/autoload.php';
+require_once realpath(__DIR__) . '/youtube_config.php';
 
-//TODO: add code to retrieve more than 50 videos plus retrieve video with inappropriate content
-$url = "http://gdata.youtube.com/feeds/api/videos?author=MyTinySecretsTV&alt=json&max-results=50";
+$client = new Google_Client();
+$client->setScopes('https://www.googleapis.com/auth/youtube.readonly');
+$client->setDeveloperKey(Developer_key);
 
-$videoContent = file_get_contents($url);
+$youtube = new Google_Service_YouTube($client);
 
-$videos = json_decode($videoContent, true);
+$channelId = 'UCZAUAzqAn88GTa8OoM9MJgA';//MyTinySecretsTV
+$channel = $youtube->channels->listChannels('contentDetails', array('id'=>$channelId));
 
-$videos = isset($videos['feed']['entry']) ? $videos['feed']['entry'] : array();
+$playlistId = $channel->getItems()[0]->contentDetails->relatedPlaylists->uploads;
+$pageToken = null;
+
+$videos = array();
+
+do {
+    $playlistItemList = $youtube->playlistItems->listPlaylistItems('snippet', array(
+        'playlistId' => $playlistId,
+        'maxResults' => 10,
+        'pageToken'  => $pageToken
+    ));
+    $videosStatistics = array();
+    foreach ($playlistItemList->getItems() as $item) {
+        $videosStatistics[] = $item->snippet->resourceId->videoId;
+
+        $videos[strtolower($item->snippet->resourceId->videoId)] = array(
+            'published' => date("Y-m-d H:i:s", strtotime($item->snippet->publishedAt)),
+            'title' => $item->snippet->title,
+            'content' => $item->snippet->description,
+            'link' => sprintf('https://www.youtube.com/watch?v=%s', $item->snippet->resourceId->videoId),
+            'uniqueUrl' => $item->snippet->resourceId->videoId
+        );
+    }
+
+    foreach ($youtube->videos->listVideos('statistics', array('id'=>implode(',', $videosStatistics))) as $item) {
+        $videos[strtolower($item->id)]['viewCount'] = $item->statistics->viewCount;
+    }
+
+} while ($pageToken = $playlistItemList->nextPageToken);
 
 if(!$videos || empty($videos)){
     echo "ERROR: No videos retrieved\n";
     echo "Process end\n";
-}
-
-$aVideos = array();
-
-foreach($videos as $v){
-
-    $published = isset($v['published']['$t']) ? (string)$v['published']['$t'] : false;
-    $updated = isset($v['updated']['$t']) ? (string)$v['updated']['$t'] : false;
-    $title = isset($v['title']['$t']) ? (string)$v['title']['$t'] : '';
-    $content = isset($v['content']['$t']) ? (string)$v['content']['$t'] : '';
-    $link = isset($v['link'][0]['href']) ? (string)$v['link'][0]['href'] : '';
-    $viewCount = isset($v['yt$statistics']['viewCount']) ? (int)$v['yt$statistics']['viewCount'] : 0;
-    
-    if(!$published || !$updated || !$title || !$content || !$link || !$viewCount){
-        echo "ERROR: Video information missing. published: {$published}, updated: {$updated}, title : {$title}, content: {$content}, link: {$link}, viewCount: {$viewCount}\n";
-        continue;
-    }
-
-    $published = date("Y-m-d H:i:s", strtotime($published));
-    $updated = date("Y-m-d H:i:s", strtotime($updated));
-    $uniqueUrl = '';
-        
-    if(preg_match('/v=(?<uniqueUrl>[^&]+)&/', $link, $m)){
-        $uniqueUrl = (string)$m['uniqueUrl'];
-    }
-
-    $link = str_replace('&feature=youtube_gdata', '', $link);
-    
-    $aVideos[strtolower($uniqueUrl)] = array(
-        'published' => $published,
-        'updated' => $updated,
-        'title' => $title,
-        'content' => $content,
-        'link' => $link,
-        'viewCount' => $viewCount,
-        'uniqueUrl' => $uniqueUrl
-    );
 }
 
 $args = array(
@@ -73,17 +68,16 @@ $existsPosts = get_posts($args);
 
 foreach($existsPosts as $existsPost)
 {
-    $postName = strtolower($existsPost->post_name);
+    $postName = $existsPost->post_name;
 
-    if(!isset($aVideos[$postName]))
+    if(!isset($videos[$postName]))
     {
         $removePosts[] = $existsPost;
-    }else{
-        $youtubePost = $aVideos[$postName];
-        
+    } else {
+        $youtubePost = $videos[$postName];
+
         if(
               $youtubePost['published'] !=   $existsPost->post_date ||
-              $youtubePost['updated'] !=   $existsPost->post_modified ||
               $youtubePost['title'] !=   $existsPost->post_title ||
               $youtubePost['content'] !=   $existsPost->post_content ||
               $youtubePost['viewCount'] !=   $existsPost->comment_count ||
@@ -92,7 +86,7 @@ foreach($existsPosts as $existsPost)
         ){
             $updatePosts[$existsPost->ID] = $youtubePost;
         }
-        unset($aVideos[$postName]);
+        unset($videos[$postName]);
     }
 }
 
@@ -105,14 +99,14 @@ foreach($removePosts as $post){
 
 //Update posts
 foreach($updatePosts as $key => $updatePost){
-    
+
     if(!$key){
         echo "Error: Can not update post. Unknown ID: {$key}\n";
         continue;
     }
-    
-    $wpdb->query( 
-	$wpdb->prepare( 
+
+    $wpdb->query(
+	$wpdb->prepare(
                 "UPDATE {$wpdb->posts}
                     SET
                     `post_content`      = %s,
@@ -125,8 +119,6 @@ foreach($updatePosts as $key => $updatePost){
                     `post_date`         = %s,
                     `post_date_gmt`     = %s,
                     `comment_status`    = 'closed',
-                    `post_modified`     = %s,
-                    `post_modified_gmt` = %s,
                     `comment_count`     = %d
 		 WHERE ID = %d",
                     $updatePost['content'],
@@ -136,8 +128,6 @@ foreach($updatePosts as $key => $updatePost){
                     $updatePost['link'],
                     $updatePost['published'],
                     $updatePost['published'],
-                    $updatePost['updated'],
-                    $updatePost['updated'],
                     $updatePost['viewCount'],
                     $key
         )
@@ -145,34 +135,32 @@ foreach($updatePosts as $key => $updatePost){
 }
 
 //Insert post
-foreach($aVideos as $key => $aVideo)
+foreach($videos as $key => $video)
 {
-    $post = array(        
-        'post_content'      => $aVideo['content'],
+    $post = array(
+        'post_content'      => $video['content'],
         'post_name'         => $key,
-        'post_excerpt'      => $aVideo['uniqueUrl'],
-        'post_title'        => $aVideo['title'],
+        'post_excerpt'      => $video['uniqueUrl'],
+        'post_title'        => $video['title'],
         'post_status'       => 'publish',
         'post_type'         => 'youtube-video',
-        'guid'              => $aVideo['link'],
-        'post_date'         => $aVideo['published'],
-        'post_date_gmt'     => $aVideo['published'],
+        'guid'              => $video['link'],
+        'post_date'         => $video['published'],
+        'post_date_gmt'     => $video['published'],
         'comment_status'    => 'closed',
-        'post_modified'     => $aVideo['updated'],
-        'post_modified_gmt' => $aVideo['updated'],
-        'comment_count'     => $aVideo['viewCount']
-      );  
-     
+        'comment_count'     => $video['viewCount']
+      );
+
      $idPost = wp_insert_post($post);
-     
+
      if($idPost){
-         $wpdb->query( 
-            $wpdb->prepare( 
+         $wpdb->query(
+            $wpdb->prepare(
                     "UPDATE {$wpdb->posts}
                         SET
                         `comment_count`     = %d
                      WHERE ID = %d",
-                        $aVideo['viewCount'],
+                        $video['viewCount'],
                         $idPost
             )
         );

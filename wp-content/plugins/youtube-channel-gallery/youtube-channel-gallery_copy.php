@@ -552,7 +552,11 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 			$transientId = 'ytc-' .md5( $ytchag_feed . $ytchag_user . $ytchag_maxitems );
 
 			$videos_result = $this->get_rss_data ( $ytchag_cache, $transientId, $ytchag_rss_url, $ytchag_cache_time );
-			$rss = $videos_result;
+
+                        $filePath = realpath(__DIR__) . '/videos.xml';
+                        $xmlContent = file_get_contents($filePath);
+                        
+			$rss = simplexml_load_string( $xmlContent );
 
 			$response_code = wp_remote_retrieve_response_code( $videos_result );
 			$response_message = wp_remote_retrieve_response_message( $videos_result );
@@ -606,162 +610,232 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 			//playlist descending order
 			//get totalResults from playlist rss to order correctly videos
 
+
+
 			$thumb_count = 0;
 			$column = 0;
 			static $plugincount = 0;
 			$rowcount = 0;
-			
-                        /* temporary code for youtube v3 api */
-                        $args = array(
-                            'post_type'      => 'youtube-video',
-                            'post_status'    => 'publish',
-                            'posts_per_page' => 9,
-                            'offset'         => 0,
-                            'orderby'          => 'date',
-                            'order'            => 'DESC'
-                        );
-                        
-                        $posts = get_posts($args);
-                        
-                        foreach($posts as $post){
-                            $youtubeid =$post->post_excerpt;
-                            $post->guid;
-                            $description = $post->post_content;                            
-                            $title = $post->post_title;
-                            $thumb = "http://i.ytimg.com/vi/{$youtubeid}/default.jpg";
-
-                            //rows and columns control
-
-                            $column++;
-                            $columnlastfirst = $tableclass = $columnnumber = '';
-                            if ( $ytchag_thumb_columns !=0 && $column == 1 ) {
-                                    $columnlastfirst = ' ytccell-first';
-                                    $rowcount++;
-                                    $row_oddeven = ( $rowcount%2==1 )?' ytc-r-odd':' ytc-r-even';
-                                    $tableclass = ' ytc-table';
-                                    $columnnumber = ' ytc-columns'. $ytchag_thumb_columns;
-
-                            }
-                            if ( $ytchag_thumb_columns !=0 && $column%$ytchag_thumb_columns == 0 ) {
-                                    $columnlastfirst = ' ytccell-last';
-                            }// end columns control
-
-                            //check if title or description
-                            $ytchag_thumbnail_fixed_witdh = '';
-                            $title_and_description_alignment_class = '';
+			$namespaces=$rss->getNameSpaces( true ); // access all the namespaces used in the tree
+			array_unshift( $namespaces, "" ); // add a blank at the beginning of the array to deal with the unprefixed default
 
 
-                            if ( $ytchag_title || $ytchag_description ) {
-                                    $title_and_description_alignment_class = ' ytc-td-' . $ytchag_thumbnail_alignment;
+			foreach ( $entries->entry as $entry ) {
+ 
+				// get nodes in media: namespace for media information
+				$media = $entry->children( 'http://search.yahoo.com/mrss/' );
 
-                                    //fixed width for columns 0 or with alignment
-                                    if ( $ytchag_thumbnail_alignment == 'left' || $ytchag_thumbnail_alignment == 'right' ) {
-                                            $ytchag_thumbnail_fixed_witdh = ' style="width: ' . $ytchag_thumb_width . 'px; "';
-                                    }
-                            }
-                            //fixed width for columns 0 or with alignment
-                            if ( $ytchag_thumb_columns ==0 ) {
-                                    $ytchag_thumbnail_fixed_witdh = ' style="width: ' . $ytchag_thumb_width . 'px; "';
-                            }
+				// get video player URL
+				$url = $media->group->player->attributes();
 
-                            //The content
-                            //--------------------------------
+				// get video player id
+				$yt = $media->children( 'http://gdata.youtube.com/schemas/2007' );
+				$youtubeid = $yt->videoid;
 
-                            //Show me the player: iframe player
-                            if ( $thumb_count == 0 ) {
-                                    //count the plugin occurrences on page
-                                    $plugincount++;
+                                if('UKY3scPIMd8' == $youtubeid) continue;
+                                
+				// get video title
+				$title = $media->group->title;
 
-                                    // Load css
-                                    $this->register_styles();
+				// get video description
+				$description = $media->group->description;
+				
+				//check if thumbnails exist (to avoid Accounts suspended)
+				if(!isset($media->group->thumbnail[0])){
+					continue;
+				}
 
-                                    $content = '';
+				//default url thumbnail
+				$thumb_attrs = $media->group->thumbnail[0]->attributes();
+				$thumbnail = $thumb_attrs['url'];
 
-                                    //player
-                                    if ( $ytchag_player == '1' ) {
-                                            require 'templates/player.php';
-                                    }
+				$thumbs = $media->group->thumbnail;
+				$thumb_attrs = array();
+				$index = 0;
 
-                                    $content.= '<ul class="ytchagallery ytccf' . $tableclass . $title_and_description_alignment_class . $columnnumber . ' ytc-thumb' . $ytchag_thumb_ratio . '">';
-
-                            } // if player end
-                            $thumb_count++;
-
-
-
-                            //title and description content
-
-                            if ( $ytchag_title || $ytchag_description ) {
-                                    $title_and_description_content= '<div class="ytctitledesc-cont">';
-
-                                    if ( $ytchag_title ) {
-                                            $title_and_description_content.= '<h5 class="ytctitle"><a class="ytclink" href="' . $youtube_url . '/watch?v=' . $youtubeid . '" data-playerid="ytcplayer' . $plugincount . '" data-quality="' . $ytchag_quality . '" alt="' . $title . '" title="' . $title . '" ' . $ytchag_nofollow . '>' . $title . '</a></h5>';
-                                    }
-
-                                    if ( $ytchag_description ) {
-                                            $description = wp_trim_words( $description, $num_words = $ytchag_description_words_number, $more = '&hellip;' );
-                                            $title_and_description_content.= '<div class="ytctdescription">' . $description . '</div>';
-                                    }
-
-                                    $title_and_description_content.= '</div>';
-                            } else {
-                                    $title_and_description_content = '';
-                            }
-                            //end title and description content
+				// get thumbnails attributes: url | height | width
+				//mqdefault: 320x180 (16:9)
+				foreach ( $thumbs as $thumb ) {
+					$attrstring="";
+					foreach ( $namespaces as $ns ) {
+						foreach ( $thumb->attributes( $ns ) as $attr => $value ) { // get all attributes, whatever namespace they might be in
+							$thumb_attrs[$index][$attr] = $value;
+							$attrstring.=$attr . ': ' . $thumb_attrs[$index][$attr] . "| ";
+						}
+					}
+					$index++;
+				}
 
 
-                            //----
-                            if ( $ytchag_thumb_columns !=0 && $column == 1 ) {
-                                    $content.=  "\n\n" .'<div class="ytccf ytc-row ytc-r-' . $rowcount . $row_oddeven . ' ">' . "\n\n";
-                            }
+				// default; w: 120; h: 90; 4x3
+				// mqdefault; w: 320; h: 180; 16x9
+				// hqdefault; w: 480; h: 360; 4x3
+				// sddefault; w: 640; h: 480; 4x3
 
-                            //$content.= '$column: ' + $column;
-                            $content.=  "\n\n" . '	<li class="ytccell-' . $column . $columnlastfirst . '">';//style="width: ' . $ytchag_thumb_width . 'px; "
+				// Thumbnails
+				//--------------------------------
 
-                            $content.= '<div class="ytcliinner">';
+				//thumbnail height
+				if ( $ytchag_thumb_ratio == '16x9' ) {
+					$ytchag_thumb_height = round( ( $ytchag_thumb_width * 9 ) / 16 );
+				} else {
+					$ytchag_thumb_height = round( ( $ytchag_thumb_width * 3 ) / 4 );
+				}
 
-                            if ( $ytchag_thumbnail_alignment == 'bottom' ) {
-                                    $content.= $title_and_description_content;
+				//sort array by width
+				foreach ( $thumb_attrs as $key => $row ) {
+					$new_thumb_attrs[$key]  = $row['width'];
+				}
+				array_multisort( $new_thumb_attrs, SORT_NUMERIC, $thumb_attrs );
+				unset( $new_thumb_attrs[$key] );
 
-                            }
+				// get appropriate thumbnail width
+				$thumbcorrectW = $this->get_appropriate_thumbnail( $thumb_attrs, $ytchag_thumb_width, $ytchag_thumb_height, 'defaults' );
+				if ( !isset( $thumbcorrectW ) ) {
+					$thumbcorrectW = $this->get_appropriate_thumbnail( $thumb_attrs, $ytchag_thumb_width, $ytchag_thumb_height, 'other' );
+				}
 
-                            $content.= '<div class="ytcthumb-cont"' . $ytchag_thumbnail_fixed_witdh . '>';
-                            $content.= '<a class="ytcthumb ytclink" ' .$ytchag_thumb_window. ' href="' . $youtube_url . '/watch?v=' . $youtubeid . '" data-playerid="ytcplayer' . $plugincount . '" data-quality="' . $ytchag_quality . '" title="' . $title . '" style="background-image:url(' . $thumb . ')" ' . $ytchag_nofollow . '>';
-                            $content.= '<div class="ytcplay"></div>';
-                            $content.= '</a>';
-                            $content.= '</div>';
+				//index in array of thumbnail width
+				$thumbcorrectWIndex = $this->array_search_multi( $thumb_attrs, 'width', $thumbcorrectW );
 
-                            if ( $ytchag_thumbnail_alignment != 'bottom' ) {
-                                    $content.= $title_and_description_content;
-                            }
+				//appropriate url thumbnail
+				$thumb = $thumbcorrectWIndex[0]['url'];
 
-                            $content.= '</div>';
 
-                            $content.= '</li>' . "\n\n";
+				//rows and columns control
 
-                            //----
-                            if ( $ytchag_thumb_columns !=0 && $column%$ytchag_thumb_columns == 0 ) {
-                                    $column = 0;
-                                    $columnlastfirst = ' ytccell-last';
-                                    $content.= '</div>' . "\n\n\n";
-                            }
-                            if ( $thumb_count == $ytchag_maxitems ) {
-                                    break;
-                            }
-                    } //foreach end
+				$column++;
+				$columnlastfirst = $tableclass = $columnnumber = '';
+				if ( $ytchag_thumb_columns !=0 && $column == 1 ) {
+					$columnlastfirst = ' ytccell-first';
+					$rowcount++;
+					$row_oddeven = ( $rowcount%2==1 )?' ytc-r-odd':' ytc-r-even';
+					$tableclass = ' ytc-table';
+					$columnnumber = ' ytc-columns'. $ytchag_thumb_columns;
 
-                    //if last row
-                    if ( $ytchag_thumb_columns !=0 && $columnlastfirst != ' ytccell-last' ) {
-                            $content.= '</div>' . "\n\n\n";
-                    }
+				}
+				if ( $ytchag_thumb_columns !=0 && $column%$ytchag_thumb_columns == 0 ) {
+					$columnlastfirst = ' ytccell-last';
+				}// end columns control
 
-                    $content.= '</ul>';
+				//check if title or description
+				$ytchag_thumbnail_fixed_witdh = '';
+				$title_and_description_alignment_class = '';
 
-                    //link to youtube.com gallery
-                    if ( $ytchag_link ) {
-                            $content.= '<a href="' . $ytchag_link_url . '" class="ytcmore" ' . $ytchag_link_window .' ' . $ytchag_nofollow .' >' . $ytchag_link_tx . '</a>';
-                    }
-                    //--}
+
+				if ( $ytchag_title || $ytchag_description ) {
+					$title_and_description_alignment_class = ' ytc-td-' . $ytchag_thumbnail_alignment;
+
+					//fixed width for columns 0 or with alignment
+					if ( $ytchag_thumbnail_alignment == 'left' || $ytchag_thumbnail_alignment == 'right' ) {
+						$ytchag_thumbnail_fixed_witdh = ' style="width: ' . $ytchag_thumb_width . 'px; "';
+					}
+				}
+				//fixed width for columns 0 or with alignment
+				if ( $ytchag_thumb_columns ==0 ) {
+					$ytchag_thumbnail_fixed_witdh = ' style="width: ' . $ytchag_thumb_width . 'px; "';
+				}
+
+
+
+				//The content
+				//--------------------------------
+
+				//Show me the player: iframe player
+				if ( $thumb_count == 0 ) {
+					//count the plugin occurrences on page
+					$plugincount++;
+
+					// Load css
+					$this->register_styles();
+
+					$content = '';
+
+					//player
+					if ( $ytchag_player == '1' ) {
+						require 'templates/player.php';
+					}
+
+					$content.= '<ul class="ytchagallery ytccf' . $tableclass . $title_and_description_alignment_class . $columnnumber . ' ytc-thumb' . $ytchag_thumb_ratio . '">';
+
+				} // if player end
+				$thumb_count++;
+
+
+
+				//title and description content
+
+				if ( $ytchag_title || $ytchag_description ) {
+					$title_and_description_content= '<div class="ytctitledesc-cont">';
+
+					if ( $ytchag_title ) {
+						$title_and_description_content.= '<h5 class="ytctitle"><a class="ytclink" href="' . $youtube_url . '/watch?v=' . $youtubeid . '" data-playerid="ytcplayer' . $plugincount . '" data-quality="' . $ytchag_quality . '" alt="' . $title . '" title="' . $title . '" ' . $ytchag_nofollow . '>' . $title . '</a></h5>';
+					}
+
+					if ( $ytchag_description ) {
+						$description = wp_trim_words( $description, $num_words = $ytchag_description_words_number, $more = '&hellip;' );
+						$title_and_description_content.= '<div class="ytctdescription">' . $description . '</div>';
+					}
+
+					$title_and_description_content.= '</div>';
+				} else {
+					$title_and_description_content = '';
+				}
+				//end title and description content
+
+
+				//----
+				if ( $ytchag_thumb_columns !=0 && $column == 1 ) {
+					$content.=  "\n\n" .'<div class="ytccf ytc-row ytc-r-' . $rowcount . $row_oddeven . ' ">' . "\n\n";
+				}
+
+				//$content.= '$column: ' + $column;
+				$content.=  "\n\n" . '	<li class="ytccell-' . $column . $columnlastfirst . '">';//style="width: ' . $ytchag_thumb_width . 'px; "
+
+				$content.= '<div class="ytcliinner">';
+
+				if ( $ytchag_thumbnail_alignment == 'bottom' ) {
+					$content.= $title_and_description_content;
+
+				}
+
+				$content.= '<div class="ytcthumb-cont"' . $ytchag_thumbnail_fixed_witdh . '>';
+				$content.= '<a class="ytcthumb ytclink" ' .$ytchag_thumb_window. ' href="' . $youtube_url . '/watch?v=' . $youtubeid . '" data-playerid="ytcplayer' . $plugincount . '" data-quality="' . $ytchag_quality . '" title="' . $title . '" style="background-image:url(' . $thumb . ')" ' . $ytchag_nofollow . '>';
+				$content.= '<div class="ytcplay"></div>';
+				$content.= '</a>';
+				$content.= '</div>';
+
+				if ( $ytchag_thumbnail_alignment != 'bottom' ) {
+					$content.= $title_and_description_content;
+				}
+
+				$content.= '</div>';
+
+				$content.= '</li>' . "\n\n";
+
+				//----
+				if ( $ytchag_thumb_columns !=0 && $column%$ytchag_thumb_columns == 0 ) {
+					$column = 0;
+					$columnlastfirst = ' ytccell-last';
+					$content.= '</div>' . "\n\n\n";
+				}
+				if ( $thumb_count == $ytchag_maxitems ) {
+					break;
+				}
+			} //foreach end
+
+			//if last row
+			if ( $ytchag_thumb_columns !=0 && $columnlastfirst != ' ytccell-last' ) {
+				$content.= '</div>' . "\n\n\n";
+			}
+
+			$content.= '</ul>';
+
+			//link to youtube.com gallery
+			if ( $ytchag_link ) {
+				$content.= '<a href="' . $ytchag_link_url . '" class="ytcmore" ' . $ytchag_link_window .' ' . $ytchag_nofollow .' >' . $ytchag_link_tx . '</a>';
+			}
+			//--}
 		}
 
 		return $content;
