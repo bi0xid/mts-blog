@@ -1,2 +1,2 @@
 Test run:
-php phpunit.phar --bootstrap vendor/autoload.php tests/
+php phpunit.phar -c phpunit.xml
