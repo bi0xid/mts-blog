@@ -18,3 +18,5 @@
 /test.php
 /testXml.php
 /testXmlHtml.php
+/.idea
+/phpunit/vendor
