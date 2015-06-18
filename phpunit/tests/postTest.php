@@ -63,7 +63,7 @@ class postTest extends \PHPUnit_Framework_TestCase
 
         /* @var $crawler Symfony\Component\DomCrawler\Crawler */
         $crawler = $client->request('GET', $url);
-        $this->assertEquals($status, $client->getResponse()->getStatus());
+        $this->assertEquals($status, $client->getResponse()->getStatus(), "Failed assert that status from url with method GET: " . $url . " = " . $status);
 
     }
 
@@ -89,7 +89,7 @@ class postTest extends \PHPUnit_Framework_TestCase
 
         /* @var $crawler Symfony\Component\DomCrawler\Crawler */
         $crawler = $client->request('GET', $url);
-        $this->assertEquals($redirectUrl, $client->getResponse()->getHeader('location', true));
+        $this->assertEquals($redirectUrl, $client->getResponse()->getHeader('location', true), "Redirection from url with method GET: " . $url . " to " . $redirectUrl . " failed");
     }
 
     public function redirectsProvider()
