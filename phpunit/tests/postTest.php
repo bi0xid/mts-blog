@@ -69,14 +69,60 @@ class postTest extends \PHPUnit_Framework_TestCase
 
     public function locationsProvider()
     {
+        $uploadsBaseUrl = wp_upload_dir()['baseurl'];
+
         return array(
-            array(home_url('/xmlrpc.php'), '403'),
-            array(home_url('/cron/'), '403'),
-            array(home_url('/phpunit/'), '403'),
-            array(home_url('/sitemap.xml'), '200'),
-            array(home_url(str_repeat(sha1(123456789), 5)), '404'),
+            array(home_url('/xmlrpc.php'), 403),
+            array(home_url('/cron/get_youtube_video.php'), 403),
+            array(home_url('/phpunit/composer.json'), 403),
+            array(home_url('/sitemap.xml'), 200),
+            array(home_url(self::getUniqueStr()), 404),
+            array(home_url('/wp-content/uploads/index.php'), 403),
+            array(sprintf('%s/profiles/%s.txt', $uploadsBaseUrl, self::getUniqueStr()), 403),
+            array(sprintf('%s/wpcf7_captcha/%s.txt', $uploadsBaseUrl, self::getUniqueStr()), 403),
+            array(sprintf('%s/wpcf7_captcha/%s.gif', $uploadsBaseUrl, self::getUniqueStr()), 200),
+            array(sprintf('%s/wpcf7_captcha/%s.jpeg', $uploadsBaseUrl, self::getUniqueStr()), 200),
+            array(sprintf('%s/wpcf7_captcha/%s.png', $uploadsBaseUrl, self::getUniqueStr()), 200),
+            array(home_url('/wp-content/plugins/akismet/akismet.php'), 403),
+            array(home_url('/wp-content/plugins/akismet/_inc/akismet.css'), 200),
+            array(home_url('/wp-content/plugins/akismet/_inc/akismet.js'), 200),
+            array(home_url('/wp-content/plugins/akismet/_inc/form.js'), 200),
+            array(home_url('/wp-content/plugins/akismet/_inc/img/logo-full-2x.png'), 200),
+            array(home_url('/wp-content/plugins/easy-social-share-buttons/public/cache/'), 403),
+            array(home_url('/wp-content/plugins/wordfence/lib/GeoIP.dat'), 403),
+            array(home_url('/wp-content/plugins/wordfence/tmp/configCache.php'), 403),
+            array(home_url('/wp-content/plugins/p3-profiler/classes/index.php'), 403),
+            array(home_url('/wp-content/plugins/p3-profiler/exceptions/index.php'), 403),
+            array(home_url('/wp-content/plugins/p3-profiler/languages/index.php'), 403),
+            array(home_url('/wp-content/plugins/p3-profiler/templates/index.php'), 403),
         );
     }
+
+    /**
+     * @beforeClass
+     */
+    public static function setUpLocationsData()
+    {
+        $uploadsBaseDir = wp_upload_dir()['basedir'];
+        foreach (array('jpeg', 'gif', 'png', 'txt') as $ext) {
+            file_put_contents(sprintf('%s/wpcf7_captcha/%s.%s', $uploadsBaseDir, self::getUniqueStr(), $ext), '');
+        }
+
+        file_put_contents(sprintf('%s/profiles/%s.txt', $uploadsBaseDir, self::getUniqueStr()), '');
+    }
+
+    /**
+     * @afterClass
+     */
+    public static function tearDownLocationsData()
+    {
+        $uploadsBaseDir = wp_upload_dir()['basedir'];
+        foreach (array('jpeg', 'gif', 'png', 'txt') as $ext) {
+            unlink(sprintf('%s/wpcf7_captcha/%s.%s', $uploadsBaseDir, self::getUniqueStr(), $ext));
+        }
+        unlink(sprintf('%s/profiles/%s.txt', $uploadsBaseDir, self::getUniqueStr()));
+    }
+
 
     /**
      * @dataProvider redirectsProvider
@@ -148,5 +194,10 @@ class postTest extends \PHPUnit_Framework_TestCase
                 'http://wiredtree.com'
             ),
         );
+    }
+
+    protected static function getUniqueStr()
+    {
+        return str_repeat(sha1(123456789), 5);
     }
 }
