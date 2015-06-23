@@ -1,5 +1,6 @@
 Test run:
-php phpunit.phar -c phpunit.xml
+All test without excluded groups: php phpunit.phar -c phpunit.xml
+Specific groups or files of tests: php phpunit.phar --group hard-loaded -c phpunit.xml tests/imagesTest.php
 
 Need to discuss how to test following rule:
 # BEGIN W3TC Skip 404 error handling by WordPress for static files

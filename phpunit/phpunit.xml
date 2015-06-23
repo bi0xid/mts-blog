@@ -10,6 +10,7 @@
     <groups>
         <exclude>
             <group>helpers</group>
+            <group>hard-loaded</group>
         </exclude>
     </groups>
 
