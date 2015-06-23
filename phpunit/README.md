@@ -2,6 +2,12 @@ Test run:
 All test without excluded groups: php phpunit.phar -c phpunit.xml
 Specific groups or files of tests: php phpunit.phar --group hard-loaded -c phpunit.xml tests/imagesTest.php
 
+
+TODO:
+1. test newsletter
+2. check 403 status once again
+3. check all redirection from redirection plugin(better create list from db info of this plugin)
+
 Need to discuss how to test following rule:
 # BEGIN W3TC Skip 404 error handling by WordPress for static files
 <IfModule mod_rewrite.c>
