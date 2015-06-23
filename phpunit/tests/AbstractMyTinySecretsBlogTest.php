@@ -72,7 +72,7 @@ class AbstractMyTinySecretsBlogTest extends \PHPUnit_Framework_TestCase
 		/* All pagination pages contains menu */
 		$this->assertEquals(1, $crawler->filter('#navigation')->count(), "Failed assert that '{$url}' contains '#navigation' (menu)");
 
-		if (in_array($unit->post_name, ['thank-you'])) {
+		if ($unit && in_array($unit->post_name, ['thank-you'])) {
 			$this->markTestSkipped("Test 'testExistsWidgets' skipped for page = '{$unit->post_name}'");
 		}
 

@@ -63,6 +63,6 @@ class searchTest extends AbstractMyTinySecretsBlogTest
 		$crawler = $client->request('GET', $url);
 		$this->assertEquals(200,  $client->getResponse()->getStatus());
 		$this->assertEquals($postCount, $crawler->filter('.excerpt')->count(), "Failed assert that search page ({$url}) contains {$postCount} posts for phrase: '{$phrase}'");
-		$this->testExistsWidgets($crawler, $url);
+		$this->testExistsWidgets($crawler, null, $url);
 	}
 }
