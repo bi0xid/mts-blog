@@ -1,0 +1,10 @@
+/.git
+/
+
+/shop/
+/shop/controllers
+/shop/controllers/
+/shop/config
+/shop/config/
+/shop/config/test
+/shop/config/teset/safasdfsf

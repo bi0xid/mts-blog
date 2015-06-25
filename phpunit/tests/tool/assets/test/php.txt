@@ -1,0 +1,2 @@
+/shop/admin123/filemanager/upload.php
+/wp-comments-post.php

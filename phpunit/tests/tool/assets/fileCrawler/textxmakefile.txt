@@ -1,0 +1,3 @@
+/phpunit/vendor/guzzlehttp/ringphp/Makefile
+/phpunit/vendor/guzzlehttp/streams/Makefile
+/phpunit/vendor/guzzlehttp/guzzle/Makefile

@@ -1,0 +1,10 @@
+/.git|:|403|:|
+/|:|200|:|
+|:|200|:|
+/shop/|:|200|:|
+/shop/controllers|:|301|:|http://mytinysecrets.com/shop/controllers/
+/shop/controllers/|:|302|:|../
+/shop/config|:|403|:|
+/shop/config/|:|403|:|
+/shop/config/test|:|403|:|
+/shop/config/teset/safasdfsf|:|403|:|

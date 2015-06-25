@@ -1,0 +1,4 @@
+/README.md|:|200|:|
+/nginx.conf|:|404|:|
+/shop/config/teset/safasdfsf.txt|:|403|:|
+/shop/config/teset/safasdfsf1.txt|:|403|:|

@@ -1,10 +1,5 @@
 <?php
 
-use Goutte\Client;
-
-/* Domain we are checking */
-$domain = 'http://mytinysecrets.com';
-
 $saveDir = realpath(__DIR__) . '/tests/tool/assets/fileCrawler/';
 
 $imagesMimeTypes = [
@@ -74,7 +69,7 @@ foreach ( $result['dir'] as $dir ) {
 if ( file_exists($saveDir . 'dir.txt') ) {
 	unlink($saveDir . 'dir.txt');
 }
-file_put_contents($saveDir . 'dir.txt', $str);
+file_put_contents($saveDir . 'dir.txt', trim($str, "\n"));
 
 foreach ( $result['file'] as $mime => $files ) {
 	$str = '';
@@ -82,8 +77,8 @@ foreach ( $result['file'] as $mime => $files ) {
 		$str .= $file . "\n";
 	}
 
-	if ( file_exists($saveDir . $mime) ) {
-		unlink($saveDir . $mime);
+	if ( file_exists($saveDir . $mime . '.txt') ) {
+		unlink($saveDir . $mime . '.txt');
 	}
-	file_put_contents($saveDir . $mime, $str);
+	file_put_contents($saveDir . $mime . '.txt', trim($str, "\n"));
 }

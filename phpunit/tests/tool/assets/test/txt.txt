@@ -1,0 +1,4 @@
+/README.md
+/nginx.conf
+/shop/config/teset/safasdfsf.txt
+/shop/config/teset/safasdfsf1.txt
