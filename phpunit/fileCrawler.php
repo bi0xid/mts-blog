@@ -46,7 +46,7 @@ $path = realpath(__DIR__) . '/..';
 $ecxludePaths = [];
 
 $exPats = [
-	'/phpunit/tests/tool/assets/reports'
+	'/phpunit/tests/tool/reports'
 ];
 
 foreach ($exPats as $rrr) {

@@ -1,2 +1,0 @@
-/shop/admin123/filemanager/upload.php|:|302|:|index.php?controller=AdminLogin&redirect=/shop/admin123/filemanager/upload.php
-/wp-comments-post.php|:|405|:|
