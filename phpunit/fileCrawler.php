@@ -111,3 +111,5 @@ foreach ( $result['file'] as $mime => $files ) {
 	}
 	file_put_contents($saveDir . $mime . '.txt', trim($str, "\n"));
 }
+
+echo memory_get_usage();

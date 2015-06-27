@@ -1,7 +1,0 @@
-/shop/js/tiny_mce/plugins/colorpicker/style.min.css
-/member/wp-content/plugins/bruteprotect/admin/fonts/font-awesome/css/font-awesome.min.css
-/member/wp-content/plugins/bruteprotect/admin/fonts/font-awesome/css/font-awesome.css
-/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/readme.html
-/phpunit/vendor/phpunit/phpunit/tests/TextUI/log-tap.phpt
-/wp-content/plugins/bruteprotect/admin/fonts/font-awesome/css/font-awesome.min.css
-/wp-content/plugins/bruteprotect/admin/fonts/font-awesome/css/font-awesome.css
