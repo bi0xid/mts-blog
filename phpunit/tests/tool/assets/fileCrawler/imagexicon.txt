@@ -1,0 +1,7 @@
+/shop/admin123/filemanager/img/ico/favicon.ico
+/shop/admin123/filemanager/img/ico_dark/favicon.ico
+/shop/img/tmp/PSdB0rne
+/shop/img/favicon-1.ico
+/shop/img/favicon.ico
+/wp-content/uploads/2014/01/mts30x30.ico
+/wp-content/uploads/2013/06/favicon.ico

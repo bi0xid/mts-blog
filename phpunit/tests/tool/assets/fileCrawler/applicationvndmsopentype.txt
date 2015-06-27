@@ -1,0 +1,11 @@
+/shop/admin123/themes/default/fonts/FontAwesome.otf
+/shop/themes/mytinysecretstheme686/font/FontAwesome.otf
+/shop/modules/themeconfigurator/views/css/font/FontAwesome.otf
+/member/wp-content/themes/twentyfourteen/genericons/Genericons-Regular.otf
+/member/wp-content/plugins/bruteprotect/admin/fonts/font-awesome/fonts/FontAwesome.otf
+/wp-content/plugins/wp-ajax-query-shortcode/font-awesome/font/FontAwesome.otf
+/wp-content/plugins/js_composer/assets/lib/font-awesome/src/assets/font-awesome/fonts/FontAwesome.otf
+/wp-content/plugins/js_composer/assets/lib/font-awesome/fonts/FontAwesome.otf
+/wp-content/plugins/bruteprotect/admin/fonts/font-awesome/fonts/FontAwesome.otf
+/wp-content/plugins/sociallocker-next-premium/bizpanda/libs/factory/font-awesome/assets/fonts/FontAwesome.otf
+/wp-content/themes/twentyfourteen/genericons/Genericons-Regular.otf
