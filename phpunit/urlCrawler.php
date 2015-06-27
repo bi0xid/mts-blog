@@ -15,6 +15,19 @@ $dir = realpath(__DIR__) . '/tests/tool/assets/test/';
 
 $saveDir = realpath(__DIR__) . '/tests/tool/assets/urlCrawler/';
 
+/* remove all files before */
+$fileInfoArray = new \RecursiveIteratorIterator(
+	new \RecursiveDirectoryIterator($saveDir)
+);
+
+foreach($fileInfoArray as $pathname => $fileInfo) {
+	if ( !preg_match('/txt$/', $pathname)) {
+		continue;
+	}
+	@unlink($pathname);
+}
+
+
 $fileInfoArray = new \RecursiveIteratorIterator(
 	new \RecursiveDirectoryIterator($dir)
 );

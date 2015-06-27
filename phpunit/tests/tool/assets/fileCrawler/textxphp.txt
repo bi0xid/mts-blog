@@ -1,8 +1,0 @@
-/pageTest.php
-/xmlFeederTest.php
-/searchTest.php
-/postTest.php
-/AbstractMyTinySecretsBlogTest.php
-/locationTest.php
-/fullStatusAndRedirections.php
-/imagesTest.php

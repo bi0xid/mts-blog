@@ -1,9 +1,0 @@
-/
-/tool
-/tool/
-/tool/assets
-/tool/assets/
-/tool/assets/urlCrawler
-/tool/assets/urlCrawler/
-/tool/assets/fileCrawler
-/tool/assets/fileCrawler/

@@ -41,12 +41,12 @@ $result = [
 	'file' => []
 ];
 
-$path = '/home/mts/domains/mts.usermd.net/public_html';
+$path = realpath(__DIR__) . '/..';
 
 $ecxludePaths = [];
 
 $exPats = [
-	'/phpunit/tests/tool/reports'
+	'/phpunit/tests/tool/assets/reports'
 ];
 
 foreach ($exPats as $rrr) {

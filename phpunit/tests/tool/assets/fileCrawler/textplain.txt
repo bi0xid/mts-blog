@@ -1,3 +1,0 @@
-/tool/assets/urlCrawler/dir.txt
-/tool/assets/urlCrawler/txt.txt
-/tool/assets/urlCrawler/php.txt
