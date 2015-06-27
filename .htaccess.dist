@@ -4,6 +4,13 @@
 #allow from 110.136.224.112
 #allow from 180.254.220.170
 
+RedirectMatch 403 /\.git
+RedirectMatch 403 /nginx\.conf
+<FilesMatch "^\.">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
 # Start iDevAffiliate SEO Code
 
 RewriteEngine On
