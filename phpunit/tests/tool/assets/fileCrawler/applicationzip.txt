@@ -1,0 +1,5 @@
+/shop/modules/graphvisifire/visifire/Visifire.xap
+/member/wp-includes/js/mediaelement/silverlightmediaelement.xap
+/member/wp-includes/js/plupload/plupload.silverlight.xap
+/wp-includes/js/mediaelement/silverlightmediaelement.xap
+/wp-includes/js/plupload/plupload.silverlight.xap
