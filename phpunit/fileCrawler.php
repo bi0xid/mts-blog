@@ -2,6 +2,18 @@
 
 $saveDir = realpath(__DIR__) . '/tests/tool/assets/fileCrawler/';
 
+/* remove all files before */
+$fileInfoArray = new \RecursiveIteratorIterator(
+	new \RecursiveDirectoryIterator($saveDir)
+);
+
+foreach($fileInfoArray as $pathname => $fileInfo) {
+	if ( !preg_match('/txt$/', $pathname)) {
+		continue;
+	}
+	@unlink($pathname);
+}
+
 $imagesMimeTypes = [
 	'image/gif',
 	'image/jpeg',
@@ -31,11 +43,28 @@ $result = [
 
 $path = '/home/mts/domains/mts.usermd.net/public_html';
 
+$ecxludePaths = [];
+
+$exPats = [
+	'/phpunit/tests/tool/reports'
+];
+
+foreach ($exPats as $rrr) {
+	$ecxludePaths[] = $path . $rrr;
+}
+
 $fileInfoArray = new \RecursiveIteratorIterator(
 	new \RecursiveDirectoryIterator($path)
 );
 
 foreach($fileInfoArray as $pathname => $fileInfo) {
+
+	foreach ($ecxludePaths as $for) {
+		if(false !== strpos($pathname, $for))	{
+			continue 2;
+		}
+	}
+
 	$realPath = str_replace($path, '', $pathname);
 
 	if ( !$fileInfo->isFile() ) {

@@ -1,9 +1,0 @@
-/shop/admin123/invoices/IN000001.pdf
-/shop/download/28b112fb2d6b0794cdc623b9f5943318f4b19fc9
-/shop/download/a31c32b8837d51b1d0be3a88910dd6c146c2936d
-/shop/download/8a17e2279cadf85db79272d525844c86db0a6e7d
-/shop/modules/westernunion/termsandconditions.pdf
-/shop/modules/westernunion/moduleinstall.pdf
-/shop/modules/customcontent/readme_en.pdf
-/shop/modules/readme_en.pdf
-/shop/modules/onepagecheckout/Installation_and_Setup.pdf

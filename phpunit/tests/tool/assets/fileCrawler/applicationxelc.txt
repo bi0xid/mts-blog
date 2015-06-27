@@ -1,5 +1,0 @@
-/shop/js/jquery/plugins/jgrowl/jquery.jgrowl.js
-/member/wp-includes/js/jquery/jquery.schedule.js
-/member/wp-content/plugins/revslider/js/codemirror/util/xml-hint.js
-/wp-includes/js/jquery/jquery.schedule.js
-/wp-includes/js/wp-emoji.js

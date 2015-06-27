@@ -1,6 +1,8 @@
 /wp-content/plugins/easy-social-share-buttons/public/cache
 !/wp-content/plugins/easy-social-share-buttons/public/cache/.gitkeep
 !/wp-content/plugins/easy-social-share-buttons/public/cache/.htaccess
+/phpunit/tests/tool/reports
+!/phpunit/tests/tool/reports/.gitkeep
 /wp-config.php
 /wp-content/cache/*
 !/wp-content/cache/.gitkeep

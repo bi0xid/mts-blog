@@ -1,4 +1,0 @@
-/shop/translations/fr.gzip
-/shop/translations/en.gzip
-/member/wp-includes/js/tinymce/wp-tinymce.js.gz
-/wp-includes/js/tinymce/wp-tinymce.js.gz
