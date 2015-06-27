@@ -13,7 +13,7 @@ use Goutte\Client;
  */
 class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 {
-	public static $forbidden = [];
+	public static $failedForbidden = [];
 	/**
 	 * @beforeClass
 	 */
@@ -81,9 +81,22 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 	 * @param $expectedLocation
 	 * @param $reportPath
 	 * @dataProvider dataProvider
+	 * @return null
 	 */
 	public function testFullStatusAndRedirection($url, $expectedCode, $expectedLocation, $reportPath)
 	{
+		if ($expectedCode == 403 ) { /* Skipping check children forbidden if parent forbidden failed */
+			foreach (self::$failedForbidden as $for) {
+				if(false !== strpos($url, $for))	{
+					return null;
+				}
+			}
+		}
+
+		$realSite = 'mytinysecrets.com';
+		$devSite = str_replace(['https://', 'http://'], '', home_url());
+		$expectedLocation = str_replace($realSite, $devSite, $expectedLocation);
+
 		$filePath = realpath(__DIR__) . '/tool/assets/urlCrawler';
 		$client = new Client();
 		$client->followRedirects(false);
@@ -105,7 +118,9 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 		}
 
 		if($msg != '') {
-			echo $finalLocation;
+			if ($expectedCode == 403) { //if forbidden failed then we do not need to check other children urls
+				self::$failedForbidden[] = $url;
+			}
 			file_put_contents($reportPath, $msg, FILE_APPEND);
 			$this->assertTrue(false, $msg);
 		}
