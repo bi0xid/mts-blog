@@ -82,6 +82,7 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 	 * @param $reportPath
 	 * @dataProvider dataProvider
 	 * @return null
+	 * @group full-redirection
 	 */
 	public function testFullStatusAndRedirection($url, $expectedCode, $expectedLocation, $reportPath)
 	{
