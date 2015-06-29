@@ -9,6 +9,13 @@ RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /(.*)\ HTTP/ [NC]
 RewriteCond %{HTTPS} !=on [NC]
 RewriteRule ^/?(wp-admin/|wp-login\.php) https://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]
 
+<FilesMatch "^(wp-login\.php|wp-admin)">
+     AuthType Basic
+     AuthName "Password Protected Area"
+     AuthUserFile /home/mts/.htpasswd
+     Require valid-user
+</FilesMatch>
+
 RedirectMatch 403 /\.git
 RedirectMatch 403 /nginx\.conf
 <FilesMatch "^\.">
