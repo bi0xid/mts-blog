@@ -157,8 +157,8 @@
 /member/wp-content/plugins/paid-memberships-pro/logs/.gitkeep
 /member/wp-content/plugins/magicmembers/core/assets/js/editor/plugins/shortcodes/css/shortcodes.css
 /member/wp-content/plugins/magicmembers/core/html/empty_comments_page.php
-/phpunit/tests/tool/assets/urlCrawler/.gitkeep
 /phpunit/tests/tool/assets/fileCrawler/.gitkeep
+/phpunit/tests/tool/assets/urlCrawler/.gitkeep
 /wp-content/cache/index.html
 /wp-content/cache/.gitkeep
 /wp-content/uploads/.gitkeep

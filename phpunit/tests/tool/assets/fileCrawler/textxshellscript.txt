@@ -1,3 +1,4 @@
+/shop/phpunit/vendor/doctrine/instantiator/.travis.install.sh
 /shop/.git/hooks/commit-msg.sample
 /shop/.git/hooks/applypatch-msg.sample
 /shop/.git/hooks/pre-rebase.sample

@@ -1,3 +1,4 @@
+/shop/phpunit/vendor/phpunit/php-code-coverage/src/CodeCoverage/Report/HTML/Renderer/Template/fonts/glyphicons-halflings-regular.ttf
 /shop/admin123/themes/default/fonts/fontawesome-webfont.ttf
 /shop/themes/mytinysecretstheme686/css/Sintony-Bold.ttf
 /shop/themes/mytinysecretstheme686/css/Sintony-Regular.ttf
