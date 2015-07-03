@@ -11,7 +11,7 @@ include 'bootstrap.php';
 use Goutte\Client;
 
 $domain = 'http://mytinysecrets.com';
-$dir = realpath(__DIR__) . '/tests/tool/assets/test/';
+$dir = realpath(__DIR__) . '/tests/tool/assets/fileCrawler/';
 
 $saveDir = realpath(__DIR__) . '/tests/tool/assets/urlCrawler/';
 
