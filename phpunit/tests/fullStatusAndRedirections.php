@@ -144,7 +144,7 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 			self::$failedCounter++;
 
 			file_put_contents($reportPath, $msg . "\n", FILE_APPEND);
-			$this->assertTrue(false);
+			//$this->assertTrue(false);
 		}
 	}
 }
