@@ -1,0 +1,12 @@
+/shop/phpunit/bin/phpunit|:|301|:|https://mytinysecrets.com/shop/phpunit/bin/phpunit
+/shop/admin123/themes/default/js/vendor/nv.d3.min.js|:|200|:|
+/shop/tools/htmlpurifier/standalone/HTMLPurifier/ConfigSchema/schema/Attr.ClassUseCDATA.txt|:|403|:|
+/shop/modules/onepagecheckout/extras/modules/shiptopay/shiptopay.css|:|200|:|
+/wp-admin/css/press-this.css|:|302|:|https://www.mytinysecrets.com/wp-admincss/press-this.css
+/wp-admin/css/press-this-rtl.css|:|302|:|https://www.mytinysecrets.com/wp-admincss/press-this-rtl.css
+/member/wp-content/plugins/js_composer/assets/lib/bootstrap3/less/normalize.less|:|200|:|
+/member/wp-content/plugins/magicmembers/core/assets/js/editor/plugins/downloads/langs/en_dlg.js|:|200|:|
+/member/wp-content/plugins/magicmembers/core/assets/css/admin/mgm.adminbar.css|:|200|:|
+/wp-content/plugins/js_composer/assets/lib/bootstrap3/less/normalize.less|:|200|:|
+/wp-content/plugins/redirection/admin.css|:|200|:|
+/wp-content/plugins/ultimate-posts-widget/.editorconfig|:|403|:|

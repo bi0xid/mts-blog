@@ -1,0 +1,14 @@
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/Helvetica-Oblique.afm|:|200|:|
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/Helvetica-Bold.afm|:|200|:|
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/Courier-BoldOblique.afm|:|200|:|
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/Times-Bold.afm|:|200|:|
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/Times-Roman.afm|:|200|:|
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/Courier-Bold.afm|:|200|:|
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/Courier-Oblique.afm|:|200|:|
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/Symbol.afm|:|200|:|
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/Courier.afm|:|200|:|
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/Times-BoldItalic.afm|:|200|:|
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/ZapfDingbats.afm|:|200|:|
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/Helvetica.afm|:|200|:|
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/Times-Italic.afm|:|200|:|
+/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/lib/fonts/Helvetica-BoldOblique.afm|:|200|:|
