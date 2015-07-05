@@ -13,6 +13,8 @@ use Goutte\Client;
  */
 class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 {
+	public static $failedCounter = 0;
+
 	public static $failedForbidden = [];
 	/**
 	 * @beforeClass
@@ -38,7 +40,7 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 		$data = [];
 
 		$reportsPath = realpath( __DIR__ ) . '/tool/reports/';
-		$filePath = realpath(__DIR__) . '/tool/assets/urlCrawler';
+		$filePath = realpath(__DIR__) . '/tool/assets/urlCrawler/';
 		$this->assertFileExists($filePath);
 		$this->assertFileExists($reportsPath);
 
@@ -65,10 +67,20 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 					$url,
 					$container[1],
 					$container[2],
-					$reportFile
+					$reportFile,
+					false
 				];
 			}
 		}
+
+		/*last element*/
+		$data[] = [
+			null,
+			null,
+			null,
+			null,
+			true
+		];
 
 		return $data;
 	}
@@ -80,12 +92,19 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 	 * @param $expectedCode
 	 * @param $expectedLocation
 	 * @param $reportPath
+	 * @param $isLast
 	 * @dataProvider dataProvider
 	 * @return null
 	 * @group full-redirection
 	 */
-	public function testFullStatusAndRedirection($url, $expectedCode, $expectedLocation, $reportPath)
+	public function testFullStatusAndRedirection($url, $expectedCode, $expectedLocation, $reportPath, $isLast)
 	{
+		if($isLast){ /* show final report */
+			echo "\n total failed test: " . self::$failedCounter . "\n";
+			echo "Please check reports files\n";
+			die(); /* finish process to not to show last native report from phpunit */
+		}
+
 		if ($expectedCode == 403 ) { /* Skipping check children forbidden if parent forbidden failed */
 			foreach (self::$failedForbidden as $for) {
 				if(false !== strpos($url, $for))	{
@@ -122,8 +141,10 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 			if ($expectedCode == 403) { //if forbidden failed then we do not need to check other children urls
 				self::$failedForbidden[] = $url;
 			}
+			self::$failedCounter++;
+
 			file_put_contents($reportPath, $msg . "\n", FILE_APPEND);
-			//$this->assertTrue(false, $msg);
+			$this->assertTrue(false);
 		}
 	}
 }
