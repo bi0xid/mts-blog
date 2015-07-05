@@ -45,13 +45,20 @@ $path = realpath(__DIR__) . '/..';
 
 $ecxludePaths = [];
 
-$exPats = [
-	'/phpunit/tests/tool/reports'
+$ecxludePathsPatterns = [
+	'/^phpunit\/tests\/tool\/reports/',
+	'/^shop\/cache\/smarty\/cache\/blockcms\/\d+/',
+	'/^shop\/cache\/smarty\/cache\/blocksearch_top\/\d+/',
+	'/shop\/phpunit\/vendor\/.+/',
+	'/^shop\/\.git\/objects\/.+/',
+	'/^\.git\/objects\/.+/',
+	'/^shop\/img\/p\/\d+/',
+	'/^shop\/cache\/smarty\/cache\/blockmyaccountfooter\/\d+/',
+	'/^shop\/cache\/smarty\/cache\/blocktopmenu\/\d+/',
+	'/^shop\/cache\/smarty\/cache\/blockpermanentlinks_header\/\d+/',
+	'/^shop\/cache\/smarty\/cache\/blockcategories\/\d+/',
+	'/^shop\/cache\/smarty\/compile\/.+/',
 ];
-
-foreach ($exPats as $rrr) {
-	$ecxludePaths[] = $path . $rrr;
-}
 
 $fileInfoArray = new \RecursiveIteratorIterator(
 	new \RecursiveDirectoryIterator($path)
@@ -59,8 +66,10 @@ $fileInfoArray = new \RecursiveIteratorIterator(
 
 foreach($fileInfoArray as $pathname => $fileInfo) {
 
-	foreach ($ecxludePaths as $for) {
-		if(false !== strpos($pathname, $for))	{
+	$realPath = str_replace($path, '', $pathname);
+
+	foreach ($ecxludePathsPatterns as $for) {
+		if (preg_match($for, $realPath)) {
 			continue 2;
 		}
 	}
@@ -70,7 +79,7 @@ foreach($fileInfoArray as $pathname => $fileInfo) {
 	if ( !$fileInfo->isFile() ) {
 		/* Replace .. and . at the end of path name */
 		/* Replace /.. to / and /. to '' to check 'host.pl' and 'host.pl/' */
-		$realPath = preg_replace(['/\/\.\.$/', '/\/\./'], ['/', ''], $realPath);
+		$realPath = preg_replace(['/\/\.\.$/', '/\/\.$/'], ['/', ''], $realPath);
 		$result['dir'][] = $realPath;
 		continue;
 	}

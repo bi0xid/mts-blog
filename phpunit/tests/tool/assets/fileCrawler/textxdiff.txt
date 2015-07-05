@@ -1,12 +1,3 @@
-/shop/phpunit/vendor/phpunit/phpunit/tests/TextUI/exception-stack.phpt
-/shop/phpunit/vendor/phpunit/phpunit/tests/TextUI/failure.phpt
-/shop/phpunit/vendor/phpunit/phpunit/tests/TextUI/failure-isolation.phpt
-/shop/phpunit/vendor/phpunit/phpunit/tests/Regression/GitHub/503.phpt
-/shop/phpunit/vendor/phpunit/phpunit/tests/Regression/GitHub/581.phpt
-/shop/phpunit/vendor/phpunit/phpunit/tests/Regression/GitHub/433.phpt
-/shop/phpunit/vendor/phpunit/phpunit/tests/Regression/GitHub/445.phpt
-/shop/phpunit/vendor/sebastian/diff/tests/fixtures/patch2.txt
-/shop/phpunit/vendor/sebastian/diff/tests/fixtures/patch.txt
 /phpunit/vendor/sebastian/diff/tests/fixtures/patch2.txt
 /phpunit/vendor/sebastian/diff/tests/fixtures/patch.txt
 /phpunit/vendor/phpunit/phpunit/tests/Regression/GitHub/581.phpt

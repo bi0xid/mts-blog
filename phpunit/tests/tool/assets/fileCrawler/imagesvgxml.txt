@@ -1,4 +1,3 @@
-/shop/phpunit/vendor/phpunit/php-code-coverage/src/CodeCoverage/Report/HTML/Renderer/Template/fonts/glyphicons-halflings-regular.svg
 /shop/admin123/themes/default/fonts/fontawesome-webfont.svg
 /shop/themes/mytinysecretstheme686/font/fontawesome-webfont.svg
 /shop/modules/themeconfigurator/views/css/font/fontawesome-webfont.svg

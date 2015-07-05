@@ -1,14 +1,3 @@
-/shop/phpunit/vendor/phpunit/phpunit/tests/TextUI/testdox-html.phpt
-/shop/phpunit/vendor/phpunit/php-code-coverage/src/CodeCoverage/Report/HTML/Renderer/Template/js/html5shiv.min.js
-/shop/phpunit/vendor/phpunit/php-code-coverage/src/CodeCoverage/Report/HTML/Renderer/Template/js/respond.min.js
-/shop/phpunit/vendor/phpunit/php-code-coverage/src/CodeCoverage/Report/HTML/Renderer/Template/file.html.dist
-/shop/phpunit/vendor/phpunit/php-code-coverage/src/CodeCoverage/Report/HTML/Renderer/Template/dashboard.html.dist
-/shop/phpunit/vendor/phpunit/php-code-coverage/src/CodeCoverage/Report/HTML/Renderer/Template/directory.html.dist
-/shop/phpunit/vendor/symfony/css-selector/Tests/XPath/Fixtures/shakespear.html
-/shop/phpunit/vendor/symfony/css-selector/Tests/XPath/Fixtures/ids.html
-/shop/phpunit/vendor/symfony/dom-crawler/Tests/Fixtures/windows-1250.html
-/shop/phpunit/vendor/symfony/dom-crawler/README.md
-/shop/phpunit/vendor/guzzlehttp/guzzle/docs/_templates/nav_links.html
 /shop/error500.html
 /shop/admin123/filemanager/jPlayer/add-on/jplayer.playlist.min.js
 /shop/admin123/filemanager/jPlayer/add-on/jquery.jplayer.inspector.js

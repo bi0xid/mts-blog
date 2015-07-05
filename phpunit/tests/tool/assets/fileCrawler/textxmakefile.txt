@@ -1,6 +1,3 @@
-/shop/phpunit/vendor/guzzlehttp/ringphp/Makefile
-/shop/phpunit/vendor/guzzlehttp/streams/Makefile
-/shop/phpunit/vendor/guzzlehttp/guzzle/Makefile
 /phpunit/vendor/guzzlehttp/guzzle/Makefile
 /phpunit/vendor/guzzlehttp/ringphp/Makefile
 /phpunit/vendor/guzzlehttp/streams/Makefile

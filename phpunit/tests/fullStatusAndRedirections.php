@@ -122,7 +122,7 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 			if ($expectedCode == 403) { //if forbidden failed then we do not need to check other children urls
 				self::$failedForbidden[] = $url;
 			}
-			file_put_contents($reportPath, $msg, FILE_APPEND);
+			file_put_contents($reportPath, $msg . "\n", FILE_APPEND);
 			$this->assertTrue(false, $msg);
 		}
 	}
