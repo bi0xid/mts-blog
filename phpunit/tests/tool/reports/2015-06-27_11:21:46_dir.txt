@@ -1,1 +1,0 @@
-Failed assert that status 301 = 403(expected 403) from http://mts.usermd.net/wp-content. Failed assert that location http://mts.usermd.net/wp-content/ =  from http://mts.usermd.net/wp-content. 

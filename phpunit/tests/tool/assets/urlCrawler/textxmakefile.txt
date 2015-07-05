@@ -1,0 +1,6 @@
+/shop/phpunit/vendor/guzzlehttp/ringphp/Makefile|:|301|:|https://mytinysecrets.com/shop/phpunit/vendor/guzzlehttp/ringphp/Makefile
+/shop/phpunit/vendor/guzzlehttp/streams/Makefile|:|301|:|https://mytinysecrets.com/shop/phpunit/vendor/guzzlehttp/streams/Makefile
+/shop/phpunit/vendor/guzzlehttp/guzzle/Makefile|:|301|:|https://mytinysecrets.com/shop/phpunit/vendor/guzzlehttp/guzzle/Makefile
+/phpunit/vendor/guzzlehttp/guzzle/Makefile|:|403|:|
+/phpunit/vendor/guzzlehttp/ringphp/Makefile|:|403|:|
+/phpunit/vendor/guzzlehttp/streams/Makefile|:|403|:|

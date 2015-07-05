@@ -50,8 +50,15 @@ foreach($fileInfoArray as $pathname => $fileInfo) {
 
 	foreach ($loop as $file) {
 		$url = $domain . $file;
+
+try {
 		/* @var $crawler Symfony\Component\DomCrawler\Crawler */
 		$crawler = $client->request('HEAD', $url);
+} catch (Exception $e) {
+    echo 'Caught exception: '.  $e->getMessage() . " url: {$url}\n";
+continue;
+}
+
 
 		$status = $client->getResponse()->getStatus();
 		$finalLocation = $client->getResponse()->getHeader('location', true);
