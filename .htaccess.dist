@@ -4,6 +4,11 @@
 #allow from 110.136.224.112
 #allow from 180.254.220.170
 
+RewriteEngine On
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /(.*)\ HTTP/ [NC]
+RewriteCond %{HTTPS} !=on [NC]
+RewriteRule ^/?(wp-admin/|wp-login\.php) https://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]
+
 RedirectMatch 403 /\.git
 RedirectMatch 403 /nginx\.conf
 <FilesMatch "^\.">

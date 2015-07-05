@@ -28,6 +28,8 @@ define('W3TC_EDGE_MODE', true); // Added by W3 Total Cache
 
 # mysql -umytiuser -p -h10.30.200.51
 
+define('FORCE_SSL_ADMIN', true);
+
 define( 'WPCACHEHOME', '/home/mytinyse/public_html/wp-content/plugins/wp-super-cache/' ); //Added by WP-Cache Manager
 define('DB_NAME', '');
 
