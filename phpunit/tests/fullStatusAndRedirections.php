@@ -68,7 +68,8 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 					$container[1],
 					$container[2],
 					$reportFile,
-					false
+					false,
+					$m['name']
 				];
 			}
 		}
@@ -79,7 +80,8 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 			null,
 			null,
 			null,
-			true
+			true,
+			$m['name']
 		];
 
 		return $data;
@@ -93,11 +95,12 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 	 * @param $expectedLocation
 	 * @param $reportPath
 	 * @param $isLast
+	 * @param $name Name of file
 	 * @dataProvider dataProvider
 	 * @return null
 	 * @group full-redirection
 	 */
-	public function testFullStatusAndRedirection($url, $expectedCode, $expectedLocation, $reportPath, $isLast)
+	public function testFullStatusAndRedirection($url, $expectedCode, $expectedLocation, $reportPath, $isLast, $name)
 	{
 		if($isLast){ /* show final report */
 			echo "\n total failed test: " . self::$failedCounter . "\n";
@@ -129,6 +132,11 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 
 		$msg = '';
 
+		/* checking directory nginx has 403 for all directories, but apache 200. For us it important to access file in directory, not listing directory */
+		if ($name = 'dir' && $status == 403 && $expectedCode == 200) {
+			return null;
+		}
+
 		if ($status != $expectedCode) {
 			$msg = "Failed assert that status {$status} = $expectedCode(expected $expectedCode) from {$url}. ";
 		}
@@ -144,7 +152,7 @@ class fullStatusAndRedirections extends AbstractMyTinySecretsBlogTest
 			self::$failedCounter++;
 
 			file_put_contents($reportPath, $msg . "\n", FILE_APPEND);
-			//$this->assertTrue(false);
+			//$this->assertTrue(false); /* not enough memory */
 		}
 	}
 }

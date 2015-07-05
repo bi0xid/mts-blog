@@ -4,7 +4,7 @@ All test without excluded groups:
 
 Specific groups or files of tests:
     php phpunit.phar --group hard-loaded -c phpunit.xml tests/imagesTest.php
-    php phpunit.phar --group full-redirection -c phpunit.xml tests/fullStatusAndRedirections.php /* reports with errors from this test are located in tests/reports */
+    php phpunit.phar --group full-redirection -c phpunit.xml tests/fullStatusAndRedirections.php /* reports with errors from this test are located in tests/tool/reports */
 
 
 
