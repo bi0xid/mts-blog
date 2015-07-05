@@ -17,7 +17,6 @@
 /member/.git/hooks/update.sample
 /member/.git/hooks/pre-applypatch.sample
 /member/wp-content/themes/zeyn/redux-framework/ReduxCore/assets/js/vendor/select2/release.sh
-/phpunit/vendor/doctrine/instantiator/.travis.install.sh
 /.git/hooks/pre-commit.sample
 /.git/hooks/pre-push.sample
 /.git/hooks/pre-applypatch.sample

@@ -1,2 +1,0 @@
-/phpunit/vendor/guzzlehttp/guzzle/docs/conf.py
-/phpunit/vendor/guzzlehttp/ringphp/docs/conf.py

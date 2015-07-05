@@ -36,7 +36,6 @@
 /member/wp-content/plugins/maintenance/load/images/fonts-icon/general_foundicons.ttf
 /member/wp-content/plugins/maintenance/load/images/fonts-icon/social_foundicons.ttf
 /member/wp-content/plugins/zeyn_vc_addon/fonts/fontello.ttf
-/phpunit/vendor/phpunit/php-code-coverage/src/CodeCoverage/Report/HTML/Renderer/Template/fonts/glyphicons-halflings-regular.ttf
 /wp-content/plugins/wp-ajax-query-shortcode/font-awesome/font/fontawesome-webfont.ttf
 /wp-content/plugins/js_composer/assets/lib/font-awesome/src/assets/font-awesome/fonts/fontawesome-webfont.ttf
 /wp-content/plugins/js_composer/assets/lib/font-awesome/fonts/fontawesome-webfont.ttf

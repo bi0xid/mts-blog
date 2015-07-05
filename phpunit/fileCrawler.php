@@ -46,18 +46,23 @@ $path = realpath(__DIR__) . '/..';
 $ecxludePaths = [];
 
 $ecxludePathsPatterns = [
-	'/^phpunit\/tests\/tool\/reports/',
-	'/^shop\/cache\/smarty\/cache\/blockcms\/\d+/',
-	'/^shop\/cache\/smarty\/cache\/blocksearch_top\/\d+/',
-	'/shop\/phpunit\/vendor\/.+/',
-	'/^shop\/\.git\/objects\/.+/',
-	'/^\.git\/objects\/.+/',
-	'/^shop\/img\/p\/\d+/',
-	'/^shop\/cache\/smarty\/cache\/blockmyaccountfooter\/\d+/',
-	'/^shop\/cache\/smarty\/cache\/blocktopmenu\/\d+/',
-	'/^shop\/cache\/smarty\/cache\/blockpermanentlinks_header\/\d+/',
-	'/^shop\/cache\/smarty\/cache\/blockcategories\/\d+/',
-	'/^shop\/cache\/smarty\/compile\/.+/',
+	'/^\/phpunit\/vendor\/.+/',
+	'/^\/phpunit\/tests\/tool\/reports/',
+	'/^\/shop\/cache\/smarty\/cache\/blockcms\/\d+/',
+	'/^\/shop\/cache\/smarty\/cache\/blocksearch_top\/\d+/',
+	'/^\/shop\/phpunit\/vendor\/.+/',
+	'/^\/shop\/\.git\/objects\/.+/',
+	'/^\/member\/\.git\/objects\/.+/',
+	'/^\/\.git\/objects\/.+/',
+	'/^\/shop\/img\/p\/\d+/',
+	'/^\/shop\/cache\/smarty\/cache\/blockmyaccountfooter\/\d+/',
+	'/^\/shop\/cache\/smarty\/cache\/blocktopmenu\/\d+/',
+	'/^\/shop\/cache\/smarty\/cache\/blockpermanentlinks_header\/\d+/',
+	'/^\/shop\/cache\/smarty\/cache\/blockcategories\/\d+/',
+	'/^\/shop\/cache\/smarty\/compile\/.+/',
+	'/^\/shop\/phpunit\/src\/.+/',
+	'/^\/shop\/themes\/default\/cache\/.+/',
+	'/^\/shop\/modules\/expresscache\/cache\/.+/'
 ];
 
 $fileInfoArray = new \RecursiveIteratorIterator(

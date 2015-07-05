@@ -1,8 +1,0 @@
-/shop/phpunit/vendor/phpunit/phpunit/tests/TextUI/log-tap.phpt|:|301|:|https://mytinysecrets.com/shop/phpunit/vendor/phpunit/phpunit/tests/TextUI/log-tap.phpt
-/shop/js/tiny_mce/plugins/colorpicker/style.min.css|:|200|:|
-/member/wp-content/plugins/bruteprotect/admin/fonts/font-awesome/css/font-awesome.min.css|:|200|:|
-/member/wp-content/plugins/bruteprotect/admin/fonts/font-awesome/css/font-awesome.css|:|200|:|
-/member/wp-content/plugins/magicmembers/core/libs/third_party/dompdf/readme.html|:|200|:|
-/phpunit/vendor/phpunit/phpunit/tests/TextUI/log-tap.phpt|:|403|:|
-/wp-content/plugins/bruteprotect/admin/fonts/font-awesome/css/font-awesome.min.css|:|200|:|
-/wp-content/plugins/bruteprotect/admin/fonts/font-awesome/css/font-awesome.css|:|200|:|

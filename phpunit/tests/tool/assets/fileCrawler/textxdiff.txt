@@ -1,9 +1,0 @@
-/phpunit/vendor/sebastian/diff/tests/fixtures/patch2.txt
-/phpunit/vendor/sebastian/diff/tests/fixtures/patch.txt
-/phpunit/vendor/phpunit/phpunit/tests/Regression/GitHub/581.phpt
-/phpunit/vendor/phpunit/phpunit/tests/Regression/GitHub/503.phpt
-/phpunit/vendor/phpunit/phpunit/tests/Regression/GitHub/445.phpt
-/phpunit/vendor/phpunit/phpunit/tests/Regression/GitHub/433.phpt
-/phpunit/vendor/phpunit/phpunit/tests/TextUI/failure-isolation.phpt
-/phpunit/vendor/phpunit/phpunit/tests/TextUI/exception-stack.phpt
-/phpunit/vendor/phpunit/phpunit/tests/TextUI/failure.phpt

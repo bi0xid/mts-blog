@@ -27,7 +27,6 @@
 /member/wp-content/plugins/maintenance/load/images/fonts-icon/social_foundicons.eot
 /member/wp-content/plugins/maintenance/load/images/fonts-icon/general_foundicons.eot
 /member/wp-content/plugins/zeyn_vc_addon/fonts/fontello.eot
-/phpunit/vendor/phpunit/php-code-coverage/src/CodeCoverage/Report/HTML/Renderer/Template/fonts/glyphicons-halflings-regular.eot
 /wp-content/plugins/wp-ajax-query-shortcode/font-awesome/font/fontawesome-webfont.eot
 /wp-content/plugins/js_composer/assets/lib/font-awesome/src/assets/font-awesome/fonts/fontawesome-webfont.eot
 /wp-content/plugins/js_composer/assets/lib/font-awesome/fonts/fontawesome-webfont.eot
