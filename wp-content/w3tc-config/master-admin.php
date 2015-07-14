@@ -23,7 +23,7 @@ return array(
 	'minify.error.file' => '000000/ZYxBDgIhDEUvNE2dldfwCgiVqQ4UaVlwe4GFMXHz8_N-_tvRSzbnDR5SE1yRsz9bIEWvimr9JN12DBwjzFh4lkXWPubnu1HtUDgDG9ybmeQpBE4u_rq2C2rhFy1SKpn12yEmw5FEDfRwlQKU0fWffN_L9QE.css',
 	'track.maxcdn_signup' => 0,
 	'track.maxcdn_authorize' => 0,
-	'track.maxcdn_validation' => 0,
+	'track.maxcdn_validation' => 1436859153,
 	'notes.maxcdn_whitelist_ip' => false,
 	'notes.remove_w3tc' => false,
 	'notes.hide_extensions' => array(
