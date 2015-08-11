@@ -187,6 +187,7 @@
 									</div>
 								</div>
 							</div>
+              <?php if ( function_exists( "get_yuzo_related_posts" ) ) { get_yuzo_related_posts(); } ?>
 							<?php wp_related_posts()?>
 							
 							<div class="single_post_right">
