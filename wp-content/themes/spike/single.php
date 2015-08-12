@@ -188,7 +188,7 @@
 								</div>
 							</div>
               <?php if ( function_exists( "get_yuzo_related_posts" ) ) { get_yuzo_related_posts(); } ?>
-							<?php if ( function_exists( "wp_related_posts" ) ) { wp_related_posts(); } ?>
+							<?php //if ( function_exists( "wp_related_posts" ) ) { wp_related_posts(); } ?>
 							
 							<div class="single_post_right">
 							<?php if($options['mts_related_posts'] == '1') { ?>	
