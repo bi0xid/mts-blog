@@ -15,6 +15,9 @@
 	<link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>" />
 	<?php mts_head(); ?>
 	<meta name="p:domain_verify" content="2299c127dcf14a09af8856aae852cd5e"/>
+<style>.single_post a {
+  color: #de0079;
+}</style>
 </head>
 <?php flush(); ?>
 <body id ="blog" <?php body_class('main'); ?>>

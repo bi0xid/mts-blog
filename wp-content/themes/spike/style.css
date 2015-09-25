@@ -1635,6 +1635,9 @@ pre {
     margin: 15px 25px 25px 0;
     padding: 12px 10px;
 }
+.single_post a {
+  color: #de0079;
+}
 .single_post a.buttons { color: #fff!important }
 .single_post a.btn_white { color: #4F4F4F!important }
 .btn_brown {
