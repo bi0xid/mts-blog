@@ -60,14 +60,14 @@ foreach($aPosts as $aPost){
     
     $aLinksArray[$sCheckingUrl] = array('id' => $aPost->ID, 'url' => $sCheckingUrl);
 
-    $sTwitterUrl	= "http://cdn.api.twitter.com/1/urls/count.json?url={$sCheckingUrl}&callback=?";
+    //$sTwitterUrl	= "http://cdn.api.twitter.com/1/urls/count.json?url={$sCheckingUrl}&callback=?";
     $sDeliciousUrl      = "http://feeds.delicious.com/v2/json/urlinfo/data?url={$sCheckingUrl}&callback=?";
     $sPinterestUrl      = "http://api.pinterest.com/v1/urls/count.json?&url={$sCheckingUrl}";            
     
-    $sTwitterContent = file_get_contents($sTwitterUrl);
-    $sTwitterContent = ($sTwitterContent) ? $sTwitterContent : '';
-    $oTwitterContent = json_decode($sTwitterContent);
-    $iTwitterCount = (int)(isset($oTwitterContent->count) ? $oTwitterContent->count : 0);
+    //$sTwitterContent = file_get_contents($sTwitterUrl);
+    //$sTwitterContent = ($sTwitterContent) ? $sTwitterContent : '';
+    //$oTwitterContent = json_decode($sTwitterContent);
+    //$iTwitterCount = (int)(isset($oTwitterContent->count) ? $oTwitterContent->count : 0);
     
     $sDeliciousContent = file_get_contents($sDeliciousUrl);
     $sDeliciousContent = ($sDeliciousContent) ? $sDeliciousContent : '';
@@ -83,10 +83,10 @@ foreach($aPosts as $aPost){
     
     $iStumbleCount = (int)getStumbleShares($sCheckingUrl);
     
-    if(!((int)get_post_meta($iPostId, 'twitter_shares_count', true) > $iTwitterCount)){
-        if(!add_post_meta($aPost->ID, 'twitter_shares_count', $iTwitterCount, true))
-            update_post_meta($aPost->ID, 'twitter_shares_count', $iTwitterCount);
-    }
+    //if(!((int)get_post_meta($iPostId, 'twitter_shares_count', true) > $iTwitterCount)){
+    //    if(!add_post_meta($aPost->ID, 'twitter_shares_count', $iTwitterCount, true))
+    //        update_post_meta($aPost->ID, 'twitter_shares_count', $iTwitterCount);
+    //}
     
     if(!((int)get_post_meta($iPostId, 'delicious_shares_count', true) > $iDeliciousCount)){
         if(!add_post_meta($aPost->ID, 'delicious_shares_count', $iDeliciousCount, true))
