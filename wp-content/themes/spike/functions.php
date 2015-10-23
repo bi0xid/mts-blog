@@ -249,11 +249,11 @@ function excerpt($limit) {
 /*-----------------------------------------------------------------------------------*/
 /* nofollow to next/previous links
 /*-----------------------------------------------------------------------------------*/
-function pagination_add_nofollow($content) {
-    return 'rel="nofollow"';
-}
-add_filter('next_posts_link_attributes', 'pagination_add_nofollow' );
-add_filter('previous_posts_link_attributes', 'pagination_add_nofollow' );
+//function pagination_add_nofollow($content) {
+//    return 'rel="nofollow"';
+//}
+//add_filter('next_posts_link_attributes', 'pagination_add_nofollow' );
+//add_filter('previous_posts_link_attributes', 'pagination_add_nofollow' );
 
 /*-----------------------------------------------------------------------------------*/
 /* Nofollow to category links
@@ -364,13 +364,13 @@ function pagination($pages = '', $range = 3) {
 			echo "<li><a rel='nofollow' href='".get_pagenum_link($paged - 1)."' class='inactive'>&lsaquo; Previous</a></li>";
 		for ($i=1; $i <= $pages; $i++){ 
 			if (1 != $pages &&( !($i >= $paged+$range+1 || $i <= $paged-$range-1) || $pages <= $showitems )) { 
-				echo ($paged == $i)? "<li class='current'><span class='currenttext'>".$i."</span></li>":"<li><a rel='nofollow' href='".get_pagenum_link($i)."' class='inactive'>".$i."</a></li>";
+				echo ($paged == $i)? "<li class='current'><span class='currenttext'>".$i."</span></li>":"<li><a href='".get_pagenum_link($i)."' class='inactive'>".$i."</a></li>";
 			} 
 		} 
 		if ($paged < $pages && $showitems < $pages) 
-			echo "<li><a rel='nofollow' href='".get_pagenum_link($paged + 1)."' class='inactive'>Next &rsaquo;</a></li>";
+			echo "<li><a href='".get_pagenum_link($paged + 1)."' class='inactive'>Next &rsaquo;</a></li>";
 		if ($paged < $pages-1 &&  $paged+$range-1 < $pages && $showitems < $pages) 
-			echo "<a rel='nofollow' class='inactive' href='".get_pagenum_link($pages)."'>Last &raquo;</a>";
+			echo "<a class='inactive' href='".get_pagenum_link($pages)."'>Last &raquo;</a>";
 			echo "</ul></div>"; 
 	}
 }
