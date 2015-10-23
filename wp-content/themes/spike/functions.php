@@ -359,9 +359,9 @@ function pagination($pages = '', $range = 3) {
 	if(1 != $pages) { 
 		echo "<div class='pagination'><ul>";
 		if($paged > 2 && $paged > $range+1 && $showitems < $pages) 
-			echo "<li><a rel='nofollow' href='".get_pagenum_link(1)."'>&laquo; First</a></li>";
+			echo "<li><a href='".get_pagenum_link(1)."'>&laquo; First</a></li>";
 		if($paged > 1 && $showitems < $pages) 
-			echo "<li><a rel='nofollow' href='".get_pagenum_link($paged - 1)."' class='inactive'>&lsaquo; Previous</a></li>";
+			echo "<li><a href='".get_pagenum_link($paged - 1)."' class='inactive'>&lsaquo; Previous</a></li>";
 		for ($i=1; $i <= $pages; $i++){ 
 			if (1 != $pages &&( !($i >= $paged+$range+1 || $i <= $paged-$range-1) || $pages <= $showitems )) { 
 				echo ($paged == $i)? "<li class='current'><span class='currenttext'>".$i."</span></li>":"<li><a href='".get_pagenum_link($i)."' class='inactive'>".$i."</a></li>";
