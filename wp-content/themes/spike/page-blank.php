@@ -4,6 +4,7 @@
  */
 ?>
 <title><?php the_title(); ?></title>
+<script type='text/javascript' src='http://newsletter.mytinysecrets.com/api/js/subscribe.js' async></script>
 <?php //get_header(); ?>
 <div id="page">
 	<div class="content">
