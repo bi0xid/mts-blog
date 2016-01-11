@@ -4,7 +4,24 @@
  */
 ?>
 <title><?php the_title(); ?></title>
+<script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js?ver=1.7.1'></script>
 <script type='text/javascript' src='http://newsletter.mytinysecrets.com/api/js/subscribe.js' async></script>
+<link rel="stylesheet" href="http://mtsloveschool.com/wp-content/themes/zeyn/css/reset-css.css">
+<link rel="stylesheet" href="http://mtsloveschool.com/wp-content/themes/zeyn/css/core.css">
+<link rel="stylesheet" href="http://mtsloveschool.com/wp-content/themes/zeyn/css/webform.css">
+<link rel="stylesheet" href="http://mtsloveschool.com/wp-content/themes/zeyn/css/template.css">
+<style type="text/css">
+#load, header {
+   display: none;
+}</style>
+<script>
+jQuery(document).ready(function(){
+	jQuery('#button').click(function(){
+	       jQuery('#load').show();
+	       jQuery('#button').hide();
+	});
+});</script>
+
 <?php //get_header(); ?>
 <div id="page">
 	<div class="content">
