@@ -40,3 +40,6 @@ phpunit/5dev.txt
 phpunit/tests/tool/123
 shop 23-11-2015/
 shop-original.bak/
+/dev-shop/
+/loveschool/
+/prod-shop/
