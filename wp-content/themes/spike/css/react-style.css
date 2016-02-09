@@ -388,13 +388,21 @@ Reactshare plugin styles*/
   transform: translate(0, -50%);
 }
 #reactshare-button .rs-react {
-  right: -5px;
+  right: 5%;
   margin-right: 15px;
 }
 #reactshare-button .rs-share {
-  left: -3px;
+  left: 5%;
   border: none;
   margin-left: 15px;
+}
+@media (max-width: 390px) {
+  #reactshare-button .rs-react {
+    right: 0px;
+  }
+  #reactshare-button .rs-share {
+    left: 0px;
+  }
 }
 @media (max-width: 300px) {
   #reactshare-button .rs-react {
