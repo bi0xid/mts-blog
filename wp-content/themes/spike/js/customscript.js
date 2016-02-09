@@ -108,7 +108,7 @@ jQuery(document).ready(function(){
 
 	/*react-share functions */
 
-	$('#reactshare-button .rs-share, #reactshare-button .rs-react').click(function(e) {
+	$('#reactshare-button').click(function(e) {
 		 e.preventDefault();
 		$('#reactshare-button').addClass('opened');
 		$('#new-shop-link').addClass('opened');

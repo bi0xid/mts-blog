@@ -303,7 +303,7 @@ body > header {
     float: left;
     width: 100%;
 }
-#navigation select { display: none }
+
 #navigation ul { margin: 0 auto }
 #navigation .menu { }
 #navigation ul li {
@@ -2461,19 +2461,6 @@ ul.related_post li img{	border: 0 !important;	border-radius: 0 !important;}.pb-m
         display: inline-block;
     }
     .js #navigation > ul { display: none }
-    .js #navigation select {
-        display: inline-block !important;
-        max-width: none;
-        padding: 7px 15px;
-        width: 80%;
-        color: #fff;
-        background: #303030;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-        font-size: 12px;
-        float: right;
-        margin-right: 15px;
-        border: 1px solid #000000;
-    }
 }
 @media screen and (max-width:760px) {
     #header { margin: 0 }
@@ -2485,10 +2472,10 @@ ul.related_post li img{	border: 0 !important;	border-radius: 0 !important;}.pb-m
     }
     .slidertitle { font-size: 24px }
     .slidertext { display: none }
-    .secondary-navigation a {
+    /*.secondary-navigation a {
         padding-top: 10px!important;
         padding-bottom: 10px!important;
-    }
+    }*/
     .article { width: 96% }
     #content_box {
         padding-right: 0px;
@@ -2587,12 +2574,6 @@ ul.related_post li img{	border: 0 !important;	border-radius: 0 !important;}.pb-m
 	.post_excerpt_l{
 		display: none;
 	}
-	/*.post_excerpt_l{
-		float: left;
-		width: 30%;
-		margin-right: 10px;
-
-	}*/
 	.post_excerpt_r{
 		width: 100%;
 	}
@@ -2610,10 +2591,6 @@ ul.related_post li img{	border: 0 !important;	border-radius: 0 !important;}.pb-m
         margin-bottom: 0;
     }
     .secondary-navigation {
-        width: 100%;
-        margin-right: 0;
-    }
-    .js #navigation select {
         width: 100%;
         margin-right: 0;
     }
@@ -2646,7 +2623,7 @@ ul.related_post li img{	border: 0 !important;	border-radius: 0 !important;}.pb-m
     .internal_author_block_content{margin: 0 !important; max-width: 97% !important; width: 97% !important;}
 }
 @media screen and (max-width:300px) {
-    nav fieldset, .js #navigation select {
+    nav fieldset {
         width: 100%;
         float: left;
     }
