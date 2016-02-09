@@ -118,8 +118,12 @@ jQuery(document).ready(function(){
 		parent.find('.menu-wrapper').css('height', menuHeight);
 	});
 
-	/*react-share functions */
+	// Responsive search
+	$('#mobile-navigation').find('.search-toggler').on('click', function(e) {
+		$('#searchform').toggleClass('in');
+	});
 
+	/*react-share functions */
 	$('#reactshare-button').click(function(e) {
 		 e.preventDefault();
 		$('#reactshare-button').addClass('opened');
@@ -140,9 +144,13 @@ jQuery(document).ready(function(){
 	});
 
 	$(window).scroll(function() {
+		$('#searchform').removeClass('in');
 		$('#reactshare-button').removeClass('opened');
 		$('#new-shop-link').removeClass('opened');
 		$('.react-overlay').hide();
+
+		$('#mobile-navigation').removeClass('in');
+		$('#mobile-navigation .menu-wrapper').css('height', '0px');
 	});
 })
 

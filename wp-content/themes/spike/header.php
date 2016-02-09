@@ -53,6 +53,7 @@
 						<ul class="menu-wrapper">
 							<?php wp_list_categories('title_li='); ?>
 						</ul>
+						<span class="search-toggler"></span>
 					</div>
 					<nav id="navigation" >
 						<?php if ( has_nav_menu( 'primary-menu' ) ) { ?>
