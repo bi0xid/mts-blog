@@ -123,6 +123,11 @@ jQuery(document).ready(function(){
 		$('#searchform').toggleClass('in');
 	});
 
+	// Bullseye
+	$('.internal_author_block_content').bind('leaveviewport', function() {
+			$('.react-and-link').removeClass('out');
+	}).bullseye();
+
 	/*react-share functions */
 	$('#reactshare-button').click(function(e) {
 		 e.preventDefault();
@@ -143,7 +148,7 @@ jQuery(document).ready(function(){
 		$('.react-overlay').hide();
 	});
 
-	$(window).scroll(function() {
+	$(window).scroll(function(e) {
 		$('#searchform').removeClass('in');
 		$('#reactshare-button').removeClass('opened');
 		$('#new-shop-link').removeClass('opened');

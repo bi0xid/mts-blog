@@ -159,6 +159,7 @@ class SG_React_Share
 			$sContent .= "
 							<div class='react-overlay'>
 							</div>
+							<div class='react-and-link out'>
 								<a href='https://mytinysecrets.com/shopping/' target='_blank' id='new-shop-link'>
 									<span>Visit My Shop</span>
 								</a>
@@ -181,6 +182,7 @@ class SG_React_Share
 										<span>react</span>
 									</div>
 								</div>
+							</div>
 
 								";
 

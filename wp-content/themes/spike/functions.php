@@ -52,6 +52,9 @@ function mts_add_scripts() {
 		}
 	}
 
+	//Bullseye
+	wp_enqueue_script('Bullseye', get_template_directory_uri() . '/js/jquery.bullseye-1.0.js');
+
 	//Lightbox
 	if($options['mts_lightbox'] == '1') {
 		wp_enqueue_script('prettyPhoto', get_template_directory_uri() . '/js/jquery.prettyPhoto.js');
