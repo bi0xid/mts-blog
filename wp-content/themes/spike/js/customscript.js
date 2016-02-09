@@ -106,7 +106,6 @@ jQuery(document).ready(function(){
 
 	})
 
-
 	// Reponsive menu
 	var initialMenuHeight = $('#mobile-navigation .menu-wrapper').height();
 	$('#mobile-navigation').find('.toggler').on('click', function(e) {
@@ -145,13 +144,6 @@ jQuery(document).ready(function(){
 		$('#new-shop-link').removeClass('opened');
 		$('.react-overlay').hide();
 	});
-
-	/*$('.clicble_voute').click(function(e) {
-		 e.preventDefault();
-
-		$('#reactshare-button').removeClass('opened');
-	})*/
-
 })
 
 function swt_format_twitter(twitters) {

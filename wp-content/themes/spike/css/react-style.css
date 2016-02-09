@@ -1,1 +1,414 @@
-#reactshare-button{box-shadow:4px 4px 0 rgba(0,0,0,.21);display:none;transition:ease .2s all;-moz-transition:ease .2s all;-o-transition:ease .2s all;-webkit-transition:ease .2s all;overflow:hidden;position:fixed;z-index:200}#reactshare-button.opened{height:108px}#reactshare-button .rs-react,#reactshare-button .rs-share{height:39px;line-height:39px;color:#fff;text-align:center;cursor:pointer;text-transform:uppercase}#reactshare-button.opened .rs-react,#reactshare-button.opened .rs-share{display:none}#reactshare-button:after{clear:both;display:table;content:""}#reactshare-button .rs-share{width:54px}#reactshare-button .rs-react{width:50%;width:56px}#reactshare-button .share-functions{background:#fff;height:35px;display:none;position:relative;padding:13px 7px 14px}#reactshare-button .share-functions:after{display:block;position:absolute;content:"";width:12px;height:6px;left:50%;margin-left:-6px;top:0;background:url(../images/reactshare-arrow.png) center center no-repeat}#reactshare-button.opened .opinion-functions,#reactshare-button.opened .share-functions{display:block}#reactshare-button .opinion-functions{height:46px;padding-left:7px;padding-right:7px;display:none}#reactshare-button .clicble_voute,.opinion-functions #span_negative_votes,.opinion-functions #span_positive_votes{height:47px;line-height:47px;color:#fff;float:left;text-align:center;font-weight:700}#reactshare-button .opinion-functions:after{clear:both;display:table;content:""}.opinion-functions #span_negative_votes,.opinion-functions #span_positive_votes{width:79px;font-size:14px;display:block}#reactshare-button .clicble_voute{width:47px;display:block;font-size:32px}.clicble_voute#posvote{background:url(../images/icon-positive.png) left center no-repeat}.clicble_voute#negvote{background:url(../images/icon-negative.png) right center no-repeat}.share-func-button{float:left;display:block;margin-right:5px;background:#e09b39;height:35px;width:35px;cursor:pointer}.share-func-button:last-child{margin-right:0}#share-funct-mail{width:81px;margin-right:0;background:url(../images/icon-reactshare-mail.png) center center no-repeat #a7c945}#share-funct-sms{background:#c94577;width:38px;display:none}#share-funct-fb{width:81px;background:url(../images/icon-reactshare-fb.png) center center no-repeat #3b5998}#share-funct-twt{width:81px;background:url(../images/icon-reactshare-twitter.png) center center no-repeat #39a9e0}#share-funct-mail a{text-indent:100%;overflow:hidden;white-space:nowrap;display:block;width:100%;height:100%}.upw-image a,.widget_ultimate_posts li{height:150px;display:block}.most-shared-posts li:after,.widget_ultimate_posts li:after{clear:both;content:"";display:table}.widget_ultimate_posts li{float:none;margin-bottom:15px;max-width:100%;position:relative;width:100%}.upw-image{float:none;height:150px;margin:0;max-width:100%;overflow:hidden;width:auto}.upw-content,.upw-image img{width:100%;max-width:100%;height:auto}.upw-content{-moz-box-sizing:border-box;box-sizing:border-box;background:rgba(0,0,0,.8);bottom:0;color:#FFF;float:none;left:0;margin:0;padding:12px;position:absolute}#widget_ultimate_posts li{list-style-type:none;margin-left:0;position:relative;width:auto;height:auto;max-width:100%}.most-shared-posts li .most-shared-content a,.upw-content .post-title{color:#333;display:block;font-size:16px;height:auto;margin-bottom:20px;width:auto}#new-shop-link,.react-overlay{display:none;position:fixed;left:0}.upw-content .post-title{color:#FFF;font-size:12px;margin:0}.upw-content .post-title a{color:#FFF}.react-overlay{width:100%;height:100%;top:0}#new-shop-link,#reactshare-button{width:50%;height:50px}#new-shop-link{z-index:200;font-size:15px;-webkit-transition:all .3s;-moz-transition:all .3s;-o-transition:all .3s;-ms-transition:all .3s;transition:all .3s;bottom:0;background:#fcdd07}@media (max-width:480px){#new-shop-link{display:block}}#new-shop-link.opened{width:100%}#new-shop-link span{color:#000;width:100%;font-weight:700;text-align:center;text-transform:uppercase;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-moz-transform:translate(-50%,-50%);-o-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}#reactshare-button{right:0;bottom:0;padding:0;background:#ec1e73}#reactshare-button:after{width:1px;height:30px;background:#fff;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-moz-transform:translate(-50%,-50%);-o-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}#reactshare-button.opened{width:100%;bottom:50px;-webkit-box-shadow:none;box-shadow:none}#reactshare-button.opened:after{display:none}#reactshare-button .opinion-functions a,#reactshare-button .opinion-functions span{width:25%}#reactshare-button .share-functions{width:100%;padding-left:0;text-align:center}#reactshare-button .share-functions #share-funct-mail,#reactshare-button .share-functions a{width:25%;float:initial;display:inline-block}#reactshare-button .rs-react,#reactshare-button .rs-share{top:50%;float:initial;font-size:15px;font-weight:700;position:absolute;-webkit-transform:translate(0,-50%);-moz-transform:translate(0,-50%);-o-transform:translate(0,-50%);-ms-transform:translate(0,-50%);transform:translate(0,-50%)}#reactshare-button .rs-react{right:5%;margin-right:15px}#reactshare-button .rs-share{left:5%;border:none;margin-left:15px}@media (max-width:390px){#reactshare-button .rs-react{right:0}#reactshare-button .rs-share{left:0}}@media (max-width:300px){#reactshare-button .rs-react{margin-right:10px}#reactshare-button .rs-share{margin-left:10px}}
+/*-----------------------------------------------
+Reactshare plugin styles*/
+/*-----------------------------------------------*/
+
+
+#reactshare-button{
+	width: 111px;
+	height: 39px;
+	background: #714670;
+	box-shadow: 4px 4px 0 rgba(0,0,0,0.21);
+	padding: 1px;
+	display: none;
+	transition: ease 0.2s all;
+	-moz-transition: ease 0.2s all;
+	-o-transition: ease 0.2s all;
+	-webkit-transition: ease 0.2s all;
+	overflow: hidden;
+	  bottom: 20px;
+    position: fixed;
+    right: 6px;
+    z-index: 200;
+}
+
+#reactshare-button.opened{
+	width: 267px;
+	height: 108px;
+}
+
+#reactshare-button.opened .rs-react, #reactshare-button.opened .rs-share{
+	display: none;
+}
+
+#reactshare-button:after{
+	clear: both;
+	display: table;
+	content: "";
+}
+
+#reactshare-button .rs-share{
+	width: 54px;
+	height: 39px;
+	float: left;
+	border-right: 1px solid #d7858c;
+	text-transform: uppercase;
+	font-size: 12px;
+	color: white;
+	text-align: center;
+	line-height: 39px;
+		cursor: pointer;
+}
+
+#reactshare-button .rs-react{
+	width: 50%;
+	width: 56px;
+	height: 39px;
+	float: left;
+	text-transform: uppercase;
+	line-height: 39px;
+	font-size: 12px;
+	color: white;
+	text-align: center;
+		cursor: pointer;
+}
+
+#reactshare-button .share-functions{
+	background: white;
+	width: 253px;
+	height: 35px;
+	padding-right: 7px;
+	padding-top: 13px;
+	padding-bottom: 14px;
+	padding-left: 7px;
+	display: none;
+	position: relative;
+}
+
+#reactshare-button .share-functions:after{
+	display: block;
+	position: absolute;
+	content: "";
+	width: 12px;
+	height: 6px;
+	left: 50%;
+	margin-left: -6px;
+	top: 0px;
+	background: url('../images/reactshare-arrow.png') center center no-repeat;
+}
+
+#reactshare-button.opened .share-functions, #reactshare-button.opened .opinion-functions{
+	display: block;
+}
+
+#reactshare-button .opinion-functions{
+	height: 46px;
+	padding-left: 7px;
+	padding-right: 7px;
+	display: none;
+}
+
+#reactshare-button .opinion-functions:after{
+	clear: both;
+	display: table;
+	content: "";
+}
+
+.opinion-functions #span_positive_votes{
+	float: left;
+	width: 79px;
+	height: 47px;
+	text-align: center;
+	line-height: 47px;
+	color: #fff;
+	font-size: 14px;
+	display: block;
+	font-weight: bold;
+}
+
+.opinion-functions #span_negative_votes{
+	float: left;
+	width: 79px;
+	height: 47px;
+	text-align: center;
+	line-height: 47px;
+	color: #fff;
+	font-size: 14px;
+	font-weight: bold;
+	display: block;
+}
+
+#reactshare-button .clicble_voute{
+	float: left;
+	width: 47px;
+	display: block;
+	height: 47px;
+
+	text-align: center;
+	line-height: 47px;
+	font-weight: bold;
+	font-size: 32px;
+	color: white;
+
+}
+
+ .clicble_voute#posvote{
+	background: url('../images/icon-positive.png') left center no-repeat;
+ }
+
+ .clicble_voute#negvote{
+	background: url('../images/icon-negative.png') right center no-repeat;
+ }
+
+.share-func-button{
+	float: left;
+	display: block;
+	margin-right: 5px;
+	background: #e09b39;
+	height: 35px;
+	width: 35px;
+	cursor: pointer;
+}
+
+.share-func-button:last-child{
+	margin-right: 0;
+}
+
+#share-funct-mail{
+	/*width: 38px;*/
+	width: 81px;
+	margin-right: 0;
+	background: #a7c945 url('../images/icon-reactshare-mail.png') center center no-repeat;
+}
+
+#share-funct-sms{
+	background: #c94577;
+	width: 38px;
+	display: none;
+}
+
+#share-funct-fb{
+	width: 81px;
+	background: #3b5998 url('../images/icon-reactshare-fb.png') center center no-repeat;
+}
+
+#share-funct-twt{
+	width: 81px;
+	background: #39a9e0 url('../images/icon-reactshare-twitter.png') center center no-repeat;
+
+}
+
+#share-funct-mail a{
+	text-indent: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.most-shared-posts li:after, .widget_ultimate_posts li:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+.widget_ultimate_posts li {
+    display: block;
+    float: none;
+    height: 150px;
+    margin-bottom: 15px;
+    max-width: 100%;
+    position: relative;
+    width: 100%;
+}
+
+
+.upw-image a {
+    display: block;
+    height: 150px;
+}
+
+.upw-image {
+    float: none;
+    height: 150px;
+    margin: 0;
+    max-width: 100%;
+    overflow: hidden;
+    width: auto;
+}
+
+
+.upw-image img {
+    height: auto;
+    max-width: 100%;
+    width: 100%;
+}
+
+
+.upw-content {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8);
+    bottom: 0;
+    color: #FFFFFF;
+    float: none;
+    height: auto;
+    left: 0;
+    margin: 0;
+    max-width: 100%;
+    padding: 12px;
+    position: absolute;
+    width: 100%;
+}
+
+#widget_ultimate_posts li{
+	list-style-type: none;
+	margin-left: 0;
+	position: relative;
+	width: auto;
+	height: auto;
+	max-width: 100%;
+}
+
+.most-shared-posts li .most-shared-content a, .upw-content .post-title {
+    color: #333333;
+    display: block;
+    font-size: 16px;
+    height: auto;
+    margin-bottom: 20px;
+    width: auto;
+}
+
+
+.upw-content .post-title {
+    color: #FFFFFF;
+    font-size: 12px;
+    margin: 0;
+}
+
+
+.upw-content .post-title a {
+    color: #FFFFFF;
+}
+
+.react-overlay{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	display: none;
+	left: 0;
+	top: 0;
+}
+
+#reactshare-button,
+#new-shop-link {
+  width: 50%;
+  height: 50px;
+}
+#new-shop-link {
+  display: none;
+  z-index: 200;
+  font-size: 15px;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  transition: all 0.3s;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: #fcdd07;
+}
+@media (max-width: 480px) {
+  #new-shop-link {
+    display: block;
+  }
+}
+#new-shop-link.opened {
+  width: 100%;
+}
+#new-shop-link span {
+  color: #000;
+  width: 100%;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+#reactshare-button {
+  right: 0;
+  bottom: 0;
+  padding: 0;
+  background: #ec1e73;
+}
+#reactshare-button:after {
+  width: 1px;
+  height: 30px;
+  background: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+#reactshare-button.opened {
+  width: 100%;
+  bottom: 50px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+#reactshare-button.opened:after {
+  display: none;
+}
+#reactshare-button .opinion-functions span,
+#reactshare-button .opinion-functions a {
+  width: 25%;
+}
+#reactshare-button .share-functions {
+  width: 100%;
+  padding-left: 0px;
+  text-align: center;
+}
+#reactshare-button .share-functions a,
+#reactshare-button .share-functions #share-funct-mail {
+  width: 25%;
+  float: initial;
+  display: inline-block;
+}
+#reactshare-button .rs-react,
+#reactshare-button .rs-share {
+  top: 50%;
+  float: initial;
+  font-size: 15px;
+  font-weight: bold;
+  position: absolute;
+  -webkit-transform: translate(0, -50%);
+  -moz-transform: translate(0, -50%);
+  -o-transform: translate(0, -50%);
+  -ms-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+}
+#reactshare-button .rs-react {
+  right: 5%;
+  margin-right: 15px;
+}
+#reactshare-button .rs-share {
+  left: 5%;
+  border: none;
+  margin-left: 15px;
+}
+@media (max-width: 390px) {
+  #reactshare-button .rs-react {
+    right: 0px;
+  }
+  #reactshare-button .rs-share {
+    left: 0px;
+  }
+}
+@media (max-width: 300px) {
+  #reactshare-button .rs-react {
+    margin-right: 10px;
+  }
+  #reactshare-button .rs-share {
+    margin-left: 10px;
+  }
+}
