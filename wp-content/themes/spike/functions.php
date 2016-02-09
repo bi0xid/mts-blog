@@ -79,6 +79,7 @@ function mts_enqueue_css() {
 	}
 
 	wp_enqueue_style('react-style', get_template_directory_uri() . '/css/react-style.css', 'style');
+	wp_enqueue_style('menu-responsive', get_template_directory_uri() . '/css/menu-responsive.css', 'style');
 }
 add_action('wp_enqueue_scripts', 'mts_enqueue_css');
 

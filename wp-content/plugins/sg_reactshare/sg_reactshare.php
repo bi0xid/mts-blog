@@ -175,10 +175,10 @@ class SG_React_Share
 										<span id='span_negative_votes'>{$iNegativeVoutes}</span>
 									</div>
 									<div class='rs-share'>
-										share
+										<span>share</span>
 									</div>
 									<div class='rs-react'>
-										react
+										<span>react</span>
 									</div>
 								</div>
 

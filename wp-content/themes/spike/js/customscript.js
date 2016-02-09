@@ -1,4 +1,4 @@
-	/*
+/*
  * Superfish v1.4.8 - jQuery menu widget
  * Copyright (c) 2008 Joel Birch
  *
@@ -105,6 +105,19 @@ jQuery(document).ready(function(){
 	evt.preventDefault();
 
 	})
+
+
+	// Reponsive menu
+	var initialMenuHeight = $('#mobile-navigation .menu-wrapper').height();
+	$('#mobile-navigation').find('.toggler').on('click', function(e) {
+		var parent = $(this).parent();
+		var isMenuIn = parent.hasClass('in');
+
+		parent.toggleClass('in');
+
+		var menuHeight = isMenuIn ? '0px' : initialMenuHeight;
+		parent.find('.menu-wrapper').css('height', menuHeight);
+	});
 
 	/*react-share functions */
 

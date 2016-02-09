@@ -47,6 +47,13 @@
 					<?php } ?>
 				<?php } ?>
 				<div class="secondary-navigation">
+					<div id="mobile-navigation">
+						<span class="toggler"></span>
+						<h2>MyTinySecrets</h2>
+						<ul class="menu-wrapper">
+							<?php wp_list_categories('title_li='); ?>
+						</ul>
+					</div>
 					<nav id="navigation" >
 						<?php if ( has_nav_menu( 'primary-menu' ) ) { ?>
 							<?php wp_nav_menu( array( 'theme_location' => 'primary-menu', 'menu_class' => 'menu', 'container' => '' ) ); ?>
@@ -56,7 +63,7 @@
 							</ul>
 						<?php } ?>
 					</nav>
-				</div>              
+				</div>
 			</div><!--#header-->
 		</div><!--.container-->
 		<div id="header-mail-form">
