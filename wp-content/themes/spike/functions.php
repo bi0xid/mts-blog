@@ -136,6 +136,8 @@ include("functions/welcome-message.php");
 // Theme Functions
 include("functions/theme-actions.php");
 
+show_admin_bar(false);
+
 /*-----------------------------------------------------------------------------------*/
 /*	Filters customize wp_title
 /*-----------------------------------------------------------------------------------*/
