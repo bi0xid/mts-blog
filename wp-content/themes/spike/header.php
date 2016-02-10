@@ -49,7 +49,7 @@
 				<div class="secondary-navigation">
 					<div id="mobile-navigation">
 						<span class="toggler"></span>
-						<h2>MyTinySecrets</h2>
+						<span class="responsive-logo"></span>
 						<ul class="menu-wrapper">
 							<?php wp_list_categories('title_li='); ?>
 						</ul>
