@@ -51,7 +51,9 @@
 						<span class="toggler"></span>
 						<span class="responsive-logo"></span>
 						<ul class="menu-wrapper">
-							<?php wp_list_categories('title_li='); ?>
+            <?php if ( has_nav_menu( 'primary-menu' ) ) { ?>
+              <?php wp_nav_menu( array( 'theme_location' => 'primary-menu', 'menu_class' => 'menu', 'container' => '' ) ); ?>
+            <?php } ?>
 						</ul>
 						<span class="search-toggler"></span>
 					</div>
