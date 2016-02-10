@@ -160,7 +160,7 @@ class SG_React_Share
 							<div class='react-overlay'>
 							</div>
 							<div class='react-and-link out'>
-								<a href='https://mytinysecrets.com/shopping/' target='_blank' id='new-shop-link'>
+								<a href='http://mytinysecrets.com/shop/' target='_blank' id='new-shop-link'>
 									<span>Visit My Shop</span>
 								</a>
 								<div id='reactshare-button' class=''>
