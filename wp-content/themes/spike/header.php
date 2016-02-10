@@ -28,11 +28,11 @@
 				<?php if ($options['mts_logo'] != '') { ?>
 					<?php if( is_front_page() || is_home() || is_404() ) { ?>
 							<h1 id="logo" class="image-logo">
-								<a href="<?php echo home_url(); ?>"><img src="<?php echo $options['mts_logo']; ?>" width="290px" height="90px" alt="<?php bloginfo( 'name' ); ?>"></a>
+								<a href="<?php echo home_url(); ?>"></a>
 							</h1><!-- END #logo -->
 					<?php } else { ?>
 						  <h2 id="logo" class="image-logo">
-								<a href="<?php echo home_url(); ?>"><img src="<?php echo $options['mts_logo']; ?>" width="290px" height="90px" alt="<?php bloginfo( 'name' ); ?>"></a>
+								<a href="<?php echo home_url(); ?>"></a>
 							</h2><!-- END #logo -->
 					<?php } ?>
 				<?php } else { ?>

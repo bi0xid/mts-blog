@@ -125,7 +125,8 @@ jQuery(document).ready(function(){
 
 	// Bullseye
 	$('.internal_author_block_content').bind('leaveviewport', function() {
-			$('.react-and-link').removeClass('out');
+		console.log(1);
+		$('.react-and-link').removeClass('out');
 	}).bullseye();
 
 	/*react-share functions */
