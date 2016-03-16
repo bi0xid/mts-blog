@@ -182,7 +182,8 @@ if($aAction == 'getForHomePage'){
     @file_put_contents($sFilePath, $sResult);
     ob_end_clean();
     die($sResult);
-}elseif($aAction == 'getForSinglePost'){
+}
+/*elseif($aAction == 'getForSinglePost'){
     $iPostId = (int)(isset($_GET['postId']) && $_GET['postId']) ? $_GET['postId'] : 0;
     
     $sFilePath = $sCacheFilePath . "getForSinglePost_{$iPostId}.txt";
@@ -209,5 +210,5 @@ if($aAction == 'getForHomePage'){
     $sResult = json_encode($aResult);
     @file_put_contents($sFilePath, $sResult);
     die($sResult);
-}
+}*/
 die();

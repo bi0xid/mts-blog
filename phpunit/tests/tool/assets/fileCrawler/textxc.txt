@@ -1,0 +1,12 @@
+/shop/phpunit/bin/phpunit
+/shop/admin123/themes/default/js/vendor/nv.d3.min.js
+/shop/tools/htmlpurifier/standalone/HTMLPurifier/ConfigSchema/schema/Attr.ClassUseCDATA.txt
+/shop/modules/onepagecheckout/extras/modules/shiptopay/shiptopay.css
+/wp-admin/css/press-this.css
+/wp-admin/css/press-this-rtl.css
+/member/wp-content/plugins/js_composer/assets/lib/bootstrap3/less/normalize.less
+/member/wp-content/plugins/magicmembers/core/assets/js/editor/plugins/downloads/langs/en_dlg.js
+/member/wp-content/plugins/magicmembers/core/assets/css/admin/mgm.adminbar.css
+/wp-content/plugins/js_composer/assets/lib/bootstrap3/less/normalize.less
+/wp-content/plugins/redirection/admin.css
+/wp-content/plugins/ultimate-posts-widget/.editorconfig

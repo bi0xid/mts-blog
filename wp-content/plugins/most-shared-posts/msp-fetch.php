@@ -176,10 +176,19 @@ function most_shared_posts_update_social_data()
 				
 				// ... if not, then lets check the Twitter API.
 				$api_hits_counter++;
-				$twitter_api_results = file_get_contents("http://urls.api.twitter.com/1/urls/count.json?url=" . urlencode(get_permalink()));
-				
-				$parsed_twitter_api_results = json_decode($twitter_api_results, true);
-				$post_tweets = $parsed_twitter_api_results['count'];
+				//$twitter_api_results = file_get_contents("http://urls.api.twitter.com/1/urls/count.json?url=" . urlencode(get_permalink()));
+
+				//$ch = curl_init(); 
+				//curl_setopt($ch, CURLOPT_URL, "http://urls.api.twitter.com/1/urls/count.json");
+				//curl_setopt($ch, CURLOPT_POST, 1);
+				//curl_setopt($ch, CURLOPT_POSTFIELDS, '[{"url":"' . get_permalink() . '"}]');
+				//curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				//curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+				//$twitter_api_results = curl_exec ($ch);
+				//curl_close ($ch);
+//
+				//$parsed_twitter_api_results = json_decode($twitter_api_results, true);
+				//$post_tweets = $parsed_twitter_api_results['count'];
 				
 				if (is_numeric($post_tweets)) // We got a valid response from the API.
 				{

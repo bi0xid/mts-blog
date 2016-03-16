@@ -15,7 +15,7 @@ if ( function_exists('add_theme_support') ) add_theme_support('automatic-feed-li
 /*-----------------------------------------------------------------------------------*/
 /*	Post Thumbnail Support
 /*-----------------------------------------------------------------------------------*/
-if ( function_exists( 'add_theme_support' ) ) { 
+if ( function_exists( 'add_theme_support' ) ) {
 	add_theme_support( 'post-thumbnails' );
 	set_post_thumbnail_size( 298, 248, true );
 	add_image_size( 'featured', 298, 248, true ); //featured
@@ -30,17 +30,17 @@ if ( function_exists( 'add_theme_support' ) ) {
 function mts_add_scripts() {
 	$options = get_option('spike');
 	global $data; //get theme options
-	
+
 	//replace jQuery with Google hosted version
-	wp_deregister_script('jquery'); 
-		wp_register_script('jquery', ("//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"), false, '1.7.1'); 
-	wp_enqueue_script('jquery');	
-	
+	wp_deregister_script('jquery');
+		wp_register_script('jquery', ("//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"), false, '1.7.1');
+	wp_enqueue_script('jquery');
+
 	//replace jQuery UI with Google hosted version
-	wp_deregister_script('jquery-ui'); 
-		wp_register_script('jquery-ui', ("//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"), false, '1.8.16'); 
+	wp_deregister_script('jquery-ui');
+		wp_register_script('jquery-ui', ("//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"), false, '1.8.16');
 	wp_enqueue_script('jquery-ui');
-	
+
 	// Site wide js
 	wp_enqueue_script('modernizr', get_template_directory_uri() . '/js/modernizr.min.js');
 	wp_enqueue_script('customscript', get_template_directory_uri() . '/js/customscript.js');
@@ -51,7 +51,10 @@ function mts_add_scripts() {
 			wp_enqueue_script('flexslider', get_template_directory_uri() . '/js/jquery.flexslider-min.js');
 		}
 	}
-	
+
+	//Bullseye
+	wp_enqueue_script('Bullseye', get_template_directory_uri() . '/js/jquery.bullseye-1.0.js');
+
 	//Lightbox
 	if($options['mts_lightbox'] == '1') {
 		wp_enqueue_script('prettyPhoto', get_template_directory_uri() . '/js/jquery.prettyPhoto.js');
@@ -65,19 +68,21 @@ add_action('wp_enqueue_scripts','mts_add_scripts');
 function mts_enqueue_css() {
 	$options = get_option('spike');
 	global $data; //get theme options
-	
+
 	//slider
 	if($options['mts_featured_slider'] == '1') {
 		if(is_front_page()) {
 			wp_enqueue_style('flexslider', get_template_directory_uri() . '/css/flexslider.css', 'style');
 		}
 	}
-	
+
 	//lightbox
 	if($options['mts_lightbox'] == '1') {
-	wp_enqueue_style('prettyPhoto', get_template_directory_uri() . '/css/prettyPhoto.css', 'style');
+		wp_enqueue_style('prettyPhoto', get_template_directory_uri() . '/css/prettyPhoto.css', 'style');
 	}
-	
+
+	wp_enqueue_style('react-style', get_template_directory_uri() . '/css/react-style.css', 'style');
+	wp_enqueue_style('menu-responsive', get_template_directory_uri() . '/css/menu-responsive.css', 'style');
 }
 add_action('wp_enqueue_scripts', 'mts_enqueue_css');
 
@@ -91,7 +96,7 @@ register_sidebar(array('name'=>'Sidebar',
 	'before_title' => '<h3>',
 	'after_title' => '</h3>',
 ));
-	
+
 /*-----------------------------------------------------------------------------------*/
 /*	Load Widgets & Shortcodes
 /*-----------------------------------------------------------------------------------*/
@@ -134,11 +139,13 @@ include("functions/welcome-message.php");
 // Theme Functions
 include("functions/theme-actions.php");
 
+show_admin_bar(false);
+
 /*-----------------------------------------------------------------------------------*/
 /*	Filters customize wp_title
 /*-----------------------------------------------------------------------------------*/
 if ( ! function_exists('mythemeshop_page_title' ) ) {
-	function mythemeshop_page_title( $title ) { 
+	function mythemeshop_page_title( $title ) {
 		$the_page_title = $title;
 		if( ! $the_page_title ){
 			$the_page_title = get_bloginfo("name");
@@ -146,10 +153,10 @@ if ( ! function_exists('mythemeshop_page_title' ) ) {
 			$the_page_title = $the_page_title;
 		}
 		return $the_page_title;
-	} 
+	}
 	add_filter('wp_title', 'mythemeshop_page_title');
 }
-	
+
 /*-----------------------------------------------------------------------------------*/
 /*	Filters that allow shortcodes in Text Widgets
 /*-----------------------------------------------------------------------------------*/
@@ -206,7 +213,7 @@ function mytheme_comment($comment, $args, $depth) {
 				<br />
 			<?php endif; ?>
 			<div class="commentmetadata">
-			<?php printf(__('<span class="fn">%s</span>', 'mythemeshop'), get_comment_author_link()) ?> 
+			<?php printf(__('<span class="fn">%s</span>', 'mythemeshop'), get_comment_author_link()) ?>
 			<div class="comment-meta">
 				<?php edit_comment_link(__('(Edit)', 'mythemeshop'),'  ','') ?>
 			</div>
@@ -249,33 +256,33 @@ function excerpt($limit) {
 /*-----------------------------------------------------------------------------------*/
 /* nofollow to next/previous links
 /*-----------------------------------------------------------------------------------*/
-function pagination_add_nofollow($content) {
-    return 'rel="nofollow"';
-}
-add_filter('next_posts_link_attributes', 'pagination_add_nofollow' );
-add_filter('previous_posts_link_attributes', 'pagination_add_nofollow' );
+//function pagination_add_nofollow($content) {
+//    return 'rel="nofollow"';
+//}
+//add_filter('next_posts_link_attributes', 'pagination_add_nofollow' );
+//add_filter('previous_posts_link_attributes', 'pagination_add_nofollow' );
 
 /*-----------------------------------------------------------------------------------*/
 /* Nofollow to category links
 /*-----------------------------------------------------------------------------------*/
-add_filter( 'the_category', 'add_nofollow_cat' ); 
+add_filter( 'the_category', 'add_nofollow_cat' );
 function add_nofollow_cat( $text ) {
 $text = str_replace('rel="category tag"', 'rel="nofollow"', $text); return $text;
 }
 
-/*-----------------------------------------------------------------------------------*/	
+/*-----------------------------------------------------------------------------------*/
 /* nofollow post author link
 /*-----------------------------------------------------------------------------------*/
 add_filter('the_author_posts_link', 'mts_nofollow_the_author_posts_link');
 function mts_nofollow_the_author_posts_link ($link) {
-return str_replace('<a href=', '<a rel="nofollow" href=',$link); 
+return str_replace('<a href=', '<a rel="nofollow" href=',$link);
 }
 
 /*-----------------------------------------------------------------------------------*/
 /* removes detailed login error information for security
 /*-----------------------------------------------------------------------------------*/
 add_filter('login_errors',create_function('$a', "return null;"));
-	
+
 /*-----------------------------------------------------------------------------------*/
 /* removes the WordPress version from your header for security
 /*-----------------------------------------------------------------------------------*/
@@ -283,7 +290,7 @@ function wb_remove_version() {
 	return '<!--Theme by MyThemeShop.com-->';
 }
 add_filter('the_generator', 'wb_remove_version');
-	
+
 /*-----------------------------------------------------------------------------------*/
 /* Removes Trackbacks from the comment count
 /*-----------------------------------------------------------------------------------*/
@@ -297,7 +304,7 @@ function comment_count( $count ) {
 		return $count;
 	}
 }
-	
+
 /*-----------------------------------------------------------------------------------*/
 /* category id in body and post class
 /*-----------------------------------------------------------------------------------*/
@@ -320,7 +327,7 @@ function has_thumb_class($classes) {
 }
 add_filter('post_class', 'has_thumb_class');
 
-/*-----------------------------------------------------------------------------------*/	
+/*-----------------------------------------------------------------------------------*/
 /* Breadcrumb
 /*-----------------------------------------------------------------------------------*/
 function the_breadcrumb() {
@@ -346,32 +353,32 @@ function the_breadcrumb() {
 	}
 }
 
-/*-----------------------------------------------------------------------------------*/	
+/*-----------------------------------------------------------------------------------*/
 /* Pagination
 /*-----------------------------------------------------------------------------------*/
-function pagination($pages = '', $range = 3) { 
+function pagination($pages = '', $range = 3) {
 	$showitems = ($range * 3)+1;
 	global $paged; if(empty($paged)) $paged = 1;
 	if($pages == '') {
-		global $wp_query; $pages = $wp_query->max_num_pages; 
-		if(!$pages){ $pages = 1; } 
+		global $wp_query; $pages = $wp_query->max_num_pages;
+		if(!$pages){ $pages = 1; }
 	}
-	if(1 != $pages) { 
+	if(1 != $pages) {
 		echo "<div class='pagination'><ul>";
-		if($paged > 2 && $paged > $range+1 && $showitems < $pages) 
-			echo "<li><a rel='nofollow' href='".get_pagenum_link(1)."'>&laquo; First</a></li>";
-		if($paged > 1 && $showitems < $pages) 
-			echo "<li><a rel='nofollow' href='".get_pagenum_link($paged - 1)."' class='inactive'>&lsaquo; Previous</a></li>";
-		for ($i=1; $i <= $pages; $i++){ 
-			if (1 != $pages &&( !($i >= $paged+$range+1 || $i <= $paged-$range-1) || $pages <= $showitems )) { 
-				echo ($paged == $i)? "<li class='current'><span class='currenttext'>".$i."</span></li>":"<li><a rel='nofollow' href='".get_pagenum_link($i)."' class='inactive'>".$i."</a></li>";
-			} 
-		} 
-		if ($paged < $pages && $showitems < $pages) 
-			echo "<li><a rel='nofollow' href='".get_pagenum_link($paged + 1)."' class='inactive'>Next &rsaquo;</a></li>";
-		if ($paged < $pages-1 &&  $paged+$range-1 < $pages && $showitems < $pages) 
-			echo "<a rel='nofollow' class='inactive' href='".get_pagenum_link($pages)."'>Last &raquo;</a>";
-			echo "</ul></div>"; 
+		if($paged > 2 && $paged > $range+1 && $showitems < $pages)
+			echo "<li><a href='".get_pagenum_link(1)."'>&laquo; First</a></li>";
+		if($paged > 1 && $showitems < $pages)
+			echo "<li><a href='".get_pagenum_link($paged - 1)."' class='inactive'>&lsaquo; Previous</a></li>";
+		for ($i=1; $i <= $pages; $i++){
+			if (1 != $pages &&( !($i >= $paged+$range+1 || $i <= $paged-$range-1) || $pages <= $showitems )) {
+				echo ($paged == $i)? "<li class='current'><span class='currenttext'>".$i."</span></li>":"<li><a href='".get_pagenum_link($i)."' class='inactive'>".$i."</a></li>";
+			}
+		}
+		if ($paged < $pages && $showitems < $pages)
+			echo "<li><a href='".get_pagenum_link($paged + 1)."' class='inactive'>Next &rsaquo;</a></li>";
+		if ($paged < $pages-1 &&  $paged+$range-1 < $pages && $showitems < $pages)
+			echo "<a class='inactive' href='".get_pagenum_link($pages)."'>Last &raquo;</a>";
+			echo "</ul></div>";
 	}
 }
 
@@ -409,7 +416,7 @@ add_action('admin_print_styles', 'admin_css' );
 
 function remove_footer_admin () {
     echo "Thank you for creating with <a href=\"http://wordpress.org/\">WordPress</a>. Dashboard Customization by <a href=\"http://mythemeshop.com/\">MyThemeShop</a>.";
-} 
+}
 add_filter('admin_footer_text', 'remove_footer_admin');
 }
 
@@ -426,24 +433,24 @@ add_filter('wp_tag_cloud', 'mts_tag_cloud');
 
 add_filter('the_content', 'add_author_box_inside_post_content');
 
-function add_author_box_inside_post_content($sContent = ''){    
+function add_author_box_inside_post_content($sContent = ''){
     if(!is_singular() || is_page()) return $sContent;
     $options = get_option('spike');
     if(!(int)$options['mts_author_box']) return $sContent;
-    
+
     if(preg_match('/^.*(<img[^>]+>)/', $sContent)){
         $sAuthorImage = '';
-        if(function_exists('get_avatar')) { 
-            $sAuthorImage = get_avatar( get_the_author_meta('email'), '90', '90' );  
+        if(function_exists('get_avatar')) {
+            $sAuthorImage = get_avatar( get_the_author_meta('email'), '90', '90' );
         }
         global $authordata;
-        
-        $sContentAbout = get_the_author_meta('description');                                                   
+
+        $sContentAbout = get_the_author_meta('description');
         $sAuthrohPostUrl = get_author_posts_url( $authordata->ID, $authordata->user_nicename);
-        
+
         $sAuthrorName = $authordata->display_name;
         $sVisileUrl = ($authordata->user_url != '') ? "<a class='inside_author_block_url' href='{$authordata->user_url}' target='_blank' rel='nofollow'>Visit Author's Website</a>" : '';
-        
+
         $sAuthorBlockContent = "<div class='internal_author_block_content' style='position: relative; z-index: 1;'>
                     <div class='upper_block'>
                         <div class='author_avatar_wrapper'>
@@ -456,7 +463,7 @@ function add_author_box_inside_post_content($sContent = ''){
                                     <h5 style='margin: 0;'>
                                         <a href='{$sAuthrohPostUrl}' target='_blank' title='Posts by {$sAuthrorName}'>{$sAuthrorName}</a>
                                     </h5>
-                                </span>    
+                                </span>
                             </span>
                             {$sVisileUrl}
                         </div>

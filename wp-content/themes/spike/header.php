@@ -15,6 +15,9 @@
 	<link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>" />
 	<?php mts_head(); ?>
 	<meta name="p:domain_verify" content="2299c127dcf14a09af8856aae852cd5e"/>
+<style>.single_post a {
+  color: #de0079;
+}</style>
 </head>
 <?php flush(); ?>
 <body id ="blog" <?php body_class('main'); ?>>
@@ -25,11 +28,11 @@
 				<?php if ($options['mts_logo'] != '') { ?>
 					<?php if( is_front_page() || is_home() || is_404() ) { ?>
 							<h1 id="logo" class="image-logo">
-								<a href="<?php echo home_url(); ?>"><img src="<?php echo $options['mts_logo']; ?>" width="290px" height="90px" alt="<?php bloginfo( 'name' ); ?>"></a>
+								<a href="<?php echo home_url(); ?>"></a>
 							</h1><!-- END #logo -->
 					<?php } else { ?>
 						  <h2 id="logo" class="image-logo">
-								<a href="<?php echo home_url(); ?>"><img src="<?php echo $options['mts_logo']; ?>" width="290px" height="90px" alt="<?php bloginfo( 'name' ); ?>"></a>
+								<a href="<?php echo home_url(); ?>"></a>
 							</h2><!-- END #logo -->
 					<?php } ?>
 				<?php } else { ?>
@@ -44,6 +47,16 @@
 					<?php } ?>
 				<?php } ?>
 				<div class="secondary-navigation">
+					<div id="mobile-navigation">
+						<span class="toggler"></span>
+						<span class="responsive-logo"></span>
+						<ul class="menu-wrapper">
+            <?php if ( has_nav_menu( 'primary-menu' ) ) { ?>
+              <?php wp_nav_menu( array( 'theme_location' => 'primary-menu', 'menu_class' => 'menu', 'container' => '' ) ); ?>
+            <?php } ?>
+						</ul>
+						<span class="search-toggler"></span>
+					</div>
 					<nav id="navigation" >
 						<?php if ( has_nav_menu( 'primary-menu' ) ) { ?>
 							<?php wp_nav_menu( array( 'theme_location' => 'primary-menu', 'menu_class' => 'menu', 'container' => '' ) ); ?>
@@ -53,7 +66,7 @@
 							</ul>
 						<?php } ?>
 					</nav>
-				</div>              
+				</div>
 			</div><!--#header-->
 		</div><!--.container-->
 		<div id="header-mail-form">
