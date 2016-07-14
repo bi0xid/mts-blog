@@ -245,7 +245,7 @@ function relative_time(time_value) {
     }
     */
 
-$(document).ready(function(){
+/*$(document).ready(function(){
     var aPostIds = new Array();
     $('.get_social_counter_result').each(function(){
         aPostIds.push($(this).attr('data-id'));
@@ -269,7 +269,7 @@ $(document).ready(function(){
             }
         });
     }
-});
+});*/
 
 function custom_social_window(sUrl){
     window.open(sUrl, "My Tiny Secrets share window", "height=300,width=550,resizable=1");
