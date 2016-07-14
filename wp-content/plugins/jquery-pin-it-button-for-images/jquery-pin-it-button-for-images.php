@@ -3,8 +3,10 @@
 Plugin Name: jQuery Pin It Button For Images
 Plugin URI: http://mrsztuczkens.me/jpibfi/
 Description: Highlights images on hover and adds a "Pin It" button over them for easy pinning.
+Text Domain: jquery-pin-it-button-for-images
+Domain Path: /languages
 Author: Marcin Skrzypiec
-Version: 1.38
+Version:1.60
 Author URI: http://mrsztuczkens.me/
 */
 
@@ -12,16 +14,14 @@ Author URI: http://mrsztuczkens.me/
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
+
 if ( ! class_exists( 'jQuery_Pin_It_Button_For_Images' ) ) :
 
-	/* Main JPIBFI Class */
 	final class jQuery_Pin_It_Button_For_Images {
-		/** Singleton *************************************************************/
 
 		private static $instance;
 
 		private function __construct() {
-			$this->setup_constants();
 			$this->includes();
 			$this->load_textdomain();
 
@@ -39,145 +39,54 @@ if ( ! class_exists( 'jQuery_Pin_It_Button_For_Images' ) ) :
 			return self::$instance;
 		}
 
-		/**
-		 * Setup plugin constants
-		 */
-		private function setup_constants() {
-
-			/* VERSIONING */
-			//plugin version
-			if ( ! defined( 'JPIBFI_VERSION' ) )
-				define( 'JPIBFI_VERSION', '1.38' );
-
-			//used in versioning css and js files
-			if ( ! defined( 'JPIBFI_VERSION_MINOR' ) )
-				define( 'JPIBFI_VERSION_MINOR', 'a' );
-
-			/* OPTIONS IN DATABASE */
-			//metadata for each post
-			if ( ! defined( 'JPIBFI_METADATA' ) )
-				define( 'JPIBFI_METADATA', 'jpibfi_meta' );
-
-			//used in error handling
-			if ( ! defined( 'JPIBFI_UPDATE_OPTIONS' ) )
-				define( 'JPIBFI_UPDATE_OPTIONS', 'jpibfi_update_options' );
-
-			if ( ! defined( 'JPIBFI_SELECTION_OPTIONS' ) )
-				define( 'JPIBFI_SELECTION_OPTIONS', 'jpibfi_selection_options' );
-
-			if ( ! defined( 'JPIBFI_VISUAL_OPTIONS' ) )
-				define( 'JPIBFI_VISUAL_OPTIONS', 'jpibfi_visual_options' );
-
-			if ( ! defined( 'JPIBFI_ADVANCED_OPTIONS' ) )
-				define( 'JPIBFI_ADVANCED_OPTIONS', 'jpibfi_advanced_options' );
-
-			if ( ! defined( 'JPIBFI_VERSION_OPTION' ) )
-				define( 'JPIBFI_VERSION_OPTION', 'jpibfi_version' );
-
-			/* FOLDERS */
-			// Plugin Folder Path
-			if ( ! defined( 'JPIBFI_PLUGIN_DIR' ) )
-				define( 'JPIBFI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-
-			// Plugin Folder URL
-			if ( ! defined( 'JPIBFI_PLUGIN_URL' ) )
-				define( 'JPIBFI_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-
-			// Plugin Root File
-			if ( ! defined( 'JPIBFI_PLUGIN_FILE' ) )
-				define( 'JPIBFI_PLUGIN_FILE', __FILE__ );
-
-			if ( ! defined( 'JPIBFI_STYLE_URL' ) )
-				define( 'JPIBFI_STYLE_URL', JPIBFI_PLUGIN_URL . 'css/' );
-
-			if ( ! defined( 'JPIBFI_SCRIPT_URL' ) )
-				define( 'JPIBFI_SCRIPT_URL', JPIBFI_PLUGIN_URL . 'js/' );
-		}
-
-		/**
-		 * Include required files
-		 */
 		private function includes() {
-			global $jpibfi_selection_options;
-			global $jpibfi_visual_options;
-			global $jpibfi_adanced_options;
 
-			$jpibfi_selection_options = get_option( JPIBFI_SELECTION_OPTIONS );
-			$jpibfi_visual_options  = get_option( JPIBFI_VISUAL_OPTIONS );
-			$jpibfi_adanced_options = get_option( JPIBFI_ADVANCED_OPTIONS );
+            require_once(plugin_dir_path(__FILE__) . 'includes/class-jpibfi-globals.php');
+            JPIBFI_Globals::init(__FILE__,  '1.60', 'a');
 
-
-			require_once JPIBFI_PLUGIN_DIR . 'includes/admin/class-jpibfi-admin-utilities.php';
-			require_once JPIBFI_PLUGIN_DIR . 'includes/admin/class-jpibfi-selection-options.php';
-			require_once JPIBFI_PLUGIN_DIR . 'includes/admin/class-jpibfi-advanced-options.php';
-			require_once JPIBFI_PLUGIN_DIR . 'includes/admin/class-jpibfi-visual-options.php';
-			require_once JPIBFI_PLUGIN_DIR . 'includes/admin/class-jpibfi-admin.php';
-			require_once JPIBFI_PLUGIN_DIR . 'includes/public/class-jpibfi-client-utilities.php';
-			require_once JPIBFI_PLUGIN_DIR . 'includes/public/class-jpibfi-client.php';
-
-
-			if ( is_admin() ) {
-				//TODO changes
-			} else {
-
-			}
+            $files = array(
+                'includes/consts/jpibfi-description-option.php',
+                'includes/admin/class-jpibfi-admin-utilities.php',
+                'includes/admin/class-jpibfi-options.php',
+                'includes/admin/class-jpibfi-selection-options.php',
+                'includes/admin/class-jpibfi-advanced-options.php',
+                'includes/admin/class-jpibfi-visual-options.php',
+                'includes/admin/class-jpibfi-lightbox-options.php',
+                'includes/admin/class-jpibfi-admin.php',
+                'includes/admin/class-jpibfi-import-export.php',
+                'includes/public/class-jpibfi-client-utilities.php',
+                'includes/public/class-jpibfi-client.php'
+            );
+            foreach($files as $file)
+                require_once JPIBFI_Globals::get_plugin_dir() .$file;
 		}
 
 		public function load_textdomain() {
-			load_plugin_textdomain( 'jpibfi', FALSE, dirname( plugin_basename( JPIBFI_PLUGIN_FILE ) ) . '/languages/' );
+			load_plugin_textdomain( 'jquery-pin-it-button-for-images', FALSE, dirname( plugin_basename( JPIBFI_Globals::get_plugin_file() ) ) . '/languages/' );
 		}
 
 		public function plugin_settings_filter( $links ) {
-			$settings_link = '<a href="options-general.php?page=jpibfi_settings">' . __( 'Settings', 'jpibfi' ) . '</a>';
+			$settings_link = '<a href="options-general.php?page=jpibfi_settings">' . __( 'Settings', 'jquery-pin-it-button-for-images' ) . '</a>';
 			array_unshift( $links, $settings_link );
 			return $links;
 		}
 
 		/* Function updates DB if it detects new version of the plugin */
 		public function update_plugin() {
+            $version_option = 'jpibfi_version';
+            $update_option = 'jpibfi_update_options';
 
-			$version = get_option( JPIBFI_VERSION_OPTION );
-			//if update is needed
-			if ( false == $version || (float)$version < (float)JPIBFI_VERSION  || get_option( JPIBFI_UPDATE_OPTIONS ) ) {
-
-				$option = get_option( JPIBFI_VISUAL_OPTIONS );
-				self::update_option_fields( $option, JPIBFI_Visual_Options::default_visual_options(), JPIBFI_VISUAL_OPTIONS );
-
-				$option = get_option( JPIBFI_SELECTION_OPTIONS );
-				self::update_option_fields( $option, JPIBFI_Selection_Options::default_selection_options(), JPIBFI_SELECTION_OPTIONS );
-
-				$option = get_option( JPIBFI_ADVANCED_OPTIONS );
-				self::update_option_fields( $option, JPIBFI_ADVANCED_OPTIONS::default_advanced_options(), JPIBFI_ADVANCED_OPTIONS );
-
-				//update the version of the plugin stored in option
-				update_option( JPIBFI_VERSION_OPTION, JPIBFI_VERSION );
-				//update not needed anymore
-				update_option( JPIBFI_UPDATE_OPTIONS, false);
-
-				add_action( 'admin_notices', array( $this, 'show_admin_notice') );
+            $jpibfi_v = JPIBFI_Globals::get_version();
+			$version = get_option( $version_option );
+			if ( false == $version || (float)$version < (float)$jpibfi_v  || get_option( $update_option ) ) {
+				update_option( $version_option, $jpibfi_v);
+				update_option( $update_option, false);
+                update_option('jpibfi_pro_ad', 1);
 			}
-		}
-
-		public function show_admin_notice(){
-			include_once( 'includes/admin/views/notice.php');
-		}
-
-		/* Function makes sure that option has all needed fields by checking with defaults */
-		public static function update_option_fields( $option, $default_option, $option_name ) {
-
-			if ( false == $option )
-				$option = array();
-
-			$new_option = array_merge($default_option, $option);
-			update_option( $option_name, $new_option );
 		}
 	}
 
 endif; // End if class_exists check
 
 
-function JPIBFI() {
-	return jQuery_Pin_It_Button_For_Images::instance();
-}
-
-JPIBFI();
+$JPIBFI = jQuery_Pin_It_Button_For_Images::instance();

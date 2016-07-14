@@ -1,6 +1,6 @@
 <?php
 
-class JPIBFI_Selection_Options {
+class JPIBFI_Selection_Options extends JPIBFI_Options {
 
 	protected static $instance = null;
 
@@ -19,25 +19,28 @@ class JPIBFI_Selection_Options {
 		return self::$instance;
 	}
 
-	/* Default values for selection options section */
-	public static function default_selection_options() {
-		$defaults = array(
-			'image_selector'      => '.jpibfi_container img',
-			'disabled_classes'    => 'nopin;wp-smiley',
-			'enabled_classes'     => '',
-			'min_image_height'		=> '0',
-			'min_image_width'			=> '0',
-			'show_on_home'     		=> '1',
-			'show_on_single'   		=> '1',
-			'show_on_page'    		=> '1',
-			'show_on_category' 		=> '1',
-			'show_on_blog'				=> '1'
-		);
+    function get_default_options(){
+        $defaults = array(
+            'image_selector' => '.jpibfi_container img',
+            'disabled_classes' => 'nopin;wp-smiley',
+            'enabled_classes' => '',
+            'min_image_height'	=> '0',
+            'min_image_width' => '0',
+            'show_on_home' => '1',
+            'show_on_single' => '1',
+            'show_on_page' => '1',
+            'show_on_category' => '1',
+            'show_on_blog' => '1'
+        );
 
-		return apply_filters('jpibfi_default_selection_options', $defaults);
-	}
+        return apply_filters('jpibfi_default_selection_options', $defaults);
+    }
 
-	private function get_checkbox_settings(){
+    static function get_option_name(){
+        return 'jpibfi_selection_options';
+    }
+
+    private function get_checkbox_settings(){
 		return array(
 			'show_on_home',
 			'show_on_single',
@@ -55,7 +58,7 @@ class JPIBFI_Selection_Options {
 		// First, we register a section.
 		add_settings_section(
 			'selection_options_section',			// ID used to identify this section and with which to register options
-			__( 'Selection', 'jpibfi' ),		// Title to be displayed on the administration page
+			__( 'Selection', 'jquery-pin-it-button-for-images' ),		// Title to be displayed on the administration page
 			array( $this, 'selection_options_callback' ),	// Callback used to render the description of the section
 			'jpibfi_selection_options'		// Page on which to add this section of options
 		);
@@ -63,13 +66,13 @@ class JPIBFI_Selection_Options {
 		//lThen add all necessary fields to the section
 		add_settings_field(
 			'image_selector',						// ID used to identify the field throughout the plugin
-			__( 'Image selector', 'jpibfi' ),							// The label to the left of the option interface element
+			__( 'Image selector', 'jquery-pin-it-button-for-images' ),							// The label to the left of the option interface element
 			array( $this, 'image_selector_callback'),	// The name of the function responsible for rendering the option interface
 			'jpibfi_selection_options',	// The page on which this option will be displayed
 			'selection_options_section',			// The name of the section to which this field belongs
 			array(								// The array of arguments to pass to the callback. In this case, just a description.
-				sprintf ( __( 'jQuery selector for all the images that should have the "Pin it" button. Set the value to %s if you want the "Pin it" button to appear only on images in content or %s to appear on all images on site (including sidebar, header and footer). If you know a thing or two about jQuery, you might use your own selector. %sClick here%s to read about jQuery selectors.', 'jpibfi' ),
-					'<a href="#" class="jpibfi_selector_option">div.jpibfi_container img</a>',
+				sprintf ( __( 'jQuery selector for all the images that should have the "Pin it" button. Set the value to %s if you want the "Pin it" button to appear only on images in content or %s to appear on all images on site (including sidebar, header and footer). If you know a thing or two about jQuery, you might use your own selector. %sClick here%s to read about jQuery selectors.', 'jquery-pin-it-button-for-images' ),
+					'<a href="#" class="jpibfi_selector_option">.jpibfi_container img</a>',
 					'<a href="#" class="jpibfi_selector_option">img</a>',
 					'<a href="http://api.jquery.com/category/selectors/" target="_blank">',
 					'</a>'
@@ -79,45 +82,45 @@ class JPIBFI_Selection_Options {
 
 		add_settings_field(
 			'disabled_classes',
-			__( 'Disabled classes', 'jpibfi' ),
+			__( 'Disabled classes', 'jquery-pin-it-button-for-images' ),
 			array( $this, 'disabled_classes_callback' ),
 			'jpibfi_selection_options',
 			'selection_options_section',
 			array(
-				__( 'Pictures with these CSS classes won\'t show the "Pin it" button. Please separate multiple classes with semicolons. Spaces are not accepted.', 'jpibfi' ),
+				__( 'Pictures with these CSS classes won\'t show the "Pin it" button. Please separate multiple classes with semicolons. Spaces are not accepted.', 'jquery-pin-it-button-for-images' ),
 			)
 		);
 
 		add_settings_field(
 			'enabled_classes',
-			__( 'Enabled classes', 'jpibfi' ),
+			__( 'Enabled classes', 'jquery-pin-it-button-for-images' ),
 			array( $this, 'enabled_classes_callback' ),
 			'jpibfi_selection_options',
 			'selection_options_section',
 			array(
-				__( 'Only pictures with these CSS classes will show the "Pin it" button. Please separate multiple classes with semicolons. If this field is empty, images with any (besides disabled ones) classes will show the Pin It button.', 'jpibfi' ),
+				__( 'Only pictures with these CSS classes will show the "Pin it" button. Please separate multiple classes with semicolons. If this field is empty, images with any (besides disabled ones) classes will show the Pin It button.', 'jquery-pin-it-button-for-images' ),
 			)
 		);
 
 		add_settings_field(
 			'show_on_field',
-			__( 'On which pages the "Pin it" button should be shown', 'jpibfi' ),
+			__( 'On which pages the "Pin it" button should be shown', 'jquery-pin-it-button-for-images' ),
 			array( $this, 'show_on_field_callback' ),
 			'jpibfi_selection_options',
 			'selection_options_section',
 			array(
-				__( 'Check on which pages you want the Pinterest button to show up.', 'jpibfi' ),
+				__( 'Check on which pages you want the Pinterest button to show up.', 'jquery-pin-it-button-for-images' ),
 			)
 		);
 
 		add_settings_field(
 			'min_image',
-			__( 'Minimum resolution that should trigger the "Pin it" button to show up', 'jpibfi' ),
+			__( 'Minimum resolution that should trigger the "Pin it" button to show up', 'jquery-pin-it-button-for-images' ),
 			array( $this, 'min_image_callback' ),
 			'jpibfi_selection_options',
 			'selection_options_section',
 			array(
-				__( 'If you\'d like the "Pin it" button to not show up on small images (e.g. social media icons), just set the appropriate values above. The default values cause the "Pin it" button to show on every eligible image.', 'jpibfi' ),
+				__( 'If you\'d like the "Pin it" button to not show up on small images (e.g. social media icons), just set the appropriate values above. The default values cause the "Pin it" button to show on every eligible image.', 'jquery-pin-it-button-for-images' ),
 			)
 		);
 
@@ -129,7 +132,7 @@ class JPIBFI_Selection_Options {
 	}
 
 	public function selection_options_callback() {
-		echo '<p>' . __('Which images can be pinned', 'jpibfi') . '</p>';
+		echo '<p>' . __('Which images can be pinned', 'jquery-pin-it-button-for-images') . '</p>';
 	}
 
 	public function image_selector_callback( $args ) {
@@ -146,27 +149,21 @@ class JPIBFI_Selection_Options {
 
 		$options = $this->get_selection_options();
 		$value = esc_attr( $options[ 'disabled_classes' ] );
-
 		?>
-		<input type="hidden" name="jpibfi_selection_options[disabled_classes]" value="{{ disabledClassesFormatted }}" ng-init="initDisabledClasses('<?php echo $value; ?>')">
-		<span ng-hide="disabledClasses.length > 0">
-		<?php echo JPIBFI_Admin_Utilities::create_description( __( 'No classes added.', 'jpibfi' ) ); ?>
-	</span>
-		<ul class="jpibfi-classes-list" ng-hide="disabledClasses.length == 0">
-			<li ng-repeat="class in disabledClasses">
-				<a ng-click="deleteDisabledClass(class)">X</a><span>{{ class }}</span>
-			</li>
-		</ul>
-		<div>
-			<div>
-				<label for="disabledClass" ><?php _e( 'Class name', 'jpibfi' ); ?></label>
-				<input id="disabledClass" type="text" ng-model="disabledClass">
-				<button type="button" ng-click="addDisabledClass(disabledClass)"><?php _e( 'Add to list', 'jpibfi' ); ?></button>
-			</div>
-		</div>
+        <div id="jpibfi-disabled-classes">
+            <input type="hidden" class="jpibfi-value" name="jpibfi_selection_options[disabled_classes]" value="<?php echo $value; ?>">
+            <span class="jpibfi-empty"><?php echo JPIBFI_Admin_Utilities::create_description( __( 'No classes added.', 'jquery-pin-it-button-for-images' ) ); ?></span>
+            <div class="jpibfi-classes-list tagchecklist"></div>
+            <div>
+                <label>
+                    <?php _e( 'Class name', 'jquery-pin-it-button-for-images' ); ?>
+                    <input class="jpibfi-class-name" type="text">
+                </label>
+                <button type="button" class="jpibfi-class-button button"><?php _e( 'Add', 'jquery-pin-it-button-for-images' ); ?></button>
+            </div>
+        </div>
 
 		<?php
-
 		echo JPIBFI_Admin_Utilities::create_description( $args[0] );
 		echo JPIBFI_Admin_Utilities::create_errors( 'disabled_classes' );
 	}
@@ -177,25 +174,20 @@ class JPIBFI_Selection_Options {
 		$value = esc_attr( $options[ 'enabled_classes' ] );
 
 		?>
-		<input type="hidden" name="jpibfi_selection_options[enabled_classes]" value="{{ enabledClassesFormatted }}" ng-init="initEnabledClasses('<?php echo $value; ?>')">
-		<span ng-hide="enabledClasses.length > 0">
-		<?php echo JPIBFI_Admin_Utilities::create_description( __( 'No classes added.', 'jpibfi' ) ); ?>
-	</span>
-		<ul class="jpibfi-classes-list" ng-hide="enabledClasses.length == 0">
-			<li ng-repeat="class in enabledClasses">
-				<a ng-click="deleteEnabledClass(class)">X</a><span>{{ class }}</span>
-			</li>
-		</ul>
-		<div>
-			<div>
-				<label for="enabledClass" ><?php _e( 'Class name', 'jpibfi' ); ?></label>
-				<input id="enabledClass" type="text" ng-model="enabledClass">
-				<button type="button" ng-click="addEnabledClass(enabledClass)"><?php _e( 'Add to list', 'jpibfi' ); ?></button>
-			</div>
-		</div>
+        <div id="jpibfi-enabled-classes">
+            <input type="hidden" class="jpibfi-value" name="jpibfi_selection_options[enabled_classes]" value="<?php echo $value; ?>">
+            <span class="jpibfi-empty"><?php echo JPIBFI_Admin_Utilities::create_description( __( 'No classes added.', 'jquery-pin-it-button-for-images' ) ); ?></span>
+            <div class="jpibfi-classes-list tagchecklist"></div>
+            <div>
+                <label>
+                    <?php _e( 'Class name', 'jquery-pin-it-button-for-images' ); ?>
+                    <input class="jpibfi-class-name" type="text">
+                </label>
+                <button type="button" class="jpibfi-class-button button"><?php _e( 'Add', 'jquery-pin-it-button-for-images' ); ?></button>
+            </div>
+        </div>
 
 		<?php
-
 		echo JPIBFI_Admin_Utilities::create_description( $args[0] );
 		echo JPIBFI_Admin_Utilities::create_errors( 'enabled_classes' );
 	}
@@ -211,15 +203,15 @@ class JPIBFI_Selection_Options {
 		?>
 
 		<input type="checkbox" id="show_on_home" name="jpibfi_selection_options[show_on_home]" <?php checked( true, $show_on_home ); ?> value="1" />
-		<label for="show_on_home"><?php _e( 'Home page', 'jpibfi' ); ?></label><br/>
+		<label for="show_on_home"><?php _e( 'Home page', 'jquery-pin-it-button-for-images' ); ?></label><br/>
 		<input type="checkbox" id="show_on_page" name="jpibfi_selection_options[show_on_page]" <?php checked( true, $show_on_page ); ?> value="1" />
-		<label for="show_on_page"><?php _e( 'Pages', 'jpibfi' ); ?></label><br />
+		<label for="show_on_page"><?php _e( 'Pages', 'jquery-pin-it-button-for-images' ); ?></label><br />
 		<input type="checkbox" id="show_on_single" name="jpibfi_selection_options[show_on_single]" <?php checked( true, $show_on_single ); ?> value="1" />
-		<label for="show_on_single"><?php _e( 'Single posts', 'jpibfi' ); ?></label><br />
+		<label for="show_on_single"><?php _e( 'Single posts', 'jquery-pin-it-button-for-images' ); ?></label><br />
 		<input type="checkbox" id="show_on_category"	name="jpibfi_selection_options[show_on_category]" <?php checked( true, $show_on_category ); ?> value="1" />
-		<label for="show_on_category"><?php _e( 'Category and archive pages', 'jpibfi' ); ?></label><br />
+		<label for="show_on_category"><?php _e( 'Category and archive pages', 'jquery-pin-it-button-for-images' ); ?></label><br />
 		<input type="checkbox" id="show_on_blog"	name="jpibfi_selection_options[show_on_blog]" <?php checked( true, $show_on_blog ); ?> value="1" />
-		<label for="show_on_blog"><?php _e( 'Blog pages', 'jpibfi' ); ?></label>
+		<label for="show_on_blog"><?php _e( 'Blog pages', 'jquery-pin-it-button-for-images' ); ?></label>
 
 		<?php
 		echo JPIBFI_Admin_Utilities::create_description( $args[0] );
@@ -233,14 +225,14 @@ class JPIBFI_Selection_Options {
 		?>
 
 		<p>
-			<label for="min_image_height"><?php _e('Height', 'jpibfi'); ?></label>
+			<label for="min_image_height"><?php _e('Height', 'jquery-pin-it-button-for-images'); ?></label>
 			<input type="number" min="0" step="1" id="min_image_height" name="jpibfi_selection_options[min_image_height]" value="<?php echo $min_image_height; ?>"
 						 class="small-text" /> px
 			<?php echo JPIBFI_Admin_Utilities::create_errors( 'min_image_height' ); ?>
 		</p>
 
 		<p>
-			<label for="min_image_width"><?php _e('Width', 'jpibfi'); ?></label>
+			<label for="min_image_width"><?php _e('Width', 'jquery-pin-it-button-for-images'); ?></label>
 			<input type="number" min="0" step="1" id="min_image_width" name="jpibfi_selection_options[min_image_width]" value="<?php echo $min_image_width; ?>"
 						 class="small-text" /> px
 			<?php echo JPIBFI_Admin_Utilities::create_errors( 'min_image_width' ); ?>
@@ -252,7 +244,8 @@ class JPIBFI_Selection_Options {
 	}
 
 	public function sanitize_selection_options( $input ) {
-		global $jpibfi_selection_options;
+        $errors = false;
+		$jpibfi_selection_options = $this->get_options();
 
 		foreach( $input as $key => $value ) {
 			switch($key) {
@@ -262,14 +255,15 @@ class JPIBFI_Selection_Options {
 
 						$field = '';
 						if ( 'disabled_classes' == $key )
-							$field = __( 'Disabled classes', 'jpibfi' );
+							$field = __( 'Disabled classes', 'jquery-pin-it-button-for-images' );
 						else if ( 'enabled_classes' == $key )
-							$field = __( 'Enabled classes', 'jpibfi' );
+							$field = __( 'Enabled classes', 'jquery-pin-it-button-for-images' );
 
+                        $errors = true;
 						add_settings_error(
 							$key,
 							esc_attr( 'settings_updated' ),
-								$field . ' - ' . __('the given value doesn\'t meet the requirements. Please correct it and try again.', 'jpibfi')
+								$field . ' - ' . __('the given value doesn\'t meet the requirements. Please correct it and try again.', 'jquery-pin-it-button-for-images')
 						);
 					}
 					break;
@@ -279,14 +273,15 @@ class JPIBFI_Selection_Options {
 
 						$field = '';
 						if ( 'min_image_height' == $key )
-							$field = __( 'Minimum image height', 'jpibfi' );
+							$field = __( 'Minimum image height', 'jquery-pin-it-button-for-images' );
 						else if ( 'min_image_width' == $key )
-							$field = __( 'Minimum image width', 'jpibfi' );
+							$field = __( 'Minimum image width', 'jquery-pin-it-button-for-images' );
 
+                        $errors = true;
 						add_settings_error(
 							$key,
 							esc_attr( 'settings_updated' ),
-								$field . ' - ' . sprintf ( __('value must be a number greater or equal to %d.', 'jpibfi'), '0' )
+								$field . ' - ' . sprintf ( __('value must be a number greater or equal to %d.', 'jquery-pin-it-button-for-images'), '0' )
 						);
 					}
 					break;
@@ -301,27 +296,26 @@ class JPIBFI_Selection_Options {
 			}
 		}
 
-		$errors = get_settings_errors();
 
-		if ( count( $errors ) > 0 ) {
+		if ( $errors ) {
 
-			update_option( JPIBFI_SELECTION_OPTIONS . '_errors', $input );
+			update_option( $this->get_option_name() . '_errors', $input );
 			return $jpibfi_selection_options;
 
 		} else {
 
-			delete_option( JPIBFI_SELECTION_OPTIONS . '_errors' );
+			delete_option( $this->get_option_name() . '_errors' );
 			return $input;
 
 		}
 	}
 
 	private function get_selection_options() {
-		global $jpibfi_selection_options;
+		$jpibfi_selection_options = $this->get_options();
 
 		if ( null == $this->admin_selection_options ) {
 			//cumbersome, but works in WP 3.3
-			$options = get_option( JPIBFI_SELECTION_OPTIONS . '_errors' );
+			$options = get_option( $this->get_option_name() . '_errors' );
 			$this->admin_selection_options = false == $options ? $jpibfi_selection_options : $options;
 		}
 

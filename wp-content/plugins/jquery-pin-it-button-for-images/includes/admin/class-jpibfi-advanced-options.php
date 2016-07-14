@@ -1,6 +1,6 @@
 <?php
 
-class JPIBFI_Advanced_Options {
+class JPIBFI_Advanced_Options extends JPIBFI_Options {
 
 	protected static $instance = null;
 
@@ -19,14 +19,18 @@ class JPIBFI_Advanced_Options {
 		return self::$instance;
 	}
 
-	public static function default_advanced_options() {
-		$defaults = array(
-			'debug'      => '0',
-			'container_selector' => 'div'
-		);
+    function get_default_options(){
+        $defaults = array(
+            'debug'      => '0',
+            'container_selector' => 'div'
+        );
 
-		return apply_filters( 'jpibfi_default_advanced_options', $defaults );
-	}
+        return apply_filters( 'jpibfi_default_advanced_options', $defaults );
+    }
+
+    static function get_option_name(){
+        return 'jpibfi_advanced_options';
+    }
 
 	/* Defines selection options section and adds all required fields	 */
 	public function initialize_advanced_options() {
@@ -34,7 +38,7 @@ class JPIBFI_Advanced_Options {
 		// First, we register a section.
 		add_settings_section(
 			'advanced_options_section',
-			__( 'Advanced Settings', 'jpibfi' ),
+			__( 'Advanced Settings', 'jquery-pin-it-button-for-images' ),
 			array( $this, 'advanced_options_callback' ),
 			'jpibfi_advanced_options'
 		);
@@ -42,23 +46,23 @@ class JPIBFI_Advanced_Options {
 		//lThen add all necessary fields to the section
 		add_settings_field(
 			'debug',
-			__( 'Debug', 'jpibfi' ),
+			__( 'Debug', 'jquery-pin-it-button-for-images' ),
 			array( $this, 'debug_callback' ),
 			'jpibfi_advanced_options',
 			'advanced_options_section',
 			array(
-				__( 'Use debug mode only if you are experiencing some issues with the plugin and you are reporting them to the developer of the plugin', 'jpibfi' ),
+				__( 'Use debug mode only if you are experiencing some issues with the plugin and you are reporting them to the developer of the plugin', 'jquery-pin-it-button-for-images' ),
 			)
 		);
 
 		add_settings_field(
 			'container_selector',
-			__( 'Container selector', 'jpibfi' ),
+			__( 'Container selector', 'jquery-pin-it-button-for-images' ),
 			array( $this, 'container_selector_callback' ),
 			'jpibfi_advanced_options',
 			'advanced_options_section',
 			array(
-				__( 'This is the selector used to find the container that holds the entire single post. It looks for an element that is a parent of the content of the post. Usually it\'s a div or article element. This setting is important to making "Use post url" visual setting work properly.', 'jpibfi' ),
+				__( 'This is the selector used to find the container that holds the entire single post. It looks for an element that is a parent of the content of the post. Usually it\'s a div or article element. This setting is important to making "Use post url" visual setting work properly.', 'jquery-pin-it-button-for-images' ),
 			)
 		);
 
@@ -69,7 +73,7 @@ class JPIBFI_Advanced_Options {
 	}
 
 	public function advanced_options_callback() {
-		echo '<p>' . __('Advanced settings', 'jpibfi') . '</p>';
+		echo '<p>' . __('Advanced settings', 'jquery-pin-it-button-for-images') . '</p>';
 	}
 
 	public function debug_callback( $args ){
@@ -77,7 +81,7 @@ class JPIBFI_Advanced_Options {
 		$debug = JPIBFI_Admin_Utilities::exists_and_equal_to( $options, 'debug', '1' );
 
 		echo '<input type="checkbox" id="debug" name="jpibfi_advanced_options[debug]" value="1" ' . checked( "1", $debug, false ) . '>';
-		echo '<label for="debug">' . __( 'Enable debug mode', 'jpibfi' ) . '</label>';
+		echo '<label for="debug">' . __( 'Enable debug mode', 'jquery-pin-it-button-for-images' ) . '</label>';
 
 		echo JPIBFI_Admin_Utilities::create_description( $args[0] );
 	}
@@ -91,11 +95,11 @@ class JPIBFI_Advanced_Options {
 	}
 
 	private function get_advanced_options() {
-		global $jpibfi_adanced_options;
+		$jpibfi_adanced_options = JPIBFI_Advanced_Options::get_instance()->get_options();
 
 		if ( null == $this->admin_advanced_options ) {
 			//cumbersome, but works in WP 3.3
-			$options = get_option( JPIBFI_ADVANCED_OPTIONS . '_errors' );
+			$options = get_option( $this->get_option_name() . '_errors' );
 			$this->admin_advanced_options = false == $options ? $jpibfi_adanced_options : $options;
 		}
 

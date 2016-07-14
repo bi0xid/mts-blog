@@ -1,10 +1,9 @@
 === jQuery Pin It Button For Images ===
 Contributors: mrsztuczkens, redearthdesign, brocheafoin, robertark
-Donate link: http://bit.ly/Uw2mEP
 Tags: pinterest, pin it, button, image, images, pinit, social media, hover, click, photo, photos
 Requires at least: 3.3.0
-Tested up to: 4.0
-Stable tag: 1.38
+Tested up to: 4.5.3
+Stable tag: 1.60
 License: GPLv2 or later
 
 Highlights images on hover and adds a Pinterest "Pin It" button over them for easy pinning.
@@ -14,7 +13,7 @@ If you're looking for an easy way to pin images in your blog posts and pages, th
 
 The plugin allows you to:
 
-* choose from where the description should be taken (possible options: page title, page description and alt/title tags from the image)
+* choose from where the pin description should be taken 
 * choose which pictures shouldn't show the "Pin it" button (using classes)
 * choose which pictures should show the "Pin it" button (all images, post images, images with certain class(es))
 * choose if you want to show the "Pin it" button on home page, single posts, single pages or category pages
@@ -22,24 +21,17 @@ The plugin allows you to:
 * choose transparency level depending on your needs
 * use your own Pinterest button design
 
-Once you activate the plugin, it's ready to go with the typical settings - button appears on all images within the body of your posts/pages that aren't marked with "nopin" or "wp-smiley" classes.
+Once you activate the plugin, it's ready to go with the default settings - button appears on all images within the body of your posts/pages that aren't marked with "nopin" or "wp-smiley" classes.
+
+> <strong>jQuery Pin It Button For Images Pro</strong><br>
+> jQuery Pin It Button For Images Pro is available with full support for touch devices. Check it out: http://mrsztuczkens.me/jquery-pin-it-button-for-images-pro/
 
 **Translators**
-
 - Spanish (es_ES) -  Andrew Kurtis [WebHostingHub](http://www.webhostinghub.com/)
-
-**Please report any bugs (or feature requests) in the plugin's support forum.**
-
-Check out the new features in the Changelog.
-
-Please note that the plugin doesn't work if the user has Javascript disabled.
 
 If you want to learn more about the plugin, visit its website: http://mrsztuczkens.me/jpibfi/
 
-Please consider donating any spare change to help me work on this plugin more. Donations can be made at: http://bit.ly/Uw2mEP
-
 (This plugin is not related to or endorsed by Pinterest or its affiliates)
-
 
 == Installation ==
 
@@ -75,6 +67,35 @@ Please report them in the plugin's support forum on Wordpress.org.
 4. Pinterest pop-up window
 
 == Changelog ==
+
+= 1.60 =
+* Release 2016-07-04
+* Added lightbox feature
+
+= 1.52 =
+* Release 2016-05-05
+* Added import/export settings feature
+
+= 1.51 =
+* Release 2016-03-15
+* Few minor fixes
+
+= 1.50 =
+* Release 2016-03-13
+* Feature: Support for infinite scroll-like plugins
+* Feature: Moved Pin Full Images from a separate plugin into jQuery Pin It Button For Images
+
+= 1.42 =
+* Release 2016-03-08
+* Lots of backend enhancements
+
+= 1.41 =
+* Release 2016-02-12
+* Syntax error for older versions of PHP fixed
+
+= 1.40 =
+* Release 2016-02-11
+* Backend and frontend JavaScript rewritten
 
 = 1.38 =
 * Release 2014-09-16
@@ -222,6 +243,27 @@ Please report them in the plugin's support forum on Wordpress.org.
 * Feature: IE7 image highlight fix: using a transparent png instead of background-color
 
 == Upgrade Notice ==
+
+= 1.60 =
+* Added lightbox feature
+
+= 1.52 =
+* Added import/export settings feature
+
+= 1.51 =
+* Few minor fixes
+
+= 1.50 =
+Added support for infinite scroll-like plugins and merged Pin Full Images into the plugin.
+
+= 1.42 =
+Minor code improvements.
+
+= 1.41 =
+Syntax error for older versions of PHP fixed.
+
+= 1.40 =
+Minor code improvements.
 
 = 1.38 =
 Fixed issue with positioning the button when Retina display active.

@@ -76,27 +76,27 @@ class JPIBFI_Client_Utilities {
 	/* True if plugin should be added to the current post/page */
 	public static function add_jpibfi() {
 		global $post;
-		global $jpibfi_selection_options;
+		$jpibfi_selection_options = JPIBFI_Selection_Options::get_instance()->get_options();
 
 		if ( is_front_page() )
-			return isset( $jpibfi_selection_options['show_on_home'] ) && $jpibfi_selection_options['show_on_home'] == "1";
+			return $jpibfi_selection_options['show_on_home'] == "1";
 		else if ( is_single() )
-			return isset( $jpibfi_selection_options['show_on_single'] ) && $jpibfi_selection_options['show_on_single'] == "1" ? self::add_plugin_to_post( $post->ID ) : false;
+			return $jpibfi_selection_options['show_on_single'] == "1" ? self::add_plugin_to_post( $post->ID ) : false;
 		else if ( is_page() )
-			return isset( $jpibfi_selection_options['show_on_page'] ) && $jpibfi_selection_options['show_on_page'] == "1" ? self::add_plugin_to_post( $post->ID ) : false;
+			return $jpibfi_selection_options['show_on_page'] == "1" ? self::add_plugin_to_post( $post->ID ) : false;
 		else if ( is_category() || is_archive() || is_search() )
-			return isset( $jpibfi_selection_options['show_on_category'] ) && $jpibfi_selection_options['show_on_category'] == "1";
+			return $jpibfi_selection_options['show_on_category'] == "1";
 		else if ( self::is_blog_page() )
-			return isset( $jpibfi_selection_options['show_on_blog'] ) && $jpibfi_selection_options['show_on_blog'] == "1";
+			return $jpibfi_selection_options['show_on_blog'] == "1";
 		return true;
 	}
 
 	/* Checks if the plugin wasn't deactivated in the given post/page */
 	private static function add_plugin_to_post( $post_id ) {
-		$post_meta = get_post_meta( $post_id, JPIBFI_METADATA, true );
+		$post_meta = get_post_meta( $post_id, 'jpibfi_meta', true );
 		return empty( $post_meta )
-		|| false == array_key_exists( 'jpibfi_disable_for_post', $post_meta )
-		|| '1' != $post_meta['jpibfi_disable_for_post'];
+            || false == array_key_exists( 'jpibfi_disable_for_post', $post_meta )
+            || '1' != $post_meta['jpibfi_disable_for_post'];
 	}
 
 	/* function copied from https://gist.github.com/wesbos/1189639 */
