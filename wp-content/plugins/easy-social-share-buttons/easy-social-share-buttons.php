@@ -1,36 +1,45 @@
 <?php
-
 /*
- * Plugin Name: Easy Social Share Buttons for WordPress
-* Description: Easy Social Share Buttons automatically adds share bar to your post or pages with support of Facebook, Twitter, Google+, LinkedIn, Pinterest, Digg, StumbleUpon, VKontakte, E-mail. 
-* Plugin URI: http://apps.creoworx.com
-* Version: 1.0.9
-* Author: CreoApps
-* Author URI: http://apps.creoworx.com
-*/
+ * Plugin Name: Easy Social Share Buttons
+ * Version: 1.2
+ * Plugin URI: http://www.idiom.co/
+ * Description: Easily add social sharing buttons to your posts and images without slowing down your site with unnecessary javascript and image files.
+ * Author: Idiom Interactive
+ * Author URI: http://www.idiom.co/
+ * Requires at least: 4.0
+ * Tested up to: 4.2.2
+ *
+ * Text Domain: easy-social-share-buttons
+ * Domain Path: /lang/
+ *
+ * @package WordPress
+ * @author Idiom Interactive
+ * @since 1.0.0
+ */
 
-if (! defined ( 'WPINC' ))
-	die ();
+if ( ! defined( 'ABSPATH' ) ) exit;
 
-define ( 'ESSB_VERSION', '1.0.9' );
-define ( 'ESSB_PLUGIN_ROOT', dirname ( __FILE__ ) . '/' );
-define ( 'ESSB_PLUGIN_URL', plugins_url () . '/' . basename ( dirname ( __FILE__ ) ) );
+// Load plugin class files
+require_once( 'includes/class-easy-social-share-buttons.php' );
+require_once( 'includes/class-easy-social-share-buttons-settings.php' );
 
-define ( 'ESSB_TEXT_DOMAIN', 'essb' );
+// Load plugin libraries
+require_once( 'includes/lib/class-easy-social-share-buttons-admin-api.php' );
 
-include (ESSB_PLUGIN_ROOT . 'lib/essb.php');
-include (ESSB_PLUGIN_ROOT . 'lib/admin/essb-metabox.php');
-register_activation_hook ( __FILE__, array ('EasySocialShareButtons', 'activate' ) );
-register_deactivation_hook ( __FILE__, array ('EasySocialShareButtons', 'deactivate' ) );
+/**
+ * Returns the main instance of Easy_Social_Share_Buttons to prevent the need to use globals.
+ *
+ * @since  1.0.0
+ * @return object Easy_Social_Share_Buttons
+ */
+function Easy_Social_Share_Buttons () {
+	$instance = Easy_Social_Share_Buttons::instance( __FILE__, '1.0.0' );
 
+	if ( is_null( $instance->settings ) ) {
+		$instance->settings = Easy_Social_Share_Buttons_Settings::instance( $instance );
+	}
 
-add_action( 'init', 'essb_load_translations' );
-function essb_load_translations() {
-	load_plugin_textdomain( ESSB_TEXT_DOMAIN, false, ESSB_PLUGIN_ROOT.'/languages' );
+	return $instance;
 }
 
-
-global $essb;
-$essb = new EasySocialShareButtons();
-
-?>
+$easy_social_share = Easy_Social_Share_Buttons();
