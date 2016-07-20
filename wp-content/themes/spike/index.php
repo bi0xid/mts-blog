@@ -83,7 +83,6 @@
 									<?php echo excerpt(53);?> 
 									<a class="pereadore" href="<?php the_permalink() ?>" title="<?php the_title(); ?>" rel="nofollow"><?php _e('...Read More','mythemeshop'); ?></a>
 								</div>
-                                <?php /*
 								<div class="home_meta_comment_social">
 									<?php if($options['mts_social_buttons_home'] == '1') { ?>
                                         <?php
@@ -236,10 +235,6 @@
                                         </ul>
                                     <?php } ?> <!--Shareit-->
 								</div>
-                                */ ?>
-                                <?php if($options['mts_social_buttons_home'] == '1') { ?>
-                                    <div class="home_meta_comment_social get_social_counter_result" data-id="<?php echo get_the_ID(); ?>" id="get_social_counter_result_<?php echo get_the_ID(); ?>"></div>
-                                <?php } ?>
 							</div>
 						</div><!--.post excerpt-->
 						
