@@ -1,17 +1,3 @@
-/**
- * WordPress Plugin: WP-EMail
- * Copyright (c) 2012 Lester "GaMerZ" Chan
- *
- * File Written By:
- * - Lester "GaMerZ" Chan
- * - http://lesterchan.net
- *
- * File Information:
- * - E-Mail Javascript File
- * - wp-content/plugins/wp-email/email-js.js
- */
-
-
 // Variables
 var email_p = 0;
 var email_pageid = 0;
@@ -121,20 +107,20 @@ function isEmpty(value){
 
 // Check Name
 function is_valid_name(name) {
-	filter  = /[(\*\(\)\[\]\+\,\/\?\:\;\'\"\`\~\\#\$\%\^\&\<\>)+]/;
+	var filter  = /[(\*\(\)\[\]\+\,\/\?\:\;\'\"\`\~\\#\$\%\^\&\<\>)+]/;
 	return !filter.test(jQuery.trim(name));
 }
 
 // Check Email
 function is_valid_email(email) {
-	filter  = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	var filter  = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 	return filter.test(jQuery.trim(email));
 }
 
 // Check Remarks
 function is_valid_remarks(remarks) {
 	remarks = jQuery.trim(remarks);
-	injection_strings = new Array('apparently-to', 'cc', 'bcc', 'boundary', 'charset', 'content-disposition', 'content-type', 'content-transfer-encoding', 'errors-to', 'in-reply-to', 'message-id', 'mime-version', 'multipart/mixed', 'multipart/alternative', 'multipart/related', 'reply-to', 'x-mailer', 'x-sender', 'x-uidl');
+	var injection_strings = new Array('apparently-to', 'content-disposition', 'content-type', 'content-transfer-encoding', 'errors-to', 'in-reply-to', 'message-id', 'mime-version', 'multipart/mixed', 'multipart/alternative', 'multipart/related', 'reply-to', 'x-mailer', 'x-sender', 'x-uidl');
 	for(i = 0; i < injection_strings.length; i++) {
 		if(remarks.indexOf(injection_strings[i]) != -1) {
 			return false;
@@ -164,7 +150,7 @@ function email_form() {
 		email_friendnames = email_friendname.split(",");
 	}
 	email_friendemail = jQuery('#friendemail').val();
-	email_friendemails = email_friendemail.split(",");
+	email_friendemails = email_friendemail.split(/[,;]+/);
 	if(jQuery('#imageverify').length) {
 		email_imageverify = jQuery('#imageverify').val();
 	}
