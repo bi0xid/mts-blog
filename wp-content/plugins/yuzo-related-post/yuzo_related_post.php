@@ -1,16 +1,22 @@
 <?php
 /*
-Plugin Name: Yuzo  ̵ ̵ ̵  Related Posts
+Plugin Name: Yuzo - Related Posts
 Plugin URI: https://wordpress.org/plugins/yuzo-related-post/
-Description: The first plugin that you must install on your wordpress site.
-Version: 4.9.9.8
+Description: The first plugin that you must install on your wordpress. All the best websites use Yuzo. (Tested on site with more than 1 million visitors per day)
+Version: 5.12.45
 Author: iLen
 Author URI: http://ilentheme.com
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd =_s-xclick&hosted_button_id=MSRAUBMB5BZFU
 */
 
-// live as if it were the last day of your life
 
+
+
+
+
+
+
+// live as if it were the last day of your life
 if ( !class_exists('yuzo_related_post') ) {
 
 
@@ -42,9 +48,8 @@ class yuzo_related_post extends yuzo_related_post_make{
 		if( isset($yuzo_options->disabled_counter) && $yuzo_options->disabled_counter ){
 			null;
 		}else{
-
 			// ajax nonce for count visits in cache plugin
-			if(  defined( 'WP_CACHE' ) && WP_CACHE ){
+			if(  ((defined( 'WP_CACHE' ) && WP_CACHE) ||  defined('WPFC_MAIN_PATH') ) && !is_user_logged_in() ){
 				add_action( 'wp_enqueue_scripts',  array( &$this, 'wp_yuzo_postview_cache_count_enqueue') );
 				add_action( 'wp_ajax_nopriv_yuzo-plus-views', array( &$this, 'hits_ajax' ) );
 				add_action( 'wp_ajax_yuzo-plus-views', array( &$this, 'hits_ajax' ) );
@@ -57,14 +62,11 @@ class yuzo_related_post extends yuzo_related_post_make{
 		
 
 		if( is_admin() ){
-
-
+ 
 			// when active plugin refirect to page
 			add_action('admin_menu',  array( &$this,'yuzo_menu_welcome') );
 
-
 			add_action( 'admin_enqueue_scripts', array( &$this,'script_and_style_admin' ) );
-
 
 			if( isset($yuzo_options->disabled_counter) && $yuzo_options->disabled_counter ){
 				null;
@@ -92,21 +94,31 @@ class yuzo_related_post extends yuzo_related_post_make{
 			// when active plugin verify db
 			//register_activation_hook( __FILE__ , array( &$this,'yuzo_install_db' ) );
 			add_action( 'admin_head',  array( &$this,'yuzo_install_db' ) );
+			//add_action( 'admin_head',  'yuzo_redirect_welcome_upgrade' );
+			add_action( 'admin_footer',   array( &$this,'show_popup_message' ) );
 			// when active plugin redirect
 			add_action( 'activated_plugin', array( &$this,'yuzo_redirect_welcome' ) );
-			//register_activation_hook( __FILE__ , array( &$this, 'yuzo_redirect_welcome' ));
+			//add_action('plugins_loaded', array(&$this, 'yuzo_redirect_welcome'), 10 , 2 );
+			//register_update_hook( __FILE__ , array( &$this,'yuzo_redirect_welcome_upgrade' ) );
 
 			// load functions ajax in admin
 			add_action( 'admin_enqueue_scripts', 'add_ajax_javascript_file' );
 			add_action( 'wp_ajax_ajax_delete_yuzo_data_admin', 'ajax_delete_yuzo_data_admin' );
 
+			// delete transient each 'save'
+			if( isset($_POST["save_options"]) && $_POST["save_options"] == 1 ){
+				$this->delete_transient_for_save();	
+			}
+			
+
+
 
 		}elseif( ! is_admin() ) {
- 
+
 			if( isset($yuzo_options->disabled_counter) && $yuzo_options->disabled_counter ){
 				null;
 			}else{
-				add_shortcode( 'yuzoviews' , array( &$this,'yuzo_shortcode' ) );
+				add_shortcode( 'yuzo_views' , array( &$this,'yuzo_shortcode' ) );
 			}
 
 			add_shortcode( 'yuzo_related', array( &$this,'yuzo_shortcode_related' ) );
@@ -193,139 +205,19 @@ function create_post_related( $content ){
 	}
 
 	//var_dump( $wp_query );
-	$_html = "";
+	$_html = "<!-- Begin Yuzo -->";
 	$_html .= "<div class='yuzo_related_post style-$yuzo_options->style'  data-version='{$this->parameter["version"]}'>";
 	if( $wp_query->post_count != 0 ){ // if have result in loop post
 
 		$__in_post   = null; // for array
 		$post_in     = null;
 		$post_not_in = null;
+		$have_manual_post = false; // true = if have / false = no have
+		$break_query_post = false; // true = If validation for query_post breaks then this variable is 'true' indicates that maximum placed in the post manual if necessary.
 
 
 		if( $rebuilt_query ){
 
-			// get no categories
-			$array_no_category=array();
-			$string_no_category="";
-			if( isset($yuzo_options->exclude_category) && is_array($yuzo_options->exclude_category) ){    
-
-				if( ! in_array( '-1',$yuzo_options->exclude_category ) ){    
-					foreach ($yuzo_options->exclude_category as $ce_key => $ce_value) {
-						$array_no_category[]=$ce_value;
-					}
-				}
-
-			}
-
-
-			// verify type page
-			$post_type = get_post_type( $post->ID );
-			if( $post_type ){
-				if( ! in_array($post_type, (array)$yuzo_options->post_type ) ){
-					return $content;
-				}
-			}
-
-			// is show home
-			if( isset($yuzo_options->show_home) && !$yuzo_options->show_home  && is_home() ){
-				return $content;
-			}elseif( !isset($yuzo_options->show_home) && !$yuzo_options->show_home && is_home()){
-				return $content;
-			}
-
-			// only in category 
-			$category_plugin = null;
-			$array_categorias = $yuzo_options->categories;
-			$categories =  get_the_category($post->ID);
-			if($categories){
-				foreach ($categories as $key_ => $value_) {
-					$category_plugin[]=(string)$value_->cat_ID;
-				}
-			}
-
-			if( is_array($array_categorias) && is_array($category_plugin) ){
-				if( ! in_array( '-1',$array_categorias ) ){
-
-					$bFound = (count(array_intersect($category_plugin, $array_categorias))) ? true : false; 
-
-					if( $bFound == false ){
-					  return $content;
-					}
-
-				}
-			}
-
-			$tag_ids = array();
-			$string_cate = "";
-			$string_tags = "";
-			$post__in = null;
-
-			$string_order_by = $yuzo_options->order_by;
-			$string_order    = $yuzo_options->order;
-
-			if( $yuzo_options->related_to == '3' ){
-			  $tags = wp_get_post_tags($post->ID);
-				if ($tags) {  
-					$tag_ids = array();
-					foreach($tags as $individual_tag) $tag_ids[] = $individual_tag->term_id;
-				}
-		 
-				//$string_tags =  $tag_ids;
-				$string_cate = $category_plugin;
-			}elseif( $yuzo_options->related_to == '1' ){
-
-				$tags = wp_get_post_tags($post->ID);
-				if ($tags) {  
-					$tag_ids = array();  
-					foreach($tags as $individual_tag) $tag_ids[] = $individual_tag->term_id;
-				}
-
-				// if exclude tags
-				/*if( isset($yuzo_options->exclude_tag) && $yuzo_options->exclude_tag ){
-					$no_tags = explode(",",$yuzo_options->exclude_tag);
-					$no_tag_values = array();
-					foreach ($no_tags as $no_tags_key => $no_tags_value_) {
-						$term = get_term_by('name', $no_tags_value_, 'post_tag');
-						$no_tag_values[] = $term->term_id;
-					}
-					//var_dump( $tag_ids );
-					//var_dump( $no_tag_values );
-					//$tag_ids = array_diff($tag_ids, $no_tag_values);
-				}*/
-				
-				//$string_tags =  implode(",",$tag_ids);
-				//$string_tags =  $tag_ids;
-
-			}elseif( $yuzo_options->related_to == '2' ){
-
-				$string_cate = $category_plugin;
-
-			}elseif( $yuzo_options->related_to == '4' ){
-
-				$string_order_by = 'rand';
-
-			}elseif( $yuzo_options->related_to == '5' ){ // Taxonomies 
-
-				$post__in = self::taxomy_real();
-				$string_order = "";
-				$string_order_by = 'post__in';
-
-			}
-
-
-			// validate exclude post current
-			$post__not_in[] = (int)$post->ID;
-			// exclude post from admin posts
-			if( isset($meta_yuzo[0]['yuzo_exclude_post']) &&  $meta_yuzo[0]['yuzo_exclude_post'] ){
-				$__ex_post = null;
-				$__ex_post = explode("|",$meta_yuzo[0]['yuzo_exclude_post']);
-				foreach ($__ex_post as $ex_post_key => $ex_post_value) {
-					if( $ex_post_value ){
-						$post__not_in[] = (int)$ex_post_value;
-					}
-				}
-
-			}
 
 
 			// include post from admin posts
@@ -337,6 +229,7 @@ function create_post_related( $content ){
    
 				foreach ($__in_post as $in_post_key => $in_post_value) {
 					if( $in_post_value ){
+						$have_manual_post = true;
 						$post_in[] = (int)$in_post_value;
 						$post_not_in[] = (int)$in_post_value;
 					}
@@ -344,142 +237,407 @@ function create_post_related( $content ){
 			}
 
 
+
+
+
+
+			// verify type page
+			$post_type = get_post_type( $post->ID );
+			if( $post_type ){
+				if( ! in_array($post_type, (array)$yuzo_options->post_type ) ){
+					if( !$have_manual_post ){
+						return $content;
+					}else{
+						$break_query_post = true;
+					}
+				}
+			}
+
+
+
+
+
+			// Categories on which related thumbnails will appear
+			$object_current_categories_of_post = get_the_category($post->ID);
+			$array_current_categories_of_post = null;
+			if( $object_current_categories_of_post ){ foreach($object_current_categories_of_post as $value_cat) $array_current_categories_of_post[] = (string)$value_cat->term_id; }
+
+			if( isset($yuzo_options->categories) && $yuzo_options->categories ){
+				if( !in_array("-1",$yuzo_options->categories) ){
+					$containsSearch = array_intersect($yuzo_options->categories, $array_current_categories_of_post);
+					if( ! $containsSearch ){
+						return $content;
+					}
+				}
+			}
+
+
+
+
+
+
+			// Exclude category and set categories
+			$array_categories_to_show = array();
+			$string_categories_to_show = null;
+			if( ! $break_query_post ){
+				// exclude category force
+				if( isset($yuzo_options->exclude_category) && is_array($yuzo_options->exclude_category) ){
+
+					if( !in_array("-1",$yuzo_options->exclude_category) ){
+						if( is_array($array_current_categories_of_post) ){
+							$array_categories_to_show = array_diff($array_current_categories_of_post,$yuzo_options->exclude_category);	
+						}
+						
+					}else{
+						// categories to show
+						$array_categories_to_show = $array_current_categories_of_post;
+					}
+					/*$containsSearch = array_intersect($yuzo_options->exclude_category, $array_current_categories_of_post);
+					if( $containsSearch ){
+						$array_categories_to_show = 
+					}*/
+					if( is_array($array_categories_to_show) ){
+						$string_categories_to_show = implode(",",$array_categories_to_show);	
+					}
+					
+
+				}else{
+					if( is_array($array_current_categories_of_post) ){
+						$string_categories_to_show = implode(",",$array_current_categories_of_post);						
+					}
+				}
+
+
+			}
+
+
+
+
+
+
+
+			/*if( ! $break_query_post ){
+				$category_plugin = null;
+				$array_categorias = $yuzo_options->categories; // (categies to show)
+				$categories =  get_the_category($post->ID);
+				if($categories){
+					foreach ($categories as $key_ => $value_) {
+						$category_plugin[]=(string)$value_->cat_ID;
+					}
+				}
+				if( is_array($array_categorias) && is_array($category_plugin) ){
+					if( ! in_array( '-1',$array_categorias ) ){
+						$bFound = (count(array_intersect($category_plugin, $array_categorias))) ? true : false; 
+						if( $bFound == false ){
+
+							if( !$have_manual_post ){
+								return $content;
+							}else{
+								$break_query_post = true;
+							}
+						}
+					}
+				}
+			}*/
+
+
+
+
+
+
+			// is show home
+			if( isset($yuzo_options->show_home) && !$yuzo_options->show_home  && is_home() ){
+				return $content;
+			}elseif( !isset($yuzo_options->show_home) && !$yuzo_options->show_home && is_home()){
+				return $content;
+			}
+
+
+
+
+
+
+			// Excluding related categories
+			if( ! $break_query_post ){
+				$array_no_category=array();
+				$string_no_category="";
+				if( isset($yuzo_options->exclude_category_related) && is_array($yuzo_options->exclude_category) ){
+					if( ! in_array( '-1',$yuzo_options->exclude_category ) ){    
+						foreach ($yuzo_options->exclude_category as $ce_key => $ce_value) {
+							$array_no_category[]=$ce_value;
+						}
+					}
+				}
+			}
+			
+
+ 
+
+
+
+
+
+
+
+
+
+
+			// Related Based in
+			if( ! $break_query_post  ){
+				$tag_ids     = array();
+				$string_cate = "";
+				$string_tags = "";
+				$post__in    = null;
+
+				$string_order_by = $yuzo_options->order_by;
+				$string_order    = $yuzo_options->order;
+
+				if( $yuzo_options->related_to == '3' ){
+				  $tags = wp_get_post_tags($post->ID);
+					if ($tags) {  
+						$tag_ids = array();
+						foreach($tags as $individual_tag) $tag_ids[] = $individual_tag->term_id;
+					}
+			 
+					//$string_tags =  $tag_ids;
+					$category_plugin = null;
+					$string_cate = $category_plugin;
+				}elseif( $yuzo_options->related_to == '1' ){
+
+					$tags = wp_get_post_tags($post->ID);
+	
+					if ($tags) {  
+						$tag_ids = array();  
+						foreach($tags as $individual_tag) $tag_ids[] = $individual_tag->term_id;
+					}else{
+
+						if( !$have_manual_post ){
+							return $content;
+						}else{
+							$break_query_post = true;
+						}
+
+					}
+
+					// if exclude tags
+					/*if( isset($yuzo_options->exclude_tag) && $yuzo_options->exclude_tag ){
+						$no_tags = explode(",",$yuzo_options->exclude_tag);
+						$no_tag_values = array();
+						foreach ($no_tags as $no_tags_key => $no_tags_value_) {
+							$term = get_term_by('name', $no_tags_value_, 'post_tag');
+							$no_tag_values[] = $term->term_id;
+						}
+						//var_dump( $tag_ids );
+						//var_dump( $no_tag_values );
+						//$tag_ids = array_diff($tag_ids, $no_tag_values);
+					}*/
+					
+					//$string_tags =  implode(",",$tag_ids);
+					//$string_tags =  $tag_ids;
+
+				}elseif( $yuzo_options->related_to == '2' ){
+					$category_plugin = null;
+					$string_cate = $category_plugin;
+
+				}elseif( $yuzo_options->related_to == '4' ){
+
+					$string_order_by = 'rand';
+
+				}elseif( $yuzo_options->related_to == '5' ){ // Taxonomies 
+
+					$post__in = self::taxomy_real();
+					$string_order = "";
+					$string_order_by = 'post__in';
+
+				}
+
+
+				// validate exclude post current
+				$post__not_in[] = (int)$post->ID;
+				// exclude post from admin posts
+				if( isset($meta_yuzo[0]['yuzo_exclude_post']) &&  $meta_yuzo[0]['yuzo_exclude_post'] ){
+					$__ex_post = null;
+					$__ex_post = explode("|",$meta_yuzo[0]['yuzo_exclude_post']);
+					foreach ($__ex_post as $ex_post_key => $ex_post_value) {
+						if( $ex_post_value ){
+							$post__not_in[] = (int)$ex_post_value;
+						}
+					}
+
+				}
+
+
+			}
+			
+
+
+
 			//Set number of post
-			$number_post = 4;
+			//if( ! $break_query_post  ){
+			$number_post = 4; // need it value for manual post without query_post
 			if( is_home() ){
 				$number_post = (int)$yuzo_options->display_post_home;
 			}else{
 				$number_post = (int)$yuzo_options->display_post;
 			}
-
-
-
-			$args        = array(
-								  'showposts'           =>  $number_post,
-								  //'post_type'           => (array)$yuzo_options->post_type,
-								  'post_status'         => 'publish',
-								  'ignore_sticky_posts' => 1,
-								  'orderby'             => $string_order_by,
-								  'order'               => $string_order,
-								  'category__in'        => $string_cate,
-								  'category__not_in'    => $array_no_category,
-						);
-
-
-			// validate if only show 1 type
-			if( isset($yuzo_options->show_only_type) && $yuzo_options->show_only_type ){
-				$args['post_type'] = (array)$post_type;
-			}
-
-
-			// validate if post related custom
-			if( is_array($post__in) ){
-				if( is_array($post_in) ){
-					foreach ($post_in as $post_in_key => $post_in_value) {
-						if( ! in_array($post_in_value,$post__in) ){
-							$post__in[] = $post_in_value;
-						}
-					}
-					//$post__in = array_merge(array_diff($post__in, $post__in_temp), array_diff($post__in_temp, $post__in));
-				}
-				if( is_array($post_not_in) ){
-					foreach ($post_not_in as $post_not_in_key => $post_not_in_value) {
-						$post__not_in[] = $post_not_in_value;
-					}
-				}
-				//$args['post__in'] =  array_diff( $post__in , $post__not_in);
-				//var_dump( $post__in );
-				//var_dump( $post__not_in );
-
-				// this validate is if no post exclude / include
-				if( !$post_in && !$post_not_in ){
-					$args['post__in'] = array_diff($post__in,$post__not_in);
-					//$args['post__in'] = array_merge(array_diff($post__in, $post__not_in), array_diff($post__not_in, $post__in));
-				}else{
-					$args['post__in'] = array_merge(array_diff($post__in, $post__not_in), array_diff($post__not_in, $post__in));    
-				}
-
-				$args['posts_per_page'] = -1;
-				
-				//var_dump($args['post__in']);
-			}else{
-				if( is_array($post_not_in) ){
-					foreach ($post_not_in as $post_not_in_key => $post_not_in_value) {
-						$post__not_in[] = $post_not_in_value;
-					}
-				}
-				$args['post__not_in'] =  (array)$post__not_in;
-			}
-
-			// validate exclude IDs in related
-			if( isset($yuzo_options->exclude_id) && $yuzo_options->exclude_id ){
-				$new_no_in_post = explode(",",$yuzo_options->exclude_id);
-				if( isset( $args['post__not_in'] ) && $args['post__not_in'] ){
-					
-					if( is_array( $new_no_in_post ) ){
-						foreach($new_no_in_post as $posts_no_in2 => $post_no_in2) {
-							array_push($args['post__not_in'], $post_no_in2);
-						}
-					}
-
-				}else{
-					if( is_array( $new_no_in_post ) ){
-						$args['post__not_in'] = array();
-						foreach($new_no_in_post as $posts_no_in2 => $post_no_in2) {
-							array_push($args['post__not_in'], $post_no_in2);
-						}
-					}
-				}
-			}
-
-
 			
-			if(  isset($tag_ids) && $tag_ids ){
-				$args['tag__in'] =  $tag_ids;
-			}
 
 
-			// validate if tags exclude custom
-			if( isset($yuzo_options->exclude_tag) && $yuzo_options->exclude_tag ){
-				// if exclude tags
-				$no_tags = explode(",",$yuzo_options->exclude_tag);
-				$no_tag_values = array();
-				foreach ($no_tags as $no_tags_key => $no_tags_value_) {
-					$term = get_term_by('name', $no_tags_value_, 'post_tag');
-					if( $term ){
-						$no_tag_values[] = $term->term_id;
+
+
+
+
+
+
+			// Main query
+			if( ! $break_query_post  ){
+				$args = array(
+					'showposts'           =>  $number_post,
+					//'post_type'           => (array)$yuzo_options->post_type,
+					'post_status'         => 'publish',
+					'ignore_sticky_posts' => 1,
+					'orderby'             => $string_order_by,
+					'order'               => $string_order,
+					'cat'				  => $string_categories_to_show,
+					//'category__in'        => $string_cate,
+					'category__not_in'    => $array_no_category,
+				);
+ 
+				// validate if only show 1 type
+				if( isset($yuzo_options->show_only_type) && $yuzo_options->show_only_type ){
+					$args['post_type'] = (array)$post_type;
+				}
+
+				// validate if post related custom
+				if( is_array($post__in) ){
+					if( is_array($post_in) ){
+						foreach ($post_in as $post_in_key => $post_in_value) {
+							if( ! in_array($post_in_value,$post__in) ){
+								$post__in[] = $post_in_value;
+							}
+						}
+						//$post__in = array_merge(array_diff($post__in, $post__in_temp), array_diff($post__in_temp, $post__in));
+					}
+					if( is_array($post_not_in) ){
+						foreach ($post_not_in as $post_not_in_key => $post_not_in_value) {
+							$post__not_in[] = $post_not_in_value;
+						}
+					}
+					//$args['post__in'] =  array_diff( $post__in , $post__not_in);
+					//var_dump( $post__in );
+					//var_dump( $post__not_in );
+
+					// this validate is if no post exclude / include
+					if( !$post_in && !$post_not_in ){
+						$args['post__in'] = array_diff($post__in,$post__not_in);
+						//$args['post__in'] = array_merge(array_diff($post__in, $post__not_in), array_diff($post__not_in, $post__in));
+					}else{
+						$args['post__in'] = array_merge(array_diff($post__in, $post__not_in), array_diff($post__not_in, $post__in));    
+					}
+
+					$args['posts_per_page'] = -1;
+					
+					//var_dump($args['post__in']);
+				}else{
+					if( is_array($post_not_in) ){
+						foreach ($post_not_in as $post_not_in_key => $post_not_in_value) {
+							$post__not_in[] = $post_not_in_value;
+						}
+					}
+					$args['post__not_in'] =  (array)$post__not_in;
+				}
+
+				// validate exclude IDs in related
+				if( isset($yuzo_options->exclude_id) && $yuzo_options->exclude_id ){
+					$new_no_in_post = explode(",",$yuzo_options->exclude_id);
+					if( isset( $args['post__not_in'] ) && $args['post__not_in'] ){
+						
+						if( is_array( $new_no_in_post ) ){
+							foreach($new_no_in_post as $posts_no_in2 => $post_no_in2) {
+								array_push($args['post__not_in'], $post_no_in2);
+							}
+						}
+
+					}else{
+						if( is_array( $new_no_in_post ) ){
+							$args['post__not_in'] = array();
+							foreach($new_no_in_post as $posts_no_in2 => $post_no_in2) {
+								array_push($args['post__not_in'], $post_no_in2);
+							}
+						}
 					}
 				}
 
-				$args['tag__not_in'] =  $no_tag_values;
+
+				
+				if(  isset($tag_ids) && $tag_ids ){
+					$args['tag__in'] =  $tag_ids;
+				}
+
+
+				// validate if tags exclude custom
+				if( isset($yuzo_options->exclude_tag) && $yuzo_options->exclude_tag ){
+					// if exclude tags
+					$no_tags = explode(",",$yuzo_options->exclude_tag);
+					$no_tag_values = array();
+					foreach ($no_tags as $no_tags_key => $no_tags_value_) {
+						$term = get_term_by('name', $no_tags_value_, 'post_tag');
+						if( $term ){
+							$no_tag_values[] = $term->term_id;
+						}
+					}
+
+					$args['tag__not_in'] =  $no_tag_values;
+				}
+
 			}
 
 
-
-
+			// validate final Related Based
+			if( $yuzo_options->related_to == '1' || $yuzo_options->related_to == '4' || $yuzo_options->related_to == '5'){
+				unset($args['cat']);
+			}
 
 
 		} // rebuilt query
+        
+        
+        
+        // validate real post to show
+        /*$posts_to_show = get_posts($args);
+        if($posts_to_show){
+            foreach($posts_to_show as $post_to_s) : setup_postdata($post_to_s);
+                
+            endforeach;    
+        }*/
+        
+
+        
 
 		//var_dump( $args );
 		// cache query
-		if( $rebuilt_query ){
+		if( $rebuilt_query && ! $break_query_post ){
 			$the_query_yuzo = new WP_Query( $args );
 
 			if(  isset($yuzo_options->transient) && $yuzo_options->transient ){
 				set_transient( $transient_name , $the_query_yuzo, 60 * $cacheTime );
 			}
 
+		}else{
+			$the_query_yuzo = new WP_Query( null );
 		}
 
 		$my_array_views = array();
-		$metabox_add_post_first = 0;
+		$metabox_add_post_first = 1;
 
 		$counter_manual_post = is_array($post_in)?count($post_in):0;
-		//var_dump( $metabox_add_post_first < $counter_manual_post );
+        //echo "contador|";
+        //var_dump( $counter_manual_post );
+        //var_dump($metabox_add_post_first);
+		//var_dump( $counter_manual_post >= $metabox_add_post_first );
 		//if( have_posts() && $wp_query->post_count != 0 ){
 		// The Loop
-		if ( ($the_query_yuzo->have_posts() && $wp_query->post_count != 0) || $metabox_add_post_first < $counter_manual_post ) {
+		if ( ($the_query_yuzo->have_posts() && $wp_query->post_count != 0) || $counter_manual_post >= $metabox_add_post_first ) {
 
 			// set transitions
 			$css_transitions = null;
@@ -487,16 +645,7 @@ function create_post_related( $content ){
 				$css_transitions = " -webkit-transition: background {$yuzo_options->bg_color_hover_transitions}s linear; -moz-transition: background {$yuzo_options->bg_color_hover_transitions}s linear; -o-transition: background {$yuzo_options->bg_color_hover_transitions}s linear; transition: background {$yuzo_options->bg_color_hover_transitions}s linear;";
 			}
 
-			// border radius
-			$css_border = null;
-			if( isset($yuzo_options->thumbnail_border_radius) && $yuzo_options->thumbnail_border_radius ){
-				$css_border = " border-radius: {$yuzo_options->thumbnail_border_radius}% ";
-
-				if(  $yuzo_options->thumbnail_border_radius == 50 ){
-					$css_border = " border-radius: {$yuzo_options->thumbnail_border_radius}%; margin:0 auto; width:".$height."px;";
-				}
-			}
-
+			
 			// margin related
 			$css_margin = null;
 			if( isset($yuzo_options->related_margin) && $yuzo_options->related_margin ){
@@ -539,20 +688,34 @@ function create_post_related( $content ){
 			// type image
 			$width="";
 			$height="";
-			if( !isset($yuzo_options->type_image) || !$yuzo_options->type_image ){
-				$width = ((int)$yuzo_options->height_image+15);
-				$height = ((int)$yuzo_options->height_image-20);
-			}elseif( isset($yuzo_options->type_image)  && $yuzo_options->type_image ){
+			/*if( !isset($yuzo_options->type_image) || !$yuzo_options->type_image ){
+				$width = ( (int)$yuzo_options->height_image * 15 / 100 ) + (int)$yuzo_options->height_image;
+				$height =  (int)$yuzo_options->height_image - ( (int)$yuzo_options->height_image * 20 / 100 );
+			}else*/if( isset($yuzo_options->type_image)  && $yuzo_options->type_image ){
 
 				if( $yuzo_options->type_image == 'rectangular' ){
-					$width = ((int)$yuzo_options->height_image+15);
-					$height = ((int)$yuzo_options->height_image-20);
+					$width =  ( (int)$yuzo_options->height_image * 15 / 100 ) + (int)$yuzo_options->height_image;
+					$height = (int)$yuzo_options->height_image - ( (int)$yuzo_options->height_image * 20 / 100 ) ;
 				}elseif( $yuzo_options->type_image == 'square'  ){
-					$width = ((int)$yuzo_options->height_image);
+					$width =  (int)$yuzo_options->height_image;
 					$height = ((int)$yuzo_options->height_image);
+				}elseif( $yuzo_options->type_image == 'full-rectangular' ){
+					$width =  ( (int)$yuzo_options->height_image * 70 / 100 ) + (int)$yuzo_options->height_image;
+					$height = (int)$yuzo_options->height_image - ( (int)$yuzo_options->height_image * 20 / 100 ) ;
 				}
 
 			}
+
+			// border radius
+			$css_border = null;
+			if( isset($yuzo_options->thumbnail_border_radius) && $yuzo_options->thumbnail_border_radius ){
+				$css_border = " border-radius: {$yuzo_options->thumbnail_border_radius}% ";
+
+				if(  $yuzo_options->thumbnail_border_radius == 50 ){
+					$css_border = " border-radius: {$yuzo_options->thumbnail_border_radius}%; margin:0 auto; width:".$height."px;";
+				}
+			}
+
 
 			// target link
 			$target_link = null;
@@ -588,28 +751,66 @@ function create_post_related( $content ){
 			if( isset( $yuzo_options->title_color->hover ) && $yuzo_options->title_color->hover ){ $css_title_color_hover=$yuzo_options->title_color->hover; }
 
 
-
-
 			//while ( have_posts() ) : the_post();
-			$_html .="<div class='yuzo_wraps'>";
-			while ( $the_query_yuzo->have_posts() || $metabox_add_post_first < $counter_manual_post ) :
-
+			$_html                  .="<div class='yuzo_wraps'>";
+			$post_count_manual      = $counter_manual_post;
+			$post_into_manual       = 0; // each that in post manual
+			$post_into_manual_fecth = false;
+			$post_into_count        = 0;
+			$post_i 				= 0; // counter post show, effective
+            
+            
+			while ( $the_query_yuzo->have_posts() || $counter_manual_post >= $metabox_add_post_first ) :
+				// $myquery->found_posts
 				// $the_query_yuzo->request; // view query sql
-				// START custom first post
+				//  START custom first post
 				// link: http://wordpress.stackexchange.com/questions/76877/include-a-specific-post-to-the-query-posts-and-remove-it-if-it-is-already-in-the
-				if ( isset($post_in) && count($post_in) >  $metabox_add_post_first ) {
-					$post_id = $post_in[$metabox_add_post_first]; // This is the ID of the first post to be displayed on slider
-					if($the_query_yuzo->have_posts() && $wp_query->post_count != 0){
+                // validate if num post = manual num post for break loop
+                if( $post_count_manual == 0 ){
+                    $the_query_yuzo->the_post();
+                    //$post = get_post();
+                }else if( $post_count_manual >= $metabox_add_post_first ){
+                    if( $post_id = $post_in[$metabox_add_post_first-1] ){
+                        //$the_query_yuzo->the_post();
+                        $post_into_manual++;
+                        if( $post_into_manual > $number_post ){ break; }
+                        $post = get_post( $post_id );
+                    }elseif($the_query_yuzo->have_posts() && $wp_query->post_count != 0){
 						$the_query_yuzo->the_post(); // END custom first post
 					}
-					$post = get_post( $post_id );
-				}else{
-					//the_post(); // END custom first post
-					$the_query_yuzo->the_post(); // END custom first post
-				}
-				$metabox_add_post_first++;
+                }elseif( $the_query_yuzo->have_posts() ){
 
-				
+                    if( $post_into_manual >= $number_post || $number_post  <= $post_i  ){  break; }
+                    if( $post_into_manual > 0 && $post_into_manual_fecth == false){
+                    	//var_dump($the_query_yuzo->found_posts);
+                    	//echo "|num:".($post_into_manual + 1)."|query found:$the_query_yuzo->found_posts";
+                        /*for($yj = 1; $yj <= ( $post_into_manual + 1 ); $yj++){
+                        	echo 10;
+                            $post_into_manual_fecth = true;
+                            $the_query_yuzo->the_post();
+                            $post = get_post();
+                            //var_dump($post);
+                        }*/
+                        $post_into_count = $post_into_manual ;
+                        //for($yj = 1; $yj <= $the_query_yuzo->found_posts && $post_into_count < $number_post ; $yj++){
+                        for($yj = 1; $yj <= $the_query_yuzo->found_posts && $yj <= $post_into_manual ; $yj++){
+                        	$post_into_count++;
+                            $post_into_manual_fecth = true;
+                            $the_query_yuzo->the_post();
+                            //$post = get_post();
+                            //var_dump($post);
+                        }
+                    }else{
+                        $the_query_yuzo->the_post();
+                    }
+				}else{
+				    break;
+				}
+                $metabox_add_post_first++;
+                $post_i++;
+ 
+
+
 
 
 
@@ -622,14 +823,17 @@ function create_post_related( $content ){
 				}
 
 
+
+
+
 				// validate text to show
 				$text_to_show = null;
 				if( (int)$yuzo_options->text2_length > 0 ){
 
 					if( ! isset($yuzo_options->text_show) ){
-						$text_to_show = get_the_content();
+						$text_to_show = $post->post_content;
 					}elseif( isset($yuzo_options->text_show) && $yuzo_options->text_show == 1 ){
-						$text_to_show = get_the_content();
+						$text_to_show = $post->post_content;//get_the_content();
 					}elseif( isset($yuzo_options->text_show) && $yuzo_options->text_show == 2 ){
 						$text_to_show = $post->post_excerpt;
 					}
@@ -654,12 +858,12 @@ function create_post_related( $content ){
 
 						$image = $this->IF_get_image(  $yuzo_options->thumbnail_size, $yuzo_options->default_image, get_the_ID(), $order_image );
 						  $_html .= '
-						  <div class="relatedthumb '.$class_box_shadow.'" style="width:'.$width.'px;float:left;overflow:hidden;'.$css_title_center.'">  
+						  <div class="relatedthumb relatedpost-'.get_the_ID().' '.$class_box_shadow.'" style="width:'.$width.'px;float:left;overflow:hidden;'.$css_title_center.'">  
 							  
 							  <a '.$rel_link.' href="'.get_permalink().'" '.$target_link.' >
-									  <div class="yuzo-img-wrap '.$css_shine_effect1.'" style="width: '.$width.'px;height:'.$height.'px;">
+									  <div class="yuzo-img-wrap '.$css_shine_effect1.'" style="/*width: '.$width.'px;height:'.$height.'px;*/">
 										'.$css_shine_effect2.'
-										<div class="yuzo-img" style="background:url(\''.$image['src'].'\') 50% 50% no-repeat;width: '.$width.'px;height:'.$height.'px;margin-bottom: 5px;background-size: '.$css_background_size.'; '.$css_border.'"></div>
+										<div class="yuzo-img" style="background:url(\''.$image['src'].'\') 50% 50% no-repeat;width: '.$width.'px;;max-width:100%;height:'.$height.'px;margin-bottom: 5px;background-size: '.$css_background_size.'; '.$css_border.'"></div>
 									  </div>
 									  '.$my_array_views['top'].'
 								   <span class="yuzo__text--title" style="font-size:'.$yuzo_options->font_size.'px;'.$bold_title.'">'.$if_utils->IF_setHtml( $if_utils->IF_cut_text( get_the_title(), $yuzo_options->text_length , true ) ).'</span>
@@ -669,7 +873,7 @@ function create_post_related( $content ){
 
 						  </div>';
 					  $style="<style>
-								.yuzo_related_post img{width:".((int)$yuzo_options->height_image + 10 )."px !important; height:{$yuzo_options->height_image}px !important;}
+								.yuzo_related_post img{width:".$width."px !important; height:{$height}px !important;}
 								.yuzo_related_post .relatedthumb{line-height:".((int)$yuzo_options->font_size +2 )."px;background:{$yuzo_options->bg_color->color} !important;color:{$css_text_color}!important;}
 								.yuzo_related_post .relatedthumb:hover{background:{$yuzo_options->bg_color->hover} !important;$css_transitions;color:{$css_text_color_hover}!important;}
 								.yuzo_related_post .relatedthumb a{color:{$css_title_color}!important;}
@@ -685,7 +889,6 @@ function create_post_related( $content ){
 						if ( ! isset($yuzo_options->yuzo_conflict) || ! $yuzo_options->yuzo_conflict ) {
 						  $script="<script>
 						  jQuery(document).ready(function( $ ){
-							//jQuery('.yuzo_related_post').equalizer({ overflow : 'relatedthumb' });
 							jQuery('.yuzo_related_post .yuzo_wraps').equalizer({ columns : '> div' });
 						   });
 						  </script>";
@@ -698,7 +901,7 @@ function create_post_related( $content ){
 						  <a '.$rel_link.' href="'.get_permalink().'" class="image-list" '.$target_link.' >
 						  <div class="yuzo-img-wrap '.$css_shine_effect1.'" style="width: '.$width.'px;height:'.$height.'px;">
 									'.$css_shine_effect2.'
-									 <div class="yuzo-img" style="background:url(\''.$image['src'].'\') 50% 50% no-repeat;width: '.((int)$yuzo_options->height_image+20).'px;height:'.$height.'px;margin-bottom: 5px;background-size:  '.$css_background_size.'; '.$css_border.' "></div>
+									 <div class="yuzo-img" style="background:url(\''.$image['src'].'\') 50% 50% no-repeat;width: '.$width.'px;height:'.$height.'px;margin-bottom: 5px;background-size:  '.$css_background_size.'; '.$css_border.' "></div>
 						  </div>
 						  </a>
 						  <a '.$rel_link.' class="link-list yuzo__text--title" href="'.get_permalink().'" style="font-size:'.$yuzo_options->font_size.'px;'.$bold_title.';line-height:'.( (int)$yuzo_options->font_size + 8).'px;">'.$my_array_views['top'].' '.$if_utils->IF_setHtml( $if_utils->IF_cut_text( get_the_title(), $yuzo_options->text_length , true ) ).'  '.$my_array_views['bottom'].'</a>
@@ -927,9 +1130,9 @@ function create_post_related( $content ){
 				if( (int)$yuzo_options->text2_length > 0 ){
 
 					if( ! isset($yuzo_options->text_show) ){
-						$text_to_show = get_the_content();
+						$text_to_show = $post->post_content;
 					}elseif( isset($yuzo_options->text_show) && $yuzo_options->text_show == 1 ){
-						$text_to_show = get_the_content();
+						$text_to_show = $post->post_content; //get_the_content();
 					}elseif( isset($yuzo_options->text_show) && $yuzo_options->text_show == 2 ){
 						$text_to_show = $post->post_excerpt;
 					}
@@ -1058,7 +1261,7 @@ function create_post_related( $content ){
 
 	}
 	  
-	$_html .= "\n $style $script \n</div>";
+	$_html .= "\n</div> $style $script <!-- End Yuzo :) -->";
 	  
 	$post = $orig_post;  
 	
@@ -1084,7 +1287,20 @@ function create_post_related( $content ){
 	wp_register_style( 'admin-css-'.$this->parameter["name_option"], plugins_url('/assets/css/admin.css',__FILE__),'all',$this->parameter['version'] );
 	// Enqueue styles
 	wp_enqueue_style( 'admin-css-'.$this->parameter["name_option"] );
-	//}
+
+
+	if( isset($_GET["page"]) && $_GET["page"] == "yuzo-welcome" ){
+		wp_enqueue_script( 'admin-js-welcome-'.$this->parameter["name_option"], plugins_url('/assets/ilenframework/assets/js/wow.min.js',__FILE__), array( 'jquery' ), $this->parameter['version'], true );
+		// Register styles
+		wp_register_style( 'admin-css-welcome-1-'.$this->parameter["name_option"], plugins_url('/assets/ilenframework/assets/css/animate.css',__FILE__),'all',$this->parameter['version'] );
+		// Enqueue styles
+		wp_enqueue_style( 'admin-css-welcome-1-'.$this->parameter["name_option"] );
+
+		// Register styles
+		wp_register_style( 'admin-css-welcome-2-'.$this->parameter["name_option"], plugins_url('/assets/ilenframework/assets/css/font-awesome.css',__FILE__),'all',$this->parameter['version'] );
+		// Enqueue styles
+		wp_enqueue_style( 'admin-css-welcome-2-'.$this->parameter["name_option"] );
+	}
  
   }
 
@@ -1212,7 +1428,7 @@ function hits( $content ="" ){
 
 }
 
-function hits_ajax(){
+function hits_ajax( $content = "" ){
 
 	if(!$_GET['is_singular']) return;
 
@@ -1272,7 +1488,7 @@ function yuzo_get_PostViews($post_ID, $count_key = '',$format = true){
 
 		$count = 0;
 		if( isset($yuzo_options->meta_views) && $yuzo_options->meta_views == 'other' ){
-		  $count_key = isset($yuzo_options->meta_views_custom)? $yuzo_options->meta_views_custom:'';
+			$count_key = isset($yuzo_options->meta_views_custom)? $yuzo_options->meta_views_custom:'';
 		}
 
 
@@ -1442,8 +1658,8 @@ function wp_yuzo_postview_cache_count_enqueue() {
 
   global $post;
   
-  if( !defined( 'WP_CACHE' ) || !WP_CACHE )
-	return;
+  //if( !defined( 'WP_CACHE' ) || !WP_CACHE )
+	//return;
   
   if ( !wp_is_post_revision( $post ) && ( is_single() || is_page() ) ) {
 
@@ -1460,38 +1676,36 @@ function wp_yuzo_postview_cache_count_enqueue() {
 
 function taxomy_real(){
 
-  global $yuzo_options,$wpdb;
+	global $yuzo_options,$wpdb;
+	$ID_post = get_the_ID();
+	$args = "SELECT term_taxonomy_id FROM {$wpdb->term_relationships} WHERE object_id = " . $ID_post;
 
-  $args = "SELECT term_taxonomy_id FROM {$wpdb->term_relationships} WHERE object_id = " . get_the_ID();
+	$term_taxonomy_ids = $wpdb->get_col( "$args" );
+	if ( !$term_taxonomy_ids ) { return; }
+	$term_taxonomy_ids_str = implode( ",", $term_taxonomy_ids );
 
-  $term_taxonomy_ids = $wpdb->get_col( "$args" );
-  if ( !$term_taxonomy_ids ) { return; }
-  $term_taxonomy_ids_str = implode( ",", $term_taxonomy_ids );
-  
-  $object_ids = array();
-  $object_ids = $wpdb->get_col( "SELECT object_id FROM {$wpdb->term_relationships} WHERE term_taxonomy_id IN ( {$term_taxonomy_ids_str} ) " );
-  if ( !$object_ids ) { return; }
-  
-  $object_ids = array_count_values( $object_ids );
-  
-  arsort( $object_ids );
+	$object_ids = array();
+	$object_ids = $wpdb->get_col( "SELECT object_id FROM {$wpdb->term_relationships} WHERE term_taxonomy_id IN ( {$term_taxonomy_ids_str} ) " );
+	if ( !$object_ids ) { return; }
 
-  $order_by = isset($yuzo_options->order_by_taxonomias)?$yuzo_options->order_by_taxonomias:'';
-  $array_id_post_return = null;
-  if ( $order_by == "related_scores_high__speedy" ) {
+	$object_ids = array_count_values( $object_ids );
+
+	arsort( $object_ids );
+
+	$order_by = isset($yuzo_options->order_by_taxonomias)?$yuzo_options->order_by_taxonomias:'';
+	$array_id_post_return = null;
+	if ( $order_by == "related_scores_high__speedy" ) {
 	$count = 1;
 	foreach ( $object_ids as $object_id => $relevancy_score ) {
-	  $related_post = $wpdb->get_row( "SELECT ID FROM {$wpdb->posts} WHERE ID = {$object_id} AND post_status = 'publish'" );
-	  if ( $related_post ) {
-
-		$array_id_post_return[] = $related_post->ID;
-
-		if ( $count++ >= ( (int)$yuzo_options->display_post + 1 ) ) {
-		  break;
+		$related_post = $wpdb->get_row( "SELECT ID FROM {$wpdb->posts} WHERE ID = {$object_id} AND post_status = 'publish'" );
+		if ( $related_post ) {
+			$array_id_post_return[] = $related_post->ID;
+			if ( $count++ >= ( (int)$yuzo_options->display_post + 1 ) ) {
+				break;
+			}
 		}
-	  }
-	}
-  } else {
+		}
+	} else {
 	$relevancy_scores = array();
 	$post_ids = array();
 	$post_date = array();
@@ -1533,13 +1747,16 @@ function taxomy_real(){
 	  }
 	  $count = 1;
 	  foreach ( $post_ids as $key => $post_id ) {
-		$array_id_post_return[] = (int)$post_id;
-		if ( $count++ >= ((int)$yuzo_options->display_post + 3 ) ) {
-		  break;
-		}
+	  	if( $ID_post != $post_id ){
+	  		$array_id_post_return[] = (int)$post_id;
+			if ( $count++ >= ((int)$yuzo_options->display_post + 3 ) ) {
+			  break;
+			}	
+	  	}
+		
 	  }
 	}
-  }
+	}
 
 
   return $array_id_post_return;
@@ -1775,6 +1992,10 @@ function yuzo_install_db(){
 
 
 
+
+
+
+
 function yuzo_menu_welcome(){
 
 	// Welcome Page
@@ -1792,11 +2013,56 @@ function yuzo_redirect_welcome( $plugin ) {
 	if( isset($this->parameter["present_version"]) && $plugin == plugin_basename( __FILE__ ) && $present_version != $this->parameter["present_version"] ) {
 
 		update_option( $this->parameter["name_option"].'_present_version' , $this->parameter["present_version"] );
+		update_option( $this->parameter["name_option"].'_date_yuzo' , time() );
 		exit( wp_redirect( admin_url( 'options-general.php?page=yuzo-welcome&install_data=true' ) ) );
 
 	}
 
 }
+
+
+
+
+
+function show_popup_message(){
+
+	global $wpdb,$YUZO_CORE,$first_present1,$first_present2;
+  
+	/*var_dump($first_present1);
+	var_dump($first_present2);*/
+	if( $first_present1 == true || (isset($_GET["page"]) && $_GET["page"]  != "yuzo-related-post") ){ return; }
+	$version_new     = $this->parameter["popup_version"]['id'];
+	$version_current = get_option( $this->parameter["name_option"].'_popup_message' );
+	update_option( $this->parameter["name_option"].'_popup_message' , $version_new  );
+	/*var_dump($version_new);
+	var_dump($version_current);
+	var_dump($version_new != $version_current &&  isset($_GET["page"]) && $_GET["page"] == "yuzo-related-post" &&  $first_present2 == true);*/
+	if ( $version_new != $version_current &&  isset($_GET["page"]) && $_GET["page"] == "yuzo-related-post" &&  $first_present2 == true ) {
+
+		echo $this->parameter["popup_version"]['html'];
+		echo '<script>
+jQuery(document).ready( function($) {
+	 jQuery( jQuery(".IF_popup_message") ).detach().appendTo( ".ilenplugin-options" );
+	 setTimeout(function(){  
+		 document.getElementById("IF_popup_button_active").click();
+	     jQuery(".time_countdown").IF_countDown({
+	        startNumber: '.$this->parameter["popup_version"]['second_close'].',
+	        callBack: function(me) {
+	            //jQuery(me).text("All done! This is where you give the reward!").css("color", "#090");
+	            jQuery(me).parent().find(".close").css("display","block");
+	            jQuery(me).remove();
+	        }
+	    });
+		}, 1500);
+});
+</script>';
+
+		//update_option( $this->parameter["name_option"].'_popup_message' , $version_new );
+	}
+
+	// 
+}
+
 
 
 
@@ -1808,7 +2074,7 @@ function add_custom_css(){
 	if( $yuzo_options->style == 1 || $yuzo_options->style == 2 ){
 
 		if( isset($yuzo_options->css_and_style) && $yuzo_options->css_and_style && isset($yuzo_options->theme) && $yuzo_options->theme == 'default' ){
-			echo addslashes("<style>{$yuzo_options->css_and_style}</style>");
+			echo ("<style scoped>{$yuzo_options->css_and_style}</style>");
 		}elseif( isset($yuzo_options->theme) && $yuzo_options->theme == 'magazine-alfa' ){
 			echo addslashes("<style>.yuzo_wraps{
    box-shadow: 0px 0px 8px -2px #333; 
@@ -1859,7 +2125,7 @@ function add_custom_css(){
 
 
 function yuzo_shortcode( $atts, $content = null ){
- 
+
 	global $post;
  
 	extract(shortcode_atts(array(
@@ -1868,7 +2134,7 @@ function yuzo_shortcode( $atts, $content = null ){
 
 	if( isset($id) && $id ){
 
-		return self::yuzo_get_PostViews( $id );
+		return '<span class="yuzo-view-shortcode">'.self::yuzo_get_PostViews( $id ).'</span>';
 
 	}
 
@@ -1909,6 +2175,19 @@ function only_specific_post(){
 }
 
 
+function delete_transient_for_save(){
+
+	global $wpdb;
+
+	$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_yuzo_view\_%'" );
+	$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_yuzo_widget\_%'" );
+	$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_yuzo_query\_%'" );
+	$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_timeout_yuzo_view\_%'" );
+	$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_timeout_yuzo_widget\_%'" );
+	$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_timeout_yuzo_query\_%'" );
+}
+
+
 
 
 } // end class
@@ -1923,14 +2202,13 @@ require_once "assets/ilenframework/core.php";
 
 
 
-
 if( isset($yuzo_options->active_widget) && $yuzo_options->active_widget ){
 	require_once "assets/functions/widget.php";
 }
 
 
-if( isset( $yuzo_options->show_columns_dashboard ) && $yuzo_options->show_columns_dashboard ){
-    require_once "assets/functions/metabox.php";    
+if( !isset( $yuzo_options->disabled_metabox ) || !$yuzo_options->disabled_metabox ){
+	require_once "assets/functions/metabox.php";    
 }
 
 
@@ -1970,22 +2248,34 @@ function get_Yuzo_Views(){
 
 
 function yuzo_redirect_welcome_upgrade() {
-
-	global $IF_CONFIG;
+	//echo 11;
+	global $IF_CONFIG,$first_present1,$first_present2;
+	$first_present1 = false;
+	$first_present2 = false;
 	$present_version  = get_option($IF_CONFIG->parameter["name_option"].'_present_version' );
-	if( isset($IF_CONFIG->parameter["present_version"]) && $present_version != $IF_CONFIG->parameter["present_version"] ) {
 
-		update_option( $IF_CONFIG->parameter["name_option"].'_present_version' , $IF_CONFIG->parameter["present_version"] );
-		exit( wp_redirect( admin_url( 'options-general.php?page=yuzo-welcome&tab=new&install_data=true' ) ) );
-
+	if( ! get_option($IF_CONFIG->parameter["name_option"].'_date_yuzo' ) ){
+		update_option( $IF_CONFIG->parameter["name_option"].'_date_yuzo' , time() );		
 	}
+
+	if( isset($IF_CONFIG->parameter["present_version"]) && $present_version != $IF_CONFIG->parameter["present_version"] ) {
+		$first_present1 = true;
+		update_option( $IF_CONFIG->parameter["name_option"].'_present_version' , $IF_CONFIG->parameter["present_version"] );
+		//sleep(5);
+		exit( wp_redirect( admin_url( 'options-general.php?page=yuzo-welcome&tab=new&install_data=true' ) ) );
+	}elseif( $present_version == $IF_CONFIG->parameter["present_version"] ){
+		$first_present2 = true;
+	}
+
+	//return true;
 
 }
 
 
+
 /* AJAX DELETE METADATA AND TRANSIENT */
 function add_ajax_javascript_file(){
-    wp_enqueue_script( 'yuzo_ajax_custom_script_admin', plugin_dir_url( __FILE__ ) . 'assets/js/admin-ajax.js', array('jquery') );
+	wp_enqueue_script( 'yuzo_ajax_custom_script_admin', plugin_dir_url( __FILE__ ) . 'assets/js/admin-ajax.js', array('jquery') );
 }
 
 
@@ -2006,12 +2296,12 @@ function ajax_delete_yuzo_data_admin() {
         
     }elseif( !empty($_POST['yuzo_actions']) && $_POST['yuzo_actions'] == "transient"  ){
 
-    	$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_yuzo_view\_%'" );
-    	$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_yuzo_widget\_%'" );
-    	$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_yuzo_query\_%'" );
-    	$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_timeout_yuzo_view\_%'" );
-    	$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_timeout_yuzo_widget\_%'" );
-    	$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_timeout_yuzo_query\_%'" );
+		$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_yuzo_view\_%'" );
+		$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_yuzo_widget\_%'" );
+		$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_yuzo_query\_%'" );
+		$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_timeout_yuzo_view\_%'" );
+		$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_timeout_yuzo_widget\_%'" );
+		$wpdb->query(  "DELETE FROM $wpdb->options WHERE option_name LIKE '%\_transient_timeout_yuzo_query\_%'" );
 
     }
 
@@ -2021,9 +2311,9 @@ function ajax_delete_yuzo_data_admin() {
 
 
 if( is_admin() ){
-	if( isset($_GET["page"]) && $_GET["page"] == "yuzo-related-post"  ){
-		yuzo_redirect_welcome_upgrade();    
-	}
+	//if( isset($_GET["page"]) && $_GET["page"] == "yuzo-related-post"  ){
+		yuzo_redirect_welcome_upgrade();
+	//}
 }
 
 

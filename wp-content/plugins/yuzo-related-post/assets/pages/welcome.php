@@ -1,13 +1,6 @@
 <?php 
 global $YUZO_CORE;
 ?>
-<!-- used for the media query -->
-<meta name="viewport" content="width=device-width" />
-<link rel="stylesheet" type="text/css" href="<?php echo $YUZO_CORE->parameter["url_framework"] ?>/assets/css/animate.css" />
-<link rel="stylesheet" type="text/css" href="<?php echo $YUZO_CORE->parameter["url_framework"] ?>/assets/css/font-awesome.css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script type='text/javascript' src='<?php echo $YUZO_CORE->parameter["url_framework"] ?>/assets/js/wow.min.js' ></script>
-
 <div class="page--yuzo__welcome">
     <div class="page--header wow fadeIn animated" data-wow-delay="0.2s">
         <div class="page--header__a">
@@ -21,8 +14,9 @@ global $YUZO_CORE;
     </div>
     <div class="page--body">
         <h2 class="nav-tab-wrapper">
-            <a class='nav-tab <?php if( !isset($_GET['tab']) || !$_GET['tab'] ){ echo "nav-tab-active"; } ?>' href='<?php echo admin_url( 'options-general.php?page=yuzo-welcome' ); ?>'>Welcome</a>
-            <a class='nav-tab <?php if( isset($_GET['tab']) && $_GET['tab'] == 'new' ){ echo "nav-tab-active"; } ?>' href='<?php echo admin_url( 'options-general.php?page=yuzo-welcome&tab=new' ); ?>'>New 4.8</a>
+            <a class='nav-tab <?php if( !isset($_GET['tab']) || $_GET['tab'] == 'new' ){ echo "nav-tab-active"; } ?>' href='<?php echo admin_url( 'options-general.php?page=yuzo-welcome&tab=new' ); ?>'>New 5.12</a>
+            <a class='nav-tab <?php if( isset($_GET['tab']) &&  $_GET['tab'] == 'faq' ){ echo "nav-tab-active"; } ?>' href='<?php echo admin_url( 'options-general.php?page=yuzo-welcome&tab=faq' ); ?>'>FAQ</a>
+            <a class='nav-tab <?php if( isset($_GET['tab']) &&  $_GET['tab'] == 'welcome' ){ echo "nav-tab-active"; } ?>' href='<?php echo admin_url( 'options-general.php?page=yuzo-welcome&tab=welcome' ); ?>'>Welcome</a>
             <a class='nav-tab <?php if( isset($_GET['tab']) && $_GET['tab'] == 'compare' ){ echo "nav-tab-active"; } ?>' href='<?php echo admin_url( 'options-general.php?page=yuzo-welcome&tab=compare' ); ?>'>Compare (VS)</a>
             <a class='nav-tab  <?php if( isset($_GET['tab']) && $_GET['tab'] == 'ilenframework' ){ echo "nav-tab-active"; } ?>' href='<?php echo admin_url( 'options-general.php?page=yuzo-welcome&tab=ilenframework' ); ?>'>iLenFramework</a>
             <a class='nav-tab <?php if( isset($_GET['tab']) && $_GET['tab'] == 'support' ){ echo "nav-tab-active"; } ?>' href='<?php echo admin_url( 'options-general.php?page=yuzo-welcome&tab=support' ); ?>'>Happy Support</a>
@@ -37,7 +31,7 @@ global $YUZO_CORE;
         </div>-->
 
 
-        <?php if( !isset($_GET['tab']) || !$_GET['tab'] ): ?>
+        <?php if( isset($_GET['tab']) && $_GET['tab'] =='welcome' ): ?>
 
         <h2 style="text-align:center;margin:30px 0;" class="">Tools increases your productivity in <strong>Metabox</strong></h2>
 
@@ -134,20 +128,31 @@ global $YUZO_CORE;
             </div>
         </div>
 
-        <?php elseif( isset($_GET['tab']) && $_GET['tab']=='new' ): ?>
+        <?php elseif( !isset($_GET['tab']) || $_GET['tab']=='new' ): ?>
         <div class="page--yuzo__new">
             <div class="changelog">
                 <article>
                     <strong>CHANGELOG</strong>
-                    <h4>V4.8 - 04. April 2015</h4>
+                    <h4>V5.12 - 17 April 2016</h4>
                     <ul class="changelog_list">
-                        <li class="add"><div class="two">Add</div>Add Theme based in css!</li>
-                        <li class="add"><div class="two">Add</div>Add class in elements html of Yuzo for manipulate css</li>
-                        <li class="fixed"><div class="two">Fix</div>Fixed <code>admin.css</code> in class</li>
-                        <li class="fixed"><div class="two">Fix</div>Modify css in core framework</li>
-                        <li class="fixed"><div class="two">Fix</div>Modify core class in editor</li>
-                        <li class="fixed"><div class="two">Fix</div>Code js in yuzo functions</li>
+                        <li class="add"><div class="two">Add</div>Disabled Metabox, if you have many problems with this. (This option requires PHP 5.3+ stable)</li>
+                        <li class="improve"><div class="two">Improve</div>Cleans 'transient' for each time data is saved: With a few problems to update data cache is avoided.</li>
+                        <li class="improve"><div class="two">Improve</div>Update core <code>iLenFramework 2.7.9</code></li>
+                        <li class="improve"><div class="two">Improve</div>Shown add up to 50 related post</li>
+                        <li class="fixed"><div class="two">Fix</div>Remove general css per conflict with other plugins</li>
+                        <li class="fixed"><div class="two">Fix</div>When the counter is disabled in the administrator, it disappeared into Metaboox, this was rectified.</li>
+                        <li class="fixed"><div class="two">Fix</div>Remove functions conflict in utils.php</li>
+                        <li class="fixed"><div class="two">Fix</div> Sometimes the widget not show well within the administration panel, javascript errors showed, this was corrected.</li>
                     </ul>
+                    <!--<h4>V5.10 - 18 October 2015</h4>
+                    <ul class="changelog_list">
+                        <li class="add"><div class="two">Add</div>Excluding related categories: If you enable this option, the categories you chose will not be displayed and that they are related to it</li>
+                        <li class="improve"><div class="two">Improve</div><code>IF_removeShortCode()</code> was improved because it was not working quite right</li>
+                        <li class="improve"><div class="two">Improve</div>Widget update code in 'related based'</li>
+                        <li class="fixed"><div class="two">Fix</div>admin.js in block desactive views</li>
+                        <li class="fixed"><div class="two">Fix</div>remove <code>addslashes()</code> for custom css</li>
+                        <li class="fixed"><div class="two">Fix</div>'Categories on which related thumbnails will appear' no worked correctly</li>
+                    </ul>-->
                     <!--<h4>V4.5 - 31. Mar 2015</h4>
                     <ul class="changelog_list">
                         <li class="add"><div class="two">Add</div>The 'shortcode' is added to display related that way</li>
@@ -160,8 +165,37 @@ global $YUZO_CORE;
                     </ul>-->
                 </article>
             </div>
-            <div class="col-group wow flipInX animated" data-wow-duration="0.8s" data-wow-delay="0.2s" style="width:680px;float:left;">
-                <div>
+            <div class="col-group wow flipInX animated" data-wow-duration="0.8s" data-wow-delay="0.2s" style="width:590px;float:left;">
+                <table>
+                    <tr>
+                        <td width="25%" style="vertical-align: top;"><img src="http://support.ilentheme.com/wp-content/uploads/2015/11/mio-.png" /></td>
+                        <td width="75%" style="vertical-align: top;">
+                            <div style="margin-left: 25px">
+                                <!--<h3 style="margin-top: 0;"><i>The beauty of the Invention</i></h3>-->
+                                <blockquote class="my-wp-blockquote" style="position: relative;font-size: 2.1em;line-height: 1.2em;color: #AAA;margin-left: 0;font-style: italic;font-family: serifgothiceflight;margin-top: 0;">
+                                    I do not think there is any more intense thrill for an inventor to see some of his creations running. That excitement makes you forget to eat, sleep, all
+                                    <cite class="my-wp-blockquote-cite" style="position: relative;top: 11px;font-family: 'Noto Sans', sans-serif;font-size: 0.6em;font-weight: 700;color: #d3d3cf;float: right;">iLen</cite>
+                                </blockquote>
+                                <style>
+.my-wp-blockquote:after {
+    content: '\201D';
+    position: absolute;
+    top: 0.28em;
+    right: 0;
+    font-size: 6em;
+    font-style: italic;
+    color: #e7e6e4;
+    z-index: -1;
+}
+.my-wp-blockquote-cite:before {
+    content: '\2015';
+}
+                                </style>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <!--<div>
                     <h2>The fastest</h2>
                     <p>Yuzo is considered one of the faster and less load on the PC.</p>
                 </div>
@@ -196,7 +230,7 @@ global $YUZO_CORE;
                 <div>
                     <h2>Productivity</h2>
                     <p>All tools and options needed to take advantage of the plugin.</p>
-                </div>
+                </div>-->
 
 
             </div>
@@ -224,6 +258,13 @@ global $YUZO_CORE;
                     <td class="feature_plugin">PHP function</td>
                     <td><i class="fa fa-check"></i></td>
                     <td><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                </tr>
+                <tr>
+                    <td class="feature_plugin">Shortcodes</td>
+                    <td><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-times"></i></td>
                     <td><i class="fa fa-check"></i></td>
                     <td><i class="fa fa-check"></i></td>
                 </tr>
@@ -397,6 +438,23 @@ global $YUZO_CORE;
 
         </div>
 
+    <?php elseif( isset($_GET['tab']) && $_GET['tab']=='faq' ): ?>
+
+        <div class="page--yuzo__support">
+            
+            <h2>Yuzo myths:</h2>
+            <h3>1) What is new or outstanding Yuzo 5.0?</h3>
+            <p>It's smarter than before, his way of looking for results and related algorithm for this more refined than ever.</p>
+            <h3>2) Do you have so many options and this causes its slowness?</h3>
+            <p>No, Yuzo can have 3 times more choices you have and this will not cause any delay in loading speed thanks to iLenFrameWork dedicated to make the plugin is as fast as possible. Yuzo is created so that all your options equals 1 single query database which makes it optimal as unlike other available plugins.</p>
+            <h3>3) If I turn off the option 'transient' the plugin will have delays of speed?</h3>
+            <p>Not necessarily, this option is for people who do not use cache plugin and want to keep their data in real-time Transient Yuzo the help that they do not consume any delay on their servers, but if you are using any plugin CACHE is better than deactivate this option and you are not going to need.</p>
+            <h3>4) Yuzo 5.0 (FREE) is the future?</h3>
+            <p>No, Yuzo 5.0 has speed improvements and reorganization of functions to do inecesarios processes. The future is Yuzo PRO that will soon be on the market (we're working on it).</p>
+            <h3>5) Yuzo remain free?</h3>
+            <p>Yuzo have its free version will always be available, but you can not die without knowing the new version PRO. (<a href="http://support.ilentheme.com/forums/topic/yuzo-pro-before-long/" target="_blank">very soon</a>).</p>
+        </div>
+
         <?php endif; ?>
 
 
@@ -419,8 +477,8 @@ jQuery(document).ready(function($){
     });
 
    
-
+    new WOW().init();
 
 });
- new WOW().init();
+
 </script>

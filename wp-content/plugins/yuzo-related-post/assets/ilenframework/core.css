@@ -277,12 +277,14 @@ Author URI: http://ilentheme.com
 }
 
 .ilentheme-options .background_complete .upload .preview{
-  width: 100%;
-  min-height: 10px;
-  border:1px dotted rgb(179, 179, 179);
-  margin: 10px 0;
-  height: 20px;
+    width: 100%;
+    min-height: 10px;
+    border:1px dotted rgb(179, 179, 179);
+    margin: 10px 0;
+    height: 20px;
+    position: relative; 
 }
+.ilentheme-options .background_complete .upload .preview::before {}
 .ilentheme-options .background_complete .upload .preview img{
   max-width: 100%!important;
   margin: 0;
@@ -734,24 +736,24 @@ Author URI: http://ilentheme.com
   display: none;
 }
 @-moz-document url-prefix() {
-  .ilentheme-options .row .b select {
-    -moz-appearance: none;
-    text-indent: 0.01px;
-    text-overflow: "";
-    -moz-appearance: radio-container;
-    width: 115%!important;
-  }
+    .ilentheme-options .row .b select {
+        -moz-appearance: none;
+        text-indent: 0.01px;
+        text-overflow: "";
+        -moz-appearance: radio-container;
+        width: 115%!important;
+    }
 }
 
 /**
  * =Typography
  */
 @font-face {
-  font-family: 'FontAwesome';
-  src: url('assets/css/fonts/fontawesome/fontawesome-webfont.eot?v=4.0.3');
-  src: url('assets/css/fonts/fontawesome/fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), url('assets/css/fonts/fontawesome/fontawesome-webfont.woff?v=4.0.3') format('woff'), url('assets/css/fonts/fontawesome/fontawesome-webfont.ttf?v=4.0.3') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'FontAwesome';
+    src: url('assets/css/fonts/fontawesome/fontawesome-webfont.eot?v=4.0.3');
+    src: url('assets/css/fonts/fontawesome/fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), url('assets/css/fonts/fontawesome/fontawesome-webfont.woff?v=4.0.3') format('woff'), url('assets/css/fonts/fontawesome/fontawesome-webfont.ttf?v=4.0.3') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 /*@font-face {
@@ -764,9 +766,6 @@ Author URI: http://ilentheme.com
   font-weight: normal;
   font-style: normal;
 }*/
-
-
-
 
 
 
@@ -1488,42 +1487,77 @@ Author URI: http://ilentheme.com
 }
 
 .ilenwidget-options  .ilenwidget-accordion .iaccordion-header {
-  background: #EEEEEE;
-  border: 0;
-  padding: 12px 10px;
-  font-size: 1.1em;
-  color: rgb(116, 116, 116);
-  font-family: arial;
-  /*border-bottom: 1px solid rgb(226, 226, 226);*/
-  border-left: 2px solid rgb(225, 225, 225);
-  cursor: pointer;
-  clear: both;
+    background: #EEEEEE;
+    border: 0;
+    padding: 12px 10px;
+    font-size: 1.1em;
+    color: rgb(116, 116, 116);
+    font-family: arial;
+    /*border-bottom: 1px solid rgb(226, 226, 226);*/
+    border-left: 2px solid rgb(225, 225, 225);
+    cursor: pointer;
+    clear: both;
 }
 
 .ilenwidget-options  .ilenwidget-accordion .iaccordion-header.active{
-  background: #86A4C0;
-  border-left: 0;
-  /*border-bottom: 3px solid #BDC7D0;*/
-  /*box-shadow: 0px 1px 0px  rgba(134,164,192,.5);*/
-  font-weight: bold;
-  /* border-top: 1px solid rgb(238, 238, 238); */
-  color: #fff;
+    background: #86A4C0;
+    border-left: 0;
+    /*border-bottom: 3px solid #BDC7D0;*/
+    /*box-shadow: 0px 1px 0px  rgba(134,164,192,.5);*/
+    font-weight: bold;
+    /* border-top: 1px solid rgb(238, 238, 238); */
+    color: #fff;
 }
 .ilenwidget-options .ilenwidget-accordion .iaccordion-content {
-  display: none;
-  padding: 20px;
-  background: #ffffff;
-  /*border: 1px solid #cccccc;*/
-  border-top: 0;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  width: 100%;
-  float: left;
+    display: none;
+    padding: 20px;
+    background: #ffffff;
+    /*border: 1px solid #cccccc;*/
+    border-top: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    float: left;
 }
-
-
-
+.ilenwidget-more--button{
+    background: #EAEAEA;
+    color: #8A8A8A;
+    padding: 0px 28px;
+    box-shadow: 0px 1px 1px #C5C5C5;
+    cursor: pointer;
+    margin-bottom: 10px;
+    position: relative;
+}
+.ilenwidget-more--button:after{
+    font-family: "FontAwesome";
+    content:'\f067';
+    position:absolute;
+    left: 10px;
+    top: 2px;
+}
+.ilenwidget-more--button.active_ilen_widget_more:after{
+    font-family: "FontAwesome";
+    content:'\f068';
+}
+.ilenwidget-more .widget_body-more{
+    display:none;
+}
+.ilenwidget-more .widget_body-more.active_ilen_widget_more{
+    display:block;
+}
+.ilenwidget-more header{
+    background: #F9F9F9;
+    position: relative;
+    top: -10px;
+    font-style: italic;
+    color: #A0A0A0;
+}
+.ilenwidget-more .row .a .help{
+    display: inline-block;
+    margin-left: 20px;
+    color: #CECECE;
+}
 
 
 
@@ -1715,20 +1749,6 @@ Author URI: http://ilentheme.com
 
 
 
-/* Basic */
-.right{
-  float: right;
-}
-.left{
-  float: left;
-}
-.clearfix{
-  clear: both;
-  display: block;
-}
-.padding_left_0{
-  padding-left: 0!important;
-}
 
 
 
@@ -1983,37 +2003,49 @@ html .ilenplugin-options input[type="button"],
 
 }
 .popover.left > .arrow{
-  left: initial;
+    left: initial;
 }
 
 .ilenplugin-options .btn-group [class^="btn-"] {
-  color: #4D4D4D!important;
+    color: #4D4D4D!important;
 }
 
 .ilenplugin-options .input-group .date input[type=text],
 .ilenplugin-options .row .input-group input[type=text]{
-  width: 100%!important;
-  margin-left: 2px;
+    width: 100%;
+    margin-left: 2px;
 }
 .ilenplugin-options .picker-switch a.btn{
-  padding: 0!important;
+    padding: 0!important;
 }
 .ilenplugin-options .ilen-page-content .btn:hover{
-  background: inherit;
+    background: inherit;
 }
 .ilenplugin-options .flag-style{
-  display: inline-block;
-  width: 16px;
-  height: 11px;
+    display: inline-block;
+    width: 16px;
+    height: 11px;
 }
+/*
+@link http://codepen.io/jeffballweg/pen/XJKwvp
+*/
+.ilenplugin-options .text_emphasis{
+    background: -webkit-linear-gradient(rgba(227, 221, 36, 0.15), rgba(227, 221, 36, 0.6), rgba(196, 191, 22, 0.6), rgba(227, 221, 36, 0.24));
+    background: linear-gradient(rgba(227, 221, 36, 0.15), rgba(227, 221, 36, 0.6), rgba(196, 191, 22, 0.6), rgba(227, 221, 36, 0.24));
+    border-right: solid 0.5em rgba(196, 191, 22, 0.15);
+    border-left: solid 0.5em rgba(227, 221, 36, 0.3);
+    text-decoration: none;
 
-
-
-
-/* Other class */
-.stuffbox .handlediv{
-  height: 8px;
+    padding: 0.3em 0em 0.2em 0em;
+    margin: 0.3em -0.5em 0.3em -0.5em;
+    border-radius: 50% 3em 50% 3em;
+    color: rgba(0, 0, 0, 0.7);
+    -webkit-box-decoration-break: clone;
+    -o-box-decoration-break: clone;
+    box-decoration-break: clone;
 }
-.stuffbox .hndle{
-  padding-top: 0!important;
+.ilenplugin-options .text_emphasis.custom{
+    padding: 1.2em 0em 0.2em 0em;
+    margin: 0.2em -0.8em 0.3em -0.5em;
+    border-radius: 50% 8em 50% 3em;
 }

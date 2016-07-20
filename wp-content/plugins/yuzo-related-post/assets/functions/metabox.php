@@ -9,8 +9,8 @@ class my_meta_yuzo{
     var $ME             = null;
 
     public function __construct(){
- 
-        global $post_type,$post;   
+            
+            global $post_type,$post;   
 
             // always variables
             global $IF;

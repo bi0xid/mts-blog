@@ -1,25 +1,25 @@
-﻿=== Plugin Name ===
+=== Plugin Name ===
 Contributors: iLenStudio
-Plugin Name: Yuzo  ̵ ̵ ̵  Related Posts
+Plugin Name: Yuzo ̵- Related Posts
 Plugin URI: https://wordpress.org/support/plugin/yuzo-related-post
-Tags: admin, related,related posts,related content,related post, post, sidebar, widget , wordpress related post, related page, best plugins, content,associate page, associate post, filters, image, images, terms
+Tags: popular posts, related posts,related content,related post, last post, most views, widget,related page,content,associate page, associate post
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MSRAUBMB5BZFU
 Author URI: http://ilentheme.com
 Author: iLen
 Requires at least: 4.0
-Tested up to: 4.2.3
-Stable tag: 4.9.9.6
-Version: 4.9.9.8
+Tested up to: 4.5
+Stable tag: 5.12.45
+Version: 5.12.45
 License: GPLv2 or later
 
-The first plugin that you must install on your wordpress site. All the best websites use Yuzo.
+The first plugin that you must install on your wordpress. All the best websites use Yuzo. (Tested on site with more than 1 million visitors per day)
 == Description ==
 <blockquote>
-  <h3>★ The best WordPress plugin 2015 ★</h3><p>&nbsp;</p>
+  <h3>★ The best WordPress plugin 2015 ★</h3>
+  Support only <a href="http://support.ilentheme.com" target="_blank">HERE</a><br />
+  <p>Yuzo only works with PHP 5.3+ or higher</p>
 </blockquote>
-<blockquote>
-  <p>Support only <a href="http://support.ilentheme.com" target="_blank">HERE</a></p>
-</blockquote>
+
 <h4>Minimalist, productive and Fast..!</h4>
 Yuzo is intended to show related post plugin as accurate as possible, also has multiple features with more customization options +60 much as structure as design.
 Also in this new version features a super widget to display related or the best post your wordpress blog. This fast to use and configure intuitive and the best thing is free.
@@ -64,6 +64,155 @@ Gives shape and life to your post with 'Yuzo related post' ;)
 
 
 == Changelog ==
+= 5.12.45 =
+* Fixed: Notice message in wp-admin
+= 5.12.44 =
+* Fixed: When it 1 related post manually, not completely exited the number of related show
+* Improve: No records the hit counter to the cache 'fastestcache' plugin I contacted the author and could add validation so that you can have ajax, is now supported
+* Minor Fixed in <code>core.php</code>
+= 5.12.39 =
+* Remove google fonts in admin, that are not using all 
+= 5.12.38 =
+* Add: Options 'Full Rectangle' in Image type.
+* Improve: Update core.
+= 5.12.37 =
+* Fixed: major order <code>admin_head,admin_footer,activated_plugin</code>.
+* Fixed: Minor corrections3.
+= 5.12.35 =
+* Show: It presents characteristics of Yuzo Pro.
+* Fixed: Minor corrections2.
+= 5.12.34 =
+* Fixed: The image did not set rectagular.
+= 5.12.33 =
+* Fixed: When manually add the post in the METABOX not synchronized with the number of post I had to show, he showed the number of post but the manuals.
+* Fixed: The thumbnail image showing a border within the image is improved, this edge was not even realtive, but now it is.
+* Fixed: Sometimes the widget not show well within the administration panel, javascript errors showed, this was corrected.
+= 5.12.32 =
+* Fixed: Undefined variable in ajax process
+= 5.12.31 =
+* Fixed: Metabox manual post. Had problem, a post that had no relationship last showed.
+* Minor Fixed
+* Add new tags
+= 5.12.30 =
+* Improve: Remove the category when the process is not required
+= 5.12.25 =
+* Fixed: Comment anonymous functions in PHP do not fuck all versions
+= 5.12.24 =
+* Update core <code>iLenFramework 2.7.9</code> (NEW)
+* Fixed: Clear code js
+= 5.12.23 =
+<blockquote>
+<h3>Widget</h3>
+<p>Small improvements were made in the plugin, soon the PRO version will have a more powerful and complete widget with the highest standards demanded by users.
+</p></blockquote>
+= 5.12.22 =
+* Fixed: Remove functions conflict in utils.php
+= 5.12.21 =
+* Improve: Improvements in the widget to display text or extracts content
+= 5.12.20 =
+* Fixed: The widget disappears, but now is ready. It was an odd mistake but already active again.
+= 5.12.19 =
+* Update core <code>iLenFramework 2.7.9</code>
+= 5.12.18 =
+* Improve: Add class and tag <code>< span></code> in shortcode when show 'views'
+* Improve: Shown add up to 50 related post
+= 5.12.17 =
+* Update core <code>iLenFramework 2.7.8</code>
+* Minor fixed
+= 5.12.16 =
+* Add: Disabled Metabox, if you have many problems with this. (This option requires PHP 5.3+ stable)
+= 5.12.15 =
+* Fixed: When you are entering a post manually this is not the correct extract showed.
+* Fixed: When the counter is disabled in the administrator, it disappeared into Metaboox, this was rectified.
+= 5.12.13 =
+* New recommendation for <strong>Transient</strong> options.
+* Add: option 'Title position' Place the title above or below the image (Only Horizontal style)
+* Improve: Widget code improved to a 'Notice' that appeared
+* Fixed: Remove general css per conflict with other plugins
+* Update core <code>iLenFramework 2.7.6</code>
+= 5.12.10 =
+* Improve: Cleans 'transient' for each time data is saved: With a few problems to update data cache is avoided.
+* Fixed: style tag out div tag
+* Fixed: style scope for class empty
+* Fixed: <code>admin.css</code> update code css
+* Fixed: <code>readme.txt</code> update text in file
+= 5.12.03 =
+* Improve: <code>welcome.php</code> It was corrected, he had js and css wrong statements.
+* Improve: <code>readme.txt</code> Geo.php credits the library was placed and because this Yuzo admitted.
+= 5.12.02 =
+* Remove all musical presentation that wing does not like people.
+= 5.12.01 =
+* Control version
+= 5.1.1 =
+* Fixed: variable no defined
+= 5.11 =
+* Update core <code>iLenFramework 2.7.5</code>: Fixed fetch ty post component
+= 5.10 =
+* New: Excluding related categories: If you enable this option, the categories you chose will not be displayed and that they are related to it.
+* Improve: IF_removeShortCode() was improved because it was not working quite right
+* Improve: Widget update code in 'related based'
+* Fixed: admin.js in block desactive views
+* Fixed: remove addslashes() for custom css
+* Fixed: 'Categories on which related thumbnails will appear' no worked correctly
+= 5.08 =
+* Fixed: Warning: array_diff(): Argument #1 is not an array in /home1/redladyb/public_html/wp-content/plugins/yuzo-related-post/yuzo_related_post.php on line 284
+= 5.07 =
+* Fixed: Warning implode
+* Fixed: Tag no realted
+= 5.06 =
+* Add: Welcome add tab 'FAQ'
+* Improve: Change default value 'off' the option transient for security
+* Improve: Orders in processes and functions, with this Yuzo many processes do not need to arrive at an answer that 'related' show. The main process became more intelligent.
+* Fixed: When a post had 2 or more categories and one of them were excluded, this post was not shown. But it should be shown because if I had another category that was bound.
+= 4.9.23 =
+* Fixed: If there was no tag in this post is showing random, this was corrected
+= 4.9.22 =
+* Improve: ID was added to the widget as it had not yet.
+= 4.9.21 =
+* Update core <code>iLenFramework 2.7.4</code>
+= 4.9.20 =
+* Fixed: Taxonomies was repeating the same current post
+= 4.9.19 =
+* Update core <code>iLenFramework 2.7.3</code> (NEW)
+= 4.9.18 =
+* Update core <code>iLenFramework 2.7.3</code>
+= 4.9.17 =
+* Improve: When a post is unrelated to others, you can use the 'Include post' within the METABOX, this allows you to add post realcionados manually when there is no relationship in your post. This part was corrected because you used to right. 
+* Update core <code>iLenFramework 2.7.2</code>
+= 4.9.16 =
+* Update core <code>iLenFramework 2.7.1</code>
+= 4.9.15 =
+* Update core <code>iLenFramework 2.7</code>
+= 4.9.14 =
+* Fixed: Remove code that show in debug mode
+= 4.9.13 =
+* Fixed: Yuzo widget and content error of radius border in image
+= 4.9.12 =
+* Fixed: Change css for style 2 in Yuzo
+= 4.9.11 =
+* Fixed: widget in title, add margin (top/bottom)
+* Fixed: widget default change 2 values
+= 4.9.10 =
+* Minor changes
+= 4.9.9.8.7 =
+* Add option  in widget 'Image type': You can choose from rectangle and square as your way of seeing
+* Minor fix in yuzo setting
+= 4.9.9.8.6 =
+* Fixed: <code>$this->WP_Widget</code> deprecated
+* Minor fixed
+= 4.9.9.8.5 =
+* Fixed: Text for image rectagle in options
+* Improve: so images are taken proportionally rectagular (%)
+= 4.9.9.8.4 =
+* Fixed: Widget transiert for various widget in same page
+* Fixed: Shortcode [yuzo_views] for page and template
+= 4.9.9.8.3 =
+* Minor changes in loop for problem with manual post
+= 4.9.9.8.2 =
+* Fix: Widget option 'most views'
+* Fix: Css widget
+= 4.9.9.8.1 =
+* Minor changes
 = 4.9.9.8 =
 * Add widget option 'Text center': Place your title text centered
 = 4.9.9.7 =
@@ -511,6 +660,16 @@ If not well visualized Related Post Yuzo possibly has a conflict with some other
 * Released
 
 
+
+== Credits ==
+--------------------- CSS Credits "Yuzo" ---------------------
+* core.css is licensed under the GPL-2.0+
+* All other CSS are licensed under the GNU General Public License v2 or later license
+- Copyright 2014 Wpbars, http://www.wpbars.com
+--------------------- Script Credits "Yuzo" ---------------------
+* The script geo.php (FREE online http://www.geoplugin.net) Help to get the location of the person but this is only used in different projects, Yuzo not use this process but is included as part of Yuzo if iLenFramework which depends on this.
+
+
 == Screenshots ==
 1. Yuzo related post plugin is inspired by these three geniuses
 2. The fastest of all
@@ -529,3 +688,4 @@ If not well visualized Related Post Yuzo possibly has a conflict with some other
 15. Other page example 14
 16. Other page example 15
 17. Other page example 16
+18. Other page example 17
