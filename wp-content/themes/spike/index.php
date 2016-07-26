@@ -92,7 +92,7 @@
                                             $iPostId = get_the_ID();
                                             
                                             $iFBLikes = (int)get_post_meta($iPostId, '_msp_fb_likes', true);
-                                            $iFBShares = (int)get_post_meta($iPostId, '_msp_shares_total', true);
+                                            $iFBShares = (int)get_post_meta($iPostId, '_msp_total_shares', true);
                                             $iTweeterShares = (int)get_post_meta(get_the_ID(), '_msp_tweets', true);
                                             $iGoogleShares = (int)get_post_meta(get_the_ID(), '_msp_google_plus_ones', true); 
                                             $iPinterestShares = (int)get_post_meta(get_the_ID(), 'pinterest_shares_count', true);
