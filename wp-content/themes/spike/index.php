@@ -491,7 +491,7 @@
                                                 </li>
                                             <?php endif; ?>
                                                 
-                                            <?php if(in_array('iStumbleShares', $aSharesArray)): ?>   
+                                            <?php /* if(in_array('iStumbleShares', $aSharesArray)): ?>   
                                                 <li class="essb_item1 essb_link_stumbleupon stumbleupon_custom_share">
                                                     <a href="http://www.stumbleupon.com/badge/?url=<?php echo $sPermaLink; ?>" 
                                                        rel="nofollow" 
@@ -502,7 +502,7 @@
                                                     </a>
                                                     <span class="stumbleCounter essb_counter1"><?php echo number_format($iStumbleShares, 0, ',', '.'); ?></span>
                                                 </li>
-                                            <?php endif; ?>
+                                            <?php endif; */ ?>
                                             
                                             <?php if(in_array('iDiggShares', $aSharesArray)): ?>
                                                 <li class="essb_item1 essb_link_digg digg_custom_share">
