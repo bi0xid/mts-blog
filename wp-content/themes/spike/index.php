@@ -381,7 +381,6 @@
 									<?php echo excerpt(53);?> 
 									<a class="pereadore" href="<?php the_permalink() ?>" title="<?php the_title(); ?>" rel="nofollow"><?php _e('...Read More','mythemeshop'); ?></a>
 								</div>
-                                <?php /*
 								<div class="home_meta_comment_social">									
 									<?php if($options['mts_social_buttons_home'] == '1') { ?>
 										<?php
@@ -522,7 +521,7 @@
                                             <?php if(in_array('iMailShares', $aSharesArray)): ?>    
                                                 <li class="essb_item1 essb_link_mail mail_custom_share">
                                                     <input type='hidden' value='<?php echo get_the_ID(); ?>' id='home_page_post_id' style="display: none; visibility: hidden;">
-                                                    <a href="mailto:?subject=Visit this site <?php echo $sSiteUrl; ?>&body=Hi, this may be intersting you: '<?php echo $sPostTitle; ?>'! This is the link: <?php echo $sPermaLink; ?>"
+                                                    <a href="mailto:?subject=Visit this site <?php echo $sSiteUrl; ?>&body=Hi, this may be interesting for you: '<?php echo $sPostTitle; ?>'! This is the link: <?php echo $sPermaLink; ?>"
                                                        rel="nofollow" 
                                                        title="Share this article with a friend (email)">
                                                         <span class='essb_icon'></span>
@@ -534,7 +533,6 @@
                                         </ul>
 									<?php } ?><!--Shareit-->
 								</div>	
-                                */ ?>
                                 <?php if($options['mts_social_buttons_home'] == '1') { ?>
                                     <div class="home_meta_comment_social get_social_counter_result" data-id="<?php echo get_the_ID(); ?>" id="get_social_counter_result_<?php echo get_the_ID(); ?>"></div>
                                 <?php } ?>
