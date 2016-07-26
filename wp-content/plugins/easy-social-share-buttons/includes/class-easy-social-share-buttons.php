@@ -109,7 +109,7 @@ class Easy_Social_Share_Buttons {
 		add_action( 'init', array( $this, 'load_localisation' ), 0 );
 
 		//Add post content filters
-		add_filter( 'the_content', array( $this, 'add_share_buttons_to_post' ));
+		add_filter( 'the_content', array( $this, 'add_share_buttons_to_post' ), 20 );
 		add_filter( 'the_content', array( $this, 'add_share_buttons_to_media' ));
 
 		// Set up ajax

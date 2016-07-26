@@ -431,7 +431,7 @@ function mts_tag_cloud() {
 }
 add_filter('wp_tag_cloud', 'mts_tag_cloud');
 
-add_filter('the_content', 'add_author_box_inside_post_content');
+add_filter('the_content', 'add_author_box_inside_post_content', 10);
 
 function add_author_box_inside_post_content($sContent = ''){
     if(!is_singular() || is_page()) return $sContent;
