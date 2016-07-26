@@ -409,13 +409,13 @@
                                             arsort($aSharesArray);
                                             $aSharesArray = array_slice($aSharesArray, 0, 4);
                                             
-                                            if(!in_array('iGoogleShares', array_keys($aSharesArray))){
-                                                $iLastElemnt = end($aSharesArray);
-                                                if(!$iLastElemnt){
-                                                    $aSharesArray = array_slice($aSharesArray, 0, 3);
-                                                    $aSharesArray['iGoogleShares'] = $iGoogleShares;
-                                                }
-                                            }
+                                            //if(!in_array('iGoogleShares', array_keys($aSharesArray))){
+                                            //    $iLastElemnt = end($aSharesArray);
+                                            //    if(!$iLastElemnt){
+                                            //        $aSharesArray = array_slice($aSharesArray, 0, 3);
+                                            //        $aSharesArray['iGoogleShares'] = $iGoogleShares;
+                                            //    }
+                                            //}
                                             
                                             $aSharesArray = array_keys($aSharesArray);                                        
                                             
