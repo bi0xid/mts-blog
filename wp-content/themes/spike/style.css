@@ -2143,7 +2143,7 @@ pre {
 article iframe.fb_iframe_widget_lift, .content .fb_iframe_widget_lift{
 	max-width: 600px !important;
 	z-index: 1000 !important;
-}.post-single-content{	float: none;	width: 100%;	max-width: 100%;}.rthumb{	width: auto;	margin-right: 20px;}
+}.post-single-content{	float: none;	width: 95%; margin-left:5%;	max-width: 100%;}.rthumb{	width: auto;	margin-right: 20px;}
 .single_post_right{	float: none;	width: 100%;}
 .single_post_right:after{	clear: both;	display: table;	content: "";}
 div#commentluv input#doluv{	width: auto;	margin-right: 10px;}
