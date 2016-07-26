@@ -389,8 +389,8 @@
                                             $sSiteUrl = get_site_url();
                                             $iPostId = get_the_ID();
                                             
-                                            $iFBLikes = (int)get_post_meta($iPostId, 'fblikecount_shares_count', true);
-                                            $iFBShares = (int)get_post_meta($iPostId, 'fbsharecount_shares_count', true);
+                                            $iFBLikes = (int)get_post_meta($iPostId, '_msp_fb_likes', true);
+                                            $iFBShares = (int)get_post_meta($iPostId, '_msp_shares_total', true);
                                             $iTweeterShares = (int)get_post_meta(get_the_ID(), 'twitter_shares_count', true);
                                             $iGoogleShares = (int)get_post_meta(get_the_ID(), 'google_shares_count', true); 
                                             $iPinterestShares = (int)get_post_meta(get_the_ID(), 'pinterest_shares_count', true);
