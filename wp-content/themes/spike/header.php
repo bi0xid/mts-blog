@@ -13,6 +13,7 @@
 	<![endif]-->
 	<?php wp_head(); ?>
 	<link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>" />
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 	<?php mts_head(); ?>
 	<meta name="p:domain_verify" content="2299c127dcf14a09af8856aae852cd5e"/>
 <style>.single_post a {
