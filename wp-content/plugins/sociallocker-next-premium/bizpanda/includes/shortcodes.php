@@ -17,9 +17,20 @@ class OPanda_LockerShortcode extends FactoryShortcodes320_Shortcode {
      * Defines what assets need to include.
      * The method is called separate from the Render method during shortcode registration.
      */
-    public function assets( $fromBody = false, $fromHook = false ) {
-        if ( is_admin() ) return;
-        OPanda_AssetsManager::requestAssets( $fromBody, $fromHook );
+    public function assets( $attrs = array(), $fromBody = false, $fromHook = false ) {
+        if ( is_admin() ) return false;
+
+        if ( is_array( $attrs) ) {
+            
+            foreach( $attrs as $attr ) {
+                $id = isset( $attr['id'] ) ? (int)$attr['id'] : $this->getDefaultId(); 
+                OPanda_AssetsManager::requestAssets( $id, $fromBody, $fromHook ); 
+            }
+
+            return true;
+        } else {
+            return false;
+        }
     }
     
     // -------------------------------------------------------------------------------------
@@ -42,8 +53,8 @@ if ( in_array( $sociallocker->license->type, array( 'free' ) ) ) {
         $id = isset( $attr['id'] ) ? (int)$attr['id'] : $this->getDefaultId();
         if ( !empty( $id ) ) $lockerMeta = get_post_meta($id, '');
         
-        if ( empty( $id ) || empty($lockerMeta) ) {
-            printf( __('<div><strong>[Opt-In Panda] The locker [id=%d] doesn\'t exist or the default lockers were deleted.</strong></div>', 'optinpanda'), $id );
+        if ( empty( $id ) || empty($lockerMeta) || empty($lockerMeta['opanda_item']) ) {
+            printf( __('<div><strong>[Locker] The locker [id=%d] doesn\'t exist or the default lockers were deleted.</strong></div>', 'bizpanda'), $id );
             return;
         }
         
@@ -51,6 +62,13 @@ if ( in_array( $sociallocker->license->type, array( 'free' ) ) ) {
         
         $content = $wp_embed->autoembed($content);
         $content = do_shortcode( $content );
+
+        // passcode
+        
+        if ( OPanda_AssetsManager::autoUnlock( $id ) ) {
+            echo $content;
+            return;
+        }
 
             // - RSS and Members
             // if it's a premium build, check premium features such 
@@ -123,6 +141,8 @@ if ( in_array( $sociallocker->license->type, array( 'free' ) ) ) {
             $lockData['options']['theme'] = $attr['theme'];    
         } 
         
+        $lockData['options']['lazy'] = opanda_get_option('lazy', false) ? true : false;  
+    
         $isAjax = false;
         $lockData['ajax'] = false;
         
@@ -132,28 +152,33 @@ if ( in_array( $sociallocker->license->type, array( 'free' ) ) ) {
             $contentHash = null;
 
             if (isset( $lockerMeta['opanda_ajax'] ) && $lockerMeta['opanda_ajax'][0] ) {
-                $isAjax = true;
+                if ( 'full' == OPanda_AssetsManager::getLockerOption($id, 'overlap', false, 'full') ) {
 
-                $ajaxContent = '<p>' . $content . '</p>';
-                $lockData['contentHash'] = $contentHash = md5( $ajaxContent );
-                $lockData['ajax'] = true;
-                
-                $metaKey = 'opanda_locker_content_hash_' . $contentHash;
+                    $isAjax = true;
 
-                if ( !isset( $lockerMeta[$metaKey] ) ) {
-                    add_post_meta($id, $metaKey, $ajaxContent, true);
+                    $ajaxContent = '<p>' . $content . '</p>';
+                    $lockData['contentHash'] = $contentHash = md5( $ajaxContent );
+                    $lockData['ajax'] = true;
+
+                    $metaKey = 'opanda_locker_content_hash_' . $contentHash;
+
+                    if ( !isset( $lockerMeta[$metaKey] ) ) {
+                        add_post_meta($id, $metaKey, $ajaxContent, true);
+                    }
                 }
             }
         
 
 
         $dynamicTheme = get_option('opanda_dynamic_theme', 0);
+        
+        $lockData['stats'] = get_option('opanda_tracking', false) ? true : false;
 
         $this->lockId = "onpLock" . rand(100000, 999999);
         $this->lockData = $lockData;
         
         $overlap = $lockData['options']['overlap']['mode'];
-        $hideContent = $overlap === 'full';
+        $hideContent = $overlap === 'full' || get_option('opanda_hide_content_on_loading', false);
 
         if ($isAjax) { ?>
             <div class="onp-locker-call" style="display: none;" data-lock-id="<?php echo $this->lockId ?>"></div>
@@ -167,9 +192,10 @@ if ( in_array( $sociallocker->license->type, array( 'free' ) ) ) {
         
 
         if ( $dynamicTheme ) { ?>
-            <div class="onp-optinpanda-params" style="display: none;">
+            <script type="text/bp-data" class="onp-optinpanda-params">
                 <?php echo json_encode( $lockData ) ?>
-            </div>
+            </script>
+            <?php  do_action('opanda_print_locker_assets', $this->lockData['lockerId'], $this->lockData, $this->lockId ); ?>
         <?php } else {
            add_action('wp_footer', array($this, 'wp_footer'), 1);
         }
@@ -180,31 +206,27 @@ if ( in_array( $sociallocker->license->type, array( 'free' ) ) ) {
         if ( !$dynamicTheme ) $this->printOptions();
     }
     
-    public function printOptions() { 
-
-        
+    public function printOptions() {    
     ?>
         <script>
             if ( !window.bizpanda ) window.bizpanda = {};
             if ( !window.bizpanda.lockerOptions ) window.bizpanda.lockerOptions = {};
             window.bizpanda.lockerOptions['<?php echo $this->lockId; ?>'] = <?php echo json_encode( $this->lockData ) ?>;
         </script>
-        <?php  do_action('opanda_print_locker_assets', $this->lockData['lockerId'], $this->lockData ); ?>
+        <?php  do_action('opanda_print_locker_assets', $this->lockData['lockerId'], $this->lockData, $this->lockId ); ?>
     <?php
     }
         
     // -------------------------------------------------------------------------------------
     // Shortcode Tracking
     // -------------------------------------------------------------------------------------
-
-    public $track = true;
-
+    
     /**
      * Defines whether the changes of post what includes shortcodes are tracked.
      * @var boolean 
      */
-    public $tracking = true;
-    
+    public $track = true;
+
     /**
      * The function that will be called when a post containing a current shortcode is changed. 
      * @param string $shortcode
@@ -212,11 +234,9 @@ if ( in_array( $sociallocker->license->type, array( 'free' ) ) ) {
      * @param string $content
      * @param integer $postId
      */
-    public function trackingCallback($shortcode, $attr, $content, $postId) { 
- 
-        $id = isset( $attr['id'] ) 
-            ? (int)$attr['id'] 
-            : get_option('onp_sl_default_locker_id');
+    public function onTrack($shortcode, $attr, $content, $postId) { 
+
+        $id = isset( $attr['id'] ) ? (int)$attr['id'] : $this->getDefaultId(); 
         
         $lockerMeta = get_post_meta($id, '');
         if (empty($lockerMeta)) return;

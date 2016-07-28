@@ -12,12 +12,12 @@
 /**
  * Returns a list of the lockers.
  */
-function opanda_get_lockers() {
+function opanda_ajax_get_lockers() {
     
     $lockers = get_posts(array(
         'post_type' => OPANDA_POST_TYPE,
         'meta_key' => 'opanda_item',
-        'meta_value' => opanda_get_panda_item_ids(),
+        'meta_value' => OPanda_Items::getAvailableNames(),
         'numberposts' => -1
     ));
         
@@ -25,7 +25,7 @@ function opanda_get_lockers() {
     foreach($lockers as $locker)
     {
         $itemType = get_post_meta( $locker->ID, 'opanda_item', true );
-        $item = opanda_get_item_type($itemType);
+        $item = OPanda_Items::getItem($itemType);
         
         $result[] = array(
             'id' => $locker->ID,
@@ -39,5 +39,5 @@ function opanda_get_lockers() {
     die();
 }
 
-add_action('wp_ajax_get_opanda_lockers', 'opanda_get_lockers');
+add_action('wp_ajax_get_opanda_lockers', 'opanda_ajax_get_lockers');
 

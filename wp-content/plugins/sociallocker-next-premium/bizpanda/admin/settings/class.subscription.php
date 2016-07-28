@@ -21,7 +21,7 @@ class OPanda_SubscriptionSettings extends OPanda_Settings  {
     public function init() {
 
         if ( isset( $_GET['opanda_aweber_disconnected'] )) {
-            $this->success = __('Your Aweber Account has been successfully disconnected.', 'optinpanda');
+            $this->success = __('Your Aweber Account has been successfully disconnected.', 'bizpanda');
         }
     }
     
@@ -51,169 +51,59 @@ class OPanda_SubscriptionSettings extends OPanda_Settings  {
             'type' => 'separator'
         );
         
-        $options[] = array(
-            'type' => 'dropdown',
-            'name' => 'subscription_service',
-            'way' => 'ddslick',
-            'width' => 400,
-            'data' => array(
-                
-                array(
-                    'value' => 'database',
-                    'title' => 'None',
-                    'hint' => sprintf( __('Emails of subscribers will be saved in the WP database.', 'optinpanda'), opanda_get_subscribers_url() )
-                ),
-                array(
-                    'value' => 'mailchimp',
-                    'title' => 'MailChimp',
-                    'hint' => sprintf( __('Adds subscribers to your MailChimp account.', 'optinpanda'), opanda_get_subscribers_url() ),
-                    'image' => OPTINPANDA_URL . '/plugin/admin/assets/img/mailing-services/mailchimp.png'
-                ),
-                array(
-                    'value' => 'aweber',
-                    'title' => 'Aweber',
-                    'hint' => sprintf( __('Adds subscribers to your Aweber account.', 'optinpanda'), opanda_get_subscribers_url() ),
-                    'image' => OPTINPANDA_URL . '/plugin/admin/assets/img/mailing-services/aweber.png'
-                ),
-                array(
-                    'value' => 'getresponse',
-                    'title' => 'GetResponse',
-                    'hint' => sprintf( __('Adds subscribers to your GetResponse account.', 'optinpanda'), opanda_get_subscribers_url() ),
-                    'image' => OPTINPANDA_URL . '/plugin/admin/assets/img/mailing-services/getresponse.png'
-                ),
-                array(
-                    'value' => 'mymail',
-                    'title' => 'MyMail',
-                    'hint' => sprintf( __('Adds subscribers to the plugin MyMail.', 'optinpanda'), opanda_get_subscribers_url() ),
-                    'image' => OPTINPANDA_URL . '/plugin/admin/assets/img/mailing-services/mymail.png'
-                ),
-                array(
-                    'value' => 'mailpoet',
-                    'title' => 'MailPoet',
-                    'hint' => sprintf( __('Adds subscribers to the plugin MailPoet.', 'optinpanda'), opanda_get_subscribers_url() ),
-                    'image' => OPTINPANDA_URL . '/plugin/admin/assets/img/mailing-services/mailpoet.png'
-                )
-            ),
-            'default' => 'none',
-            'title' => __('Mailing Service', 'optinpanda')
-        );
+        require_once OPANDA_BIZPANDA_DIR . '/admin/includes/subscriptions.php';
+        $serviceList = OPanda_SubscriptionServices::getSerivcesList();
         
-        $options[] = array(
-            'type'      => 'div',
-            'id'        => 'opanda-mailchimp-options',
-            'class'     => 'opanda-mail-service-options opanda-hidden',
-            'items'     => array(
-
-                array(
-                    'type' => 'separator'
-                ),
-                array(
-                    'type'      => 'textbox',
-                    'name'      => 'mailchimp_apikey',
-                    'after'     => sprintf( __( '<a href="%s" class="btn btn-default" target="_blank">Get API Key</a>', 'optinpanda' ), 'http://kb.mailchimp.com/accounts/management/about-api-keys#Finding-or-generating-your-API-key' ),
-                    'title'     => __( 'API Key', 'optinpanda' ),
-                    'hint'      => __( 'The API key of your MailChimp account.', 'optinpanda' ),
-                )
-            )
-        );
-                 
-        if( !$this->isAweberConnected()) {
+        // fix
+        $service =  get_option('opanda_subscription_service', 'database');
+        if ( $service == 'none' ) update_option('opanda_subscription_service', 'database');
+        
+        $listItems = array();
+        
+        foreach( $serviceList as $serviceName => $serviceInfo ) {
             
-            $options[] = array(
-                'type'      => 'div',
-                'id'        => 'opanda-aweber-options',
-                'class'     => 'opanda-mail-service-options opanda-hidden',
-                'items'     => array(
-
-                    array(
-                        'type' => 'separator'
-                    ),
-                    array(
-                        'type'      => 'html',
-                        'html'      => array($this, 'showAweberHtml')
-                    ),
-                    array(
-                        'type'      => 'textarea',
-                        'name'      => 'aweber_auth_code',
-                        'title'     => __( 'Authorization Code', 'optinpanda' ),
-                        'hint'      => __( 'The authorization code you will see after log in to your Aweber account.', 'optinpanda' )
-                    )
-                )
-            );    
-            
-        } else {
-            
-            $options[] = array(
-                'type'      => 'div',
-                'id'        => 'opanda-aweber-options',
-                'class'     => 'opanda-mail-service-options opanda-hidden',
-                'items'     => array(
-                    array(
-                        'type' => 'separator'
-                    ),
-                    array(
-                        'type'      => 'html',
-                        'html'      => array($this, 'showAweberHtml')
-                    )                    
-                )
+            $listItems[] = array(
+                'value' => $serviceName,
+                'title' => $serviceInfo['title'],
+                'hint' => isset( $serviceInfo['description'] ) ? $serviceInfo['description'] : null,
+                'image' => isset( $serviceInfo['image'] ) ? $serviceInfo['image'] : null,
+                'hover' => isset( $serviceInfo['hover'] ) ? $serviceInfo['hover'] : null             
             );
         }
         
         $options[] = array(
-            'type'      => 'div',
-            'id'        => 'opanda-getresponse-options',
-            'class'     => 'opanda-mail-service-options opanda-hidden',
-            'items'     => array(
-                
-                array(
-                    'type' => 'separator'
-                ),
-                array(
-                    'type'      => 'textbox',
-                    'name'      => 'getresponse_apikey',
-                    'title'     => __( 'API Key', 'optinpanda' ),
-                    'after'     => sprintf( __( '<a href="%s" class="btn btn-default" target="_blank">Get API Key</a>', 'optinpanda' ), 'http://support.getresponse.com/faq/where-i-find-api-key' ),
-                    'hint'      => __( 'The Twitter Consumer Secret of your Twitter App.', 'optinpanda' )
-                )
-            )
+            'type' => 'dropdown',
+            'name' => 'subscription_service',
+            'way' => 'ddslick',
+            'width' => 450,
+            'data' => $listItems,
+            'default' => 'none',
+            'title' => __('Mailing Service', 'bizpanda')
         );
         
-        $options[] = array(
-            'type'      => 'div',
-            'id'        => 'opanda-mymail-options',
-            'class'     => 'opanda-mail-service-options opanda-hidden',
-            'items'     => array(
-                
-       
-                array(
-                    'type' => 'html',
-                    'html' => array($this, 'showMyMailHtml')
-                ),
-                array(
-                    'type' => 'separator'
-                ),
-                array(
-                    'type'      => 'checkbox',
-                    'way'       => 'buttons',
-                    'name'      => 'mymail_redirect',
-                    'title'     => __( 'Redirect To Locker', 'optinpanda' ),
-                    'hint'      => sprintf( __( 'Set On, to redirect the user to the same page where the locker is located after clicking on the confirmation link.<br />If Off, the MyMail will redirect the user to the page specified in the option <a href="%s" target="_blank">Newsletter Homepage</a>.', 'optinpanda' ), admin_url('options-general.php?page=newsletter-settings&settings-updated=true#frontend') )
-                )
-            )
-        );
+        $options = apply_filters( 'opanda_subscription_services_options', $options, $this );
         
         $options[] = array(
-            'type'      => 'div',
-            'id'        => 'opanda-mailpoet-options',
-            'class'     => 'opanda-mail-service-options opanda-hidden',
-            'items'     => array(
-     
-                array(
-                    'type' => 'html',
-                    'html' => array($this, 'showMailPoetHtml')
-                )   
-            )
+            'type' => 'separator'
         );
+        
+        $options[] = array( 'type' => 'html', 'html' => array($this, 'showConfirmationMessageHeader') );
+               
+        $options[] = array(
+            'type' => 'textbox',
+            'name' => 'sender_email',
+            'title' => __('Sender Email', 'bizpanda'),
+            'hint' => __('Optional. A sender for confirmation emails.', 'bizpanda'),
+            'default' => get_bloginfo('admin_email')
+        );     
+        
+        $options[] = array(
+            'type' => 'textbox',
+            'name' => 'sender_name',
+            'title' => __('Sender Name', 'bizpanda'),
+            'hint' => __('Optional. A sender name for confirmation emails.', 'bizpanda'),
+            'default' => get_bloginfo('name')
+        );         
         
         $options[] = array(
             'type' => 'separator'
@@ -222,96 +112,17 @@ class OPanda_SubscriptionSettings extends OPanda_Settings  {
         return $options;
     }
     
-    public function showAweberHtml() {
-        
-        if( !$this->isAweberConnected()) {
+    public function showConfirmationMessageHeader() {
         ?>
-        
         <div class="form-group">
             <label class="col-sm-2 control-label"></label>
-            <div class="control-group controls col-sm-10 opanda-aweber-steps">
-                <p><?php _e( 'To connect your Aweber account:', 'optinpanda' ) ?></p>
-                <ul>
-                    <li><?php _e( '<span>1.</span> <a href="https://auth.aweber.com/1.0/oauth/authorize_app/92c68137" class="button" target="_blank">Click here</a> <span>to open the authorization page and log in.</span>', 'optinpanda' ) ?></li>
-                    <li><?php _e( '<span>2.</span> Copy and paste the authorization code in the field below.', 'optinpanda' ) ?></li>
-                </ul>
+            <div class="control-group controls col-sm-10">
+                <?php _e('If you are going to use Double Opt-In and send confirmation emails through Wordpress, fill the sender information below.', 'emaillocker' ) ?>
             </div>
         </div>
-        
-        <?php } else { ?>
-        
-        <div class="form-group">
-            <label class="col-sm-2 control-label"></label>
-            <div class="control-group controls col-sm-10 opanda-aweber-steps">
-                <p><strong><?php _e( 'Your Aweber Account is connected.', 'optinpanda' ) ?></strong></p>
-                <ul>
-                    <li><?php _e( '<a href="' . $this->getActionUrl('disconnectAweber') . '" class="button onp-sl-aweber-oauth-logout">Click here</a> <span>to disconnect.</span>', 'optinpanda' ) ?></li>                    
-                </ul>
-            </div>
-        </div>
-        
-        <?php  
-        }
-    }
-    
-    /**
-     * Shows HTML for MyMail.
-     * 
-     * @since 1.0.7
-     * @return void
-     */
-    public function showMyMailHtml() {
-        
-        if ( !defined('MYMAIL_VERSION') ) {
-            ?>
-            <div class="form-group">
-                <label class="col-sm-2 control-label"></label>
-                <div class="control-group controls col-sm-10">
-                    <p><strong><?php _e('The MyMail plugin is not found on your website. Emails will be added to the WP database only.', 'opanda') ?></strong></p>
-                </div>
-            </div>
-            <?php
-        } else {
-            ?>
-            <div class="form-group">
-                <label class="col-sm-2 control-label"></label>
-                <div class="control-group controls col-sm-10">
-                    <p><?php _e('You can set a list where the subscribers should be added in the settings of a particular locker.', 'opanda') ?></p>
-                </div>
-            </div>
         <?php
-        }
     }
-    
-    /**
-     * Shows HTML for MyMail.
-     * 
-     * @since 1.0.7
-     * @return void
-     */
-    public function showMailPoetHtml() {
-        
-        if ( !defined('WYSIJA') ) {
-            ?>
-            <div class="form-group">
-                <label class="col-sm-2 control-label"></label>
-                <div class="control-group controls col-sm-10">
-                    <p><strong><?php _e('The MailPoet plugin is not found on your website. Emails will be added to the WP database only.', 'opanda') ?></strong></p>
-                </div>
-            </div>
-            <?php
-        } else {
-            ?>
-            <div class="form-group">
-                <label class="col-sm-2 control-label"></label>
-                <div class="control-group controls col-sm-10">
-                    <p><?php _e('You can set a list where the subscribers should be added in the settings of a particular locker.', 'opanda') ?></p>
-                </div>
-            </div>
-        <?php
-        }
-    }
-    
+
     /**
      * Calls before saving the settings.
      * 
@@ -319,49 +130,9 @@ class OPanda_SubscriptionSettings extends OPanda_Settings  {
      * @return void
     */
     public function onSaving() {
-        
-        $service = isset( $_POST['opanda_subscription_service'] ) 
-                ? $_POST['opanda_subscription_service']:
-                null;
-        
-        $authCode = isset( $_POST['opanda_aweber_auth_code'] )
-                ? trim( $_POST['opanda_aweber_auth_code'] ):
-                null;
-        
-        unset( $_POST['opanda_aweber_auth_code'] );
-        
-        if ( 'aweber' !== $service || $this->isAweberConnected() ) return;
-        
-        // if the auth code is empty, show the error
-        
-        if ( empty( $authCode ) ) {
-            return $this->showError( __('Unable to connect to Aweber. The Authorization Code is empty.', 'optinpanda' ) );    
-        }
-        
-        // try to get credential via api, shows the error if the exception occurs
-
-        require_once OPANDA_BIZPANDA_DIR.'/admin/includes/subscriptions.php';
-        $aweber = OPanda_SubscriptionServices::getService('aweber');
-        
-        try {
-            $credential = $aweber->getCredentialUsingAuthorizeKey( $authCode ); 
-        } catch (Exception $ex) {
-            return $this->showError( $ex->getMessage() );
-        }
-
-        // saves the credential
-
-        if ( $credential && sizeof($credential) ) {
-            foreach( $credential as $key => $value ) {
-                update_option('opanda_aweber_'.$key, $value);
-            }
-        }
+        do_action('opanda_on_saving_subscription_settings', $this );
    }
-    
-    public function isAweberConnected() {
-         return get_option('opanda_aweber_consumer_key', false);
-    }   
-   
+
     public function disconnectAweberAction() {
 
         delete_option('opanda_aweber_consumer_key');

@@ -17,7 +17,24 @@ class OPanda_StatisticsPage extends OPanda_AdminPage  {
     public function __construct( $plugin ) {
         $this->id = 'stats';
         $this->menuPostType = OPANDA_POST_TYPE;
-        $this->menuTitle = __('Stats & Reports', 'optinpanda');
+        $this->menuTitle = __('Stats & Reports', 'bizpanda');
+        
+        // admin
+        /**
+        if( current_user_can( 'manage_options' ) ) {
+
+            $this->menuPostType = OPANDA_POST_TYPE;
+            $this->menuTitle = __('Stats & Reports', 'bizpanda');
+            
+        // editor
+        } elseif ( current_user_can( 'edit_posts' ) ) {
+            
+            $this->menuIcon = SOCIALLOCKER_URL . '/plugin/admin/assets/img/menu-icon.png';
+            $this->menuTitle = __('Stats & Reports', 'bizpanda');
+            
+        }
+         * 
+         */
         
         parent::__construct( $plugin );
     }
@@ -48,25 +65,29 @@ class OPanda_StatisticsPage extends OPanda_AdminPage  {
         $dropdownItems = get_posts(array(
             'post_type' => OPANDA_POST_TYPE,
             'meta_key' => 'opanda_item',
-            'meta_value' => opanda_get_panda_item_ids(),
+            'meta_value' => OPanda_Items::getAvailableNames(),
             'numberposts' => -1
         ));
 
         // current item
         
         $itemId = isset( $_GET['opanda_id'] ) ? $_GET['opanda_id'] : null;
-        if ( empty( $itemId ) ) $itemId = $dropdownItems[0]->ID;
+        if ( empty( $itemId ) ) {
+            $itemId = isset( $dropdownItems[0]->ID ) ? $dropdownItems[0]->ID : 0;
+        }
         
-        $itemName = opanda_get_item_type_by_id($itemId);
+        $itemName = OPanda_Items::getItemNameById($itemId);
         
+        $showPopup = ( count( $dropdownItems ) > 1 && !isset( $_GET['opanda_id'] ) );
+                
         $screens = apply_filters("opanda_item_type_stats_screens", array(), $itemName);
         $screens = apply_filters("opanda_{$itemName}_stats_screens", $screens);
         
         $item = get_post( $itemId );
-        if ( empty( $item) ) die( __('The item with ID = ' . $itemId . ' is not found.' , 'optinpanda' ) );
+        if ( empty( $item) ) die( __('The item with ID = ' . $itemId . ' is not found.' , 'bizpanda' ) );
         
         $itemTitle = empty( $item->post_title ) 
-            ? sprintf( __('(no titled, id=%s)', 'optinpanda'), $item->ID ) 
+            ? sprintf( __('(no titled, id=%s)', 'bizpanda'), $item->ID ) 
             : $item->post_title;
         
         // current item screen
@@ -74,7 +95,7 @@ class OPanda_StatisticsPage extends OPanda_AdminPage  {
         $currentScreenName = isset($_REQUEST['opanda_screen']) ? $_REQUEST['opanda_screen'] : 'summary'; 
         $currentScreen = $screens[$currentScreenName];
 
-        require_once(OPANDA_BIZPANDA_DIR . '/admin/includes/stats-screen.php');
+        require_once(OPANDA_BIZPANDA_DIR . '/admin/includes/classes/class.stats-screen.php');
         
         require_once $currentScreen['path'];
         
@@ -154,11 +175,11 @@ class OPanda_StatisticsPage extends OPanda_AdminPage  {
         ?>
         <div class="wrap">
 
-            <h2><?php _e('Stats & Reports', 'optinpanda') ?></h2>
+            <h2><?php _e('Stats & Reports', 'bizpanda') ?></h2>
 
             <div id="opanda-control-panel">
                 <div class="opanda-left" id="opanda-current-item">
-                    <span><?php _e('You are viewing reports for ', 'optinpanda') ?> <a href="<?php echo admin_url("post.php?post=" . $itemId . "&action=edit") ?>"><strong><?php echo $itemTitle ?></strong></a></span>
+                    <span><?php _e('You are viewing reports for ', 'bizpanda') ?> <a href="<?php echo admin_url("post.php?post=" . $itemId . "&action=edit") ?>"><strong><?php echo $itemTitle ?></strong></a></span>
                 </div>
                 
                 <form method="get" id="opanda-item-selector" class="opanda-right">
@@ -172,23 +193,23 @@ class OPanda_StatisticsPage extends OPanda_AdminPage  {
                         <?php foreach( $dropdownItems as $dropdownItem ) { ?>
                         <option value="<?php echo $dropdownItem->ID ?>" <?php if ( $dropdownItem->ID == $itemId ) { echo 'selected="selected"'; } ?>>
                             <?php if ( empty($dropdownItem->post_title) ) { ?>
-                                <?php printf( __('(no titled, id=%s)', 'optinpanda'), $dropdownItem->ID ) ?>
+                                <?php printf( __('(no titled, id=%s)', 'bizpanda'), $dropdownItem->ID ) ?>
                             <?php } else { ?>
                                 <?php echo $dropdownItem->post_title ?>
                             <?php } ?>
                         </option>
                         <?php } ?>
                     </select>
-                    <input class="button" type="submit" value="<?php _e('Select', 'optinpanda') ?>" />
+                    <input class="button" type="submit" value="<?php _e('Select', 'bizpanda') ?>" />
                 </form>
                 
             </div>
 
-            <div class="factory-bootstrap-328 factory-fontawesome-320">
+            <div class="factory-bootstrap-329 factory-fontawesome-320">
 
             <div class="onp-chart-hints">
                 <div class="onp-chart-hint onp-chart-hint-errors">
-                    <?php printf( __('This chart shows the count of times when the locker was not available to use due to the visitor installed the extensions like Avast or Adblock which may block social networks.<br />By default, the such visitors see the locker without social buttons but with the offer to disable the extensions. You can set another behaviour <a href="%s"><strong>here</strong></a>.', 'optinpanda'), admin_url('admin.php?page=common-settings-' . $this->plugin->pluginName . '&action=advanced') ) ?>
+                    <?php printf( __('This chart shows the count of times when the locker was not available to use due to the visitor installed the extensions like Avast or Adblock which may block social networks.<br />By default, the such visitors see the locker without social buttons but with the offer to disable the extensions. You can set another behaviour <a href="%s"><strong>here</strong></a>.', 'bizpanda'), admin_url('admin.php?page=common-settings-' . $this->plugin->pluginName . '&action=advanced') ) ?>
                 </div>
             </div>
             
@@ -215,12 +236,12 @@ class OPanda_StatisticsPage extends OPanda_AdminPage  {
                         <input type="hidden" name="opanda_screen" value="<?php echo $currentScreenName ?>" />
                         <input type="hidden" name="opanda_id" value="<?php echo $itemId ?>" />
                         
-                        <span class="onp-sl-range-label"><?php _e('Date range', 'optinpanda') ?>:</span>
+                        <span class="onp-sl-range-label"><?php _e('Date range', 'bizpanda') ?>:</span>
                         <input type="text" id="onp-sl-date-start" name="opanda_date_start" class="form-control" value="<?php echo $dateStart ?>" />
                         <input type="text" id="onp-sl-date-end" name="opanda_date_end" class="form-control" value="<?php echo $dateEnd ?>" />
                         
                         <a id="onp-sl-apply-dates" class="btn btn-default">
-                            <?php _e('Apply', 'optinpanda') ?>
+                            <?php _e('Apply', 'bizpanda') ?>
                         </a>
                     </div>
                 </div>
@@ -245,10 +266,10 @@ class OPanda_StatisticsPage extends OPanda_AdminPage  {
 
             <?php if ($postId) { ?>
                 <div class="alert alert-warning">
-                <?php echo sprintf(__('Data for the post: <strong>%s</strong> (<a href="%s">return back</a>)', 'optinpanda'),$post->post_title, add_query_arg( 'opanda_post_id', false, $urlBase ) ); ?>
+                <?php echo sprintf(__('Data for the post: <strong>%s</strong> (<a href="%s">return back</a>)', 'bizpanda'),$post->post_title, add_query_arg( 'opanda_post_id', false, $urlBase ) ); ?>
                 </div>
             <?php } else { ?>
-                <p><?php _e('Top-50 posts and pages where you put the locker, ordered by their performance:', 'optinpanda') ?></p>
+                <p><?php _e('Top-50 posts and pages where you put the locker, ordered by their performance:', 'bizpanda') ?></p>
             <?php } ?>
 
             <div id="opanda-data-table-wrap">
@@ -329,6 +350,31 @@ class OPanda_StatisticsPage extends OPanda_AdminPage  {
             <?php $chart->printData() ?>
           ];
         </script>
+        
+        <?php if ( $showPopup ) { ?>
+        
+            <!-- Locker Select Popup -->
+
+            <div id="opanda-locker-select-overlap" style="display: none;"></div>      
+            <div id="opanda-locker-select-popup" style="display: none;">
+                <strong><?php _e('Select Locker', 'bizpanda') ?></strong>
+                <p><?php _e('Please select a locker to view reports.', 'bizpanda') ?></p>
+
+                <select id="opanda-locker-select">
+                    <?php foreach( $dropdownItems as $dropdownItem ) { ?>
+                    <option value="<?php echo opanda_get_admin_url('stats', array('opanda_id' => $dropdownItem->ID)); ?>" <?php if ( $dropdownItem->ID == $itemId ) { echo 'selected="selected" data-default="true"'; } ?>>
+                        <?php if ( empty($dropdownItem->post_title) ) { ?>
+                            <?php printf( __('(no titled, id=%s)', 'bizpanda'), $dropdownItem->ID ) ?>
+                        <?php } else { ?>
+                            <?php echo $dropdownItem->post_title ?>
+                        <?php } ?>
+                    </option>
+                    <?php } ?>
+                </select>
+                <input class="button" type="submit" value="<?php _e('Select', 'bizpanda') ?>" id="opanda-locker-select-submit" />
+            </div>
+
+        <?php } ?>
     <?php 
     }
 }

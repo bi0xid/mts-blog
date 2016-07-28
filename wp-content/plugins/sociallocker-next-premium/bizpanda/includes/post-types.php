@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Opt-In Panda Type
  * Declaration for custom post type of Social Locler.
@@ -36,7 +37,7 @@ class OPanda_PandaItemType extends FactoryTypes322_Type {
      * @link http://codex.wordpress.org/Roles_and_Capabilities
      * @var array 
      */
-    public $capabilities = array('administrator', 'editor');
+    public $capabilities = array('administrator');
     
     public function useit() { global $sociallocker;
 if ( in_array( $sociallocker->license->type, array( 'paid','trial' ) ) ) {
@@ -49,8 +50,8 @@ if ( in_array( $sociallocker->license->type, array( 'paid','trial' ) ) ) {
     function __construct($plugin) {
         parent::__construct($plugin);
         
-        $this->pluralTitle = __('Lockers', 'optinpanda');
-        $this->singularTitle = __('Locker', 'optinpanda');
+        $this->pluralTitle = __('Lockers', 'bizpanda');
+        $this->singularTitle = __('Locker', 'bizpanda');
     }
     
     /**
@@ -69,18 +70,18 @@ if ( in_array( $sociallocker->license->type, array( 'paid','trial' ) ) ) {
         $labels = array(
             'singular_name' => $this->singularTitle,
             'name' => $this->pluralTitle,          
-            'all_items' => sprintf( __('All Lockers', 'optinpanda'), $pluralName ),
-            'add_new' => sprintf( __('+ New Locker', 'optinpanda'), $singularName ),
-            'add_new_item' => sprintf( __('Add new', 'optinpanda'), $singularName ),
-            'edit' => sprintf( __('Edit', 'optinpanda') ),
-            'edit_item' => sprintf( __('Edit Item', 'optinpanda'), $singularName ),
-            'new_item' => sprintf( __('New Item', 'optinpanda'), $singularName ),
+            'all_items' => sprintf( __('All Lockers', 'bizpanda'), $pluralName ),
+            'add_new' => sprintf( __('+ New Locker', 'bizpanda'), $singularName ),
+            'add_new_item' => sprintf( __('Add new', 'bizpanda'), $singularName ),
+            'edit' => sprintf( __('Edit', 'bizpanda') ),
+            'edit_item' => sprintf( __('Edit Item', 'bizpanda'), $singularName ),
+            'new_item' => sprintf( __('New Item', 'bizpanda'), $singularName ),
             'view' => sprintf( __('View', 'factory') ),
-            'view_item' => sprintf( __('View Item', 'optinpanda'), $singularName ),
-            'search_items' => sprintf( __('Search Items', 'optinpanda'), $pluralName ),
-            'not_found' => sprintf( __('No Items found', 'optinpanda'), $pluralName ),
-            'not_found_in_trash' => sprintf( __('No Items found in trash', 'optinpanda'), $pluralName ),
-            'parent' => sprintf( __('Parent Item', 'optinpanda'), $pluralName )
+            'view_item' => sprintf( __('View Item', 'bizpanda'), $singularName ),
+            'search_items' => sprintf( __('Search Items', 'bizpanda'), $pluralName ),
+            'not_found' => sprintf( __('No Items found', 'bizpanda'), $pluralName ),
+            'not_found_in_trash' => sprintf( __('No Items found in trash', 'bizpanda'), $pluralName ),
+            'parent' => sprintf( __('Parent Item', 'bizpanda'), $pluralName )
         );
 
         $this->options['labels'] = apply_filters('opanda_items_lables', $labels);
@@ -102,10 +103,11 @@ if ( in_array( $sociallocker->license->type, array( 'paid','trial' ) ) ) {
          * Scripts & styles
         */  
         
-        $this->scripts->request( array( 'jquery', 'jquery-effects-highlight' ) );
+        $this->scripts->request( array( 'jquery', 'jquery-effects-highlight', 'jquery-effects-slide' ) );
         
         $this->scripts->request( array( 
             'bootstrap.transition',
+            'bootstrap.datepicker',
             'bootstrap.tab',
             'holder.more-link',
             'control.checkbox',
@@ -116,6 +118,7 @@ if ( in_array( $sociallocker->license->type, array( 'paid','trial' ) ) ) {
         
         $this->styles->request( array( 
             'bootstrap.core', 
+            'bootstrap.datepicker',
             'bootstrap.form-group', 
             'bootstrap.form-metabox', 
             'bootstrap.tab', 
@@ -127,10 +130,11 @@ if ( in_array( $sociallocker->license->type, array( 'paid','trial' ) ) ) {
             'holder.more-link'
             ), 'bootstrap' ); 
         
+        $this->scripts->add( OPANDA_BIZPANDA_URL . '/assets/admin/js/filters.010000.js');    
         $this->scripts->add( OPANDA_BIZPANDA_URL . '/assets/admin/js/libs/json2.js');
         $this->scripts->add( OPANDA_BIZPANDA_URL . '/assets/admin/js/preview.010000.js');
-        $this->scripts->add( OPANDA_BIZPANDA_URL . '/assets/admin/js/item-edit.010007.js')->request('jquery-ui-sortable');       
-        $this->styles->add( OPANDA_BIZPANDA_URL . '/assets/admin/css/item-edit.010000.css');
+        $this->scripts->add( OPANDA_BIZPANDA_URL . '/assets/admin/js/item-edit.010008.js')->request('jquery-ui-sortable');       
+        $this->styles->add( OPANDA_BIZPANDA_URL . '/assets/admin/css/item-edit.010008.css');
             $this->styles->add( OPANDA_BIZPANDA_URL . '/assets/admin/css/item-edit.010000-en_US.css');  
         
 

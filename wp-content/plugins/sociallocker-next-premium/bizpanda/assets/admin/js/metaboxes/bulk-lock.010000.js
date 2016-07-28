@@ -113,7 +113,7 @@
                 this.disableVisiblityOptions();
             }
 
-            $("#onp-sl-bulk-lock-modal").factoryBootstrap328_modal("hide");
+            $("#onp-sl-bulk-lock-modal").factoryBootstrap329_modal("hide");
 
             // generating hidden fields to save on form submitting
 

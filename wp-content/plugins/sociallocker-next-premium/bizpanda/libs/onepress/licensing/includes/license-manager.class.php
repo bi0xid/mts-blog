@@ -65,6 +65,14 @@ class OnpLicensing325_LicenseManagerPage extends FactoryPages321_AdminPage  {
         
         $this->site = site_url();
         $this->domain = parse_url( $this->site, PHP_URL_HOST );
+        
+        $nounce = wp_create_nonce('hidelm');
+        $optionName = 'onp_lm_' . $this->plugin->pluginName . '_' . $nounce;
+        $optionValue = get_option( $optionName );
+        
+        if ( !empty( $optionValue ) ) {
+            $this->hidden = true;
+        }
     }
     
     /**
@@ -93,7 +101,7 @@ class OnpLicensing325_LicenseManagerPage extends FactoryPages321_AdminPage  {
         $licenseManager = $license = $this->plugin->license;
         $updatesManager = $this->plugin->updates;
         
-        $licenseKey = isset( $_POST['licensekey'] ) ? trim( $_POST['licensekey'] ) : null;
+        $licenseKey = isset( $_POST['licensekey'] ) ? htmlspecialchars ( trim( $_POST['licensekey'] ) ) : null;
         
         $scope = isset( $_GET['scope'] ) ? $_GET['scope'] : null;  
         $error = $response = null;
@@ -102,7 +110,7 @@ class OnpLicensing325_LicenseManagerPage extends FactoryPages321_AdminPage  {
 
         if ( isset( $_POST['licensekey'] ) ) {
             $scope = 'submit-key';
-            $licenseKey = trim( $_POST['licensekey'] );
+            $licenseKey = htmlspecialchars( trim( $_POST['licensekey'] ));
             
             if ( empty( $licenseKey ) ) {
                 $error = new WP_Error('FORM:KeyEmpty', __('Please enter your license key to continue.', 'onp_licensing_325'));
@@ -144,7 +152,12 @@ class OnpLicensing325_LicenseManagerPage extends FactoryPages321_AdminPage  {
         }
         
         ?>
-        <div class="factory-bootstrap-328 factory-fontawesome-320 onp-page-wrap <?php echo $licenseData['Category'] ?>-license-manager-content" id="license-manager">
+
+        <div class="factory-bootstrap-329 factory-fontawesome-320 onp-page-wrap <?php echo $licenseData['Category'] ?>-license-manager-content" id="license-manager">
+            
+            <a id="onp-hide-license-manager" href="<?php $this->actionUrl('hideLM') ?>">
+                <i class="fa fa-eye-slash"></i><?php _e('Hide License Manager', 'onp_licensing_325') ?>
+            </a>
 
             <?php if ( $error ) { ?>
                 <?php $this->showError($error, $scope) ?>
@@ -244,12 +257,14 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
                             <?php } ?>
                         <?php } else { ?>
                             <?php if ( $licenseManager->data['Category'] == 'free' ) { ?>
-                                <p><?php _e('Public License is a GPLv2 compatible license allowing you to change and use this version of the plugin for free. Please keep in mind this license covers only free edition of the plugin. Premium versions are distributed with other type of a license.') ?>
+                                <p><?php _e('Public License is a GPLv2 compatible license allowing you to change and use this version of the plugin for free. Please keep in mind this license covers only free edition of the plugin. Premium versions are distributed with other type of a license.', 'onp_licensing_325') ?>
                                 </p>
+                                <?php if ( $this->trial ) { ?>
                                 <p class="activate-trial-hint">
                                     <?php printf( __('You can <a href="%1$s">activate</a> a premium version for a trial period (7 days).', 'onp_licensing_325'), $this->getActionUrl('activateTrial') ) ?>
                                     <?php printf( __('Or click <a target="_blank" href="%1$s">here</a> to learn more about the premium version.', 'onp_licensing_325'), onp_licensing_325_get_purchase_url( $this->plugin ) ) ?>
                                 </p>
+                                <?php } ?>
                             <?php } else { ?>
                                 <?php echo $licenseData['Description'] ?>
                             <?php } ?>
@@ -336,7 +351,7 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
                 </div>
             </div>
             <div id="plugin-update-block">
-                <?php if ( $licenseManager->data['Build'] !== 'free' ) { ?>
+                <?php if ( $updatesManager->needCheckUpdates() ) { ?>
                     <?php if ( !$updatesManager->isVersionChecked() ) { ?>
                         <?php if ( isset( $updatesManager->lastCheck['Checked'] ) ) { ?>
                             <?php printf( __('The upadtes were checked at <strong>%1$s</strong>.', 'onp_licensing_325'), date( 'g:i a, j M y', $updatesManager->lastCheck['Checked'] ) ) ?>
@@ -412,7 +427,7 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
         </div>
         <?php
     }
-    
+
     /**
      * Show one of the result messages.
      * 
@@ -430,7 +445,7 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
         $btnText = apply_filters('onp_license_manager_success_button_' . $this->plugin->pluginName, __('Okay, I got it', 'onp_licensing_325') );
         
         ?>
-        <div class="factory-bootstrap-328 factory-fontawesome-320 onp-page-wrap onp-single-block" id="finish">
+        <div class="factory-bootstrap-329 factory-fontawesome-320 onp-page-wrap onp-single-block" id="finish">
 
             <div class='onp-header'>  
                 <?php if ( $ref == 'trial' || $ref == 'manual-trial-activation' ) { ?>
@@ -549,7 +564,7 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
  
         ?>
         <form method="POST">
-        <div class="factory-bootstrap-328 factory-fontawesome-320 onp-page-wrap onp-single-block" id="create-account">
+        <div class="factory-bootstrap-329 factory-fontawesome-320 onp-page-wrap onp-single-block" id="create-account">
             
             <?php if ( $ref == 'key-activation' ) { ?>
             <div class='onp-header'>  
@@ -646,7 +661,7 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
         
         ?>
         <form method="POST">
-        <div class="factory-bootstrap-328 factory-fontawesome-320 onp-page-wrap onp-single-block" id="account-already-created">
+        <div class="factory-bootstrap-329 factory-fontawesome-320 onp-page-wrap onp-single-block" id="account-already-created">
             
             <div class='onp-header'>
                 <h4><?php _e('A customer with the specified email already registered. Are you sure to bind your key to this email?', 'onp_licensing_325') ?></h4>
@@ -684,7 +699,7 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
         if ( $code && $message ) $error = new WP_Error($code, base64_decode($message));
         
         ?>
-        <div class="factory-bootstrap-328 factory-fontawesome-320 onp-page-wrap onp-single-block" id="account-created">
+        <div class="factory-bootstrap-329 factory-fontawesome-320 onp-page-wrap onp-single-block" id="account-created">
 
             <div class='onp-header'>
                 <h4><?php _e('Your customer account has been successfully created!', 'onp_licensing_325') ?></h4>
@@ -810,6 +825,41 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
     }
     
     // ------------------------------------------------------------------
+    // Hiding/Showing License Manager
+    // ------------------------------------------------------------------
+    
+    public function hideLMAction() {
+        $nounce = wp_create_nonce('hidelm');
+        $optionName = 'onp_lm_' . $this->plugin->pluginName . '_' . $nounce;
+        
+        if ( isset( $_GET['onp_nounce'] ) && $_GET['onp_nounce'] == $nounce ) {
+            update_option($optionName, $nounce);
+            wp_redirect(admin_url('edit.php?post_type=opanda-item') );
+            exit;
+        }
+        
+        ?>
+        <div class="wrap factory-fontawesome-320">
+            <h2><?php _e('Hiding License Manager', 'onp_licensing_325') ?></h2>
+            
+            <div class="factory-bootstrap-329" >
+                <div class="margin-top: 0px; margin-bottom: 30px;">
+                    <p style="margin: 0px;"><?php _e('<strong>Warning!</strong> The License Manager will get inaccessible when you click the button "Hide License Manager".', 'onp_licensing_325') ?></p>
+                    <p style="margin: 10px 0 0 0;"><?php printf( __('To restore access to the License Manager, you will need to clear the option <strong>%s</strong> on the page <strong>options.php</strong>:', 'onp_licensing_325'), $optionName ) ?></p
+                    <p style="margin: 0px;">
+                        <a href="<?php echo admin_url( "options.php" ) ?>"><?php echo admin_url( "options.php" ) ?></a>
+                    </p>
+                </div>
+                <div style="margin-top: 20px;">
+                    <a href="<?php $this->actionUrl("hideLM", array('onp_nounce' => $nounce)) ?>" class="btn btn-danger"><?php _e('Hide License Manager', 'onp_licensing_325') ?></a>
+                    <a href="<?php $this->actionUrl("index") ?>" class="btn btn-default" style="margin-left: 5px;"><?php _e('Return Back', 'onp_licensing_325') ?></a>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
+    // ------------------------------------------------------------------
     // The rest actions
     // ------------------------------------------------------------------
     
@@ -882,7 +932,7 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
         }
         
         ?>
-        <div class="factory-bootstrap-328 onp-page-wrap" id="activate-key-manual">
+        <div class="factory-bootstrap-329 onp-page-wrap" id="activate-key-manual">
             <form action="<?php $this->actionUrl('activateKeyManualy') ?>" method="post">
             <div class="onp-container">
                 <h2 style="margin-bottom: 10px;"><?php _e('Key Activation', 'onp_licensing_325') ?></h2>
@@ -925,7 +975,7 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
         }
         
         ?>
-        <div class="factory-bootstrap-328 onp-page-wrap" id="activate-key-manual">
+        <div class="factory-bootstrap-329 onp-page-wrap" id="activate-key-manual">
             <form action="<?php $this->actionUrl('deleteKeyManualy') ?>" method="post">
             <div class="onp-container">
                 <h2 style="margin-bottom: 10px;"><?php _e('Key Deactivation', 'onp_licensing_325') ?></h2>
@@ -940,7 +990,7 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
                     </li>
                 </ul>
                 <a href="#" class="btn btn-primary" id="manual-trial-submit">
-                    <i class="icon-ok-sign icon-white"></i> verify code
+	                <?php _e('<i class="icon-ok-sign icon-white"></i> verify code', 'onp_licensing_325'); ?>
                 </a>  
             </div>
             </form>
@@ -966,11 +1016,11 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
         }
         
         ?>
-        <div class="factory-bootstrap-328 onp-page-wrap" id="activate-key-manual">
+        <div class="factory-bootstrap-329 onp-page-wrap" id="activate-key-manual">
             <form action="<?php $this->actionUrl('activateTrialManualy') ?>" method="post">
             <div class="onp-container">
-                <h2 style="margin-bottom: 10px;">Trial Activation</h2>
-                <p style="margin-top: 0px;">Please perfome the following steps to activate the plugin manualy.</p>
+                <h2 style="margin-bottom: 10px;"><?php _e('Trial Activation', 'onp_licensing_325'); ?></h2>
+                <p style="margin-top: 0px;"><?php _e('Please perfome the following steps to activate the plugin manualy.', 'onp_licensing_325'); ?></p>
                 <ul>
                     <li>
                         1. <?php printf( __('<a href="%s" target="_blank">Click here</a> to send the activation request.', 'onp_licensing_325'), $this->requestUrl ) ?>
@@ -981,7 +1031,7 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
                     </li>
                 </ul>
                 <a href="#" class="btn btn-primary" id="manual-trial-submit">
-                    <i class="icon-ok-sign icon-white"></i> verify code
+                    <?php _e('<i class="icon-ok-sign icon-white"></i> verify code', 'onp_licensing_325'); ?>
                 </a>  
             </div>
             </form>
@@ -1018,35 +1068,35 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
         
         ?>
         <div class="wrap ">
-            <h2>License Manager Internal Keys</h2>
-            <p style="margin-top: 0px; margin-bottom: 30px;">You actually don't need to change something here. Please change the values below only if OnePress supports ask you to do it.</p>
+            <h2><?php _e('License Manager Internal Keys', 'onp_licensing_325'); ?></h2>
+            <p style="margin-top: 0px; margin-bottom: 30px;"><?php _e('You actually don\'t need to change something here. Please change the values below only if OnePress supports ask you to do it.', 'onp_licensing_325'); ?></p>
             
-            <div class="factory-bootstrap-328" style="max-width: 800px;">
+            <div class="factory-bootstrap-329" style="max-width: 800px;">
                 <form method="post" class="form-horizontal" action="<?php echo $this->actionUrl('internalKeys') ?>">
 
                 <div>
                 
                     <?php if ( $saved ) { ?>
                     <div class="alert alert-success" style="margin-bottom: 25px;">
-                        The changes has been saved successfully!
+                        <?php _e('The changes has been saved successfully!', 'onp_licensing_325'); ?>
                     </div>
                     <?php } ?>
                     
                     <?php if ( $sender == 'reset' ) { ?>
                     <div class="alert alert-success" style="margin-bottom: 25px;">
-                        The license has been reset successfully!
+                        <?php _e('The license has been reset successfully!', 'onp_licensing_325'); ?>
                     </div>
                     <?php } ?>                    
                     
                     <div class="form-group control-group">
-                        <label class="control-label col-sm-2" for="site_secret">Site Secret</label>
+                        <label class="control-label col-sm-2" for="site_secret"><?php _e('Site Secret', 'onp_licensing_325'); ?></label>
                         <div class="controls col-sm-10">
                             <input type="text" name="site_secret" id="site_secret" value="<?php echo $siteSecret ?>" class="form-control" />
                         </div>
                     </div> 
                     
                     <div class="form-group control-group">
-                        <label class="control-label col-sm-2" for="key_secret">Key Secret</label>
+                        <label class="control-label col-sm-2" for="key_secret"><?php _e('Key Secret', 'onp_licensing_325'); ?></label>
                         <div class="controls col-sm-10">
                             <input type="text" name="key_secret" id="key_secret" value="<?php echo $keySecret ?>" class="form-control" />
                         </div>
@@ -1054,7 +1104,7 @@ if ( !in_array( $sociallocker->license->type, array( 'paid' ) ) ) {
                
                     <div class="form-group form-actions">
                       <div class="col-sm-offset-2 col-sm-10">
-                        <input name="save-action" class="btn btn-primary" type="submit" value="Save changes"/>
+                        <input name="save-action" class="btn btn-primary" type="submit" value="<?php _e('Save changes', 'onp_licensing_325'); ?>"/>
                       </div>
                     </div>
 

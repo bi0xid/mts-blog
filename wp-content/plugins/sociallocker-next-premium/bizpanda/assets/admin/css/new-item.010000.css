@@ -98,7 +98,7 @@ html {
     position: relative;
 }
 .opanda-extra-items .opanda-arrow {
-
+    display: none;
     margin-left: 20px;
     margin-top: 20px;
 }
@@ -135,4 +135,13 @@ html {
 }
 .opanda-extra-items h2 + p {
     margin-bottom: 30px;
+}
+
+.opanda-item-premium .opanda-item-cover {
+    width: 67px;
+    height: 67px;
+    background: url("../img/premium-item.png") top right no-repeat;
+    position: absolute;
+    top: -2px;
+    right: -2px;
 }

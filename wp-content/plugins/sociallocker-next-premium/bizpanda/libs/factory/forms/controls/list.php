@@ -15,7 +15,7 @@
  * @since 1.0.0
  */
 
-class FactoryForms327_ListControl extends FactoryForms327_Control 
+class FactoryForms328_ListControl extends FactoryForms328_Control 
 {
     public $type = 'list';
     
@@ -86,7 +86,7 @@ class FactoryForms327_ListControl extends FactoryForms327_Control
                     'url': '<?php echo $data['url'] ?>',
                     'data': <?php echo json_encode( $data['data'] ) ?>,
                     'selected': <?php echo json_encode( $value ) ?>,
-                    'emptyList': '<?php echo $this->getOption('empty', __('The list is empty.', 'factory_forms_327') ) ?>'
+                    'emptyList': '<?php echo $this->getOption('empty', __('The list is empty.', 'factory_forms_328') ) ?>'
                 };
             </script>
             <?php
@@ -124,7 +124,7 @@ class FactoryForms327_ListControl extends FactoryForms327_Control
         $errors = !empty( $errorsCallback ) ? call_user_func( $errorsCallback ) : array();
         
         $isEmpty = $this->isAjax() || empty( $items );
-        $emptyList = $this->getOption('empty', __('The list is empty.', 'factory_forms_327') );
+        $emptyList = $this->getOption('empty', __('The list is empty.', 'factory_forms_328') );
         
         if ( $isEmpty ) {
             $this->addCssClass('factory-empty');  

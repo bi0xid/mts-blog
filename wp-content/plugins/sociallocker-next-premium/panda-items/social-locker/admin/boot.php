@@ -16,14 +16,17 @@ function opanda_socail_locker_metaboxes( $metaboxes ) {
    
     $metaboxes[] = array(
         'class' => 'OPanda_SocialOptionsMetaBox',
-        'path' => BIZPANDA_SOCIAL_LOCKER_DIR . '/includes/metaboxes/social-options.php'
+        'path' => BIZPANDA_SOCIAL_LOCKER_DIR . '/admin/metaboxes/social-options.php'
     );
-
-    $metaboxes[] = array(
-        'class' => 'OPanda_TermsPrivacyMetaBox',
-        'path' => OPANDA_BIZPANDA_DIR . '/includes/metaboxes/terms-privacy.php'
-    );        
-
+    
+    if ( OPanda_Items::isCurrentFree() ) {
+        
+        $metaboxes[] = array(
+            'class' => 'OPanda_SocialLockerMoreFeaturesMetaBox',
+            'path' => BIZPANDA_SOCIAL_LOCKER_DIR . '/admin/metaboxes/more-features.php'
+        );   
+    }
+    
     return $metaboxes;
 }
 
@@ -53,20 +56,23 @@ function opanda_social_locker_activation( $plugin, $helper ) {
 
     $wpdb->query("UPDATE {$wpdb->posts} SET post_type='" . OPANDA_POST_TYPE . "' WHERE post_type='social-locker'");
     $wpdb->query("UPDATE {$wpdb->posts} SET post_title='" . __('Social Locker', 'optionpanda') . "', post_name='opanda_default_social_locker' WHERE post_name='default_sociallocker_locker'");
+        $defaulTheme = 'flat';
+    
+
     
     // default social locker
     $helper->addPost(
         'opanda_default_social_locker_id',
         array(
             'post_type' => OPANDA_POST_TYPE,
-            'post_title' => __('Social Locker', 'optinpanda'),
+            'post_title' => __('Social Locker (default)', 'sociallocker'),
             'post_name' => 'opanda_default_social_locker'
         ),
         array(
             'opanda_item' => 'social-locker',
-            'opanda_header' => __('This content is locked', 'optinpanda'),       
-            'opanda_message' => __('Please support us, use one of the buttons below to unlock the content.', 'optinpanda'),
-            'opanda_style' => 'flat',
+            'opanda_header' => __('This content is locked', 'sociallocker'),       
+            'opanda_message' => __('Please support us, use one of the buttons below to unlock the content.', 'sociallocker'),
+            'opanda_style' => $defaulTheme,
             'opanda_mobile' => 1,          
             'opanda_highlight' => 1,                   
             'opanda_is_system' => 1,
@@ -96,35 +102,35 @@ function opanda_register_social_locker_themes() {
             'name' => 'starter',
             'title' => 'Starter',
             'path' => OPANDA_BIZPANDA_DIR . '/themes/starter',
-            'items' => array('social-locker') 
+            'items' => array('social-locker', 'custom-locker') 
         ));
 
         OPanda_ThemeManager::registerTheme(array(
             'name' => 'secrets',
             'title' => 'Secrets',
             'path' => OPANDA_BIZPANDA_DIR . '/themes/secrets',
-            'items' => array('social-locker') 
+            'items' => array('social-locker', 'custom-locker')
         )); 
 
         OPanda_ThemeManager::registerTheme(array(
             'name' => 'dandyish',
             'title' => 'Dandyish',
             'path' => OPANDA_BIZPANDA_DIR . '/themes/dandyish',
-            'items' => array('social-locker') 
+            'items' => array('social-locker', 'custom-locker')
         )); 
 
         OPanda_ThemeManager::registerTheme(array(
             'name' => 'glass',
             'title' => 'Glass',
             'path' => OPANDA_BIZPANDA_DIR . '/themes/glass',
-            'items' => array('social-locker') 
+            'items' => array('social-locker', 'custom-locker')
         ));
 
         OPanda_ThemeManager::registerTheme(array(
             'name' => 'flat',
             'title' => 'Flat',
             'path' => OPANDA_BIZPANDA_DIR . '/themes/flat',
-            'items' => array('social-locker') 
+            'items' => array('social-locker', 'custom-locker')
         ));
     
     
@@ -201,8 +207,8 @@ function opanda_social_locker_stats_screens( $screens ) {
         // The Summary Screen
         
         'summary' => array (
-            'title' => __('<i class="fa fa-search"></i> Summary', 'optinpanda'),
-            'description' => __('The page shows the total number of unlocks for the current locker.', 'opanda'),
+            'title' => __('<i class="fa fa-search"></i> Summary', 'sociallocker'),
+            'description' => __('The page shows the total number of unlocks for the current locker.', 'sociallocker'),
 
             'chartClass' => 'OPanda_SocialLocker_Summary_StatsChart',
             'tableClass' => 'OPanda_SocialLocker_Summary_StatsTable',
@@ -212,25 +218,27 @@ function opanda_social_locker_stats_screens( $screens ) {
         // The Channels Screen        
   
         'channels' => array(
-            'title' => __('<i class="fa fa-search-plus"></i> Detailed', 'opanda'), 
-            'description' => __('The page shows which ways visitors used to unlock the content.', 'optinpanda'),
+            'title' => __('<i class="fa fa-search-plus"></i> Detailed', 'sociallocker'), 
+            'description' => __('The page shows which ways visitors used to unlock the content.', 'sociallocker'),
             
             'chartClass' => 'OPanda_SocialLocker_Detailed_StatsChart',
             'tableClass' => 'OPanda_SocialLocker_Detailed_StatsTable',
             'path' => BIZPANDA_SOCIAL_LOCKER_DIR . '/admin/stats/detailed.php' 
-        ),
-  
+        )
+    );
+        
         // The Skips Screen 
         
-        'skips' => array (
-            'title' => __('<i class="fa fa-tint"></i> Skips', 'optinpanda'),
-            'description' => __('The chart shows how many users skipped the locker by using the Timer or Close Icon, comparing to the users who unlocked the content.', 'optinpanda'),
+        $screens['skips'] = array (
+            'title' => __('<i class="fa fa-tint"></i> Skips', 'sociallocker'),
+            'description' => __('The chart shows how many users skipped the locker by using the Timer or Close Icon, comparing to the users who unlocked the content.', 'sociallocker'),
             
             'chartClass' => 'OPanda_SocialLocker_Skips_StatsChart',
             'tableClass' => 'OPanda_SocialLocker_Skips_StatsTable',
             'path' => BIZPANDA_SOCIAL_LOCKER_DIR . '/admin/stats/skips.php'
-         )
-    );
+         );
+    
+
     
     return $screens;
 }

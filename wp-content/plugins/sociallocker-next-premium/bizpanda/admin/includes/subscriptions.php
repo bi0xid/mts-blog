@@ -2,111 +2,182 @@
 
 class OPanda_SubscriptionServices {
     
-    private static $_services = null;
+    /**
+     * Returns a list of available subscription services.
+     * 
+     * @since 1.0.8
+     * @return mixed[]
+     */
+    public static function getSerivcesList() {
+        $result = apply_filters('opanda_subscription_services', array() );
+        
+        $helper = array();
+        foreach( $result as $name => $data ) {
+            $helper[$name] = $data['title'];
+        }
+        
+        array_multisort( $result, $helper );
+        return $result;
+    }
     
-    public static function getServices() {
-        if ( !empty( self::$_services ) ) return self::$_services;
-        
-        $items = array(
-            
-            'none' => array(
-                'title' => __('None', 'optinpanda'),
-                'class' => 'OPanda_DatabaseSubscriptionService',
-                'path' => OPANDA_BIZPANDA_DIR . '/admin/includes/connect-handlers/handlers/subscription/libs/database/class.database.php',
-            ),
-            'mailchimp' => array(
-                'title' => __('MailChimp', 'optinpanda'),
-                'class' => 'OPanda_MailChimpSubscriptionService',
-                'path' => OPANDA_BIZPANDA_DIR . '/admin/includes/connect-handlers/handlers/subscription/libs/mailchimp/class.mailchimp.php',
-            ),
-            'aweber' => array(
-                'title' => __('Aweber', 'optinpanda'),
-                'class' => 'OPanda_AweberSubscriptionService',
-                'path' => OPANDA_BIZPANDA_DIR . '/admin/includes/connect-handlers/handlers/subscription/libs/aweber/class.aweber.php',
-            ),
-            'getresponse' => array(
-                'title' => __('GetResponse', 'optinpanda'),
-                'class' => 'OPanda_GetResponseSubscriptionService',
-                'path' => OPANDA_BIZPANDA_DIR . '/admin/includes/connect-handlers/handlers/subscription/libs/getresponse/class.getresponse.php',
-            ),
-            'mymail' => array(
-                'title' => __('MyMail', 'optinpanda'),
-                'class' => 'OPanda_MyMailSubscriptionService',
-                'path' => OPANDA_BIZPANDA_DIR . '/admin/includes/connect-handlers/handlers/subscription/libs/mymail/class.mymail.php',
-            ),
-            'mailpoet' => array(
-                'title' => __('MailPoet', 'optinpanda'),
-                'class' => 'OPanda_MailPoetSubscriptionService',
-                'path' => OPANDA_BIZPANDA_DIR . '/admin/includes/connect-handlers/handlers/subscription/libs/mailpoet/class.mailpoet.php',
-            )
-        );
-        
-        $items = apply_filters('opanda_subscription_services', $items);
-        
-        $services = array(); 
-        require_once OPANDA_BIZPANDA_DIR . '/admin/includes/connect-handlers/handlers/subscription/libs/class.subscription.php';
+    /**
+     * Returns a name of the current subscription service.
+     * 
+     * @since 1.0.8
+     * @return OPanda_Subscription
+     */
+    public static function getCurrentName() {
+        return get_option('opanda_subscription_service', 'none');
+    }
+    
+    /**
+     * Returns a title of the current subscription service.
+     * 
+     * @since 1.0.8
+     * @return OPanda_Subscription
+     */
+    public static function getCurrentServiceTitle() {
+        $info = self::getCurrentServiceInfo();
+        return !empty( $info ) ? $info['title'] : null;
+    }
+    
+    /**
+     * Returns information about the current subscription service.
+     * 
+     * @since 1.0.8
+     * @return string[]
+     */
+    public static function getCurrentServiceInfo() {
+        return self::getServiceInfo( null );
+    }
+    
+    /**
+     * Returns an object of the current subscription service.
+     * 
+     * @since 1.0.8
+     * @return OPanda_Subscription
+     */
+    public static function getCurrentService() {
+        return self::getService( null );
+    }
+    
+    /**
+     * Returns information about a specified service.
+     * 
+     * @since 1.0.8
+     * @param string $name A name of the service to return.
+     * @return string[]
+     */
+    public static function getServiceInfo( $name = null ) {
 
-        foreach( $items as $name => $item ) {
-            require_once $item['path'];
-            
-            $item['name'] = $name;
-            $services[$name] = new $item['class']( $item );
-        }
-        
-        self::$_services = $services;
-        return self::$_services;
-    }
-    
-    public static function getService( $name = null, $init = false ) {
-        
+        $services = self::getSerivcesList();
         $name = empty( $name ) ? get_option('opanda_subscription_service', 'none') : $name;
-        $services = self::getServices( $name );
-        
         if ( !isset( $services[$name] ) ) $name = 'none';
-        $service = isset( $services[$name] ) ? $services[$name] : null;
-        if ( empty( $service ) ) return null;
         
-        if ( $init ) {
-            $options = $service->getOptions();
-            $options = apply_filters("opanda_subscription_service_options", $options);
-            $options = apply_filters("opanda_{$name}_service_options", $options);
-            $service->init( $options );
+        if ( isset( $services[$name] ) ) {
+            $services[$name]['name'] = $name;
+            return $services[$name];
         }
         
-        return $service;
+        return null;
     }
     
-    public static function getOptInModes( $includes = array(), $toList = false ) {
+    /**
+     * Returns an object of a specified subscription service.
+     * 
+     * @since 1.0.8
+     * @param string $name A name of the service to return.
+     * @return OPanda_Subscription
+     */
+    public static function getService( $name = null ) {
+        require_once OPANDA_BIZPANDA_DIR . '/admin/includes/classes/class.subscription.php';
+
+        $info = self::getServiceInfo( $name );
+        if ( empty( $info) ) return null;
+
+        require_once $info['path'];
+        return new $info['class']( $info );
+    }
+    
+    /**
+     * Returns available opt-in modes for the current subscription service.
+     * 
+     * @since 1.0.8
+     * @param string $name A name of the service to return.
+     * @return mixed[]
+     */
+    public static function getCurrentOptinModes( $toList = false ) {
+
+        $result = array();
+        $finish = array();
+        
+        $info = self::getCurrentServiceInfo();
+        if ( empty( $info ) ) return array();
+
+        if ( OPANDA_DEPENDS_ON_LIST === $info['modes'] ) {
+
+            if ( !$toList ) {
+                return array( OPANDA_DEPENDS_ON_LIST );
+            } else {
+                $finish[] = array( OPANDA_DEPENDS_ON_LIST, __('[ Depends on the list ]', 'bizpanda'), __( 'The Opt-In Mode depends on the settings of the list you selected. Check the <a href="http://freshmail.com/help-and-knowledge/help/managing-clients/set-parameters-list-recipients/" target="_blank">parameter</a> "List type" of the selected list in your FreshMail account to know which Opt-In Mode will be applied.', 'bizpanda') );
+                return $finish;                
+            }
+        }
+
+        $all = self::getAllOptinModes();
+
+        foreach( $info['modes'] as $name ) {
+            $result[$name] = $all[$name];
+        }
+        
+        if ( !$toList ) return $result;
+
+        if ( isset( $result['quick'] ) ) {
+            
+            if ( !isset($result['double-optin'] ) )  {
+                $result['double-optin'] = $all['double-optin'];
+            }
+            
+            if ( !isset($result['quick-double-optin'] ) )  {
+                $result['quick-double-optin'] = $all['quick-double-optin'];
+            }
+        }
+
+        foreach( $result as $name => $mode ) {
+            $finish[] = array(
+                'value' => $name, 
+                'title' => $mode['title'], 
+                'hint' => $mode['description']
+            );
+        }
+        
+
+        return $finish;
+    }
+    
+    /**
+     * Returns all the available opt-in modes.
+     * 
+     * @since 1.0.8
+     * @return mixed[]
+     */
+    public static function getAllOptinModes() {
         
         $modes = array(
             'double-optin' => array(
-                'title' => __('Full Double Opt-In (recommended)', 'optinpanda'),
-                'description' => __('After the user enters one\'s email address, sends the confirmation email (double opt-in) and waits until the user confirms the subscription. Then, unlocks the content.', 'optinpanda')
+                'title' => __('Full Double Opt-In (recommended)', 'bizpanda'),
+                'description' => __('After the user enters one\'s email address, sends the confirmation email (double opt-in) and waits until the user confirms the subscription. Then, unlocks the content.', 'bizpanda')
             ),
             'quick-double-optin' => array(
-                'title' => __('Lazy Double Opt-In', 'optinpanda'),
-                'description' => __('Unlocks the content immediately after the user enters one\'s email address but also sends the confirmation email (double opt-in) to confirm the subscription.', 'optinpanda')
+                'title' => __('Lazy Double Opt-In', 'bizpanda'),
+                'description' => __('Unlocks the content immediately after the user enters one\'s email address but also sends the confirmation email (double opt-in) to confirm the subscription.', 'bizpanda')
             ),
             'quick' => array(
-                'title' => __('Single Opt-In', 'optinpanda'),
-                'description' => __('Unlocks the content immediately after the user enters one\'s email address. Doesn\'t send the confirmation email.', 'optinpanda')
+                'title' => __('Single Opt-In', 'bizpanda'),
+                'description' => __('Unlocks the content immediately after the user enters one\'s email address. Doesn\'t send the confirmation email.', 'bizpanda')
             ),
         );
         
-        if ( !is_array( $includes ) ) $includes = array( $includes );
-        
-        $result = array();
-        foreach( $includes as $name ) {
-            $result[$name] = $modes[$name];
-        }
-
-        if ( !$toList ) return $result;
-            
-        $finish = array();
-        foreach( $result as $name => $mode ) {
-            $finish[] = array( $name, $mode['title'], $mode['description'] );
-        }
-        
-        return $finish;
+        return apply_filters('opanda_optin_modes', $modes);
     }
 }

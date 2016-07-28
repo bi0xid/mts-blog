@@ -65,10 +65,10 @@ class OPanda_AdvancedOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
     public function __construct( $plugin ) {
         parent::__construct( $plugin );
         
-        $this->title = __('Advanced Options', 'optinpanda');
+        $this->title = __('Advanced Options', 'bizpanda');
     }
     
-    public $cssClass = 'factory-bootstrap-328';
+    public $cssClass = 'factory-bootstrap-329';
     
     /**
      * Configures a form that will be inside the metabox.
@@ -76,7 +76,7 @@ class OPanda_AdvancedOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
      * @see FactoryMetaboxes321_FormMetabox
      * @since 1.0.0
      * 
-     * @param FactoryForms327_Form $form A form object to configure.
+     * @param FactoryForms328_Form $form A form object to configure.
      * @return void
      */ 
     public function form( $form ) {
@@ -88,8 +88,8 @@ class OPanda_AdvancedOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
                 'type'      => 'checkbox',
                 'way'       => 'buttons',
                 'name'      => 'close',
-                'title'     => __('Close Icon', 'optinpanda'),
-                'hint'      => __('Shows the Close Icon at the corner.', 'optinpanda'),
+                'title'     => __('Close Icon', 'bizpanda'),
+                'hint'      => __('Shows the Close Icon at the corner.', 'bizpanda'),
                 'icon'      => OPANDA_BIZPANDA_URL . '/assets/admin/img/close-icon.png',
                 'default'   => false
             ),
@@ -97,8 +97,8 @@ class OPanda_AdvancedOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
             array(
                 'type'      => 'textbox',
                 'name'      => 'timer',
-                'title'     => __('Timer Interval', 'optinpanda'),
-                'hint'      => __('Sets a countdown interval for the locker.', 'optinpanda'),
+                'title'     => __('Timer Interval', 'bizpanda'),
+                'hint'      => __('Sets a countdown interval for the locker.', 'bizpanda'),
                 'icon'      => OPANDA_BIZPANDA_URL . '/assets/admin/img/timer-icon.png',
                 'default'   => false
             ),
@@ -107,24 +107,37 @@ class OPanda_AdvancedOptionsMetaBox extends FactoryMetaboxes321_FormMetabox
                 'type'      => 'checkbox',
                 'way'       => 'buttons',
                 'name'      => 'ajax',
-                'title'     => __('AJAX', 'optinpanda'),
-                'hint'      => __('If On, locked content will be cut from a page source code.', 'optinpanda'),
+                'title'     => __('AJAX', 'bizpanda'),
+                'hint'      => __('If On, locked content will be cut from a page source code.', 'bizpanda'),
                 'icon'      => OPANDA_BIZPANDA_URL . '/assets/admin/img/ajax-icon.png',
                 'default'   => false
             ),
             
             array(
+                'type'      => 'html',
+                'html'      => '<div id="opanda-ajax-disabled" class="alert alert-warning">The option AJAX is not applied when the "transparence" or "blurring" overlap modes selected.</div>'
+            ),  
+            
+            array(
                 'type'      => 'checkbox',
                 'way'       => 'buttons',
                 'name'      => 'highlight',
-                'title'     => __('Highlight', 'optinpanda'),
-                'hint'      => __('Defines whether the locker must use the Highlight effect.', 'optinpanda'),
+                'title'     => __('Highlight', 'bizpanda'),
+                'hint'      => __('Defines whether the locker must use the Highlight effect.', 'bizpanda'),
                 'icon'      => OPANDA_BIZPANDA_URL . '/assets/admin/img/highlight-icon.png',
                 'default'   => true
             )
         );  
         
-        $options = apply_filters('onp_sl_advanced_options', $options);
+        if ( OPanda_Items::isCurrentFree() ) {
+            
+            $options[] = array(
+                'type'      => 'html',
+                'html'      => '<div style="display: none;" class="factory-fontawesome-320 opanda-overlay-note opanda-premium-note">' . __( '<i class="fa fa-star-o"></i> Go Premium <i class="fa fa-star-o"></i><br />To Unlock These Features <a href="#" class="opnada-button">Learn More</a>', 'bizpanda' ) . '</div>'
+            );
+        }
+        
+        $options = apply_filters('opanda_advanced_options', $options);
         $form->add($options);
     }
 }

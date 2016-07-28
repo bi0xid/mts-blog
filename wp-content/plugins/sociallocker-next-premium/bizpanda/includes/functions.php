@@ -22,18 +22,17 @@ class BizPanda {
      * @var int 
      */
     public static function getPluginCount() {
-        return self::$pluginCount;
+        return count( self::$_installedPlugins );
     }
     
     /**
-     * Increases the value in the var $pluginCount by 1.
-     * Calls when a plugin tries to create another BizPanda instance. 
+     * [obsoleted]
      * 
      * @since 1.0.0
      * @var void 
      */
     public static function countCallerPlugin() {
-        self::$pluginCount++;
+        // nothing
     }
     
     /**
@@ -43,7 +42,7 @@ class BizPanda {
      * @var bool 
      */
     public static function isSinglePlugin() {
-        return self::$pluginCount === 1;
+        return count( self::$_installedPlugins ) == 1;
     }
     
     protected static $_features = array();
@@ -62,14 +61,28 @@ class BizPanda {
     
     
     protected static $_plugins = array();
+    protected static $_installedPlugins = array();
+    
+    protected static $_hasPremiumPlugins = false;
     
     public static function hasPlugin( $name ) {
         return isset( self::$_plugins[$name] );
     }
     
-    public static function registerPlugin( $plugin, $name = null ) {
+    public static function registerPlugin( $plugin, $name = null, $type = null ) {
         $pluginName = empty( $name ) ? $plugin->pluginName : $name;
-        self::$_plugins[$pluginName] = $plugin;
+        $pluginType = empty( $type ) ? ( $plugin->options['build'] !== 'free' ? 'premium' : 'free' ) : $type;
+        
+        if ( !isset( self::$_plugins[$pluginName] ) ) self::$_plugins[$pluginName] = array();
+        self::$_plugins[$pluginName][$pluginType] = $plugin;
+        
+        self::$_installedPlugins[] = array(
+            'name' => $pluginName,
+            'type' => $type,
+            'plugin' => $plugin
+        );
+
+        self::$_hasPremiumPlugins = self::$_hasPremiumPlugins || 'premium' === $pluginType;
     }  
 
     public static function hasDefaultMenuIcon() {
@@ -89,12 +102,48 @@ class BizPanda {
     }
     
     public static function getMenuTitle() {
-        $menuTitle = __('Biz<span class="onp-sl-panda">Panda</span>', 'opanda');
+        $menuTitle = __('Biz<span class="onp-sl-panda">Panda</span>', 'bizpanda');
         return apply_filters('opanda_menu_title', $menuTitle );      
     }
     
     public static function getSubscriptionServiceName() {
         return get_option('opanda_subscription_service', 'database'); 
+    }
+    
+    public static function hasPremiumPlugins() {
+        return self::$_hasPremiumPlugins;
+    }
+    
+    public static function getPlugin() {
+
+        if ( isset( self::$_installedPlugins[0] )) return self::$_installedPlugins[0]['plugin'];
+        return false;
+    }
+
+    public static function getPluginNames( $full = false ) {
+        if ( !$full ) return array_keys( self::$_plugins );
+        
+        $names = array();
+        foreach( self::$_installedPlugins as $pluginInfo ) {
+            $plugin = self::$_installedPlugins[0]['plugin'];
+            $name = $plugin->options['name'] . '-' .$plugin->options['assembly']; 
+            $names[] = $name;
+        }
+        
+        return $names;
+    }
+    
+    public static function getInstalledPlugins() {
+        return self::$_installedPlugins;
+    }
+    
+    public static function hasInstalled( $pluginName, $pluginType = null ) {
+        
+        if ( empty( $pluginType ) ) {
+            return isset( self::$_plugins[$pluginName] );
+        } else {
+            return isset( self::$_plugins[$pluginName][$pluginType] );
+        }
     }
 }
 
@@ -134,24 +183,44 @@ function opanda_proxy_url() {
 }
 
 function opanda_terms_url() {
-    $terms = get_option('opanda_terms_of_use', null);
-    if ( empty( $terms ) ) return;
+    $enabled = get_option('opanda_terms_enabled', false);
+    if ( empty( $enabled ) ) return false;
     
-    return get_permalink( $terms );
+    $usePages = get_option('opanda_terms_use_pages', false);
+    if ( $usePages ) {
+        
+        $pageId = get_option('opanda_terms_of_use_page', false);   
+        if ( empty( $pageId ) ) return false;
+        return get_permalink( $pageId );
+        
+    } else {
+
+        return add_query_arg(array(
+            'bizpanda' => 'terms-of-use'
+        ), site_url() );
+        
+    }
 }
 
 function opanda_privacy_policy_url() {
-    $terms = get_option('opanda_privacy_policy', null);
-    if ( empty( $terms ) ) return;
+    $enabled = get_option('opanda_terms_enabled', false);
+    if ( empty( $enabled ) ) return false;
     
-    return get_permalink( $terms );
+    $usePages = get_option('opanda_terms_use_pages', false);
+    if ( $usePages ) {
+        
+        $pageId = get_option('opanda_privacy_policy_page', false);   
+        if ( empty( $pageId ) ) return false;
+        return get_permalink( $pageId );
+        
+    } else {
+
+        return add_query_arg(array(
+            'bizpanda' => 'privacy-policy'
+        ), site_url() );
+        
+    }
 }
-
-function opanda_get_item_type_by_id( $id ) {
-    return get_post_meta( $id, 'opanda_item', true );
-}
-
-
 
 /**
  * Returns the global option for the panda item.
@@ -174,6 +243,28 @@ function opanda_get_item_option( $id, $name, $isArray = false, $default = null )
     return ($value === null || $value === '')
         ? $default 
         : ( $isArray ? maybe_unserialize($value) : stripslashes( $value ) ); 
+}
+
+/**
+ * Replaces the variables in URLs {var} and return the result URL.
+ *
+ * @since 1.1.3
+ */
+function opanda_get_dynamic_url( $id, $name, $default = null ) {
+    $url = opanda_get_item_option( $id, $name, false );
+    
+    if( empty( $url ) ) return $default;
+    return preg_replace_callback("/\{([^}]+)\}/", 'opanda_get_dunamic_url_callback', $url);
+}
+
+/**
+ * A callback for 'preg_replace_callback' in the function opanda_get_dunamic_url.
+ * 
+ * @since 1.1.3
+ */
+function opanda_get_dunamic_url_callback( $match ) {
+    if( array_key_exists( $match[1], $_REQUEST ) ) return $_REQUEST[$match[1]];
+    return $match[0];
 }
 
 /**
@@ -227,6 +318,17 @@ function opanda_get_handler_options( $handlerName ) {
                 'consumer_secret' => $consumerSecret,
                 'proxy' => opanda_proxy_url()
             );
+            
+        case 'linkedin':
+            
+            $clientId = get_option('opanda_linkedin_client_id');
+            $clientSecret = get_option('opanda_linkedin_client_secret');
+
+            return array(
+                'client_id' => $clientId,
+                'client_secret' => $clientSecret,
+                'proxy' => opanda_proxy_url()
+            ); 
 
         case 'subscription':
             
@@ -273,3 +375,231 @@ function opanda_normilize_value( $value = null ) {
     return $value;
 }
 
+/**
+ * Returns a website robust key to load failed assets.
+ * 
+ * @since 1.1.3
+ */
+function opanda_get_robust_key() {
+    $key = get_option('opanda_robust_key', false);
+    if ( empty( $key ) ) {
+        $key = substr( md5( NONCE_SALT ), 0, rand(5,15) );
+        update_option( 'opanda_robust_key', $key );
+    }
+    return $key;
+}
+
+/**
+ * Returns a website robust script key to load the locker script.
+ * 
+ * @since 1.1.3
+ */
+function opanda_get_robust_script_key() {
+    $key = get_option('opanda_robust_script_key', false);
+    if ( empty( $key ) ) {
+        $key = substr( md5( NONCE_SALT ), 15, rand(5,15) );
+        update_option( 'opanda_robust_script_key', $key );
+    }
+    return $key;
+}
+
+/**
+ * Returns available lockers.
+ * 
+ * @since 1.1.3
+ */
+function opanda_get_lockers( $lockerType = null, $output = null ) {
+    
+    $lockers = get_posts(array(
+        'post_type' => OPANDA_POST_TYPE,
+        'meta_key' => 'opanda_item',
+        'meta_value' => empty( $lockerType ) ? OPanda_Items::getAvailableNames() : $lockerType,
+        'numberposts' => -1
+    ));
+    
+    foreach( $lockers as $locker ) {
+        $locker->post_title = empty( $locker->post_title ) 
+            ? sprintf( __( '(no titled, ID=%s)' ), $locker->ID )
+            : $locker->post_title;
+    } 
+    
+    if ( 'vc' === $output ) {
+        
+        $result = array();
+        foreach ( $lockers as $locker ) $result[$locker->post_title] = $locker->ID;
+        return $result;
+    }
+    
+    return $lockers;
+}
+
+// ---------------------------------
+// Move to hooks.php
+// ---------------------------------
+
+/**
+ * Handles a frontend action linked with bizpanda.
+ * 
+ * @since 1.1.0
+ * @return void
+ */
+function bizpanda_frontend_action() {
+    $robustKey = opanda_get_robust_key();
+    
+    if ( isset( $_REQUEST['bizpanda'] ) ) {
+        
+        $action = $_REQUEST['bizpanda'];
+
+        if ( 'terms-of-use' === $action ) {
+            return bizpanda_show_terms_of_use();
+        }
+
+        if ( 'privacy-policy' === $action ) {
+            return bizpanda_show_privacy_policy();
+        }    
+
+    } else if ( isset( $_REQUEST[$robustKey] ) ) {
+        
+        $action = $_REQUEST[$robustKey];
+        
+        if ( opanda_get_robust_script_key() === $action ) {
+            echo file_get_contents(OPANDA_BIZPANDA_DIR . '/assets/js/lockers.010209.min.js');
+            exit;
+        }
+    }
+}
+add_action('template_redirect', 'bizpanda_frontend_action');
+
+/**
+ * Displays the text of the Terms of Use.
+ * 
+ * @since 1.1.0
+ * @return void
+ */
+function bizpanda_show_terms_of_use() {
+    
+    $enabled = get_option('opanda_terms_enabled', false);
+    if ( empty( $enabled ) ) return;
+    
+    $usePages = get_option('opanda_terms_use_pages', false);
+    if ( $usePages ) return;
+    
+    ?>
+
+    <html>
+        <title><?php echo get_bloginfo('name'); ?></title>
+        <link rel='stylesheet' href='<?php echo OPANDA_BIZPANDA_URL . '/assets/css/terms.010000.css' ?>' type='text/css' media='all' />
+        <body>
+            <?php echo get_option('opanda_terms_of_use_text', false); ?>
+        </body>
+    <html>
+        
+    <?php
+    exit;
+}
+
+/**
+ * Displays the text of the Privacy Policy.
+ * 
+ * @since 1.1.0
+ * @return void
+ */
+function bizpanda_show_privacy_policy() {
+    
+    $enabled = get_option('opanda_terms_enabled', false);
+    if ( empty( $enabled ) ) return;
+    
+    $usePages = get_option('opanda_terms_use_pages', false);
+    if ( $usePages ) return;
+    
+    ?>
+        
+    <html>
+        <title><?php echo get_bloginfo('name'); ?></title>
+        <link rel='stylesheet' href='<?php echo OPANDA_BIZPANDA_URL . '/assets/css/terms.010000.css' ?>' type='text/css' media='all' />
+        <body>
+            <?php echo get_option('opanda_privacy_policy_text', false); ?>
+        </body>
+    <html>
+        
+    <?php
+    exit;
+}
+
+/**
+ * Confrims subscription made through Wordpress.
+ */
+function bizpanda_confrim_wp_subscription() {
+
+    if ( !isset( $_GET['opanda_confirm'] ) ) return;
+    if ( !isset( $_GET['opanda_email'] ) ) return;
+    if ( !isset( $_GET['opanda_code'] ) ) return;
+    
+    require_once OPANDA_BIZPANDA_DIR . '/admin/includes/leads.php';
+    require_once OPANDA_BIZPANDA_DIR . '/admin/includes/stats.php';
+        
+    $email = $_GET['opanda_email'];
+    $code = $_GET['opanda_code'];
+
+    OPanda_Leads::confirm($email, $code, true);
+}
+
+add_action( 'init', 'bizpanda_confrim_wp_subscription' );
+
+// ----------------------------------------------
+// Visibility Parameters
+// ----------------------------------------------
+
+/**
+ * Writes a current user role into the visibility vars.
+ */
+function bizpanda_visibility_param_user_role( $value ) {
+    
+    if ( !is_user_logged_in() ) return 'guest';
+    else {
+        $current_user = wp_get_current_user(); 
+        if ( !($current_user instanceof WP_User) ) return $value;
+        return $current_user->roles;
+    }
+}
+add_filter('bp_visibility_param_user-role', 'bizpanda_visibility_param_user_role');
+
+/**
+ * Writes a timestamp when the user was registered the visibility vars.
+ */
+function bizpanda_visibility_param_user_registered( $value ) {
+    
+    if ( !is_user_logged_in() ) return 0;
+    else {
+        $user = wp_get_current_user();
+        $timestamp = strtotime( $user->data->user_registered ) * 1000;
+        return $timestamp;
+    }
+}
+add_filter('bp_visibility_param_user-registered', 'bizpanda_visibility_param_user_registered');
+
+/**
+ * Writes a number of user pageviews.
+ */
+function bizpanda_visibility_param_user_pageviews( $value ) {
+    
+    if ( !is_user_logged_in() ) return 0;
+    else {
+        $user = wp_get_current_user();
+        $timestamp = strtotime( $user->data->user_registered ) * 1000;
+        return $timestamp;
+    }
+}
+add_filter('bp_visibility_param_user-pageviews', 'bizpanda_visibility_param_user_pageviews');
+
+/**
+ * Writes a number of user pageviews.
+ */
+function bizpanda_visibility_param_post_published( $value ) {
+    global $post;
+    if ( empty( $post ) ) return $value;
+    
+    if ( empty( $post->post_date_gmt ) ) return time() * 1000;
+    return strtotime( $post->post_date_gmt ) * 1000;
+}
+add_filter('bp_visibility_param_post-published', 'bizpanda_visibility_param_post_published');

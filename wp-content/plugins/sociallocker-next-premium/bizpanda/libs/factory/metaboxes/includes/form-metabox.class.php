@@ -40,13 +40,13 @@ abstract class FactoryMetaboxes321_FormMetabox extends FactoryMetaboxes321_Metab
     private function getForm( $post_id = null ) {
         
         // creating a value provider
-        $this->provider = new FactoryForms327_MetaValueProvider( array(
+        $this->provider = new FactoryForms328_MetaValueProvider( array(
             'scope' => $this->scope                            
         ));
         $this->provider->init( $post_id );
 
         // creating a form
-        $form = new FactoryForms327_Form( array(
+        $form = new FactoryForms328_Form( array(
             'scope' => $this->scope,
             'name' => $this->id
         ), $this->plugin );
@@ -96,14 +96,14 @@ abstract class FactoryMetaboxes321_FormMetabox extends FactoryMetaboxes321_Metab
     /**
      * Method executed before rendering the form.
      */
-    public function beforeForm(FactoryForms327_Form $form) {
+    public function beforeForm(FactoryForms328_Form $form) {
         return;
     }
     
     /**
      * Method executed after rendering the form.
      */
-    public function afterForm(FactoryForms327_Form $form) {
+    public function afterForm(FactoryForms328_Form $form) {
         return;
     }
         

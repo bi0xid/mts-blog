@@ -54,10 +54,10 @@ class OPanda_TermsPrivacyMetaBox extends FactoryMetaboxes321_Metabox
     public function __construct( $plugin ) {
         parent::__construct( $plugin );
         
-        $this->title = __('Terms & Policies', 'optinpanda');
+        $this->title = __('Terms & Policies', 'bizpanda');
     }
     
-    public $cssClass = 'factory-bootstrap-328';
+    public $cssClass = 'factory-bootstrap-329';
         
 
     public function html() {

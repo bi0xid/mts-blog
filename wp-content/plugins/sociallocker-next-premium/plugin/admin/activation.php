@@ -16,7 +16,7 @@
  * @return string
  */
 function sociallocker_license_manager_success_button() {
-    return __('Learn how to use the plugin <i class="fa fa-lightbulb-o"></i>', 'opanda');
+    return __('Learn how to use the plugin <i class="fa fa-lightbulb-o"></i>', 'plugin-sociallocker');
 }
 
 add_action('onp_license_manager_success_button_' . $sociallocker->pluginName, 'sociallocker_license_manager_success_button');
@@ -59,7 +59,7 @@ class SocialLocker_Activation extends Factory325_Activator {
      * @since 1.0.0
      */
     protected function setupLicense() {
-        
+
         // sets the default licence
         // the default license is a license that is used when a license key is not activated
  
@@ -68,7 +68,7 @@ class SocialLocker_Activation extends Factory325_Activator {
                 'Build'         => 'premium',
                 'Title'         => 'OnePress Zero License',
                 'Description'   => __('Please, activate the plugin to get started. Enter a key 
-                                    you received with the plugin into the form below.', 'optinpanda')
+                                    you received with the plugin into the form below.', 'plugin-sociallocker')
             ));
         
 

@@ -15,14 +15,20 @@ class OPanda_TwitterHandler extends OPanda_Handler {
         $requestType = !empty( $_REQUEST['opandaRequestType'] ) ? $_REQUEST['opandaRequestType'] : null;
         
         // allowed request types, others will trigger an error
-        $allowed = array('init', 'callback', 'user_info', 'follow', 'tweet');
+        $allowed = array('init', 'callback', 'user_info', 'follow', 'tweet', 'get_tweets', 'get_followers');
         
         if ( empty( $requestType ) || !in_array($requestType, $allowed) )
             throw new Opanda_HandlerException('Invalid request type.'); 
         
         // the visitor id is used as a key for the storage where all the tokens are saved
         $visitorId = !empty( $_REQUEST['opandaVisitorId'] ) ? $_REQUEST['opandaVisitorId'] : null;
-
+        
+        $readOnly = !empty( $_REQUEST['opandaReadOnly'] ) ? (bool)$_REQUEST['opandaReadOnly'] : null;   
+        if ( $readOnly ) {
+            $this->options['consumer_key'] = 'BGzwxomRvrJce8jQr2ajg5LBj';
+            $this->options['consumer_secret'] = 'bYCm0HawRTVCYARtJD6tLLkyccq9YRrmtU41QLrcuLEXR7CD9r';
+        }
+        
         require_once( 'libs/twitteroauth.php');
 
         switch( $requestType ) {
@@ -40,17 +46,23 @@ class OPanda_TwitterHandler extends OPanda_Handler {
                 $this->follow( $visitorId );
                 
             case 'tweet':
-                $this->tweet( $visitorId );     
+                $this->tweet( $visitorId );    
+                
+            case 'get_tweets':
+                $this->getTweets( $visitorId ); 
+                
+            case 'get_followers':
+                $this->getFollowers( $visitorId );  
         }
     }
     
     /**
      * Build the callback URL for Twitter.
      */
-    public function getCallbackUrl( $visitorId ) {
+    public function getCallbackUrl( $visitorId, $keepOpen ) {
         $proxy = $this->options['proxy'];
         $prefix = ( strpos( $proxy, '?') === false) ? '?' : '&';
-        return $proxy . $prefix . 'opandaHandler=twitter&opandaRequestType=callback&opandaVisitorId=' . $visitorId;
+        return $proxy . $prefix . 'opandaHandler=twitter&opandaRequestType=callback&opandaVisitorId=' . $visitorId . ('&opandaKeepOpen=' . ($keepOpen ? '1' : '0'));
     }
     
     /**
@@ -60,9 +72,11 @@ class OPanda_TwitterHandler extends OPanda_Handler {
         $options = $this->options;
 
         if ( empty( $visitorId ) ) $visitorId = $this->getGuid();
-
-        $oauth = new TwitterOAuth( $options['consumer_key'], $options['consumer_secret'] );
-        $requestToken = $oauth->getRequestToken( $this->getCallbackUrl( $visitorId ) ); 
+        $keepOpen = !empty( $_REQUEST['opandaKeepOpen'] ) ? (bool)$_REQUEST['opandaKeepOpen'] : null; 
+        $readOnly = !empty( $_REQUEST['opandaReadOnly'] ) ? (bool)$_REQUEST['opandaReadOnly'] : null; 
+        
+        $oauth = new OPanda_TwitterOAuth( $options['consumer_key'], $options['consumer_secret'] );
+        $requestToken = $oauth->getRequestToken( $this->getCallbackUrl( $visitorId, $keepOpen ) ); 
 
         $token = $requestToken['oauth_token'];
         $secret = $requestToken['oauth_token_secret'];          
@@ -81,7 +95,8 @@ class OPanda_TwitterHandler extends OPanda_Handler {
      */
     public function doCallback( $visitorId ) {
         $options = $this->options;
-        
+        $keepOpen = !empty( $_REQUEST['opandaKeepOpen'] ) ? (bool)$_REQUEST['opandaKeepOpen'] : null; 
+
         if ( empty( $visitorId ) )
             throw new Opanda_HandlerException('Invalid visitor ID.');
         
@@ -89,7 +104,7 @@ class OPanda_TwitterHandler extends OPanda_Handler {
         if ( $denied ) { 
         ?>
             <script>
-                if( window.opener ) window.opener.OPanda_TwitterOAuthDenied( '<?php echo $visitorId ?>' );                
+                if( window.opener ) window.opener.OPanda_OPanda_TwitterOAuthDenied( '<?php echo $visitorId ?>' );                
                 window.close();                
             </script>
         <?php
@@ -109,7 +124,7 @@ class OPanda_TwitterHandler extends OPanda_Handler {
             throw new Opanda_HandlerException( "The secret of the request token is invalid for $visitorId" );
         }    
 
-        $connection = new TwitterOAuth( $options['consumer_key'], $options['consumer_secret'], $token, $secret );
+        $connection = new OPanda_TwitterOAuth( $options['consumer_key'], $options['consumer_secret'], $token, $secret );
 
         $accessToken = $connection->getAccessToken( $verifier );
 
@@ -119,7 +134,15 @@ class OPanda_TwitterHandler extends OPanda_Handler {
         ?>
             <script>
                 if( window.opener ) window.opener.OPanda_TwitterOAuthCompleted( '<?php echo $visitorId ?>' );                
-                window.close();                
+                <?php if ( !$keepOpen ) { ?>
+                    window.close();
+                <?php } ?>
+                
+                window.updateState = function( url, width, height, x, y ){
+                    window.location.href = url;
+                    window.resizeTo && window.resizeTo(width, height);
+                    window.moveTo && window.moveTo(x, y);
+                }
             </script>
         <?php
         
@@ -141,17 +164,38 @@ class OPanda_TwitterHandler extends OPanda_Handler {
             if ( empty( $secret ) ) throw new Opanda_HandlerException( "The secret of the access token is invalid for $visitorId" );
         }
         
-        return new TwitterOAuth( $options['consumer_key'], $options['consumer_secret'], $token, $secret);
+        return new OPanda_TwitterOAuth( $options['consumer_key'], $options['consumer_secret'], $token, $secret);
     }
     
-    public function getUserData( $visitorId ) {
+    public function getUserData( $visitorId, $returnData = false ) {
+        require_once( 'libs/twitteroauth.php');
         $oauth = $this->getTwitterOAuth( $visitorId );
 
-        $response = $oauth->get('account/verify_credentials');
+        $response = $oauth->get('account/verify_credentials', array('skip_status' => 1, 'include_email' => 'true'));
+        if ( $returnData ) return $response;
+        
+        echo json_encode($response);
+        exit;
+    }
+    
+    public function getTweets( $visitorId ) {
+        $oauth = $this->getTwitterOAuth( $visitorId );
+
+        $response = $oauth->get('statuses/user_timeline', array('count' => 3));
         echo json_encode($response);
         
         exit;
     }
+    
+    public function getFollowers( $visitorId ) {
+        $oauth = $this->getTwitterOAuth( $visitorId );
+        $sceenName = !empty( $_REQUEST['opandaSceenName']) ? $_REQUEST['opandaSceenName'] : null;
+
+        $response = $oauth->get('friendships/lookup', array('screen_name' => $sceenName));
+        echo json_encode($response);
+        
+        exit;
+    }    
     
     protected function follow( $visitorId ) {
         $oauth = $this->getTwitterOAuth( $visitorId );

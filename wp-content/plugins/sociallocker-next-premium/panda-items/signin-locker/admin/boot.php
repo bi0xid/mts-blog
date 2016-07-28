@@ -16,13 +16,13 @@ function opanda_signin_locker_metaboxes( $metaboxes ) {
    
     $metaboxes[] = array(
         'class' => 'OPanda_ConnectOptionsMetaBox',
-        'path' => BIZPANDA_SIGNIN_LOCKER_DIR . '/includes/metaboxes/connect-options.php'
+        'path' => BIZPANDA_SIGNIN_LOCKER_DIR . '/admin/metaboxes/connect-options.php'
     );
 
     $metaboxes[] = array(
         'class' => 'OPanda_TermsPrivacyMetaBox',
         'path' => OPANDA_BIZPANDA_DIR . '/includes/metaboxes/terms-privacy.php'
-    );    
+    );
 
     return $metaboxes;
 }
@@ -42,21 +42,21 @@ function opanda_signin_locker_activation( $plugin, $helper ) {
         'opanda_default_signin_locker_id',
         array(
             'post_type' => OPANDA_POST_TYPE,
-            'post_title' => __('Sign-In Locker', 'optinpanda'),
+            'post_title' => __('Sign-In Locker (default)', 'signinlocker'),
             'post_name' => 'opanda_default_signin_locker'
         ),
         array(
             'opanda_item' => 'signin-locker',
-            'opanda_header' => __('Sign In To Unlock This Content', 'optinpanda'),       
-            'opanda_message' => __('Please sign in. It\'s free. Just click one of the buttons below to get instant access.', 'optinpanda'),
+            'opanda_header' => __('Sign In To Unlock This Content', 'signinlocker'),       
+            'opanda_message' => __('Please sign in. It\'s free. Just click one of the buttons below to get instant access.', 'signinlocker'),
             'opanda_style' => 'great-attractor',
             'opanda_catch_leads' => 1,
             'opanda_connect_buttons' => 'facebook,twitter,google',
-            'opanda_facebook_actions' => BizPanda::hasPlugin('optinpanda') ? 'subscribe,signup' : 'signup',
-            'opanda_twitter_actions' => BizPanda::hasPlugin('optinpanda') ? 'subscribe,signup' : 'signup',
-            'opanda_google_actions' => BizPanda::hasPlugin('optinpanda') ? 'subscribe,signup' : 'signup',
-            'opanda_linkedin_actions' => BizPanda::hasPlugin('optinpanda') ? 'subscribe,signup' : 'signup',
-            'opanda_email_actions' => BizPanda::hasPlugin('optinpanda') ? 'subscribe,signup' : 'signup',
+            'opanda_facebook_actions' => BizPanda::hasPlugin('optinpanda') ? 'signup' : 'signup',
+            'opanda_twitter_actions' => BizPanda::hasPlugin('optinpanda') ? 'signup' : 'signup',
+            'opanda_google_actions' => BizPanda::hasPlugin('optinpanda') ? 'signup' : 'signup',
+            'opanda_linkedin_actions' => BizPanda::hasPlugin('optinpanda') ? 'signup' : 'signup',
+            'opanda_email_actions' => BizPanda::hasPlugin('optinpanda') ? 'signup' : 'signup',
             'opanda_mobile' => 1,          
             'opanda_highlight' => 1,                   
             'opanda_is_system' => 1,
@@ -81,27 +81,30 @@ add_action('after_bizpanda_activation', 'opanda_signin_locker_activation', 10, 2
  * @return void 
  */
 function opanda_register_signin_locker_themes( $item = 'signin-locker' ) {
+        
+        OPanda_ThemeManager::registerTheme(array(
+            'name' => 'great-attractor',
+            'title' => 'Great Attractor',
+            'path' => OPANDA_BIZPANDA_DIR . '/themes/great-attractor',
+            'items' => array('signin-locker', 'email-locker') 
+        ));
 
-    OPanda_ThemeManager::registerTheme(array(
-        'name' => 'great-attractor',
-        'title' => 'Great Attractor',
-        'path' => OPANDA_BIZPANDA_DIR . '/themes/great-attractor',
-        'items' => array('signin-locker', 'email-locker') 
-    ));
+        OPanda_ThemeManager::registerTheme(array(
+            'name' => 'friendly-giant',
+            'title' => 'Friendly Giant',
+            'path' => OPANDA_BIZPANDA_DIR . '/themes/friendly-giant',
+            'items' => array('signin-locker', 'email-locker') 
+        ));
 
-    OPanda_ThemeManager::registerTheme(array(
-        'name' => 'friendly-giant',
-        'title' => 'Friendly Giant',
-        'path' => OPANDA_BIZPANDA_DIR . '/themes/friendly-giant',
-        'items' => array('signin-locker', 'email-locker') 
-    ));
+        OPanda_ThemeManager::registerTheme(array(
+            'name' => 'dark-force',
+            'title' => 'Dark Force',
+            'path' => OPANDA_BIZPANDA_DIR . '/themes/dark-force',
+            'items' => array('signin-locker', 'email-locker') 
+        ));  
+    
+    
 
-    OPanda_ThemeManager::registerTheme(array(
-        'name' => 'dark-force',
-        'title' => 'Dark Force',
-        'path' => OPANDA_BIZPANDA_DIR . '/themes/dark-force',
-        'items' => array('signin-locker', 'email-locker') 
-    ));  
 }
 
 add_action('onp_sl_register_themes', 'opanda_register_signin_locker_themes');
@@ -162,8 +165,8 @@ function opanda_signin_locker_stats_screens( $screens ) {
         // The Summary Screen
         
         'summary' => array (
-            'title' => __('<i class="fa fa-search"></i> Summary', 'optinpanda'),
-            'description' => __('The page shows the total number of unlocks for the current locker.', 'opanda'),
+            'title' => __('<i class="fa fa-search"></i> Summary', 'signinlocker'),
+            'description' => __('The page shows the total number of unlocks for the current locker.', 'signinlocker'),
 
             'chartClass' => 'OPanda_SignInLocker_Summary_StatsChart',
             'tableClass' => 'OPanda_SignInLocker_Summary_StatsTable',
@@ -173,8 +176,8 @@ function opanda_signin_locker_stats_screens( $screens ) {
         // The Profits Screen
         
         'profits' => array(
-            'title' => __('<i class="fa fa-usd"></i> Benefits', 'opanda'), 
-            'description' => __('The page shows benefits the locker brought for your website.', 'opanda'),
+            'title' => __('<i class="fa fa-usd"></i> Benefits', 'signinlocker'), 
+            'description' => __('The page shows benefits the locker brought for your website.', 'signinlocker'),
 
             'chartClass' => 'OPanda_SignInLocker_Profits_StatsChart',
             'tableClass' => 'OPanda_SignInLocker_Profits_StatsTable',
@@ -184,8 +187,8 @@ function opanda_signin_locker_stats_screens( $screens ) {
         // The Channels Screen        
   
         'channels' => array(
-            'title' => __('<i class="fa fa-search-plus"></i> Channels', 'opanda'), 
-            'description' => __('The page shows which ways visitors used to unlock the content.', 'optinpanda'),
+            'title' => __('<i class="fa fa-search-plus"></i> Channels', 'signinlocker'), 
+            'description' => __('The page shows which ways visitors used to unlock the content.', 'signinlocker'),
             
             'chartClass' => 'OPanda_SignInLocker_Channels_StatsChart',
             'tableClass' => 'OPanda_SignInLocker_Channels_StatsTable',
@@ -195,26 +198,27 @@ function opanda_signin_locker_stats_screens( $screens ) {
         // The Bounces Screen        
   
         'bounces' => array(
-            'title' => __('<i class="fa fa-sign-out"></i> Bounces', 'opanda'), 
-            'description' => __('The page shows major weaknesses of the locker which lead to bounces. Hover your mouse pointer on [?] in the table, to know more about a particular metric.', 'opanda'),
+            'title' => __('<i class="fa fa-sign-out"></i> Bounces', 'signinlocker'), 
+            'description' => __('The page shows major weaknesses of the locker which lead to bounces. Hover your mouse pointer on [?] in the table, to know more about a particular metric.', 'signinlocker'),
             
             'chartClass' => 'OPanda_SignInLocker_Bounces_StatsChart',
             'tableClass' => 'OPanda_SignInLocker_Bounces_StatsTable',
             'path' => BIZPANDA_SIGNIN_LOCKER_DIR . '/admin/stats/bounces.php' 
-        ),
-        
+        )
+    );
         
         // The Skips Screen 
         
-        'skips' => array (
-            'title' => __('<i class="fa fa-tint"></i> Skips', 'optinpanda'),
-            'description' => __('The chart shows how many users skipped the locker by using the Timer or Close Icon, comparing to the users who unlocked the content.', 'optinpanda'),
-            
+        $screens['skips'] = array (
+            'title' => __('<i class="fa fa-tint"></i> Skips', 'signinlocker'),
+            'description' => __('The chart shows how many users skipped the locker by using the Timer or Close Icon, comparing to the users who unlocked the content.', 'signinlocker'),
+
             'chartClass' => 'OPanda_SignInLocker_Skips_StatsChart',
             'tableClass' => 'OPanda_SignInLocker_Skips_StatsTable',
             'path' => BIZPANDA_SIGNIN_LOCKER_DIR . '/admin/stats/skips.php'
-         )
-    );
+        );
+    
+
     
     return $screens;
 }

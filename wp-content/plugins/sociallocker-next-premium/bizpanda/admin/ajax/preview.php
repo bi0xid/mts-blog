@@ -1,6 +1,50 @@
 <?php
 add_action("wp_ajax_onp_sl_preview", 'onp_lock_preview');
 function onp_lock_preview() {
+
+    $resOptions = array(
+        'confirm_screen_title',
+        'confirm_screen_instructiont',
+        'confirm_screen_note1',
+        'confirm_screen_note2',  
+        'confirm_screen_cancel',
+        'confirm_screen_open',
+        'misc_data_processing',
+        'misc_or_enter_email',
+        'misc_enter_your_email',
+        'misc_enter_your_name',
+        'misc_your_agree_with',
+        'misc_terms_of_use',
+        'misc_privacy_policy',
+        'misc_or_wait',
+        'misc_close',
+        'misc_or',
+        'errors_empty_email',
+        'errors_inorrect_email',
+        'errors_empty_name',
+        'errors_subscription_canceled',
+        'misc_close',
+        'misc_or',
+        'onestep_screen_title',
+        'onestep_screen_instructiont',
+        'onestep_screen_button',
+        'errors_not_signed_in',
+        'errors_not_granted',
+        'signin_long',
+        'signin_short',
+        'signin_facebook_name',
+        'signin_twitter_name',
+        'signin_google_name',
+        'signin_linkedin_name'
+    );
+    
+    $resources = array();
+    foreach( $resOptions as $resName ) {
+        $resValue = get_option('opanda_res_'. $resName, false);
+        if ( empty( $resValue ) ) continue;
+        $resources[$resName] = $resValue;
+    }
+    
 ?>
 <!DOCTYPE html>
 <html>
@@ -62,6 +106,14 @@ function onp_lock_preview() {
                  margin-top: 20px;
              }
          </style>
+         
+         <?php if ( !empty( $resources ) ) { ?>
+         <script>
+            window.__pandalockers = {};
+            window.__pandalockers.lang = <?php echo json_encode( $resources ) ?>;
+         </script>
+         <?php } ?>
+         
          <script type="text/javascript" src="<?php echo get_site_url() ?>/wp-includes/js/jquery/jquery.js"></script>
          
          <?php if ( file_exists( includes_url() . 'js/jquery/ui/jquery.ui.core.min.js' )) { ?>
@@ -77,14 +129,14 @@ function onp_lock_preview() {
          <script type="text/javascript" src="<?php echo OPANDA_BIZPANDA_URL ?>/assets/admin/js/libs/json2.js"></script>    
          
          <?php ?>
-         <script type="text/javascript" src="<?php echo OPANDA_BIZPANDA_URL ?>/assets/js/lockers.010004.min.js"></script>  
-         <link rel="stylesheet" type="text/css" href="<?php echo OPANDA_BIZPANDA_URL ?>/assets/css/lockers.010003.min.css">  
+         <script type="text/javascript" src="<?php echo OPANDA_BIZPANDA_URL ?>/assets/js/lockers.010209.min.js"></script>  
+         <link rel="stylesheet" type="text/css" href="<?php echo OPANDA_BIZPANDA_URL ?>/assets/css/lockers.010209.min.css">  
          <?php 
  ?>
          
          <?php do_action('onp_sl_preview_head') ?>  
     </head>
-    <body class="onp-sl-demo">
+    <body class="onp-sl-demo factory-fontawesome-320">
         <div id="wrap" style="text-align: center; margin: 0 auto; max-width: 800px;">
             <div class="content-to-lock" style="text-align: center; margin: 0 auto; max-width: 700px;">
 
@@ -126,7 +178,7 @@ function onp_lock_preview() {
                locker.bind('opanda-unlock', function(){
                     window.alertFrameSize();   
                });
-               
+
                locker.bind('opanda-size-changed', function(){
                     window.alertFrameSize();   
                });
@@ -146,6 +198,8 @@ function onp_lock_preview() {
 
            window.dencodeOptions  = function( options ) {
                for( var optionName in options ) {
+                   if ( !$.isPlainObject(options[optionName])) continue;
+                   
                    if ( typeof options[optionName] === 'object' ) {
                        options[optionName] = dencodeOptions( options[optionName] );
                    } else {

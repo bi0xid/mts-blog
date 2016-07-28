@@ -11,9 +11,13 @@ add_action('wp_ajax_nopriv_opanda_connect', 'opanda_connect');
  */
 function opanda_connect() {    
     define('OPANDA_PROXY', true);
+    error_reporting(-1);
+    
+    // error_reporting(E_ALL);
+    // ini_set('display_errors', 'On');
     
     $handlerName = isset( $_REQUEST['opandaHandler'] ) ? $_REQUEST['opandaHandler'] : null;
-    $allowed = array('twitter', 'subscription', 'signup');
+    $allowed = array('twitter', 'linkedin', 'subscription', 'signup', 'lead');
 
     if ( empty( $handlerName ) || !in_array( $handlerName, $allowed ) ) {
         header( 'Status: 403 Forbidden' );
@@ -35,6 +39,7 @@ function opanda_connect() {
     $handler = new $handlerClass( $options );
 
     try {
+        
         $result = $handler->handleRequest();
         echo json_encode( $result );
 
@@ -56,12 +61,12 @@ function opanda_connect() {
  * @return void
  */
 function opanda_get_subscrtiption_lists() {
-        
+
     require OPANDA_BIZPANDA_DIR.'/admin/includes/subscriptions.php';    
     
     try {
         
-        $service = OPanda_SubscriptionServices::getService( null, true );
+        $service = OPanda_SubscriptionServices::getCurrentService();
 
         $lists = $service->getLists();
         echo json_encode($lists); 
@@ -74,3 +79,30 @@ function opanda_get_subscrtiption_lists() {
 }
 
 add_action( 'wp_ajax_opanda_get_subscrtiption_lists', 'opanda_get_subscrtiption_lists' );
+
+/**
+ * Returns the lists available for the current subscription service.
+ * 
+ * @since 1.0.0
+ * @return void
+ */
+function opanda_get_custom_fields() {
+
+    require OPANDA_BIZPANDA_DIR.'/admin/includes/subscriptions.php';    
+    
+    try {
+        
+        $listId = isset( $_POST['opanda_list_id'] ) ? $_POST['opanda_list_id'] : null;
+        $service = OPanda_SubscriptionServices::getCurrentService();
+
+        $fields = $service->getCustomFields( $listId );
+        echo json_encode($fields); 
+        
+    } catch (Exception $ex) {
+        echo json_encode( array('error' => $ex->getMessage() ) ); 
+    }
+
+    exit;
+}
+
+add_action( 'wp_ajax_opanda_get_custom_fields', 'opanda_get_custom_fields' );

@@ -118,8 +118,9 @@ abstract class FactoryShortcodes320_Shortcode {
             $metaValue = get_post_meta($post->ID, self::$metaKeyShorcodeAssetsForPosts, true);
             if ( !isset( $metaValue[$shortcodeName] ) ) continue;
 
-            $this->assets( false, true );
-
+            $result = $this->assets( $metaValue[$shortcodeName], false, true );
+            if ( !$result ) continue;
+            
             $this->scripts->connect();
             $this->styles->connect();
 
@@ -137,41 +138,12 @@ abstract class FactoryShortcodes320_Shortcode {
      */
     public function actionSavePost( $postid ) {
         if ( wp_is_post_revision( $postid ) ) return $postid;
-        
+
         $post = get_post($postid);
         if (empty($post)) return;
         
         $this->onPostSave( $post );
-
-        // checks needs to include assets in the <head> tag of the post page.
-        $this->markPostAssets( $post );
-        // 
         if ($this->track) $this->trackShortcode( $post );
-    }
-    
-    /**
-     * Marks post as a post containing a current shortcode and to load the shortcodes assets
-     * on showing the post.
-     * 
-     * @since 1.0.0
-     * @param object $post A current post.
-     * @return void
-     */
-    private function markPostAssets( $post ) {
-        if ( !$this->assetsInHeader) return;
-        
-        $content = $post->post_content;
-        $metaValue = get_post_meta($post->ID, self::$metaKeyShorcodeAssetsForPosts, true);
-        if ( !is_array($metaValue) ) $metaValue = array();
-        
-        foreach($this->shortcodeName as $shortcodeName) {
-            unset( $metaValue[$shortcodeName] );
-            if ( !(strpos($content, '[' . $shortcodeName) === false) ) {
-                $metaValue[$shortcodeName] = true;
-            }   
-        }
-        
-        update_post_meta($post->ID, self::$metaKeyShorcodeAssetsForPosts, $metaValue);
     }
     
     /**
@@ -182,17 +154,32 @@ abstract class FactoryShortcodes320_Shortcode {
      * @return void
      */
     private function trackShortcode( $post ) {
+        if ( empty( $this->shortcodeName ) ) return;
+                
         $matches = array();
 
-        $tagregexp = join( '|', $this->shortcodeName );
+        $shortcodes = $this->shortcodeName;
+        if ( !is_array( $shortcodes ) ) $shortcodes = array( $this->shortcodeName );
+        
+        $tagregexp = join( '|', $shortcodes );
 
         $start = '(\[(' . $tagregexp . ')([^\[\]]*)\])';
         $end = '\[\/\2\]';
         $pattern = '/' . $start . '(.*?)' . $end . '/is';
 
         $count = preg_match_all($pattern, $post->post_content, $matches, PREG_SET_ORDER);
-        if (!$count) return $post->post_content;
-
+        
+        $foundShortcodes = get_post_meta($post->ID, self::$metaKeyShorcodeAssetsForPosts, true);
+        if ( !is_array( $foundShortcodes ) ) $foundShortcodes = array();
+        foreach( $shortcodes as $shortcode ) unset( $foundShortcodes[$shortcode] );
+        
+        if ( !$count ) {
+            update_post_meta($post->ID, self::$metaKeyShorcodeAssetsForPosts, $foundShortcodes);
+            return;
+        }
+        
+        // clears info about previously existing shortcodes
+        
         foreach($matches as $order => $match) {
 
             $shortcode = $match[2];
@@ -201,8 +188,19 @@ abstract class FactoryShortcodes320_Shortcode {
 
             $attrs = shortcode_parse_atts($attrContent);
             
+            if ( !isset( $foundShortcodes[$shortcode] ) ) $foundShortcodes[$shortcode] = array();
+            $foundShortcodes[$shortcode][] = $attrs;
+            
+            // allows to perfome custom actions
+            
+            do_action('factory_shortcode_found', $shortcode, $attrs, $innerContent);
             $this->onTrack( $shortcode, $attrs, $innerContent, $post->ID );
         }
+
+        // saves info about existing shortcodes for a given post
+        
+        delete_post_meta($post->ID, self::$metaKeyShorcodeAssetsForPosts);
+        update_post_meta($post->ID, self::$metaKeyShorcodeAssetsForPosts, $foundShortcodes);
     }
     
     /**
@@ -214,11 +212,28 @@ abstract class FactoryShortcodes320_Shortcode {
     public function render($attr, $content) {
 
         if ( !$this->connected ) {
-            $this->assets( true, false );
+            $this->assets( array( $attr ), true, false );
             $this->scripts->connect(true);
             $this->styles->connect(true);
         }
         
+        // fix for compability
+        
+        global $post;
+        if ( !empty($post) && !empty( $this->shortcodeName ) ) {
+            $foundShortcodes = get_post_meta($post->ID, self::$metaKeyShorcodeAssetsForPosts, true);
+            if ( $foundShortcodes && !is_array($foundShortcodes) ) {
+                
+                $shortcodes = $this->shortcodeName;
+                if ( !is_array( $shortcodes ) ) $shortcodes = array( $this->shortcodeName );
+                
+                $foundShortcodes = array();
+                $foundShortcodes[$shortcodes[0]] = array();
+                $foundShortcodes[$shortcodes[0]][] = $attr;
+                update_post_meta($post->ID, self::$metaKeyShorcodeAssetsForPosts, $foundShortcodes);
+            }
+        }
+
         ob_start();
         $this->html($attr, $content);
         $html = ob_get_clean();

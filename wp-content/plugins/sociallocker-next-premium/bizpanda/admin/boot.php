@@ -1,25 +1,32 @@
 <?php
 
-require OPANDA_BIZPANDA_DIR . '/admin/activation.php';
-require OPANDA_BIZPANDA_DIR . '/admin/panda-items.php';
-require OPANDA_BIZPANDA_DIR . '/admin/bulk-lock.php';
-
+require_once OPANDA_BIZPANDA_DIR . '/admin/activation.php';
+require_once OPANDA_BIZPANDA_DIR . '/admin/troubleshooting.php';
+require_once OPANDA_BIZPANDA_DIR . '/admin/bulk-lock.php';
+require_once OPANDA_BIZPANDA_DIR . '/admin/helpers.php';
+require_once OPANDA_BIZPANDA_DIR . '/extras/visual-composer/boot.php';
 
 // ---
 // Pages
 //
 
 #comp merge
-require OPANDA_BIZPANDA_DIR . '/admin/pages/base.php';
-require OPANDA_BIZPANDA_DIR . '/admin/pages/new-item.php';
+require_once OPANDA_BIZPANDA_DIR . '/admin/pages/base.php';
+require_once OPANDA_BIZPANDA_DIR . '/admin/pages/new-item.php';
 
-require OPANDA_BIZPANDA_DIR . '/admin/pages/leads.php';
+require_once OPANDA_BIZPANDA_DIR . '/admin/pages/leads.php';
     
-require OPANDA_BIZPANDA_DIR . '/admin/pages/stats.php';    
-require OPANDA_BIZPANDA_DIR . '/admin/pages/settings.php';    
-require OPANDA_BIZPANDA_DIR . '/admin/pages/how-to-use.php'; 
+require_once OPANDA_BIZPANDA_DIR . '/admin/pages/stats.php';    
+require_once OPANDA_BIZPANDA_DIR . '/admin/pages/settings.php';    
+require_once OPANDA_BIZPANDA_DIR . '/admin/pages/how-to-use.php'; 
 #endcomp
 
+
+// ---
+// Constants
+//
+
+define('OPANDA_DEPENDS_ON_LIST', 'DEPENDS_ON_LIST');
 
 // ---
 // Ajax
@@ -36,8 +43,12 @@ if ( isset( $_REQUEST['action'] ) ) {
         case 'opanda_avatar':
             require OPANDA_BIZPANDA_DIR . '/admin/ajax/avatar.php';
             break;      
+        case 'opanda_debug_log':
+            require OPANDA_BIZPANDA_DIR . '/admin/ajax/debug.php';
+            break;           
         case 'opanda_connect':
         case 'opanda_get_subscrtiption_lists':
+        case 'opanda_get_custom_fields':            
             require OPANDA_BIZPANDA_DIR . '/admin/ajax/proxy.php';
             break;      
         case 'opanda_loader':
@@ -48,6 +59,8 @@ if ( isset( $_REQUEST['action'] ) ) {
             break;
         case 'get_opanda_lockers':
             require OPANDA_BIZPANDA_DIR . '/admin/ajax/tinymce.php';
+        case 'bp_ajax_get_user_roles':
+            require OPANDA_BIZPANDA_DIR . '/admin/ajax/visibility.php';            
     }
 }
 
@@ -168,6 +181,19 @@ function opanda_add_plugin($plugin_array) {
         $plugin_array['optinpanda'] = OPANDA_BIZPANDA_URL . '/assets/admin/js/optinpanda.tinymce4.js';  
     }
 
+    return $plugin_array;  
+}
+
+add_filter('mce_external_plugins', 'opanda_add_plugin'); 
+
+/**
+ * Adds js variable required for shortcodes.
+ * 
+ * @see before_wp_tiny_mce
+ * @since 1.1.0
+ */
+function opanda_tinymce_data() {
+
     // styles for the plugin shorcodes
     $shortcodeIcon = BizPanda::getShortCodeIcon();
     $shortcodeTitle = strip_tags( BizPanda::getMenuTitle() );
@@ -182,12 +208,8 @@ function opanda_add_plugin($plugin_array) {
         var bizpanda_shortcode_title = '<?php echo $shortcodeTitle ?>';
     </script>
     <?php
-
-    return $plugin_array;  
 }
-
-add_filter('mce_external_plugins', 'opanda_add_plugin'); 
-
+add_action( 'before_wp_tiny_mce', 'opanda_tinymce_data' );
 
 // ---
 // Key Events
@@ -202,27 +224,13 @@ add_filter('mce_external_plugins', 'opanda_add_plugin');
  */
 
 /**
- * Calls always when we receive contact data of a visitor.
- */
-function opanda_lead_catched( $identity, $context, $emailConfirmed = false, $subscriptionConfirmed = false ) {
-    $itemId = isset( $context['itemId'] ) ? intval( $context['itemId'] ) : 0;
-    
-    if ( empty( $itemId ) || get_post_meta($itemId, 'opanda_catch_leads', true) ) {
-        
-        require_once OPANDA_BIZPANDA_DIR . '/admin/includes/leads.php';
-        require_once OPANDA_BIZPANDA_DIR . '/admin/includes/stats.php';
-
-        OPanda_Leads::add( $identity, $context, $emailConfirmed, $subscriptionConfirmed );
-    }
-}
-
-add_action('opanda_lead_catched', 'opanda_lead_catched', 10, 4);
-
-/**
  * Calls always when we subscribe an user.
  */
-function opanda_subscribe( $status, $identity, $context ) {
-
+function opanda_subscribe( $status, $identity, $context, $isWpSubscription ) {
+    if ( $isWpSubscription ) return;
+    
+    require_once OPANDA_BIZPANDA_DIR . '/admin/includes/leads.php';
+    
     if ( 'subscribed' == $status ) {
         
         // if the current service is 'database', 
@@ -230,27 +238,27 @@ function opanda_subscribe( $status, $identity, $context ) {
         
         $serviceName = BizPanda::getSubscriptionServiceName();
         $confirmed = $serviceName === 'database' ? false : true;
-        
-        do_action('opanda_lead_catched', $identity, $context, $confirmed, $confirmed );
+
+        OPanda_Leads::add( $identity, $context, $confirmed, $confirmed );    
         
     } elseif ( 'pending' == $status ) {
-        do_action('opanda_lead_catched', $identity, $context, false, false  );
+        OPanda_Leads::add($identity, $context, false, false);
     }
 }
 
-add_action('opanda_subscribe', 'opanda_subscribe', 10, 3);
+add_action('opanda_subscribe', 'opanda_subscribe', 10, 4);
 
 /**
  * Calls always when we check the subscription status of the user.
  */
-function opanda_check( $status, $identity, $context ) {
+function opanda_check( $status, $identity, $context, $isWpSubscription ) {
 
     if ( 'subscribed' == $status ) {
-        do_action('opanda_lead_catched', $identity, $context, true, true );
+        OPanda_Leads::add( $identity, $context, true, true ); 
     }
 }
 
-add_action('opanda_check', 'opanda_check', 10, 3);
+add_action('opanda_check', 'opanda_check', 10, 4);
 
 /**
  * Calls when a new user is registered.
@@ -299,14 +307,103 @@ add_action('opanda_tweet_posted', 'opanda_tweet_posted');
 //
 
 // includes the view table only if the current page is the list of panda items
-if ( isset( $_GET['post_type'] ) && 'opanda-item' === $_GET['post_type'] ) {
+if ( isset( $_GET['post_type'] ) && OPANDA_POST_TYPE === $_GET['post_type'] ) {
     
     function opanda_filter_panda_items_in_view_table() {
         global $wp_query;
+        
+        $names = OPanda_Items::getAvailableNames();
+        
         $wp_query->query_vars['meta_key'] = 'opanda_item';
-        $wp_query->query_vars['meta_value'] = opanda_get_panda_item_ids();
+        $wp_query->query_vars['meta_value'] = OPanda_Items::getAvailableNames();
     }
     add_action( 'pre_get_posts', 'opanda_filter_panda_items_in_view_table' );
     
-    require OPANDA_BIZPANDA_DIR . '/admin/includes/viewtables/locker-viewtable.class.php';
+    require OPANDA_BIZPANDA_DIR . '/admin/includes/classes/class.lockers.viewtable.php';
 }
+
+// ---
+// Metaboxes
+//
+
+
+/**
+ * Registers default options (lockers, popups, forms).
+ * 
+ * @since 1.0.0
+ */
+function opanda_add_meta_boxes() {
+    global $bizpanda;
+    
+    $type = OPanda_Items::getCurrentItem();
+    if ( empty( $type ) ) return;
+    
+    $typeName = $type['name'];
+    
+    $data = array();
+
+    if ( OPanda_Items::isCurrentPremium() ) {
+
+        $data[] = array(
+            'class' => 'OPanda_BasicOptionsMetaBox',
+            'path' => OPANDA_BIZPANDA_DIR . '/includes/metaboxes/basic-options.php'
+        );
+
+        $data[] = array(
+            'class' => 'OPanda_PreviewMetaBox',
+            'path' => OPANDA_BIZPANDA_DIR . '/includes/metaboxes/preview.php'
+        );
+
+        $data[] = array(
+            'class' => 'OPanda_ManualLockingMetaBox',
+            'path' => OPANDA_BIZPANDA_DIR . '/includes/metaboxes/manual-locking.php'
+        );
+
+        $data[] = array(
+            'class' => 'OPanda_BulkLockingMetaBox',
+            'path' => OPANDA_BIZPANDA_DIR . '/includes/metaboxes/bulk-locking.php'
+        );
+
+        $data[] = array(
+            'class' => 'OPanda_VisabilityOptionsMetaBox',
+            'path' => OPANDA_BIZPANDA_DIR . '/includes/metaboxes/visability-options.php'
+        );
+
+        $data[] = array(
+            'class' => 'OPanda_AdvancedOptionsMetaBox',
+            'path' => OPANDA_BIZPANDA_DIR . '/includes/metaboxes/advanced-options.php'
+        );
+
+    } else {
+
+        $data[] = array(
+            'class' => 'OPanda_BasicOptionsMetaBox',
+            'path' => OPANDA_BIZPANDA_DIR . '/includes/metaboxes/basic-options.php'
+        );
+
+        $data[] = array(
+            'class' => 'OPanda_PreviewMetaBox',
+            'path' => OPANDA_BIZPANDA_DIR . '/includes/metaboxes/preview.php'
+        );
+
+        $data[] = array(
+            'class' => 'OPanda_ManualLockingMetaBox',
+            'path' => OPANDA_BIZPANDA_DIR . '/includes/metaboxes/manual-locking.php'
+        );
+
+        $data[] = array(
+            'class' => 'OPanda_BulkLockingMetaBox',
+            'path' => OPANDA_BIZPANDA_DIR . '/includes/metaboxes/bulk-locking.php'
+        );
+    }
+
+    $data = apply_filters( "opanda_item_type_metaboxes", $data, $typeName );
+    $data = apply_filters( "opanda_{$typeName}_type_metaboxes", $data );
+    
+    foreach( $data as $metabox ) {
+        require_once $metabox['path'];
+        FactoryMetaboxes321::registerFor( new $metabox['class']( $bizpanda ), OPANDA_POST_TYPE, $bizpanda);
+    }
+}
+
+add_action( 'init', 'opanda_add_meta_boxes' );

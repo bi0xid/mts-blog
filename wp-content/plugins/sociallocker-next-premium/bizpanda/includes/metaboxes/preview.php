@@ -43,7 +43,7 @@ class OPanda_PreviewMetaBox extends FactoryMetaboxes321_Metabox
     public function __construct( $plugin ) {
         parent::__construct( $plugin );
         
-        $this->title = __('Locker Preview', 'optinpanda');
+        $this->title = __('Locker Preview', 'bizpanda');
     }
     
     /**
@@ -64,7 +64,7 @@ class OPanda_PreviewMetaBox extends FactoryMetaboxes321_Metabox
             'data-lang' => get_option('opanda_lang'),
             'data-short-lang' => get_option('opanda_short_lang'),
             'data-facebook-appid' => get_option('opanda_facebook_appid'),
-            'data-facebook-version' => get_option('opanda_facebook_version', 'v1.0')
+            'data-facebook-version' => get_option('opanda_facebook_version', 'v1.0')            
         );
         $extra_data['data-vk-appid'] = get_option('opanda_vk_appid');
         $extra_data['data-url'] = admin_url('admin-ajax.php') . $query_string;
@@ -76,28 +76,38 @@ class OPanda_PreviewMetaBox extends FactoryMetaboxes321_Metabox
             $dataPrint .= $key.'="'.$val.'" ';
         }
         $dataPrint = rtrim($dataPrint, ' ');
+        
+        $showStyleRollerOffer = ( BizPanda::isSinglePlugin() && BizPanda::hasPlugin('sociallocker') );
         ?>
         <script>
             function onp_sl_update_preview_height(height) {
                 jQuery("#lock-preview-wrap iframe").height(height);
             }
             var pluginName = '<?php echo $bizpanda->pluginName; ?>';
-            
-            <?php if ( defined('OPANDA_STYLER_PLUGIN_ACTIVE') ) { ?>
-            window.onp_sl_styleroller = true;
-            <?php } else { ?>
-            window.onp_sl_styleroller = false;
-            <?php } ?>
-                
+
             window.opanda_proxy_url = '<?php echo opanda_proxy_url() ?>'
             window.opanda_facebook_app_id = '<?php echo get_option('opanda_facebook_appid') ?>';
             window.opanda_google_client_id = '<?php echo get_option('opanda_google_client_id') ?>';
-            window.opanda_linkedin_api_key = '<?php echo get_option('opanda_linkedin_api_key') ?>';
+            window.opanda_linkedin_client_id = '<?php echo get_option('opanda_linkedin_client_id') ?>';
             window.opanda_terms = '<?php echo opanda_terms_url() ?>';
             window.opanda_privacy_policy = '<?php echo opanda_privacy_policy_url() ?>';
             window.opanda_subscription_service_name = '<?php echo get_option('opanda_subscription_service', 'none') ?>';
+            
+            <?php if ( defined('ONP_OP_STYLER_PLUGIN_ACTIVE') ) { ?>
+            window.onp_sl_styleroller = true;
+            <?php } else { ?>
+            window.onp_sl_styleroller = false;
+            window.onp_sl_styleroller_offer_text = '<?php _e('Want more themes?', 'bizpanda') ?>';
+            window.onp_sl_styleroller_offer_url = '<?php echo $bizpanda->options['styleroller'] ?>';
+            <?php } ?>
+                
+            <?php if ( $showStyleRollerOffer ) { ?>
+            window.onp_sl_show_styleroller_offer = true;
+            <?php } else { ?>
+            window.onp_sl_show_styleroller_offer = false;
+            <?php } ?>      
         </script>
-        <p class="note"><strong><?php _e('Note', 'optinpanda'); ?>:</strong> <?php _e('In the preview mode, the some features of the locker may not work properly.', 'optinpanda'); ?></p>
+        <p class="note"><strong><?php _e('Note', 'bizpanda'); ?>:</strong> <?php _e('In the preview mode, some features of the locker may not work properly.', 'bizpanda'); ?></p>
         <div id="lock-preview-wrap"<?php echo $dataPrint; ?>>
             <iframe 
                 allowtransparency="1" 
@@ -108,7 +118,7 @@ class OPanda_PreviewMetaBox extends FactoryMetaboxes321_Metabox
                 name="preview"
                 vspace="0"
                 width="100%">
-                <?php _e('Your browser doen\'t support the iframe tag.', 'optinpanda'); ?>
+                <?php _e('Your browser doen\'t support the iframe tag.', 'bizpanda'); ?>
             </iframe>           
         </div>
         <?php

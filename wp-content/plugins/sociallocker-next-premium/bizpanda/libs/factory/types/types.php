@@ -42,7 +42,7 @@ class FactoryTypes322 {
         $type = new $className( $plugin );
 
         $pluginName = !empty($plugin) ? $plugin->pluginName : '-';
-        if ( isset( self::$types[$pluginName] ) ) self::$types[$pluginName] = array();
+        if ( !isset( self::$types[$pluginName] ) ) self::$types[$pluginName] = array();
         
         self::$types[$pluginName][] = $type;
     }
@@ -56,10 +56,7 @@ class FactoryTypes322 {
      */
     public static function activationHook( $plugin ) {
         $pluginName = $plugin->pluginName;
-        
-        $cancel = apply_filters('factory_cancel_plugin_activation_' . $plugin->pluginName, false);
-        if ( $cancel ) return true;
-        
+
         // Sets capabilities for types.
         if ( isset( self::$types[$pluginName] ) ) {
             foreach(self::$types[$pluginName] as $type) {
@@ -71,11 +68,10 @@ class FactoryTypes322 {
                     $role->add_cap('edit_' . $type->name); 
                     $role->add_cap('read_' . $type->name);
                     $role->add_cap('delete_' . $type->name);
-                    $role->add_cap('delete_' . $type->name. 's');                
                     $role->add_cap('edit_' . $type->name . 's');
                     $role->add_cap('edit_others_' . $type->name . 's');
                     $role->add_cap('publish_' . $type->name . 's'); 
-                    $role->add_cap('read_private_' . $type->name . 's');   
+                    $role->add_cap('read_private_' . $type->name . 's');      
                 }
             }
         }
@@ -89,9 +85,6 @@ class FactoryTypes322 {
      * @return void
      */
     public static function deactivationHook( $plugin ) {
-        
-        $cancel = apply_filters('factory_cancel_plugin_deactivation_' . $plugin->pluginName, false);
-        if ( $cancel ) return true;
         
         $pluginName = $plugin->pluginName;
         global $wp_roles;

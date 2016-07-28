@@ -31,7 +31,9 @@ function onp_sl_load_ajax_content() {
         "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = %s", 
         'opanda_locker_content_hash_' . $hash
     ));
-
+    
+    $content = apply_filters('opanda_ajax_content', $content);
+    
     echo $content;
     exit;
 }

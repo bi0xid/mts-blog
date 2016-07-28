@@ -9,9 +9,9 @@
  * @since 1.0.0
  */
 
-add_action('onp_updates_324_plugin_created', 'onp_updates_324_plugin_created');
-function onp_updates_324_plugin_created( $plugin ) {
-    $manager = new OnpUpdates324_Manager( $plugin );
+add_action('onp_updates_325_plugin_created', 'onp_updates_325_plugin_created');
+function onp_updates_325_plugin_created( $plugin ) {
+    $manager = new OnpUpdates325_Manager( $plugin );
     $plugin->updates = $manager;
 }
 
@@ -20,7 +20,7 @@ function onp_updates_324_plugin_created( $plugin ) {
  * 
  * @since 1.0.0
  */
-class OnpUpdates324_Manager {
+class OnpUpdates325_Manager {
     
     /**
      * Current factory plugin.
@@ -89,7 +89,7 @@ class OnpUpdates324_Manager {
      * @return bool
      */
     public function needCheckUpdates() {
-        return $this->plugin->build == 'premium';
+		return !isset( $this->plugin->options['host'] ) || $this->plugin->options['host'] == 'onepress';
     }
     
     /**
@@ -200,7 +200,7 @@ class OnpUpdates324_Manager {
         $transient = $this->changePluginTransient( get_site_transient('update_plugins') );
         if ( !empty( $transient) ) {
             unset($transient->response[$this->plugin->relativePath]);
-            onp_updates_324_set_site_transient('update_plugins', $transient);  
+            onp_updates_325_set_site_transient('update_plugins', $transient);  
         }
     }
     
@@ -222,7 +222,7 @@ class OnpUpdates324_Manager {
      */
     public function updatePluginTransient() {
         $transient = $this->changePluginTransient( get_site_transient('update_plugins') );
-        onp_updates_324_set_site_transient('update_plugins', $transient);
+        onp_updates_325_set_site_transient('update_plugins', $transient);
     }
     
     /**

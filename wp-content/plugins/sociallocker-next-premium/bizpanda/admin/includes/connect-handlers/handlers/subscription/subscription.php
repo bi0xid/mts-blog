@@ -13,14 +13,19 @@ class OPanda_SubscriptionHandler extends OPanda_Handler {
         if( !isset($_POST['opandaRequestType']) || !isset($_POST['opandaService']) ) {
            throw new Opanda_HandlerInternalException('Invalid request. The "opandaRequestType" or "opandaService" are not defined.');
         }
-        
+
+        require_once OPANDA_BIZPANDA_DIR . '/admin/includes/subscriptions.php';
+        $service = OPanda_SubscriptionServices::getCurrentService();
+
+        if ( empty( $service) ) {
+           throw new Opanda_HandlerInternalException( sprintf( 'The subscription service is not set.' )); 
+        }
+
         // - service name
         
-        $service = $this->options['service'];
-        $allowed = array( 'database', 'mailchimp', 'aweber', 'getresponse', 'mymail', 'mailpoet' );
-        
-        if ( !in_array( $service, $allowed ) ) {
-           throw new Opanda_HandlerInternalException( sprintf( 'The subscription service "%s" not found.', $service ));
+        $serviceName = $this->options['service'];
+        if ( $serviceName !== $service->name  ) {
+           throw new Opanda_HandlerInternalException( sprintf( 'Invalid subscription service "%s".', $serviceName ));
         }
         
         // - request type
@@ -41,18 +46,16 @@ class OPanda_SubscriptionHandler extends OPanda_Handler {
            throw new Opanda_HandlerException( 'Unable to subscribe. The email is not specified.' );
         }
         
-        $requireName =  isset( $_POST['opandaRequireName'] ) ? $_POST['opandaRequireName'] : true;
-        $requireName = $this->normilizeValue( $requireName );
+        // - service data
         
-        if ( $requireName && empty( $identityData['name'] ) ) {
-           throw new Opanda_HandlerException( 'Unable to subscribe. The name is not specified.' );
-        }
+        $serviceData = isset( $_POST['opandaServiceData'] ) ? $_POST['opandaServiceData'] : array();
+        $serviceData = $this->normilizeValues( $serviceData );
         
         // - context data
         
         $contextData = isset( $_POST['opandaContextData'] ) ? $_POST['opandaContextData'] : array();
         $contextData = $this->normilizeValues( $contextData );
-        
+
         // - list id
         
         $listId = isset( $_POST['opandaListId'] ) ? $_POST['opandaListId'] : null;
@@ -70,49 +73,86 @@ class OPanda_SubscriptionHandler extends OPanda_Handler {
         $confirm =  isset( $_POST['opandaConfirm'] ) ? $_POST['opandaConfirm'] : true;
         $confirm = $this->normilizeValue( $confirm );
         
-        // creating subscription service
+        // verifying user data if needed while subscribing
+        // works for social subscription
         
-        require_once('libs/class.subscription.php'); 
-        require_once('libs/' . $service . '/class.' . $service . ".php");    
+        $verified = false; 
+        $mailServiceInfo = OPanda_SubscriptionServices::getServiceInfo();
+        $modes = $mailServiceInfo['modes'];
+            
+        if ( 'subscribe' === $requestType ) {
 
-        $class = "OPanda_" . ucfirst($service) . "SubscriptionService"; 
+            if ( $doubleOptin && in_array( 'quick', $mailServiceInfo['modes'] ) ) {
+                $verified = $this->verifyUserData( $identityData, $serviceData );
+            }     
+        }
+
+        // prepares data received from custom fields to be transferred to the mailing service
+        
+        $itemId = intval( $contextData['itemId'] );
+        
+        $identityData = $this->prepareDataToSave( $service, $itemId, $identityData );
+        $serviceReadyData = $this->mapToServiceIds( $service, $itemId, $identityData );
+        $identityData = $this->mapToCustomLabels( $service, $itemId, $identityData );
+        
+        // checks if the subscription has to be procces via WP
+        
+        $subscribeMode = get_post_meta($itemId, 'opanda_subscribe_mode', true);
+        $subscribeDelivery = get_post_meta($itemId, 'opanda_subscribe_delivery', true);
+        
+        $isWpSubscription = false;
+        
+        if ( $service->hasSingleOptIn() 
+                && in_array( $subscribeMode, array('double-optin', 'quick-double-optin') ) 
+                && ( $service->isTransactional() || $subscribeDelivery == 'wordpress' ) ) {
+            
+            $isWpSubscription = true;
+        }
+
+        // creating subscription service
 
         try {    
-            
-            $serviceData = array(
-                'name' => $service,
-                'title' => null
-            );
-            
-            $service = new $class( $serviceData );
-            
-            if ( defined( 'OPANDA_WORDPRESS' ) ) {
-                $serviceOptions = $service->getOptions();
-            } else {
-                $serviceOptions = $this->options[$service];
-            }
-            
-            $service->init( $serviceOptions );
             
             $result = array();
             
             if ( 'subscribe' === $requestType ) {
-                $result = $service->subscribe( $identityData, $listId, $doubleOptin, $contextData );
+                
+                if ( $isWpSubscription ) {
+                    
+                    // if the use signes in via a social network and we managed to confirm that the email is real,
+                    // then we can skip the confirmation process
+                    
+                    if ( $verified ) {
+                        OPanda_Leads::add( $identityData, $contextData, true, true );
+                        return $service->subscribe( $serviceReadyData, $listId, false, $contextData, $verified );
+                    } else {
+                        $result = $service->wpSubscribe( $identityData, $serviceReadyData, $contextData, $listId, $verified );    
+                    }
+      
+                } else {
+                    $result = $service->subscribe( $serviceReadyData, $listId, $doubleOptin, $contextData, $verified );         
+                }
 
                 do_action('opanda_subscribe', 
                     ( $result && isset( $result['status'] ) ) ? $result['status'] : 'error', 
-                    $identityData, $contextData
+                    $identityData, $contextData, $isWpSubscription
                 );
                 
             } elseif ( 'check' === $requestType ) {
-                $result = $service->check( $identityData, $listId, $contextData );
-
+                
+                if ( $isWpSubscription ) {
+                    $result = $service->wpCheck( $identityData, $serviceReadyData, $contextData, $listId, $verified );   
+                } else {
+                    $result = $service->check( $serviceReadyData, $listId, $contextData );   
+                }
+                
                 do_action('opanda_check', 
                     ( $result && isset( $result['status'] ) ) ? $result['status'] : 'error', 
-                    $identityData, $contextData
+                    $identityData, $contextData, $isWpSubscription
                 );
             }
-
+            
+            $result = apply_filters('opanda_subscription_result', $result, $identityData);
             if ( !defined( 'OPANDA_WORDPRESS' ) ) return $result;
             
             // calls the hook to save the lead in the database

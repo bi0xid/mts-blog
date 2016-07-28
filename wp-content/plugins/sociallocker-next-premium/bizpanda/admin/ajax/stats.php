@@ -28,12 +28,17 @@ function opanda_statistics() {
     
     $eventName = isset( $statsItem['eventName'] ) ? $statsItem['eventName'] : null;
     $eventName = opanda_normilize_value( $eventName );
-    
+
     // sender type
     
     $eventType = isset( $statsItem['eventType'] ) ? $statsItem['eventType'] : null;
     $eventType = opanda_normilize_value( $eventType );
     
+    // visitor id
+    
+    $visitorId = isset( $statsItem['visitorId'] ) ? $statsItem['visitorId'] : null;
+    $visitorId = opanda_normilize_value( $visitorId );    
+
     // context data
     
     $context = isset( $_POST['opandaContext'] ) ? $_POST['opandaContext'] : array();
@@ -43,8 +48,20 @@ function opanda_statistics() {
     $postId = isset( $context['postId'] ) ? $context['postId'] : null;
     
     if ( empty( $itemId ) ) {
-        echo json_encode( array( 'error' => __('Item ID is not specified.', 'optinpanda') ) );
+        echo json_encode( array( 'error' => __('Item ID is not specified.', 'bizpanda') ) );
         exit;
+    }
+
+    // stats for form unlocks is counted only once for a give visitor ID,
+    // against multiple counting when the confirmation is used
+    
+    if ( $eventName == 'form' && $eventType == 'unlock' ) {
+        
+        $key = 'opanda_' . md5($visitorId . $eventName . $eventType );
+        
+        $unlocked = get_transient($key);
+        if ( $unlocked ) return json_encode( array( 'error' => __('Already counted.', 'bizpanda') ) );
+        set_transient($key, 1, 10);
     }
     
     // counts the stats
