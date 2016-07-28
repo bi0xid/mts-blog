@@ -2988,3 +2988,18 @@ width: 100% !important;
     padding: 0 2%;
     float: left;
 }
+
+ul.ess-buttons {
+    margin-left:0;
+}
+
+.breadcrumb {
+    width: 95%;
+    margin-left:5%;
+}
+
+article header {
+    float: left;
+    width: 95%;
+    margin-left: 5%;
+}
