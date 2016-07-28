@@ -40,6 +40,8 @@ class FactoryMetaboxes321 {
      */
     public static $postTypes = array();
 
+	protected static $_existingMetaboxes = array();
+
     /**
      * Registers a metabox by its class name.
      * 
@@ -47,13 +49,29 @@ class FactoryMetaboxes321 {
      * @param type $className A metabox class name.
      * @return FactoryMetaboxes321_Metabox
      */
-    public static function register( $className, $plugin ) {
-        $metabox = new $className( $plugin );
+    public static function register( $classNameOrObject, $plugin ) {
+  
+        if ( is_string( $classNameOrObject )) {
+            
+            $className = $classNameOrObject;
+            if ( !isset( self::$_existingMetaboxes[$className] ) ) {
+                self::$_existingMetaboxes[$className] = new $className( $plugin );
+            }
+        
+        } else {
+            
+            $className = get_class( $classNameOrObject );
+            if ( !isset( self::$_existingMetaboxes[$className] ) ) {
+                self::$_existingMetaboxes[$className] = $classNameOrObject;
+            }
+        }
+        
+        $metabox =self::$_existingMetaboxes[$className];
         self::$metaboxes[$metabox->id] = $metabox;
         
         if ( empty( $metabox->postTypes ) ) return $metabox;
         foreach($metabox->postTypes as $type) {
-            $this->postTypes[$type][$metabox->id] = $metabox;
+            self::$postTypes[$type][$metabox->id] = $metabox;
         }
         
         return $metabox;
@@ -63,14 +81,16 @@ class FactoryMetaboxes321 {
      * Registers a metabox for a given post type.
      * 
      * @since 1.0.0
-     * @param type $className A metabox class name.
+     * @param type $classNameOrObject A metabox class name.
      * @param type $postType A post type for which a given metabox should be registered. 
      * @return FactoryMetaboxes321_Metabox
      */
-    public static function registerFor( $className, $postType, $plugin ) {
-        $metabox = self::register( $className, $plugin );
+    public static function registerFor( $classNameOrObject, $postType, $plugin ) {
+
+        $metabox = self::register( $classNameOrObject, $plugin );
         self::$metaboxes[$metabox->id]->addPostType($postType); 
         self::$postTypes[$postType][$metabox->id] = $metabox;
+
         return $metabox;
     }
  

@@ -15,7 +15,7 @@
  * @since 1.0.0
  */
 
-class FactoryForms327_FontControl extends FactoryForms327_ComplexControl 
+class FactoryForms328_FontControl extends FactoryForms328_ComplexControl 
 {
     public $type = 'font';
     
@@ -40,9 +40,9 @@ class FactoryForms327_FontControl extends FactoryForms327_ComplexControl
             'pickerTarget' => '.factory-control-' . $this->options['name'] . ' .factory-picker-target'
         );
         
-        $this->size = new FactoryForms327_IntegerControl( $optionFontSize, $form, $provider );
-        $this->family = new FactoryForms327_DropdownControl( $optionFontFamily, $form, $provider );
-        $this->color = new FactoryForms327_ColorControl( $optionFontColor, $form, $provider );
+        $this->size = new FactoryForms328_IntegerControl( $optionFontSize, $form, $provider );
+        $this->family = new FactoryForms328_DropdownControl( $optionFontFamily, $form, $provider );
+        $this->color = new FactoryForms328_ColorControl( $optionFontColor, $form, $provider );
         
         $this->innerControls = array( $this->family, $this->size, $this->color );   
     }
@@ -51,8 +51,8 @@ class FactoryForms327_FontControl extends FactoryForms327_ComplexControl
          
         $fonts = $this->getDefaultFonts();
         
-        $fonts = apply_filters('factory_forms_327_fonts', $fonts);
-        $fonts = apply_filters('factory_forms_327_fonts-' . $this->options['name'], $fonts);
+        $fonts = apply_filters('factory_forms_328_fonts', $fonts);
+        $fonts = apply_filters('factory_forms_328_fonts-' . $this->options['name'], $fonts);
         
         return $fonts;
     }
@@ -61,9 +61,9 @@ class FactoryForms327_FontControl extends FactoryForms327_ComplexControl
         
         $fonts = array(
  
-            array( 'inherit', __( '(use default website font)', 'factory_forms_327' ) ),
+            array( 'inherit', __( '(use default website font)', 'factory_forms_328' ) ),
             
-            array( 'group', __('Sans Serif:', 'factory_forms_327'), array(
+            array( 'group', __('Sans Serif:', 'factory_forms_328'), array(
                 array( 'Arial, "Helvetica Neue", Helvetica, sans-serif', 'Arial' ),
                 array( '"Arial Black", "Arial Bold", Gadget, sans-serif', 'Arial Black' ), 
                 array( '"Arial Narrow", Arial, sans-serif', 'Arial Narrow' ),
@@ -86,7 +86,7 @@ class FactoryForms327_FontControl extends FactoryForms327_ComplexControl
                 array( 'Verdana, Geneva, sans-serif', 'Verdana' ),        
             )),
             
-            array( 'group', __('Serif:', 'factory_forms_327'), array(
+            array( 'group', __('Serif:', 'factory_forms_328'), array(
                 array( 'Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif', 'Baskerville' ),
                 array( '"Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif', 'Big Caslon' ), 
                 array( '"Bodoni MT", Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif', 'Bodoni MT' ),
@@ -106,7 +106,7 @@ class FactoryForms327_FontControl extends FactoryForms327_ComplexControl
                 array( 'TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif', 'Times New Roman' )
             )),
             
-            array( 'group', __('Monospaced:', 'factory_forms_327'), array(
+            array( 'group', __('Monospaced:', 'factory_forms_328'), array(
                 array( '"Andale Mono", AndaleMono, monospace', 'Andale Mono' ),
                 array( 'Consolas, monaco, monospace', 'Consolas' ), 
                 array( '"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace', 'Courier New' ),

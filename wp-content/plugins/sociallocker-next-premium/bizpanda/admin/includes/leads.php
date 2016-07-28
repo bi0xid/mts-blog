@@ -11,11 +11,18 @@ class OPanda_Leads {
      * @param bool $confirmed Has a lead confirmed one's email address?
      * @return int A lead ID.
      */
-    public static function add( $identity = array(), $context = array(), $emailConfirmed = false, $subscriptionConfirmed = false ) {
+    public static function add( $identity = array(), $context = array(), $emailConfirmed = false, $subscriptionConfirmed = false, $temp = null ) 
+    {
+        $itemId = isset( $context['itemId'] ) ? intval( $context['itemId'] ) : 0;
+        if ( !empty( $itemId ) && !get_post_meta($itemId, 'opanda_catch_leads', true) ) return false;
+        
+        require_once OPANDA_BIZPANDA_DIR . '/admin/includes/leads.php';
+        require_once OPANDA_BIZPANDA_DIR . '/admin/includes/stats.php';
+
         $email = isset( $identity['email'] ) ? $identity['email'] : false;
  
         $lead = self::getByEmail( $email );
-        return self::save( $lead, $identity, $context, $emailConfirmed, $subscriptionConfirmed );
+        return self::save( $lead, $identity, $context, $emailConfirmed, $subscriptionConfirmed, $temp );
     }
     
     /**
@@ -28,8 +35,10 @@ class OPanda_Leads {
      * @param bool $confirmed Has a lead confirmed one's email address?
      * @return int A lead ID.
      */
-    public static function save( $lead = null, $identity = array(), $context = array(), $emailConfirmed = false, $subscriptionConfirmed = false ) {
+    public static function save( $lead = null, $identity = array(), $context = array(), $emailConfirmed = false, $subscriptionConfirmed = false, $temp = null ) {
         global $wpdb;
+        
+        require_once OPANDA_BIZPANDA_DIR . '/admin/includes/stats.php';
         
         $email = isset( $identity['email'] ) ? $identity['email'] : false;
         if ( isset( $identity['social'] ) ) $emailConfirmed = true;
@@ -44,7 +53,7 @@ class OPanda_Leads {
 
         $name = self::extract('name', $identity);
         $family = self::extract('family', $identity);
-        
+  
         $displayName = self::extract('displayName', $identity );
         if ( empty( $displayName ) ) {
 
@@ -52,23 +61,26 @@ class OPanda_Leads {
                 $displayName = $name . ' ' . $family;
             } elseif ( !empty( $name ) ) {
                 $displayName = $name;
-            } else {
+            } elseif ( !empty( $family ) ) {
                 $displayName = $family;
+            } else {
+                $displayName = "";
             }
         }
-        
+
         $leadId = empty( $lead ) ? null : $lead->ID;
 
         // counts the number of confirmed emails (subscription)
         if ( $subscriptionConfirmed && $leadId && !$lead->lead_subscription_confirmed ) {
+            require_once OPANDA_BIZPANDA_DIR . '/admin/includes/stats.php';
             OPanda_Stats::countMetrict( $itemId, $postId, 'email-confirmed');
         }
-            
+
         if ( !$leadId ) {
             
             // counts the number of new recivied emails
             OPanda_Stats::countMetrict( $itemId, $postId, 'email-received');
-            
+
             $data = array(
                 'lead_display_name' => $displayName,
                 'lead_name' => $name,
@@ -82,16 +94,17 @@ class OPanda_Leads {
                 'lead_referer' => $postUrl,
                 'lead_email_confirmed' => $emailConfirmed ? 1 : 0,        
                 'lead_subscription_confirmed' => $subscriptionConfirmed ? 1 : 0,
-                'lead_ip' => self::getIP()
+                'lead_ip' => self::getIP(),
+                'lead_temp' => !empty( $temp ) ? json_encode( $temp ) : null
             );
-            
+
             // else inserts a new lead
             $result = $wpdb->insert( $wpdb->prefix . 'opanda_leads', $data, array(
-                '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%s', '%s', '%s', '%d', '%s'
+                '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%s', '%s', '%s', '%d', '%s', '%s'
             ));
-            
+
             if ( $result ) $leadId = $wpdb->insert_id;
-            
+
         } else {
             
             $data = array(
@@ -99,17 +112,27 @@ class OPanda_Leads {
                 'lead_name' => $name,
                 'lead_family' => $family,
                 'lead_email_confirmed' => $emailConfirmed ? 1 : 0,
-                'lead_subscription_confirmed' => $subscriptionConfirmed ? 1 : 0
+                'lead_subscription_confirmed' => $subscriptionConfirmed ? 1 : 0,
+                'lead_temp' => !empty( $temp ) ? json_encode( $temp ) : null
             );
-            
+
             $formats = array(
                 'lead_display_name' => '%s',
                 'lead_name' => '%s',
                 'lead_family' => '%s',
                 'lead_email_confirmed' => '%d',
-                'lead_subscription_confirmed' => '%d'
+                'lead_subscription_confirmed' => '%d',
+                'lead_temp' => '%s'
             );
             
+            // to void claring the temp data in sign in locker
+            // when several actions save a lead
+            
+            if ( empty( $data['lead_temp'] ) ) {
+                unset( $data['lead_temp'] );
+                unset( $formats['lead_temp'] );
+            }
+                
             if ( empty( $displayName ) ) {
                 unset( $data['lead_display_name'] );
                 unset( $formats['lead_display_name'] );
@@ -149,38 +172,156 @@ class OPanda_Leads {
 
         $fields = array();
 
-        if ( isset( $identity['facebookUrl'] ) ) {
-            $fields['facebookUrl'] = $identity['facebookUrl'];
+        foreach( $identity as $itemName => $itemValue ) {
+            if ( in_array( $itemName, array( 'email', 'name', 'family', 'displayName' ) ) ) continue;
+            if ( 'image' === $itemName ) $itemName = 'externalImage';
+            $fields[trim( $itemName, '{}') ] = array('value' => $itemValue, 'custom' => ( strpos($itemName, '{') === 0 )  ? 1 : 0 );
         }
 
-        if ( isset( $identity['twitterUrl'] ) ) {
-            $fields['twitterUrl'] = $identity['twitterUrl'];
-        }
-
-        if ( isset( $identity['googleUrl'] ) ) {
-            $fields['googleUrl'] = $identity['googleUrl'];
-        }
-
-        if ( isset( $identity['linkedinUrl'] ) ) {
-            $fields['linkedinUrl'] = $identity['linkedinUrl'];
-        }
-
-        if ( isset( $identity['image'] ) ) {
-            $fields['externalImage'] = $identity['image'];
-        }  
-
-        foreach( $fields as $fieldName => $fieldValue ) {
+        foreach( $fields as $fieldName => $fieldData ) {
             
             $sql = $wpdb->prepare("
-                INSERT IGNORE INTO {$wpdb->prefix}opanda_leads_fields
-                ( lead_id, field_name, field_value )
-                VALUES ( %d, %s, %s )
-            ", $leadId, $fieldName, $fieldValue );
+                INSERT INTO {$wpdb->prefix}opanda_leads_fields
+                ( lead_id, field_name, field_value, field_custom )
+                VALUES ( %d, %s, %s, %d ) ON DUPLICATE KEY UPDATE field_value = VALUES(field_value)
+            ", $leadId, $fieldName, $fieldData['value'], $fieldData['custom'] );
 
             $wpdb->query( $sql );
         }
         
         return $leadId;
+    }
+    
+    /**
+     * Sets a confirmation code for the lead.
+     */
+    public static function setConfirmationCode( $lead, $code ) {
+        if ( empty( $lead ) ) return;
+        
+        global $wpdb;
+
+        $sql = $wpdb->prepare("
+            UPDATE {$wpdb->prefix}opanda_leads
+            SET lead_confirmation_code = %s
+            WHERE ID = %d 
+        ", $code, $lead->ID );
+
+        $wpdb->query($sql);
+    }
+    
+    /**
+     * Confirms a lead.
+     */
+    public static function confirm( $email, $code, $push = false ) {
+        if ( empty( $email ) ) return;
+    
+        $lead = OPanda_Leads::getByEmail($email);
+        if ( !$lead || $lead->lead_subscription_confirmed ) return;
+        
+        if ( empty( $lead ) ) return;
+        if ( $code !== $lead->lead_confirmation_code ) return;
+        
+        $temp = !empty( $lead->lead_temp ) ? json_decode( $lead->lead_temp, true ) : null;
+
+        $itemId = isset( $temp['context']['itemId'] ) ? $temp['context']['itemId'] : null;
+        $postId = isset( $temp['context']['postId'] ) ? $temp['context']['postId'] : null;
+        
+        if ( $push ) {
+            
+            try {
+                
+                require_once OPANDA_BIZPANDA_DIR . '/admin/includes/subscriptions.php';
+
+                $serviceReady = isset( $temp['serviceReady'] ) ? $temp['serviceReady'] : null;
+                $context = isset( $temp['context'] ) ? $temp['context'] : null;
+                $listId = isset( $temp['listId'] ) ? $temp['listId'] : null;
+                $verified = isset( $temp['verified'] ) ? $temp['verified'] : null;
+
+                $service = OPanda_SubscriptionServices::getCurrentService();
+
+                if ( empty( $service) ) {
+                   throw new Exception( sprintf( 'The subscription service is not set.' )); 
+                }
+
+                $service->subscribe( $serviceReady, $listId, false, $context, $verified );
+            
+            } catch (Exception $ex) {
+                printf ( __( "<strong>Error:</strong> %s", 'bizpanda' ), $ex->getMessage() );
+                exit;
+            }
+        }
+        
+        global $wpdb;
+
+        $sql = $wpdb->prepare("
+            UPDATE {$wpdb->prefix}opanda_leads
+            SET lead_email_confirmed = 1, lead_subscription_confirmed = 1            
+            WHERE ID = %d 
+        ", $lead->ID );
+
+        $wpdb->query($sql);
+
+        // counts the number of confirmed emails (subscription)
+        if ( $lead->ID && !$lead->lead_subscription_confirmed && $itemId && $postId ) {
+            require_once OPANDA_BIZPANDA_DIR . '/admin/includes/stats.php';
+            OPanda_Stats::countMetrict( $itemId, $postId, 'email-confirmed');
+        }
+    }
+    
+    public static function setTempData( $lead, $temp )  {
+        global $wpdb;
+        
+        $sql = $wpdb->prepare("
+            UPDATE {$wpdb->prefix}opanda_leads
+            SET lead_temp = %s WHERE ID = %d 
+        ", json_encode($temp), $lead->ID ); 
+            
+        $wpdb->query($sql);
+    }       
+    
+    private static $_leads = array();
+    
+    /**
+     * Returns a lead.
+     */
+    public static function get( $leadId ) {
+        if ( isset( self::$_leads[$leadId] ) ) return self::$_leads[$leadId];
+        
+        global $wpdb; 
+        $lead = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}opanda_leads WHERE ID = %d", $leadId ) );  
+        
+        self::$_leads[$leadId] = $lead;
+        return $lead;
+    }
+    
+    /**
+     * Returns custom fields
+     */
+    public static function getCustomFields( $leadId = null ) {
+        
+        if ( !empty( $leadId )) {
+        
+            global $wpdb; 
+            $data = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}opanda_leads_fields WHERE lead_id = %d AND field_custom = 1", $leadId ), ARRAY_A );
+
+            $customFields = array();
+            foreach( $data as $item ) {
+
+                $name = $item['field_name'];
+                if ( strpos( $name, '_' ) === 0 ) continue;
+                $customFields[$item['field_name']] = $item['field_value'];
+
+                $fields[$name] = strip_tags( $item['field_value'] );
+            }
+            
+            return $customFields;
+        
+        } else {
+            
+            global $wpdb; 
+            $fields = $wpdb->get_results( "SELECT field_name FROM {$wpdb->prefix}opanda_leads_fields WHERE field_custom = 1 GROUP BY field_name" );
+            return $fields;
+        }
     }
     
     private static $_fields = array();
@@ -197,8 +338,9 @@ class OPanda_Leads {
         
         global $wpdb; 
         $data = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}opanda_leads_fields WHERE lead_id = %d", $leadId ), ARRAY_A );
-    
+        
         $fields = array();
+
         foreach( $data as $item ) {
             $fields[$item['field_name']] = $item['field_value'];
         }
@@ -280,15 +422,17 @@ class OPanda_Leads {
      * @return string
      */
     public static function getAvatarUrl( $leadId, $email = null, $size = 40 ) {
-        
+
         $imageSource = OPanda_Leads::getLeadField( $leadId, 'externalImage', null );
         $image = OPanda_Leads::getLeadField( $leadId, '_image' . $size, null );
         
         // getting an avatar from cache
         
         if ( !empty( $image ) ) {
-            $path = ABSPATH . '/wp-content/uploads/bizpanda/avatars/' . $image;
-            $url = site_url( '/wp-content/uploads/bizpanda/avatars/' . $image );
+            $upload_dir = wp_upload_dir(); 
+     
+            $path = $upload_dir['path'] . '/bizpanda/avatars/' . $image;
+            $url = $upload_dir['url'] . '/bizpanda/avatars/' . $image;
 
             if ( file_exists( $path ) ) return $url;
             self::removeLeadField($leadId, '_image' . $size);
@@ -302,7 +446,7 @@ class OPanda_Leads {
         
         // else return a gravatar
         
-        $gravatar = get_avatar( $email, 40 );
+        $gravatar = get_avatar( $email, $size );
         if ( preg_match('/https?\:\/\/[^\'"]+/i', $gravatar, $match) ) {
             return $match[0];
         }
@@ -318,12 +462,12 @@ class OPanda_Leads {
      * @param int $size A size of the avatar (px).
      * @return string HTML
      */
-    public static function getAvatar( $leadId, $size = 40 ) {
+    public static function getAvatar( $leadId, $email = null, $size = 40 ) {
         
-        $url = self::getAvatarUrl( $leadId, $size );
+        $url = self::getAvatarUrl( $leadId, $email, $size );
         if ( empty( $url ) ) return null;
         
-        $alt = __('User Avatar', 'opanda');
+        $alt = __('User Avatar', 'bizpanda');
         return "<img src='$url' width='$size' height='$size' alt='$alt' />";
     }
     
@@ -395,7 +539,7 @@ class OPanda_Leads {
         
         if ( $cache ) {
             $count = get_transient('opanda_subscribers_count');
-            if ( $count === 0 || !empty( $count ) ) return $count;
+            if ( $count === '0' || !empty( $count ) ) return intval( $count );
         }
         
         if( $wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}opanda_leads'") === $wpdb->prefix . 'opanda_leads' ) {

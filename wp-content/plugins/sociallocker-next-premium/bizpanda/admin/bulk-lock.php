@@ -64,7 +64,7 @@ function opanda_print_bulk_locking_state( $lockerId ) {
 
     ?>
 
-    <div class="factory-bootstrap-328 factory-fontawesome-320">
+    <div class="factory-bootstrap-329 factory-fontawesome-320">
         
         <div class="onp-sl-setup-section <?php echo $setupStateClass ?>">
 
@@ -76,34 +76,34 @@ function opanda_print_bulk_locking_state( $lockerId ) {
 
                 <div class="onp-sl-way-description onp-sl-skip-lock-content <?php echo $skipAndLockStateClass ?>">
                     <span class="onp-sl-skip-lock-0-content">
-                        <?php echo _e('Every post will be locked entirely.', 'optinpanda') ?>
+                        <?php echo _e('Every post will be locked entirely.', 'bizpanda') ?>
                     </span>
                     <span class="onp-sl-skip-lock-1-content">
-                        <?php echo _e('Every post will be locked entirely except the first paragraph.', 'optinpanda') ?>
+                        <?php echo _e('Every post will be locked entirely except the first paragraph.', 'bizpanda') ?>
                     </span>
                     <span class="onp-sl-skip-lock-2-content">
-                        <?php echo sprintf( __('Every post will be locked entirely except %s paragraphs placed at the beginning.', 'optinpanda'), $skipNumber ) ?>
+                        <?php echo sprintf( __('Every post will be locked entirely except %s paragraphs placed at the beginning.', 'bizpanda'), $skipNumber ) ?>
                     </span>
                 </div>
 
                 <div class="onp-sl-way-description onp-sl-more-tag-content">
-                    <?php echo _e('Content placed after the More Tag will be locked in every post.', 'optinpanda') ?>
+                    <?php echo _e('Content placed after the More Tag will be locked in every post.', 'bizpanda') ?>
                 </div>
 
                 <div class="onp-sl-way-description onp-sl-css-selector-content">
-                    <p><?php echo _e('Every content matching the CSS selector will be locked on every page:', 'optinpanda') ?></p>
+                    <p><?php echo _e('Every content matching the CSS selector will be locked on every page:', 'bizpanda') ?></p>
                     <strong class="onp-sl-css-selector-view"><?php echo $cssSelector ?></strong>                      
                 </div>
 
                 <div class='onp-sl-rules'>
                     <span class='onp-sl-post-types-rule'>
-                        <?php printf( __('Applies to types: %s', 'optinpanda'), $postTypes ) ?>
+                        <?php printf( __('Applies to types: %s', 'bizpanda'), $postTypes ) ?>
                     </span>
                     <span class='onp-sl-exclude-post-ids-rule'>
-                        <?php printf( __('Excludes posts: %s', 'optinpanda'), $excludePosts ) ?>
+                        <?php printf( __('Excludes posts: %s', 'bizpanda'), $excludePosts ) ?>
                     </span>
                     <span class='onp-sl-exclude-categories-ids-rule'>
-                        <?php printf( __('Excludes categories: %s', 'optinpanda'), $excludeCategories ) ?>
+                        <?php printf( __('Excludes categories: %s', 'bizpanda'), $excludeCategories ) ?>
                     </span>       
                 </div>
             </div> 
@@ -116,13 +116,13 @@ function opanda_print_bulk_locking_state( $lockerId ) {
 
 
 /**
- * Removes the locker options from the global bulk locker options array.
+ * Removes the bulk locker options from the cache.
  * 
  * @since 3.0.0
  * @param integer $lockerId
  * @return boolean
  */
-function opanda_clear_bulk_locker_options( $lockerId ) {
+function opanda_clear_batch_lock_cache( $lockerId ) {
     
     $bulkLockers = get_option('onp_sl_bulk_lockers', array());
     if ( !is_array($bulkLockers) ) $bulkLockers = array();
@@ -133,20 +133,30 @@ function opanda_clear_bulk_locker_options( $lockerId ) {
 }
 
 /**
- * Removes the locker options from the global bulk locker options array.
+ * Updates the bulk locker options in the cache.
  * 
  * @since 3.0.0
  * @param integer $lockerId
  * @return boolean
  */
-function opanda_reset_bulk_locker_options( $lockerId ) {
+function opanda_update_batch_lock_cache( $lockerId ) {
     $data = get_post_meta($lockerId, 'opanda_bulk_locking', true);
-    if ( empty($data) ) return;
     
     $bulkLockers = get_option('onp_sl_bulk_lockers', array());
     if ( !is_array($bulkLockers) ) $bulkLockers = array();
-    $bulkLockers[$lockerId] = $data;
     
+    if ( empty( $data ) && isset( $bulkLockers[$lockerId] ) ) {
+        unset( $bulkLockers[$lockerId] );
+        
+        delete_option('onp_sl_bulk_lockers');
+        add_option('onp_sl_bulk_lockers', $bulkLockers);
+        return;
+    }
+    
+    if ( empty( $data ) ) return;
+
+    $bulkLockers[$lockerId] = $data; 
+
     delete_option('onp_sl_bulk_lockers');
     add_option('onp_sl_bulk_lockers', $bulkLockers);
 }
@@ -162,9 +172,9 @@ function opanda_clear_bulk_locker_options_on_deletion( $postId ) {
 
     $post = get_post( $postId );
     if ( empty( $post) ) return true;
-    if ( $post->post_type !== 'optinpanda' ) return true;
+    if ( $post->post_type !== OPANDA_POST_TYPE ) return true;
      
-    opanda_clear_bulk_locker_options($postId);
+    opanda_clear_batch_lock_cache($postId);
     return true;
 }
 add_action('delete_post', 'opanda_clear_bulk_locker_options_on_deletion');
@@ -179,13 +189,14 @@ add_action('delete_post', 'opanda_clear_bulk_locker_options_on_deletion');
  * @return void
  */
 function opanda_update_bulk_locker_options_on_changing_status( $new_status, $old_status, $post ) {
+
     if ( empty( $post) ) return true;
-    if ( $post->post_type !== 'optinpanda' ) return true;
+    if ( $post->post_type !== OPANDA_POST_TYPE ) return true;
     
     if ( $new_status == 'trash' ) {
-        opanda_clear_bulk_locker_options($post->ID);
+        opanda_clear_batch_lock_cache($post->ID);
     } elseif ( $new_status !== 'trash' ) {
-        opanda_reset_bulk_locker_options($post->ID);
+        opanda_update_batch_lock_cache($post->ID);
     }
 }
 add_action('transition_post_status', 'opanda_update_bulk_locker_options_on_changing_status', 10, 3 );

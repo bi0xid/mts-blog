@@ -10,18 +10,23 @@ class OPanda_SignupHandler extends OPanda_Handler {
      * Handles the proxy request.
      */
     public function handleRequest() {
-        
+
         // - context data
         
         $contextData = isset( $_POST['opandaContextData'] ) ? $_POST['opandaContextData'] : array();
         $contextData = $this->normilizeValues( $contextData );
         
-        // - idetity data
+        // - identity data
         
         $identityData = isset( $_POST['opandaIdentityData'] ) ? $_POST['opandaIdentityData'] : array();
         $identityData = $this->normilizeValues( $identityData );
-
-        do_action('opanda_lead_catched', $identityData, $contextData);
+        
+        // prepares data received from custom fields to be transferred to the mailing service
+        
+        $identityData = $this->prepareDataToSave( null, null, $identityData );
+        
+        require_once OPANDA_BIZPANDA_DIR . '/admin/includes/leads.php';
+        OPanda_Leads::add( $identityData, $contextData );
         
         if ( is_user_logged_in() ) {
             return false;
@@ -36,6 +41,12 @@ class OPanda_SignupHandler extends OPanda_Handler {
             $random_password = wp_generate_password( $length = 12, false );
 
             $userId = wp_create_user( $username, $random_password, $email );
+            
+            if ( $userId ) {
+                if ( isset( $identityData['name'] ) ) update_user_meta( $userId, 'first_name', $identityData['name'] );
+                if ( isset( $identityData['family'] ) ) update_user_meta( $userId, 'last_name', $identityData['family'] );  
+            }
+
             wp_new_user_notification( $userId, $random_password );
             
             do_action('opanda_registered', $identityData, $contextData ); 

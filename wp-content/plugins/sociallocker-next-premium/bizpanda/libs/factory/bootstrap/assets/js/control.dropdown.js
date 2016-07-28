@@ -30,6 +30,34 @@
                 return false;
             });
             
+        } else if ( 'ddslick' === this.way ) {
+
+            var data = window['factory_' + this.name + "_data"];
+            var $ddslick = this.$element.find(".factory-ddslick");
+            
+            var width = this.$element.data("width") || 300;
+            var imagePosition = this.$element.data("align") || 'right';
+
+            $(data).each(function(){
+                if ( !this.imageHoverSrc ) return true;
+                $('<img/>')[0].src = this.imageHoverSrc;
+            });
+
+            $ddslick.ddslick({
+                data: data,
+                width: width,
+                imagePosition: imagePosition,
+                selectText: "- select -",
+                onSelected: function (data) {
+                    
+                    if ( data.selectedData.imageHoverSrc )
+                        self.$element.find(".dd-selected-image").attr('src', data.selectedData.imageHoverSrc);
+
+                    var $result = self.$element.find(".factory-result").val( data.selectedData.value  );
+                    $result.change();
+                }
+            });
+
         } else {
 
             // hints
@@ -101,6 +129,8 @@
                         self.addListItem( item );
                     }
                 }
+                
+                this.$element.trigger("factory-loaded");
             };
 
             this.clearList = function() {
@@ -151,7 +181,7 @@
     // DROPDOWN CONTROL DEFINITION
     // ================================
     
-    $.fn.factoryBootstrap328_dropdownControl = function (option) {
+    $.fn.factoryBootstrap329_dropdownControl = function (option) {
         
         // call an method
         if ( typeof option === "string" ) {
@@ -170,13 +200,13 @@
         }
     };
 
-    $.fn.factoryBootstrap328_dropdownControl.Constructor = DropdownControl;
+    $.fn.factoryBootstrap329_dropdownControl.Constructor = DropdownControl;
     
     // AUTO CREATING
     // ================================
     
     $(function(){
-        $(".factory-bootstrap-328 .factory-dropdown").factoryBootstrap328_dropdownControl();
+        $(".factory-bootstrap-329 .factory-dropdown").factoryBootstrap329_dropdownControl();
     });
     
 }( jQuery ) );

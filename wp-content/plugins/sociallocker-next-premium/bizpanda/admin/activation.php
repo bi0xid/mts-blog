@@ -15,7 +15,7 @@ class OPanda_Activation extends Factory325_Activator {
      */
     public function activate() {   
         global $bizpanda;
-        
+
         do_action('before_bizpanda_activation', $bizpanda, $this);
         
         $this->importOptions();
@@ -52,7 +52,7 @@ class OPanda_Activation extends Factory325_Activator {
     protected function presetOptions() {
         
 	add_option('opanda_facebook_appid', '117100935120196');
-        add_option('opanda_facebook_version', 'v2.0');
+        add_option('opanda_facebook_version', 'v2.6');
         
 	add_option('opanda_lang', 'en_US');
         add_option('opanda_short_lang', 'en');
@@ -68,32 +68,11 @@ class OPanda_Activation extends Factory325_Activator {
      * @since 1.0.0
      */
     protected function createPolicies() {
-        
-        // Terms of Use
-        
-        $this->addPost(
-            'opanda_terms_of_use',
-            array(
-                'post_name' => 'opanda_terms_of_use',
-                'post_type' => 'page',
-                'post_title' => __('Terms of Use', 'optinpanda'),
-                'post_content' => file_get_contents( OPANDA_BIZPANDA_DIR . '/content/terms-of-use.html' )
-            ),
-            array()
-        );
-        
-        // Privacy Policy
-        
-        $this->addPost(
-            'opanda_privacy_policy',
-            array(
-                'post_name' => 'opanda_privacy_policy',
-                'post_type' => 'page',
-                'post_title' => __('Privacy Policy', 'optinpanda'),
-                'post_content' => file_get_contents( OPANDA_BIZPANDA_DIR . '/content/privacy-policy.html' )
-            ),
-            array()
-        );
+
+        add_option('opanda_terms_enabled', 1);
+        add_option('opanda_terms_use_pages', 0);
+        add_option('opanda_terms_of_use_text', file_get_contents( OPANDA_BIZPANDA_DIR . '/content/terms-of-use.html' ));
+        add_option('opanda_privacy_policy_text', file_get_contents( OPANDA_BIZPANDA_DIR . '/content/privacy-policy.html' ));
     }
         
     /**
@@ -124,6 +103,8 @@ class OPanda_Activation extends Factory325_Activator {
               lead_item_title varchar(255) DEFAULT NULL,
               lead_post_title varchar(255) DEFAULT NULL,
               lead_referer text DEFAULT NULL,
+              lead_confirmation_code varchar(32) DEFAULT NULL,
+              lead_temp text DEFAULT NULL,
               PRIMARY KEY  (ID),
               UNIQUE KEY lead_email (lead_email)
             );";
@@ -137,6 +118,8 @@ class OPanda_Activation extends Factory325_Activator {
                 lead_id int(10) UNSIGNED NOT NULL,
                 field_name varchar(255) NOT NULL,
                 field_value text NOT NULL,
+                field_custom bit(1) NOT NULL DEFAULT b'0',
+                KEY IDX_wp_opanda_leads_fields_field_name (field_name),
                 UNIQUE KEY UK_wp_opanda_leads_fields (lead_id,field_name)
             );";
 
@@ -161,12 +144,6 @@ class OPanda_Activation extends Factory325_Activator {
 }
 
 $bizpanda->registerActivation('OPanda_Activation');
-
-function bizpanda_cancel_plugin_activation( $cancel ) {
-    if ( !BizPanda::isSinglePlugin() ) return true;
-    return $cancel;
-}
-add_filter('factory_cancel_plugin_activation_bizpanda', 'bizpanda_cancel_plugin_activation');
 
 function bizpanda_cancel_plugin_deactivation( $cancel ) {
     if ( !BizPanda::isSinglePlugin() ) return true;

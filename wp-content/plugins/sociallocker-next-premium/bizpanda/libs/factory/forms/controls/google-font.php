@@ -15,7 +15,7 @@
  * @since 1.0.0
  */
 
-class FactoryForms327_GoogleFontControl extends FactoryForms327_FontControl 
+class FactoryForms328_GoogleFontControl extends FactoryForms328_FontControl 
 {
     public $type = 'google-font';
     const APIKEY = 'AIzaSyB-3vazYv7Q-5QZA04bmSKFrWcw_VhC40w';
@@ -29,7 +29,7 @@ class FactoryForms327_GoogleFontControl extends FactoryForms327_FontControl
             'cssClass' => 'factory-google-font-data'
         );       
                
-        $this->googleFontData = new FactoryForms327_HiddenControl( $optionGoogleFontData, $form, $provider );
+        $this->googleFontData = new FactoryForms328_HiddenControl( $optionGoogleFontData, $form, $provider );
         $this->innerControls[] = $this->googleFontData;
     }
     
@@ -38,10 +38,10 @@ class FactoryForms327_GoogleFontControl extends FactoryForms327_FontControl
         $googleFonts = $this->getGoogleFonts();
 
         $fonts = array(
-            array( 'inherit', __( '(use default website font)', 'factory_forms_327' ) )
+            array( 'inherit', __( '(use default website font)', 'factory_forms_328' ) )
         );
         
-        $fontsCommon = array( 'group', __('Standard:', 'factory_forms_327'), array(
+        $fontsCommon = array( 'group', __('Standard:', 'factory_forms_328'), array(
             
             array( 'Arial, "Helvetica Neue", Helvetica, sans-serif', 'Arial' ),
             array( '"Helvetica Neue", Helvetica, Arial, sans-serif', 'Helvetica' ),
@@ -50,7 +50,7 @@ class FactoryForms327_GoogleFontControl extends FactoryForms327_FontControl
             
         ));       
         
-        $fontsGoogleFonts = array( 'group', __('Google Fonts:', 'factory_forms_327'), array() );
+        $fontsGoogleFonts = array( 'group', __('Google Fonts:', 'factory_forms_328'), array() );
         
         foreach( $googleFonts->items as $item ) {
             
@@ -91,14 +91,14 @@ class FactoryForms327_GoogleFontControl extends FactoryForms327_FontControl
                     
         if ( is_wp_error( $response ) ) {
             
-            $this->error = __('Unable to retrieve the list of Google Fonts.', 'factory_forms_327');
+            $this->error = __('Unable to retrieve the list of Google Fonts.', 'factory_forms_328');
             $this->defailedError = $response->get_error_message();
             return $body;
         }
             
         if ( !isset( $response['body'] ) ) {
 
-            $this->error = __('Invalide response from the Google Fonts API.', 'factory_forms_327');
+            $this->error = __('Invalide response from the Google Fonts API.', 'factory_forms_328');
             $this->defailedError = $response['body'];
             return $body;
         }
@@ -107,7 +107,7 @@ class FactoryForms327_GoogleFontControl extends FactoryForms327_FontControl
 
         if ( empty( $body->items ) ) {
             
-            $this->error = __('Unexpected error. The list of Google Fonts are empty.', 'factory_forms_327');
+            $this->error = __('Unexpected error. The list of Google Fonts are empty.', 'factory_forms_328');
             return $body;
         }
         

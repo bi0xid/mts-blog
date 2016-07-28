@@ -13,7 +13,7 @@ class OPanda_NewPandaItemPage extends OPanda_AdminPage  {
  
     public function __construct( $plugin  ) {    
         
-        $this->menuTitle = __('+ New Locker', 'optinpanda');
+        $this->menuTitle = __('+ New Locker', 'bizpanda');
         $this->menuPostType = OPANDA_POST_TYPE;
         $this->id = "new-item";
     
@@ -38,29 +38,26 @@ class OPanda_NewPandaItemPage extends OPanda_AdminPage  {
      * @return void
      */
     public function indexAction() {
-        $types = opanda_get_item_types();
+        $types = OPanda_Items::getAvailable();
         
         // checkes extra items which are not installed yet
+ 
+        require_once OPANDA_BIZPANDA_DIR . '/admin/includes/plugins.php';
+            $suggestions = OPanda_Plugins::getSuggestions();
         
-        $fetchedItems = opanda_fetch_panda_items();
-        
-        $extraItems = array();
-        foreach( $fetchedItems as $item ) {
-            if ( BizPanda::hasPlugin( $item['pluginName'] ) ) continue;
-            $extraItems[] = $item;
-        }
 
+        
         ?>
 
         <div class="wrap factory-fontawesome-320">
 
             <div class="opanda-items ">
                 
-                <h2><?php _e('Creating New Item', 'optinpanda') ?></h2>
-                <p style="margin-top: 0px;"><?php _e('Choose which items you would like to create.', 'optinpanda') ?></p>
+                <h2><?php _e('Creating New Item', 'bizpanda') ?></h2>
+                <p style="margin-top: 0px;"><?php _e('Choose which items you would like to create.', 'bizpanda') ?></p>
 
                 <?php foreach( $types as $name => $type ) { ?>
-                <div class="postbox opanda-item">
+                <div class="postbox opanda-item opanda-item-<?php echo $type['type'] ?>">
 
                     <h4 class="opanda-title">
                         <?php echo $type['title'] ?>
@@ -71,11 +68,11 @@ class OPanda_NewPandaItemPage extends OPanda_AdminPage  {
                     <div class="opanda-buttons">
 
                         <a href="<?php echo admin_url('post-new.php?post_type=opanda-item&opanda_item=' . $name); ?>" class="button button-large opanda-create">
-                            <i class="fa fa-plus"></i><span><?php _e('Create Item', 'optinpanda') ?></span>
+                            <i class="fa fa-plus"></i><span><?php _e('Create Item', 'bizpanda') ?></span>
                         </a>
 
                         <?php if ( isset( $type['help'] )) { ?>
-                        <a href="<?php echo $type['help'] ?>" class="button button-large opanda-help opanda-right" title="<?php _e('Click here to learn more', 'opanda') ?>">
+                        <a href="<?php echo $type['help'] ?>" class="button button-large opanda-help opanda-right" title="<?php _e('Click here to learn more', 'bizpanda') ?>">
                             <i class="fa fa-question-circle"></i>
                         </a>
                         <?php } ?>
@@ -85,7 +82,7 @@ class OPanda_NewPandaItemPage extends OPanda_AdminPage  {
                 <?php } ?>
             </div>
             
-            <?php if ( !empty( $extraItems ) ) { ?>
+            <?php if ( !empty( $suggestions ) ) { ?>
             
             <div class="opanda-separator"></div>
             
@@ -93,25 +90,58 @@ class OPanda_NewPandaItemPage extends OPanda_AdminPage  {
                 <div class="opanda-inner-wrap">
                     
                     <h2>
-                        <?php _e('More Marketing Tools To Grow Your Business', 'optinpanda') ?>
+                        <?php _e('More Marketing Tools To Grow Your Business', 'bizpanda') ?>
                     </h2>
                     <p style="margin-top: 0px;">
-                        <?php _e('Check out other plugins which add more features to your lockers.', 'optinpanda') ?>
+                        <?php _e('Check out other plugins which add more features to your lockers.', 'bizpanda') ?>
                     </p>
                     
-                    <?php foreach( $extraItems as $item ) { ?>
+                    <?php foreach( $suggestions as $suggestion ) { 
+                        
+                        $url = $suggestion['url'];
+                        
+                        if ( false === strpos( $url, 'utm_source') ) {
+                            
+                            if ( BizPanda::isSinglePlugin() ) {
+                                
+                                $plugin = BizPanda::getPlugin();
+                                
+                                $args = array(
+                                    'utm_source'            => 'plugin-' . $plugin->options['name'],
+                                    'utm_medium'            => ( $plugin->license && isset( $plugin->license->data['Category'] ) ) 
+                                                                ? ( $plugin->license->data['Category'] . '-version' )
+                                                                : 'unknown-version',
+                                    'utm_campaign'          => 'suggestions',
+                                    'tracker'               => isset( $plugin->options['tracker'] ) ? $plugin->options['tracker'] : null
+                                );
+
+                                $url = add_query_arg( $args, $url );   
+                                
+                            } else {
+
+                                $url = add_query_arg( array(
+                                    'utm_source' => 'plugin-bizpanda',
+                                    'utm_medium' => 'mixed-versions',
+                                    'utm_campaign' => 'suggestions',
+                                    'utm_term' => implode(',', BizPanda::getPluginNames( true ) )
+                                ), $url );   
+                            }
+                        }  
+                        ?>
                     
-                        <div class="postbox opanda-item">
+                        <div class="postbox opanda-item opanda-item-<?php echo $suggestion['type'] ?>">
+                            <div class="opanda-item-cover"></div>
+                            
                             <i class="fa fa-plus-circle opanda-plus-background"></i>
                             
                             <h4 class="opanda-title">
-                                <?php echo $item['title'] ?>
+                                <?php echo $suggestion['title'] ?>
                             </h4>
                             <div class="opanda-description">
-                                <?php echo $item['description'] ?>
+                                <?php echo $suggestion['description'] ?>
                             </div>
                             <div class="opanda-buttons">
-                                <a href='<?php echo $item['url'] ?>' class="button button-large" title="<?php _e('Click here to learn more', 'opanda') ?>">
+                                <a href='<?php echo $url ?>' class="button button-large" title="<?php _e('Click here to learn more', 'bizpanda') ?>">
                                     <i class="fa fa-external-link"></i><span>Learn More</span>
                                 </a>
                             </div>

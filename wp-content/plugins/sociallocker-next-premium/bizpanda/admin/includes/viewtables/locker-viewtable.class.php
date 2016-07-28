@@ -10,17 +10,13 @@ class OPanda_ItemsViewTable extends FactoryViewtables320_Viewtable
         
         $this->columns->clear();
 
-        $this->columns->add('stats', __('<span title="Unlocks / Impressions / Conversion">U / I / %', 'optinpanda'));
-        $this->columns->add('title', __('Locker Title', 'optinpanda'));
-        
-        if ( !BizPanda::isSinglePlugin() ) {
-            $this->columns->add('type', __('Type', 'optinpanda'));
-        }
-        
-        $this->columns->add('shortcode', __('Shortcode', 'optinpanda')); 
-        $this->columns->add('bulk', __('Bulk Lock', 'optinpanda'));   
-        $this->columns->add('theme', __('Theme', 'optinpanda'));
-        $this->columns->add('created', __('Created', 'optinpanda'));
+        $this->columns->add('stats', __('<span title="Unlocks / Impressions / Conversion">U / I / %', 'bizpanda'));
+        $this->columns->add('title', __('Locker Title', 'bizpanda'));
+
+        $this->columns->add('shortcode', __('Shortcode', 'bizpanda')); 
+        $this->columns->add('bulk', __('Bulk Lock', 'bizpanda'));   
+        $this->columns->add('visibility', __('Visibility', 'bizpanda'));
+        $this->columns->add('created', __('Created', 'bizpanda'));
         
         /**
          * Scripts & styles
@@ -45,15 +41,7 @@ class OPanda_ItemsViewTable extends FactoryViewtables320_Viewtable
             echo $post->post_title;
         }
     }
-    
-    /**
-     * Column 'Type'
-     */
-    public function columnType( $post, $isFullMode ) {
-        $item = get_post_meta($post->ID, 'opanda_item', true);
-        echo $item;
-    }
-    
+
     /**
      * Column 'Shortcode'
      */ 
@@ -62,7 +50,7 @@ class OPanda_ItemsViewTable extends FactoryViewtables320_Viewtable
         $isSystem = get_post_meta( $post->ID, 'opanda_is_system', true);
         $itemTypeName = get_post_meta( $post->ID, 'opanda_item', true);
         
-        $item = opanda_get_item_type( $itemTypeName );
+        $item = OPanda_Items::getItem( $itemTypeName );
         $shortcodeName = $item['shortcode'];
         
         $shortcode = '[' . $shortcodeName . '] [/' . $shortcodeName . ']';
@@ -89,7 +77,7 @@ class OPanda_ItemsViewTable extends FactoryViewtables320_Viewtable
     /**
      * Column 'Theme'
      */
-    public function columnTheme( $post, $isFullMode ) {
+    public function columnVisibility( $post, $isFullMode ) {
         
         $theme = get_post_meta($post->ID, 'opanda_style', true);
         echo $theme;

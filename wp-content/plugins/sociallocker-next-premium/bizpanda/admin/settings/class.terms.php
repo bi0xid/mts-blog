@@ -27,7 +27,7 @@ class OPanda_TermsSettings extends OPanda_Settings  {
     public function init() {
         
         if ( isset( $_GET['onp_table_cleared'] )) {
-            $this->success = __('The data has been successfully cleared.', 'optinpanda');
+            $this->success = __('The data has been successfully cleared.', 'bizpanda');
         }
     }
     
@@ -39,7 +39,7 @@ class OPanda_TermsSettings extends OPanda_Settings  {
      */
     public function header() {
         ?>
-        <p><?php _e('Select the pages which contains Terms of Use and Privacy Policy. It\'s not mandatory, but usually improves transparency and conversions.', 'optionpanda') ?></p>
+        <p><?php _e('Configure here Terms of Use and Privacy Policy for locker on your website. It\'s not mandatory, but improves transparency and conversions.', 'optionpanda') ?></p>
         <?php
     }
     
@@ -57,34 +57,112 @@ class OPanda_TermsSettings extends OPanda_Settings  {
         $pages = get_pages();
         $result = array();
         
-        $result[] = array('0', '- none -');
         foreach( $pages as $page ) {
             $result[] = array($page->ID, $page->post_title . ' [ID=' . $page->ID . ']');
         }
-        
-        
+
+        $defaultTermsOfUse = file_get_contents( OPANDA_BIZPANDA_DIR . '/content/terms-of-use.html' );
+        $defaultPrivacy = file_get_contents( OPANDA_BIZPANDA_DIR . '/content/privacy-policy.html' ); 
+
         $options[] = array(
             'type' => 'separator'
         );
         
         $options[] = array(
-            'type'      => 'dropdown',
-            'name'      => 'terms_of_use',
+            'type'      => 'checkbox',
+            'way'       => 'buttons',
+            'name'      => 'terms_enabled',
             'data'      => $result,
-            'title'     => __('Terms of Use', 'optinpanda'),
-            'hint'      => __('Select a page which contains the "Terms of Use" of the plugin.<br />When you activated the plugin, we created one by default. Read and change it if required.', 'optinpanda'),
+            'title'     => __('Enable Policies', 'bizpanda'),
+            'hint'      => __('Set On to show the links to Terms of Use and Privacy Policy of your website below the Sign-In/Email lockers.', 'bizpanda'),
             'default'   => true
+        ); 
+        
+        $enabledWrap = array(
+            'type'      => 'div',
+            'id'        => 'opanda-enabled-options'
         );
 
-        $options[] = array(
-            'type'      => 'dropdown',
-            'name'      => 'privacy_policy',
+        $enabledOptions[] = array(
+            'type'      => 'checkbox',
+            'way'       => 'buttons',
+            'name'      => 'terms_use_pages',
             'data'      => $result,
-            'title'     => __('Privacy Policy', 'optinpanda'),
-            'hint'      => __('Select a page which contains the "Privacy Policy" of your website.<br />When you activated the plugin, we created one by default. Read and change it if required.', 'optinpanda'),
-            'default'   => true
+            'title'     => __('Use Existing Pages', 'bizpanda'),
+            'hint'      => __('Set On, if your website already contains pages for "Terms of Use" and "Privacy Policies" and you want to use them.', 'bizpanda'),
+            'default'   => false
+        ); 
+        
+        $noPagesWrap = array(
+            'type'      => 'div',
+            'id'        => 'opanda-nopages-options',
+            'items'     => array(
+                
+                array(
+                    'type' => 'separator'
+                ),
+                
+                array(
+                    'type'      => 'wp-editor',
+                    'name'      => 'terms_of_use_text',
+                    'data'      => $result,
+                    'title'     => __('Terms of Use', 'bizpanda'),
+                    'hint'      => __('The text of Terms of Use. The link to this text will be shown below the lockers.', 'bizpanda'),
+                    'tinymce'   => array(
+                        'height' => 250,
+                        'content_css' => OPANDA_BIZPANDA_URL . '/assets/admin/css/tinymce.010000.css'
+                    ),
+                    'default'   => $defaultTermsOfUse
+                ),
+                
+                array(
+                    'type'      => 'wp-editor',
+                    'name'      => 'privacy_policy_text',
+                    'data'      => $result,
+                    'title'     => __('Privacy Policy', 'bizpanda'),
+                    'hint'      => __('The text of Privacy Policy.  The link to this text will be shown below the lockers.', 'bizpanda'),
+                    'tinymce'   => array(
+                        'height' => 250,
+                        'content_css' => OPANDA_BIZPANDA_URL . '/assets/admin/css/tinymce.010000.css'
+                    ),
+                    'default'   => $defaultPrivacy
+                )
+            )
+        );
+
+        $pagesWrap = array(
+            'type'      => 'div',
+            'id'        => 'opanda-pages-options',
+            'items'     => array(
+                
+                array(
+                    'type' => 'separator'
+                ),
+                
+                array(
+                    'type'      => 'dropdown',
+                    'name'      => 'terms_of_use_page',
+                    'data'      => $result,
+                    'title'     => __('Terms of Use', 'bizpanda'),
+                    'hint'      => __('Select a page which contains the "Terms of Use" for the lockers or/and your website.', 'bizpanda')
+                ),
+
+                array(
+                    'type'      => 'dropdown',
+                    'name'      => 'privacy_policy_page',
+                    'data'      => $result,
+                    'title'     => __('Privacy Policy', 'bizpanda'),
+                    'hint'      => __('Select a page which contains the "Privacy Policy" for the lockers or/and your website.', 'bizpanda')
+                )
+            )
         );
         
+        $enabledOptions[] = $noPagesWrap;
+        $enabledOptions[] = $pagesWrap;
+        
+        $enabledWrap['items'] = $enabledOptions;
+        $options[] = $enabledWrap;
+
         $options[] = array(
             'type' => 'separator'
         );

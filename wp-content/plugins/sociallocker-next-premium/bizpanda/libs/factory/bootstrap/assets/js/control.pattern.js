@@ -10,7 +10,7 @@
  */
 ;( function( $ ){
     
-    $.widget( "factoryBootstrap328.patternControl", {
+    $.widget( "factoryBootstrap329.patternControl", {
 
         _create: function() {
             
@@ -142,7 +142,7 @@
             
             this.$element.addClass('factory-color-panel-active');
             this.$btnChangeColor.addClass('button-active');
-            this.$colorResult.val( this.$colorContol.factoryBootstrap328_colorControl('getValue') );
+            this.$colorResult.val( this.$colorContol.factoryBootstrap329_colorControl('getValue') );
             this.$colorResult.trigger('change');
             this.$element.trigger('change');
         },
@@ -211,8 +211,8 @@
     });
     
     $(function(){
-        $.widget.bridge( "factoryBootstrap328_patternControl", $.factoryBootstrap328.patternControl );
-        $(".factory-bootstrap-328 .factory-pattern").factoryBootstrap328_patternControl({});
+        $.widget.bridge( "factoryBootstrap329_patternControl", $.factoryBootstrap329.patternControl );
+        $(".factory-bootstrap-329 .factory-pattern").factoryBootstrap329_patternControl({});
     });
     
 }( jQuery ) );

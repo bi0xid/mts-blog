@@ -15,7 +15,7 @@
  * @since 1.0.0
  */
 
-class FactoryForms327_DropdownControl extends FactoryForms327_Control 
+class FactoryForms328_DropdownControl extends FactoryForms328_Control 
 {
     public $type = 'dropdown';
     
@@ -75,8 +75,9 @@ class FactoryForms327_DropdownControl extends FactoryForms327_Control
             $ajaxId = 'factory-dropdown-' . rand(1000000, 9999999);
             
             $value = $this->getValue();
-            if ( empty( $value ) || empty( $value[0] )) $value = null;
-                    
+
+            if ( empty( $value ) || ( is_array( $value) && empty( $value[0] ) ) ) $value = null;
+
             ?>
             <div class="factory-ajax-loader <?php echo $ajaxId . '-loader'; ?>"></div>
             <script>
@@ -85,7 +86,7 @@ class FactoryForms327_DropdownControl extends FactoryForms327_Control
                     'url': '<?php echo $data['url'] ?>',
                     'data': <?php echo json_encode( $data['data'] ) ?>,
                     'selected': '<?php echo $value ?>',
-                    'emptyList': '<?php echo $this->getOption('empty', __('The list is empty.', 'factory_forms_327') ) ?>'
+                    'emptyList': '<?php echo $this->getOption('empty', __('The list is empty.', 'factory_forms_328') ) ?>'
                 };
             </script>
             <?php
@@ -97,7 +98,9 @@ class FactoryForms327_DropdownControl extends FactoryForms327_Control
         
         if ( 'buttons' == $way ) {
             $this->buttonsHtml();   
-        } else {
+        } elseif ( 'ddslick' == $way ) {
+            $this->ddslickHtml();   
+        } else {   
             $this->defaultHtml();
         }
     }
@@ -136,6 +139,49 @@ class FactoryForms327_DropdownControl extends FactoryForms327_Control
     }
     
     /**
+     * Shows the ddSlick dropbox.
+     * 
+     * @since 3.2.8
+     * @return void
+     */
+    protected function ddslickHtml() {
+        $items = $this->getItems();
+        $value = $this->getValue();
+        
+        $nameOnForm = $this->getNameOnForm();  
+        
+        $this->addCssClass('factory-ddslick-way');      
+        $this->addHtmlData('name', $nameOnForm);
+        
+        $this->addHtmlData('width', $this->getOption('width', 300));
+        $this->addHtmlData('align', $this->getOption('imagePosition', 'right'));
+        
+        ?>
+        <div <?php $this->attrs() ?>>
+            
+            <script>
+                //Dropdown plugin data
+                var factory_<?php echo $nameOnForm ?>_data = [
+                    <?php foreach ( $items as $item ) { ?>
+                    {
+                        text: "<?php echo $item['title'] ?>",
+                        value: "<?php echo $item['value'] ?>",
+                        selected: <?php if ( $value == $item['value'] ) { echo 'true'; } else { echo 'false'; } ?>,
+                        description: "<?php echo ( isset( $item['hint'] ) ? $item['hint'] : '' ); ?>",
+                        imageSrc: "<?php echo ( isset( $item['image'] ) ? $item['image'] : '' ); ?>",
+                        imageHoverSrc: "<?php echo ( isset( $item['hover'] ) ? $item['hover'] : '' ); ?>"                    
+                    },      
+                    <?php } ?>
+                ];  
+            </script>
+            
+            <div class="factory-ddslick"></div>
+            <input type="hidden" class="factory-result" id="<?php echo $nameOnForm ?>" name="<?php echo $nameOnForm ?>" value="<?php echo $value ?>" />
+        </div>
+        <?php
+    }
+
+    /**
      * Shows the standart dropdown.
      * 
      * @since 1.3.1
@@ -155,8 +201,15 @@ class FactoryForms327_DropdownControl extends FactoryForms327_Control
         $hasGroups = $this->getOption('hasGroups', true);
         $hasHints = $this->getOption('hasHints', false);
         
+        foreach($items as $item) {
+            if ( !isset( $item['hint'] ) ) continue;
+            if ( empty( $item['hint'] ) ) continue;  
+            $hasHints = true;
+            break;
+        }
+        
         $isEmpty = $this->isAjax() || empty( $items );
-        $emptyList = $this->getOption('empty', __('- empty -', 'factory_forms_327') );
+        $emptyList = $this->getOption('empty', __('- empty -', 'factory_forms_328') );
 
         ?>
             
@@ -176,11 +229,18 @@ class FactoryForms327_DropdownControl extends FactoryForms327_Control
             
         <?php if ( $hasHints ) { ?>
         <div class="factory-hints">
-            <?php foreach($items as $item) { ?>
-                <?php if ( isset( $item[2] )) { ?>
-                    <div class="factory-hint factory-hint-<?php echo $item[0] ?>" <?php if ( $value !== $item[0] ) { echo 'style="display: none;"'; } ?>><?php echo $item[2] ?></div>
-                <?php } ?>
-            <?php } ?>  
+            <?php foreach($items as $item) { 
+                
+                $hint = isset( $item[2] ) ? $item[2] : null;
+                $hint = isset( $item['hint'] ) ? $item['hint'] : null;
+                
+                $value = isset( $item[0] ) ? $item[0] : null;
+                $value = isset( $item['value'] ) ? $item['value'] : null;
+                 
+                if ( !empty( $hint ) ) { ?>
+                    <div style="display: none;" class="factory-hint factory-hint-<?php echo $value ?>" <?php if ( $value !== $value ) { echo 'style="display: none;"'; } ?>><?php echo $hint ?></div>
+                <?php }
+            } ?>  
         </div>
         <?php } ?>
         <?php
@@ -200,7 +260,7 @@ class FactoryForms327_DropdownControl extends FactoryForms327_Control
                 if ( 'group' === $type ) $subitems = isset( $item['items'] ) ? $item['items'] :array();
                 
                 $value = isset( $item['value'] ) ? $item['value'] : '';
-                $title = isset( $item['title'] ) ? $item['title'] : __( '- empty -', 'factory_forms_327' );
+                $title = isset( $item['title'] ) ? $item['title'] : __( '- empty -', 'factory_forms_328' );
                 
                 $data = isset( $item['data'] ) ? $item['data'] : null;
 

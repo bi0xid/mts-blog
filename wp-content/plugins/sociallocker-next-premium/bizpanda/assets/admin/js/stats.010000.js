@@ -37,6 +37,8 @@ if ( !window.bizpanda.statistics ) window.bizpanda.statistics = {};
         
         init: function() {
             var self = this;
+            
+            this.initLockerSelectorPopup();
 
             this.initButtonSelector();
             this.initTypeSelector();
@@ -44,6 +46,56 @@ if ( !window.bizpanda.statistics ) window.bizpanda.statistics = {};
 
             $(window).resize(function(){
                 self.redrawChart();
+            });
+        },
+        
+        initLockerSelectorPopup: function() {
+            
+            var $popup = $("#opanda-locker-select-popup").appendTo( $("body") );
+            if ( $popup.length === 0 ) return;
+            
+            var $overlap = $("#opanda-locker-select-overlap");
+            var $select = $("#opanda-locker-select");
+            var $menu = $("#adminmenuback");
+                
+            $overlap.show();
+            $popup.show();
+            
+            var updatePopupPosition = function(){
+                
+                var height = $popup.innerHeight();
+                var width = $popup.innerWidth();
+                var windowWidth = $( window ).width();
+                
+                var shift = ( $menu.is(":visible") ) ? $menu.innerWidth() : 0;
+            
+                $popup.css({
+                    'marginTop': -parseInt( height / 2 ) + "px",
+                    'left': shift + ( ( windowWidth - shift - width ) / 2 ) + "px"
+                });
+            };
+
+            $(window).resize(function(){
+                updatePopupPosition();
+            });
+
+            $("#collapse-menu").click(function(){
+                updatePopupPosition();
+            });
+            
+            updatePopupPosition();
+            
+            $("#opanda-locker-select-submit").click(function(){
+                var defaultOption = $select.find(":selected").data('default');
+                
+                if ( defaultOption ) {
+                    $popup.remove();
+                    $overlap.remove();
+                    return;
+                }
+                
+                window.location.href = $select.val();
+                return;
             });
         },
         
@@ -251,7 +303,7 @@ if ( !window.bizpanda.statistics ) window.bizpanda.statistics = {};
                 columns.push({type: 'number', 'title': row[column]['title']});
 
                 var color = 'PRIMARY_DARK' === row[column]['color']
-                        ? window.factory.factoryBootstrap328.colors.primaryDark
+                        ? window.factory.factoryBootstrap329.colors.primaryDark
                         : row[column]['color'];
 
                 colors.push(color);

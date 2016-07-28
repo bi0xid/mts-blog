@@ -4,13 +4,13 @@
  */
 class SocialLocker_LicenseManagerPage extends OnpLicensing325_LicenseManagerPage  {
  
-    public $purchasePrice = '$24';
+    public $purchasePrice = '$25';
     
     public function configure() {
-                $this->purchasePrice = '$24'; global $sociallocker;
+                $this->purchasePrice = '$25'; global $sociallocker;
 if ( in_array( $sociallocker->license->type, array( 'free' ) ) ) {
 
-                    $this->menuTitle = __('Social Locker', 'optinpanda');
+                    $this->menuTitle = __('Social Locker', 'plugin-sociallocker');
                 
 
 

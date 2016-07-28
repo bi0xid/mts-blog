@@ -8,13 +8,15 @@ if ( !window.bizpanda.preview ) window.bizpanda.preview = {};
         _forms: {},
         
         refresh: function( url, name, options, callback ) {
-            var self = this;
-            
+
             if ( !$("iframe[name=" + name + "]").length ) return;
             
             // removes previos forms
             if ( this._forms[name] ) {
-                $("iframe[name='" + name + "']")[0].contentWindow.setOptions( options );
+                
+                if ( $("iframe[name='" + name + "']")[0].contentWindow.setOptions ) 
+                    $("iframe[name='" + name + "']")[0].contentWindow.setOptions( options );
+                
                 return;
             }
             
@@ -45,6 +47,8 @@ if ( !window.bizpanda.preview ) window.bizpanda.preview = {};
            
         _encodeOptions: function( options ) {
             for( var optionName in options ) {
+                if ( !$.isPlainObject(options[optionName])) continue;
+                                   
                 if ( typeof options[optionName] === 'object' ) {
                     options[optionName] = this._encodeOptions( options[optionName] );
                 } else {

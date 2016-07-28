@@ -293,3 +293,37 @@
     text-align: left;
     font-style: italic;
 }
+
+/**
+* Locker Selector Popup
+*/
+
+#opanda-locker-select-popup {
+    position: absolute;
+    padding: 30px;
+    background-color: #fff;
+    
+    -moz-box-sizing: conent-box;  
+    box-sizing: conent-box;
+    
+    width: 330px;
+    
+    top: 50%;
+    
+    box-shadow: 0 0 15px 3px rgba(0,0,0,0.08);
+    border-radius: 4px;
+    z-index: 51;
+}
+#opanda-locker-select-overlap {
+    background-color: #f1f1f1;
+    opacity: 0.5;
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    z-index: 50;
+}
+#opanda-locker-select-popup strong {
+    font-size: 18px;
+}
+#opanda-locker-select-popup p {
+    margin-top: 5px;
+}
