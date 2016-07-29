@@ -2998,7 +2998,7 @@ ul.ess-buttons {
     margin-left:5%;
 }
 
-article header {
+.single article header {
     float: left;
     width: 95%;
     margin-left: 5%;
