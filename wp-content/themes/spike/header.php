@@ -81,7 +81,7 @@
 				</div>
 				<div id="header-form-wrapper">
                                     <div id="WFItem7323202" class="wf-formTpl">
-                                        <form accept-charset="utf-8" action="<?php echo get_home_url(); ?>/sign-up/register.php" method="post">
+                                        <form accept-charset="utf-8" action="<?php echo get_home_url(); ?>/sign-up/register-newsletter.php" method="post">
                                             <input type="hidden" name="form_type" value="header">
                                             <div class="box">
                                                 <div id="WFIcenter" class="wf-body">
