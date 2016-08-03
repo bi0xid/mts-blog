@@ -1,0 +1,70 @@
+@media only screen and (max-width: 780px) {
+  #subscribe_form_wrapper {
+    margin:0 auto;
+  }
+}
+
+
+body {
+    background-color: rgb(113, 70, 112);
+}
+
+#existing_email, label {
+    font-family: Helvetica, sans-serif;
+}
+
+div.ck_form.ck_naked {
+    margin-top: -17%;
+}
+
+input#ck_firstNameField.ck_first_name{
+    width: 100%;
+    margin-bottom: 5%;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 24px;
+    color: rgb(161, 169, 173);
+    border: 3px solid rgb(236, 240, 242);
+    padding: 0px 10px;
+    font-weight: normal;
+    font-style: normal;
+    background-color: rgb(255, 255, 255);
+    height: 54px;
+    padding: 0px 10px;
+}
+
+input#ck_emailField.ck_email_address{
+    width: 100%;
+    margin-bottom: 5%;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 24px;
+    color: rgb(161, 169, 173);
+    border: 3px solid rgb(236, 240, 242);
+    padding: 0px 10px;
+    font-weight: normal;
+    font-style: normal;
+    background-color: rgb(255, 255, 255);
+    height: 54px;
+    padding: 0px 10px;
+}
+
+
+button#ck_subscribe_button.subscribe_button.ck_subscribe_button.btn.fields {
+  background-color: rgb(169, 80, 122);
+    background-image: none;
+    border: 5px none rgb(255, 255, 255);
+    box-shadow: none;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    height: 82px;
+    font-family: Helvetica, Arial, sans-serif;
+  font-size: 280%;
+  color: #ffffff;
+    text-decoration: none;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+    margin-top: 4%;
+    padding: 0 15%;
+}
