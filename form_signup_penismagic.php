@@ -4,28 +4,17 @@
 
     // Connect to the database and initializate variables
     $stop = 'false';
-<<<<<<< HEAD
-    $servername = "10.30.200.51";
-    $username = "mytiuser";
-    $password = "Q2w3e4r5t";
-    $db = "featurex_wp770";
-=======
     $servername = "loveschool.cgwdbyp5vyan.us-east-1.rds.amazonaws.com";
     $username = "adinariv_arls";
     $password = "6LC0SN9.P[";
     $db = "adinariv_arls";
->>>>>>> d93fad4aaf07e70dd94904443ae6025e6fd95f1b
 
     // Databse connection
     $conn = mysql_connect( $servername, $username, $password );
     mysql_select_db( $db,$conn );
  
     // Look in the database if the email already exists
-<<<<<<< HEAD
-    $query = "SELECT ID FROM wppv_leads WHERE user_email = '$email' AND form_id = '$form_id'";
-=======
     $query = "SELECT ID FROM wparl_leads WHERE user_email = '$email' AND form_id = '$form_id'";
->>>>>>> d93fad4aaf07e70dd94904443ae6025e6fd95f1b
     //var_dump($query);
     $existing_email = mysql_query($query, $conn);
     // If exists, $stop is true    
@@ -43,11 +32,7 @@
     } else {
 
         // we add the email to the database
-<<<<<<< HEAD
-        $query = "INSERT INTO `wppv_leads` (`form_id`, `user_email`) VALUES ('$form_id', '$email')";
-=======
         $query = "INSERT INTO `wparl_leads` (`form_id`, `user_email`) VALUES ('$form_id', '$email')";
->>>>>>> d93fad4aaf07e70dd94904443ae6025e6fd95f1b
         $insert = mysql_query($query, $conn);
 
         // we capitalize the name
@@ -79,3 +64,4 @@
         header( "Location: $thankyou" );
 
     }
+
