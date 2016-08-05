@@ -86,20 +86,18 @@ function waq_isScrolledIntoView(elem) {
 	return ((elemBottom <= docViewBottom + 50) && (elemTop >= docViewTop));
 }
 
+function wp_ajax_query_resize() {
+	$('.ajax-item-thumb').height( function(){
+		return $(this).children('img').height();
+	});
+}
+
 $(window).resize(function() {
 	wp_ajax_query_resize();        
 	$('.modern .wp-ajax-query-content').masonry().masonry( 'reload' );
 });
 
-$(window).load(function() {
-	wp_ajax_query_resize();
-});
-
-function wp_ajax_query_resize(){
-	$('.ajax-item-thumb').height( function(){
-		return $(this).children('img').height();    
-	});
-}
+$(window).load(wp_ajax_query_resize);
 
 $(document).ready(function(e) {
 	$('.ajax-layout-toggle').click(function(e){
