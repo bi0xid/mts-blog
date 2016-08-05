@@ -1,167 +1,159 @@
 <?php
-   /*
-   Plugin Name: WP Ajax Query Shortcode
-   Plugin URI: http://leafcolor.com/wp-quick-ajax/
-   Description: A plugin to create awesome ajax query post for your WP site
-   Version: 2.2.1
-   Author: Leafcolor
-   Author URI: http://leafcolor.com
-   License: GPL2
-   */
-define( 'WAQ_PATH', plugin_dir_url( __FILE__ ) );
+/**
+ * Plugin Name: WP Ajax Query Shortcode
+ * Plugin URI: http://leafcolor.com/wp-quick-ajax/
+ * Description: A plugin to create awesome ajax query post for your WP site
+ * Version: 2.2.1
+ * Author: Leafcolor
+ * Author URI: http://leafcolor.com
+ * License: GPL2
+ */
+
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
+
+
+if (!defined( 'WAQ_PATH' ) ) {
+	define( 'WAQ_PATH', plugin_dir_url( __FILE__ ) );
+}
 
 require_once ('core/plugin-options.php');
 
-// Make sure we don't expose any info if called directly
-if ( !function_exists( 'add_action' ) ) {
-	echo 'Hi there!  I\'m just a plugin, not much I can do when called directly.';
-	exit;
-}
-
 $waq_id = 0;
 
-/*
+/**
  * Setup shortcode
  * Get default settings
  * Call template render
  */
-function wp_ajax_shortcode($atts, $content=""){        
+function wp_ajax_shortcode( $atts, $content = "" ) {
 	$waq_options = waq_get_all_option();    
 	$atts = shortcode_atts( array(
-		//query param
-		'author' => NULL,
-		'author_name' => '',
-		'cat' => implode(",",$waq_options['cat']),
-		'category_name' => '',
-		'tag' => $waq_options['tag'],
-		'tag_id' => NULL,
-		'product_cat' => '',
-		'p' => NULL,
-		'name' => '',
-		'page_id' => '',
-		'pagename' => '',
-		'post_parent' => '',
-		'post_type' => implode(",",$waq_options['post_type']),
-		'post_status' => 'publish',
-		'posts_per_page' => $waq_options['posts_per_page'],
+		'author'                 => NULL,
+		'author_name'            => '',
+		'cat'                    => implode(",",$waq_options['cat']),
+		'category_name'          => '',
+		'tag'                    => $waq_options['tag'],
+		'tag_id'                 => NULL,
+		'product_cat'            => '',
+		'p'                      => NULL,
+		'name'                   => '',
+		'page_id'                => '',
+		'pagename'               => '',
+		'post_parent'            => '',
+		'post_type'              => implode(",",$waq_options['post_type']),
+		'post_status'            => 'publish',
+		'posts_per_page'         => $waq_options['posts_per_page'],
 		'posts_per_archive_page' => '',
-		//'paged' => get_query_var('paged')?get_query_var('paged'):get_query_var('page')?get_query_var('page'):1,
-		'offset' => 0,
-		'order' => $waq_options['order'],
-		'orderby' => $waq_options['orderby'],
-		'ignore_sticky_posts' => true,
-		'year' => NULL,
-		'monthnum' => NULL,
-		'w' =>  NULL,
-		'day' => NULL,
-		'meta_key' => '',
-		'meta_value' => '',
-		'meta_compare' => '',
-		//plugin param
-		'layout' => $waq_options['layout'],
-		'col_width' => $waq_options['col_width'],
-		'ajax_style' => $waq_options['ajax_style'],
-		//button
-		'button_label' => $waq_options['button_label'],
-		'button_text_color' => $waq_options['button_text_color'],
-		'button_bg_color' => $waq_options['button_bg_color'],
-		'button_font' => $waq_options['button_font'],
-		'button_size' => $waq_options['button_size'],
-		'button_icon' => $waq_options['button_icon'],
-		
-		'loading_image' => $waq_options['loading_image'],
-		
-		'thumb_size' => $waq_options['thumb_size'],
-		
-		'post_title_color' => $waq_options['post_title_color'],
-		'post_title_font' => $waq_options['post_title_font'],
-		'post_title_size' => $waq_options['post_title_size'],
-		
-		'post_excerpt_color' => $waq_options['post_excerpt_color'],
-		'post_excerpt_font' => $waq_options['post_excerpt_font'],
-		'post_excerpt_size' => $waq_options['post_excerpt_size'],
-		'post_excerpt_limit' => $waq_options['post_excerpt_limit'],
-		
-		'post_meta_color' => $waq_options['post_meta_color'],
-		'post_meta_font' => $waq_options['post_meta_font'],
-		'post_meta_size' => $waq_options['post_meta_size'],
-		
-		'thumb_hover_icon' => $waq_options['thumb_hover_icon'],
-		'thumb_hover_color' => $waq_options['thumb_hover_color'],
-		'thumb_hover_bg' => $waq_options['thumb_hover_bg'],
-		'thumb_hover_popup' => $waq_options['thumb_hover_popup'],
-		'popup_theme' => $waq_options['popup_theme'],
-
-		'border_hover_color' => $waq_options['border_hover_color'],
-		'border_hover_width' => $waq_options['border_hover_width'],
-		//extra param
-		'full_post' => '0',
-		'global_query' => '0',
-		'related_query' => '0',
-		'related_tag_query' => '0',
+		'offset'                 => 0,
+		'order'                  => $waq_options['order'],
+		'orderby'                => $waq_options['orderby'],
+		'ignore_sticky_posts'    => true,
+		'year'                   => NULL,
+		'monthnum'               => NULL,
+		'w'                      =>  NULL,
+		'day'                    => NULL,
+		'meta_key'               => '',
+		'meta_value'             => '',
+		'meta_compare'           => '',
+		'layout'                 => $waq_options['layout'],
+		'col_width'              => $waq_options['col_width'],
+		'ajax_style'             => $waq_options['ajax_style'],
+		'button_label'           => $waq_options['button_label'],
+		'button_text_color'      => $waq_options['button_text_color'],
+		'button_bg_color'        => $waq_options['button_bg_color'],
+		'button_font'            => $waq_options['button_font'],
+		'button_size'            => $waq_options['button_size'],
+		'button_icon'            => $waq_options['button_icon'],
+		'loading_image'          => $waq_options['loading_image'],
+		'thumb_size'             => $waq_options['thumb_size'],
+		'post_title_color'       => $waq_options['post_title_color'],
+		'post_title_font'        => $waq_options['post_title_font'],
+		'post_title_size'        => $waq_options['post_title_size'],
+		'post_excerpt_color'     => $waq_options['post_excerpt_color'],
+		'post_excerpt_font'      => $waq_options['post_excerpt_font'],
+		'post_excerpt_size'      => $waq_options['post_excerpt_size'],
+		'post_excerpt_limit'     => $waq_options['post_excerpt_limit'],
+		'post_meta_color'        => $waq_options['post_meta_color'],
+		'post_meta_font'         => $waq_options['post_meta_font'],
+		'post_meta_size'         => $waq_options['post_meta_size'],
+		'thumb_hover_icon'       => $waq_options['thumb_hover_icon'],
+		'thumb_hover_color'      => $waq_options['thumb_hover_color'],
+		'thumb_hover_bg'         => $waq_options['thumb_hover_bg'],
+		'thumb_hover_popup'      => $waq_options['thumb_hover_popup'],
+		'popup_theme'            => $waq_options['popup_theme'],
+		'border_hover_color'     => $waq_options['border_hover_color'],
+		'border_hover_width'     => $waq_options['border_hover_width'],
+		'full_post'              => '0',
+		'global_query'           => '0',
+		'related_query'          => '0',
+		'related_tag_query'      => '0'
 	), $atts );
     
-    if($atts['layout'] != 'modern'){
+    if( $atts['layout'] != 'modern' ) {
         $atts['offset'] = (int)$atts['posts_per_page'];
     }
     
-	if($atts['post_type']=='attachment'){
+	if( $atts['post_type'] == 'attachment' ) {
 		$atts['post_status']='inherit';
 	}
-	if($atts['global_query']=='1'){
+
+	if( $atts['global_query'] == '1' ) {
 		global $wp_query;
 		$atts_old = $atts;
 		$atts = array_merge( $atts, $wp_query->query_vars );
 		$atts['posts_per_page'] = $atts_old['posts_per_page'];
 		$atts['paged'] = 1;
 	}
-	if($atts['related_query']=='1'){
+
+	if( $atts['related_query'] == '1' ) {
 		global $post;
 		$related_arg = array(
-			'category__in' => wp_get_post_categories($post->ID),
-			'post__not_in' => array($post->ID) 
+			'category__in' => wp_get_post_categories( $post->ID ),
+			'post__not_in' => array( $post->ID ) 
 		);
 		$atts = array_merge( $atts, $related_arg );
 	}
-	if($atts['related_tag_query']=='1'){
+
+	if($atts['related_tag_query'] == '1' ) {
 		global $post;
 		$tags = "";
-		$posttags = get_the_tags($post->ID);
-		if ($posttags) {
-			foreach($posttags as $tag) {
+
+		$posttags = get_the_tags( $post->ID );
+		if ( $posttags ) {
+			foreach( $posttags as $tag ) {
 				$tags .= ',' . $tag->slug; 
 			}
 		}
-		$tags = substr($tags, 1); // remove first comma
+
+		// Remove first comma
+		$tags = substr($tags, 1);
+
 		$related_arg = array(
 			'tag' => $tags,
 			'post__not_in' => array($post->ID) 
 		);
 		$atts = array_merge( $atts, $related_arg );
 	}
-	if(is_multisite()){
-		$atts['multisite']=get_current_blog_id();
+
+	if( is_multisite() ){
+		$atts['multisite'] = get_current_blog_id();
 	}
-    
-    if($atts['layout'] == 'modern'){
-        $atts['post__not_in'] = array(get_the_ID());
-    }
-    
+
+	if($atts['layout'] == 'modern') {
+		$atts['post__not_in'] = array(get_the_ID());
+	}
+
 	return wp_ajax_template($atts);
 }
+
 add_shortcode('wpajax', 'wp_ajax_shortcode');
 
-/*
-
+/**
  * Render template
-
- *
-
- * Return HTML
-
+ * @return HTML
  */
-
-function wp_ajax_template($atts){
+function wp_ajax_template( $atts ) {
 	global $waq_id;
 	$waq_id++;
 	$atts['waq_id']=$waq_id;
