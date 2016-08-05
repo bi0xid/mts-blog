@@ -34,22 +34,23 @@ $(document).ready(function($) {
 		$(this).toggleClass('toggleta').next('.togglec').slideToggle('normal');
 		return true;
 	});
-});
 
-// Tabs
-jQuery(document).ready(function($){
-	$('.stabs a').click(function(){
+	// Tabs
+	$('.stabs a').click(function() {
 		switch_tabs($(this));
 	});
+
 	switch_tabs($('.defaulttab'));
+
 	function switch_tabs(obj) {
 		$('.stab-content').hide();
-		$('.stabs a').removeClass("selected");
-		var id = obj.attr("rel");
-		$('#'+id).show();
-		obj.addClass("selected");
+		$('.stabs a').removeClass('selected');
+
+		$('#' + obj.attr('rel')).show();
+		obj.addClass('selected');
 	}
 });
+
 
 jQuery(document).ready(function(){
 	// UL = .tabs
