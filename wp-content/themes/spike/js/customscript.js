@@ -49,30 +49,34 @@ $(document).ready(function($) {
 		$('#' + obj.attr('rel')).show();
 		obj.addClass('selected');
 	}
-});
 
+	var tag_cloud_class  = '#tag-cloud';
+	var tag_cloud_height = $('#tag-cloud').height();
 
-jQuery(document).ready(function(){
-	// UL = .tabs
-	// Tab contents = .inside
-	var tag_cloud_class = '#tag-cloud';
-	//Fix for tag clouds - unexpected height before .hide()
-	var tag_cloud_height = jQuery('#tag-cloud').height();
-	jQuery('.inside ul li:last-child').css('border-bottom','0px') // remove last border-bottom from list in tab conten
-	jQuery('.tabs').each(function(){
-	jQuery(this).children('li').children('a:first').addClass('selected'); // Add .selected class to first tab on load
+	// Remove last border-bottom from list in tab conten
+	$('.inside ul li:last-child').css('border-bottom','0px');
+
+	$('.tabs').each(function() {
+		// Add .selected class to first tab on load
+		$(this).children('li').children('a:first').addClass('selected');
 	});
-	jQuery('.inside > *').hide();
-	jQuery('.inside > *:first-child').show();
-	jQuery('.tabs li a').click(function(evt){ // Init Click funtion on Tabs
-	var clicked_tab_ref = jQuery(this).attr('href'); // Strore Href value
-	jQuery(this).parent().parent().children('li').children('a').removeClass('selected'); //Remove selected from all tabs
-	jQuery(this).addClass('selected');
-	jQuery(this).parent().parent().parent().children('.inside').children('*').hide();
-	jQuery('.inside ' + clicked_tab_ref).fadeIn(500);
-	evt.preventDefault();
 
-	})
+	$('.inside > *').hide();
+	$('.inside > *:first-child').show();
+
+	// Init Click funtion on Tabs
+	$('.tabs li a').click(function(evt) {
+		// Strore Href value
+		var clicked_tab_ref = $(this).attr('href');
+
+		//Remove selected from all tabs
+		$(this).parent().parent().children('li').children('a').removeClass('selected');
+		$(this).addClass('selected');
+		$(this).parent().parent().parent().children('.inside').children('*').hide();
+
+		$('.inside ' + clicked_tab_ref).fadeIn(500);
+		evt.preventDefault();
+	});
 
 	// Reponsive menu
 	var initialMenuHeight = $('#mobile-navigation .menu-wrapper').height();
@@ -93,13 +97,13 @@ jQuery(document).ready(function(){
 
 	// Bullseye
 	$('.internal_author_block_content').bind('leaveviewport', function() {
-		console.log(1);
 		$('.react-and-link').removeClass('out');
 	}).bullseye();
 
-	/*react-share functions */
+	// React-share functions
 	$('#reactshare-button').click(function(e) {
-		 e.preventDefault();
+		e.preventDefault();
+
 		$('#reactshare-button').addClass('opened');
 		$('#new-shop-link').addClass('opened');
 		$('.react-overlay').show();
@@ -126,7 +130,9 @@ jQuery(document).ready(function(){
 		$('#mobile-navigation').removeClass('in');
 		$('#mobile-navigation .menu-wrapper').css('height', '0px');
 	});
-})
+});
+
+
 
 function swt_format_twitter(twitters) {
   var statusHTML = [];
