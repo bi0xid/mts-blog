@@ -155,19 +155,18 @@ add_shortcode('wpajax', 'wp_ajax_shortcode');
  */
 function wp_ajax_template( $atts ) {
 	global $waq_id;
+
 	$waq_id++;
-	$atts['waq_id']=$waq_id;
+
+	$atts['waq_id'] = $waq_id;
+
+	// Start the HTML Return
 	ob_start(); ?>
-<?php /*
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=<?php echo str_replace(" ", "+", $atts['button_font']) ?>|<?php echo str_replace(" ", "+", $atts['post_title_font']) ?>|<?php echo str_replace(" ", "+", $atts['post_excerpt_font']) ?>|<?php echo str_replace(" ", "+", $atts['post_meta_font']) ?>" >
-*/ 
-?>
-    <style>
-        
+	<style>
 		<?php if($atts['layout']=='modern'||$atts['layout']=='combo'){ ?>
 		#waq<?php echo $waq_id; ?> .ajax-item{ /*width:280px */}
-        <?php } ?>
-        #waq<?php echo $waq_id; ?> .ajax-item-head a{
+		<?php } ?>
+		#waq<?php echo $waq_id; ?> .ajax-item-head a{
 			color:#<?php echo $atts['post_title_color'] ?>;
 			<?php if($atts['post_title_font']){ ?>font-family:"<?php echo $atts['post_title_font'] ?>", sans-serif;<?php } ?>
 			font-size:<?php echo $atts['post_title_size'] ?>px;
@@ -221,97 +220,78 @@ function wp_ajax_template( $atts ) {
 			//color: #<?php echo $atts['border_hover_color'] ?>;
 		}
 		<?php } ?>
-        
-    </style>
+	</style>
 
-    <div id="waq<?php echo $waq_id; ?>" class="wp-ajax-query-shortcode <?php echo $atts['layout']=='combo'?$atts['layout'].' modern':($atts['layout']=='timeline'?$atts['layout'].' classic':$atts['layout']) ?>">
-    	<div class="wp-ajax-query-wrap">
-        	<?php if($atts['layout']=='combo'){ ?>
-            	<center><button class="ajax-layout-toggle">Switch layout  <i class="icon-random"></i></button></center>
-            <?php } ?>
-        	<div class="wp-ajax-query-inner">
-            	<div class="wp-ajax-query-content">
-    				<?php echo wp_ajax_query($atts); ?>
-            	</div>
-                <div class="clear"></div>
-                <div class="wp-ajax-loading-images">                    
-                    <img src="<?php echo WAQ_PATH.'images/gray.gif'; ?>" width="88px" height="8px" />
-                    <?php /*
-                	<?php if($atts['loading_image']=='1'){ ?>
-                    	<img src="<?php echo WAQ_PATH.'images/gray.gif'; ?>" width="88px" height="8px" />
-                    <?php }elseif($atts['loading_image']=='2'){ ?>
-                    	<i class="icon-spinner icon-spin"></i>
-                    <?php }elseif($atts['loading_image']=='3'){ ?>
-                    	<i class="icon-refresh icon-spin"></i>
-                    <?php }elseif($atts['loading_image']=='4'){ ?>
-                    	<i class="icon-cog icon-spin"></i>
-                    <?php }else{ ?>
-                    	<img src="<?php echo WAQ_PATH.'images/gray.gif'; ?>" width="88px" height="8px" />
-                    <?php } ?>
-                     * 
-                     */?>
-                </div>
-                <div class="wp-ajax-query-button <?php echo $atts['ajax_style']=='scroll'?'hide-button':'' ?>"><a href="#"><?php echo $atts['button_label']; echo $atts['button_icon']?' &nbsp;<i class="'.$atts['button_icon'].'"></i>':'' ?></a></div>
-            </div>
-        </div>
-    </div>
-    <div class="clear"></div>
-    <script>
-	jQuery(function(){        
-		ajax_running=0;
-		end_of_ajax=0;
-		<?php if($atts['ajax_style']=='scroll'){ ?>
-		jQuery(window).scroll(function(){
-			if(jQuery('#waq<?php echo $atts['waq_id']; ?> .wp-ajax-query-button a').length && waq_isScrolledIntoView(jQuery('#waq<?php echo $waq_id; ?> .wp-ajax-query-button a')) && ajax_running==0){
+	<div id="waq<?php echo $waq_id; ?>" class="wp-ajax-query-shortcode <?php echo $atts['layout']=='combo'?$atts['layout'].' modern':($atts['layout']=='timeline'?$atts['layout'].' classic':$atts['layout']) ?>">
+		<div class="wp-ajax-query-wrap">
+			<?php if($atts['layout']=='combo'){ ?>
+				<center><button class="ajax-layout-toggle">Switch layout  <i class="icon-random"></i></button></center>
+			<?php } ?>
+			<div class="wp-ajax-query-inner">
+				<div class="wp-ajax-query-content">
+					<?php echo wp_ajax_query($atts); ?>
+				</div>
+				<div class="clear"></div>
+				<div class="wp-ajax-loading-images">
+					<img src="<?php echo WAQ_PATH.'images/gray.gif'; ?>" width="88px" height="8px" />
+				</div>
+				<div class="wp-ajax-query-button <?php echo $atts['ajax_style']=='scroll'?'hide-button':'' ?>"><a href="#"><?php echo $atts['button_label']; echo $atts['button_icon']?' &nbsp;<i class="'.$atts['button_icon'].'"></i>':'' ?></a></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="clear"></div>
+
+	<script>
+		jQuery(function() {
+			end_of_ajax = 0;
+			<?php if($atts['ajax_style']=='scroll') { ?>
+				jQuery(window).scroll(function() {
+					if(jQuery('#waq<?php echo $atts['waq_id']; ?> .wp-ajax-query-button a').length && waq_isScrolledIntoView(jQuery('#waq<?php echo $waq_id; ?> .wp-ajax-query-button a'))) {
+						ajaxParam = <?php echo json_encode($atts); ?>;
+						ajaxParam['home_url'] = "<?php echo home_url("/");?>";
+						ajaxParam['waq_id'] = "<?php echo $atts['waq_id']; ?>";
+						wp_ajax_query_shortcode<?php echo $atts['layout'] == 'combo' ? 'modern' : ($atts['layout'] == 'timeline' ? 'classic' : $atts['layout']) ?>(ajaxParam);
+					}
+				});
+			<?php } else { ?>
+			jQuery('#waq<?php echo $atts['waq_id']; ?> .wp-ajax-query-button a').on('click',function() {
 				ajaxParam = <?php echo json_encode($atts); ?>;
 				ajaxParam['home_url'] = "<?php echo home_url("/");?>";
 				ajaxParam['waq_id'] = "<?php echo $atts['waq_id']; ?>";
-				wp_ajax_query_shortcode<?php echo $atts['layout']=='combo'?'modern':($atts['layout']=='timeline'?'classic':$atts['layout']) ?>(ajaxParam);
-			}
+				wp_ajax_query_shortcode<?php echo $atts['layout'] == 'combo' ? 'modern' : ($atts['layout'] == 'timeline' ? 'classic' : $atts['layout']) ?>(ajaxParam);
+				return false;
+			});
+			<?php } ?>
 		});
-		<?php }else{ ?>
-		jQuery('#waq<?php echo $atts['waq_id']; ?> .wp-ajax-query-button a').on('click',function(){
-			ajaxParam = <?php echo json_encode($atts); ?>;
-			ajaxParam['home_url'] = "<?php echo home_url("/");?>";
-			ajaxParam['waq_id'] = "<?php echo $atts['waq_id']; ?>";
-			wp_ajax_query_shortcode<?php echo $atts['layout']=='combo'?'modern':($atts['layout']=='timeline'?'classic':$atts['layout']) ?>(ajaxParam);
-			return false;
-		});
-		<?php } ?>
-	});
-	<?php /* if($atts['thumb_hover_popup']){?>
-    
-	jQuery("#waq<?php echo $waq_id; ?> a[rel^='prettyPhoto']").prettyPhoto({
-		<?php echo $atts['popup_theme']?'theme:"'.$atts['popup_theme'].'"':'' ?>
-	});
-    
-	<?php } */?>
-    
-    
-	jQuery(document).ready(function(){        
-		wp_ajax_query_resize();
-		$columnwidth = jQuery('#waq<?php echo $waq_id; ?> .ajax-item').width();
-		$container = jQuery('#waq<?php echo $waq_id; ?>.modern .wp-ajax-query-content');
-		$container.imagesLoaded( function(){
+
+		jQuery(document).ready(function() {
 			wp_ajax_query_resize();
+			$columnwidth = jQuery('#waq<?php echo $waq_id; ?> .ajax-item').width();
+			$container = jQuery('#waq<?php echo $waq_id; ?>.modern .wp-ajax-query-content');
+
+			$container.imagesLoaded(function() {
+				wp_ajax_query_resize();
+			});
+
+			$container.masonry({
+				itemSelector : '.ajax-item',
+				columnWidth  : $columnwidth,
+				isFitWidth   : true,
+				gutter       : 0
+			});
 		});
-		$container.masonry({
-			// options
-			itemSelector : '.ajax-item',
-			columnWidth : $columnwidth,
-			isFitWidth: true,
-			gutter: 0
+
+		jQuery(window).load(function(e) {
+			$container.imagesLoaded(function() {
+				wp_ajax_query_resize();
+				$container.masonry('reload');
+			});
 		});
-	});
-	jQuery(window).load(function(e) {        
-		$container.imagesLoaded( function(){
-			wp_ajax_query_resize();
-			$container.masonry( 'reload' );
-		});
-    });
 	</script>
 	<?php
 	$html = ob_get_clean();
+
 	return $html;
 }
 
