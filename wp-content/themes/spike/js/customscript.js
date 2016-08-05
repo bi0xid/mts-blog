@@ -20,21 +20,20 @@ $(document).ready(function($) {
 		},
 		dropShadows : false
 	});
-});
 
-// Scroll to Top script
-jQuery(document).ready(function($){
-    $('a[href=#top]').click(function(){
-        $('html, body').animate({scrollTop:0}, 'slow');
-        return false;
-    });
-$(".togglec").hide();
+	// Scroll to Top script
+	$('a[href=#top]').click(function() {
+		$('html, body').animate({
+			scrollTop:0
+		}, 'slow');
+		return false;
+	});
 
-    	$(".togglet").click(function(){
-
-    	$(this).toggleClass("toggleta").next(".togglec").slideToggle("normal");
-    	   return true;
-    	});
+	$('.togglec').hide();
+	$('.togglet').click(function() {
+		$(this).toggleClass('toggleta').next('.togglec').slideToggle('normal');
+		return true;
+	});
 });
 
 // Tabs
