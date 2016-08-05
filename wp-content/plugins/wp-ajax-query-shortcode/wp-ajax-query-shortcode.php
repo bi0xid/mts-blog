@@ -244,18 +244,20 @@ function wp_ajax_template( $atts ) {
 
 	<script>
 		jQuery(function() {
-			end_of_ajax = 0;
 			<?php if($atts['ajax_style']=='scroll') { ?>
 				jQuery(window).scroll(function() {
-					if(jQuery('#waq<?php echo $atts['waq_id']; ?> .wp-ajax-query-button a').length && waq_isScrolledIntoView(jQuery('#waq<?php echo $waq_id; ?> .wp-ajax-query-button a'))) {
+					if(jQuery('#waq<?php echo $atts['waq_id']; ?> .wp-ajax-query-button a').length && waq_isScrolledIntoView(jQuery('#waq<?php echo $waq_id; ?> .wp-ajax-query-button a')) && !window.short_code_ajax_is_loading) {
+
 						ajaxParam = <?php echo json_encode($atts); ?>;
-						ajaxParam['home_url'] = "<?php echo home_url("/");?>";
+						ajaxParam['home_url'] = "<?php echo home_url( '/' );?>";
 						ajaxParam['waq_id'] = "<?php echo $atts['waq_id']; ?>";
+
 						wp_ajax_query_shortcode<?php echo $atts['layout'] == 'combo' ? 'modern' : ($atts['layout'] == 'timeline' ? 'classic' : $atts['layout']) ?>(ajaxParam);
 					}
 				});
 			<?php } else { ?>
 			jQuery('#waq<?php echo $atts['waq_id']; ?> .wp-ajax-query-button a').on('click',function() {
+
 				ajaxParam = <?php echo json_encode($atts); ?>;
 				ajaxParam['home_url'] = "<?php echo home_url("/");?>";
 				ajaxParam['waq_id'] = "<?php echo $atts['waq_id']; ?>";

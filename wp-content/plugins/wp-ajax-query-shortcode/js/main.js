@@ -1,5 +1,8 @@
 var $ = jQuery;
 
+// Global variable
+window.short_code_ajax_is_loading = false;
+
 function wp_ajax_query_shortcodeclassic(ajaxParam) {
 	var item_showed = $('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-content .ajax-item').length;
 
@@ -7,21 +10,24 @@ function wp_ajax_query_shortcodeclassic(ajaxParam) {
 		item_showed = $('.post.excerpt').length;
 	}
 
-	if(item_showed<9999) {
+	if(item_showed < 9999) {
 		$('#waq'+ajaxParam['waq_id']+' .wp-ajax-loading-images').addClass('show');
 
 		var param1 = { action: 'wp_ajax_query' };
 		var param = $.extend({}, param1, ajaxParam);
 
-		param['offset'] = item_showed * 1;
+		short_code_ajax_is_loading = true;
+
 		param['ajax_runnig'] = true;
+		param['offset'] = item_showed * 1;
 
 		$.ajax({
 			type: "GET",
 			url: ajaxParam['home_url']+"ajax.php",
 			dataType: 'html',
 			data: (param),
-			success: function(data){
+			success: function(data) {
+				short_code_ajax_is_loading = false;
 				if(data == '-11'|| data.replace(/(\r\n|\n|\r)/gm, "") == '-11') {
 					$('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-button a').html('<i class="icon-remove"></i> No more');
 					$('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-button a').fadeOut(1000, function() {
@@ -29,7 +35,7 @@ function wp_ajax_query_shortcodeclassic(ajaxParam) {
 					});
 
 					$('#waq'+ajaxParam['waq_id']+' .wp-ajax-loading-images').remove();
-				}else{
+				} else {
 					$('#waq'+ajaxParam['waq_id']+' .wp-ajax-loading-images').removeClass('show');
 					$(data).hide().appendTo('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-content').slideDown('slow').imagesLoaded( function(){
 						wp_ajax_query_resize();
@@ -43,21 +49,24 @@ function wp_ajax_query_shortcodeclassic(ajaxParam) {
 function wp_ajax_query_shortcodemodern(ajaxParam) {
 	var item_showed = $('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-content .ajax-item').length;
 
-	if(item_showed<9999) {
+	if(item_showed < 9999) {
 		$('#waq'+ajaxParam['waq_id']+' .wp-ajax-loading-images').addClass('show');
 
 		var param1 = { action: 'wp_ajax_query' };
 		var param = $.extend({}, param1, ajaxParam);
 
-		param['offset'] = param['offset'] * 1 + item_showed * 1;
+		short_code_ajax_is_loading = true;
+
 		param['ajax_runnig'] = true;
+		param['offset'] = param['offset'] * 1 + item_showed * 1;
 
 		$.ajax({
 			type: "GET",
-			url: ajaxParam['home_url']+"ajax.php",
+			url: ajaxParam['home_url'] + 'ajax.php',
 			dataType: 'html',
 			data: (param),
 			success: function(data) {
+				short_code_ajax_is_loading = false;
 				if(data == '-11'|| data.replace(/(\r\n|\n|\r)/gm, "") == '-11') {
 					$('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-button a').html('<i class="icon-remove"></i> No more');
 					$('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-button a').fadeOut(1500, function(){
@@ -94,7 +103,7 @@ function wp_ajax_query_resize() {
 
 $(window).resize(function() {
 	wp_ajax_query_resize();        
-	$('.modern .wp-ajax-query-content').masonry().masonry( 'reload' );
+	$('.modern .wp-ajax-query-content').masonry().masonry('reload');
 });
 
 $(window).load(wp_ajax_query_resize);
