@@ -29,30 +29,21 @@ if ( function_exists( 'add_theme_support' ) ) {
 /*-----------------------------------------------------------------------------------*/
 function mts_add_scripts() {
 	$options = get_option('spike');
-	global $data; //get theme options
 
-	//replace jQuery with Google hosted version
-	wp_deregister_script('jquery');
-		wp_register_script('jquery', ("//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"), false, '1.7.1');
-	wp_enqueue_script('jquery');
-
-	//replace jQuery UI with Google hosted version
-	wp_deregister_script('jquery-ui');
-		wp_register_script('jquery-ui', ("//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"), false, '1.8.16');
-	wp_enqueue_script('jquery-ui');
+	global $data;
 
 	// Site wide js
 	wp_enqueue_script('modernizr', get_template_directory_uri() . '/js/modernizr.min.js');
-	wp_enqueue_script('customscript', get_template_directory_uri() . '/js/customscript.js');
+	wp_enqueue_script('customscript', get_template_directory_uri() . '/js/customscript.js', array('jquery'));
 
-	//Slider
+	// Slider
 	if($options['mts_featured_slider'] == '1') {
 		if(is_front_page()) {
 			wp_enqueue_script('flexslider', get_template_directory_uri() . '/js/jquery.flexslider-min.js');
 		}
 	}
 
-	//Lightbox
+	// Lightbox
 	if($options['mts_lightbox'] == '1') {
 		wp_enqueue_script('prettyPhoto', get_template_directory_uri() . '/js/jquery.prettyPhoto.js');
 	}
