@@ -2470,7 +2470,11 @@ ul.related_post li img{	border: 0 !important;	border-radius: 0 !important;}.pb-m
     }
     .slidertitle { font-size: 24px }
     .slidertext { display: none }
-    .article { width: 96% }
+    .article {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 2%;
+    }
     #content_box {
         padding-right: 0px;
         padding-left: 0px!important;
