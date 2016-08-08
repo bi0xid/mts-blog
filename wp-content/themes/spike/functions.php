@@ -34,7 +34,7 @@ function mts_add_scripts() {
 
 	// Site wide js
 	wp_enqueue_script('modernizr', get_template_directory_uri() . '/js/modernizr.min.js');
-	wp_enqueue_script('customscript', get_template_directory_uri() . '/js/customscript.js');
+	wp_enqueue_script('customscript', get_template_directory_uri() . '/js/customscript.js', array('jquery'));
 
 	// Slider
 	if($options['mts_featured_slider'] == '1') {
