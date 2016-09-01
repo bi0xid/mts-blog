@@ -480,4 +480,10 @@ function get_the_user_ip() {
 	return apply_filters( 'wpb_get_ip', $ip );
 }
 
-?>
+
+function remove_pages_from_search() {
+    global $wp_post_types;
+    $wp_post_types['page']->exclude_from_search = true;
+}
+add_action('init', 'remove_pages_from_search');
+
