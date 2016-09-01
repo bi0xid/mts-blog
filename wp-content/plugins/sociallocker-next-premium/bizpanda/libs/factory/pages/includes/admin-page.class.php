@@ -195,9 +195,9 @@ class FactoryPages321_AdminPage extends FactoryPages321_Page {
         } 
 
         // sets default capabilities
-        //if ( empty( $this->capabilitiy ) ) {
-            $this->capabilitiy = 'edit_posts';
-        //}
+        if ( empty( $this->capabilitiy ) ) {
+            $this->capabilitiy = 'manage_options';
+        }
 
         $this->pageTitle = !$this->pageTitle ? $this->menuTitle : $this->pageTitle;
         $this->menuTitle = !$this->menuTitle ? $this->pageTitle : $this->menuTitle;

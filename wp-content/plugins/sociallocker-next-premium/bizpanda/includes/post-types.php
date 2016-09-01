@@ -37,7 +37,7 @@ class OPanda_PandaItemType extends FactoryTypes322_Type {
      * @link http://codex.wordpress.org/Roles_and_Capabilities
      * @var array 
      */
-    public $capabilities = array('administrator', 'editor');
+    public $capabilities = array('administrator');
     
     public function useit() { global $sociallocker;
 if ( in_array( $sociallocker->license->type, array( 'paid','trial' ) ) ) {
