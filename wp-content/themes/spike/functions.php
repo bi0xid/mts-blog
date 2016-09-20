@@ -32,18 +32,16 @@ function mts_add_scripts() {
 
 	global $data;
 
-	// Site wide js
-	wp_enqueue_script('modernizr', get_template_directory_uri() . '/js/modernizr.min.js');
-	wp_enqueue_script('customscript', get_template_directory_uri() . '/js/customscript.js', array('jquery'));
+	wp_enqueue_script( 'modernizr', get_template_directory_uri() . '/js/modernizr.min.js' );
+	wp_enqueue_script( 'customscript', get_template_directory_uri() . '/js/customscript.js', array( 'jquery' ) );
+	wp_enqueue_script( 'main-js', get_template_directory_uri() . '/js/main.js', array( 'jquery' ) );
 
-	// Slider
 	if($options['mts_featured_slider'] == '1') {
 		if(is_front_page()) {
 			wp_enqueue_script('flexslider', get_template_directory_uri() . '/js/jquery.flexslider-min.js');
 		}
 	}
 
-	// Lightbox
 	if($options['mts_lightbox'] == '1') {
 		wp_enqueue_script('prettyPhoto', get_template_directory_uri() . '/js/jquery.prettyPhoto.js');
 	}
