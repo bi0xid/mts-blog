@@ -49,9 +49,23 @@ $(document).ready(function() {
 			player.stopVideo()
 			videoBackground.fadeOut(400)
 		})
+
+		container.find('a.btn').on('click', function() {
+			trackOutboundLink('http://adinariversloveschool.com/pussy-pleasure-course/')
+			return false
+		})
+	}
+
+	var trackOutboundLink = function(url) {
+		ga('send', 'event', 'outbound', 'click', url, {
+			'transport'  : 'beacon',
+			'hitCallback': function() {
+				document.location = url
+			}
+		})
 	}
 })
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_d7862cc4.js","/")
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_4ebd9cc2.js","/")
 },{"7YKIPe":4,"buffer":3,"countdown":10,"moment-timezone":7}],2:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';

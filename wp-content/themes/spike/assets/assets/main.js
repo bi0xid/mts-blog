@@ -47,5 +47,19 @@ $(document).ready(function() {
 			player.stopVideo()
 			videoBackground.fadeOut(400)
 		})
+
+		container.find('a.btn').on('click', function() {
+			trackOutboundLink('http://adinariversloveschool.com/pussy-pleasure-course/')
+			return false
+		})
+	}
+
+	var trackOutboundLink = function(url) {
+		ga('send', 'event', 'outbound', 'click', url, {
+			'transport'  : 'beacon',
+			'hitCallback': function() {
+				document.location = url
+			}
+		})
 	}
 })
