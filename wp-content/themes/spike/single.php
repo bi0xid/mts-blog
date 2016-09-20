@@ -167,7 +167,7 @@
                             <?php endif; ?>
                             
                             
-							<div class="pb-mc-wrapper">
+							<div class="pb-mc-wrapper hide">
 								<div id="pb-mailchimp">
 									<h3>Want To Become Sexually Healthy & Happy?</h3>
 									<p>Join The Secret Sunday List & Get 1 FREE Actionable Secret Every Sunday.</p>
@@ -187,7 +187,49 @@
 									</div>
 								</div>
 							</div>
-              <?php if ( function_exists( "get_yuzo_related_posts" ) ) { get_yuzo_related_posts(); } ?>
+
+							<div id="course-enroll-banner" style="background-image:url('<?php echo get_stylesheet_directory_uri() . '/images/loveschool/banner.png' ?>')">
+								<div class="left-block">
+									<div class="padding-block">
+										<h5><span>The Pussy Pleasure Course™</span></h5>
+										<h2><span>Learn How To Fully Pleasure Your Partner!</span></h2>
+									</div>
+
+									<div class="counter_wrapper">
+										<p>Enrollment closes In</p>
+
+										<div id="ls_course_counter" data-deadline="2016-10-03 00:00">
+											<div class="counter_labels">
+												<div class="d">
+													<span class="label">Days</span>
+													<span>0</span>
+												</div>
+												<div class="gh">
+													<span class="label">Hours</span>
+													<span>0</span>
+												</div>
+												<div class="m">
+													<span class="label last">Minutes</span>
+													<span class="last">0</span>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="padding-block">
+										<a href="http://adinariversloveschool.com/pussy-pleasure-course/" class="btn">Tell Me More</a>
+									</div>
+
+									<span class="play-btn" style="background-image:url('<?php echo get_stylesheet_directory_uri() . '/images/loveschool/play-button.png' ?>')">
+								</div>
+							</div>
+
+							<div class="loveschool-teaser-video-background">
+								<span class="close-video">X</span>
+								<div id="teaser-video"></div>
+							</div>
+
+						<?php if ( function_exists( "get_yuzo_related_posts" ) ) { get_yuzo_related_posts(); } ?>
 							<?php //if ( function_exists( "wp_related_posts" ) ) { wp_related_posts(); } ?>
 							
 							<div class="single_post_right">

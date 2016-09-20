@@ -1,0 +1,31 @@
+#navigation select { display: none }
+
+@media screen and (max-width:865px) {
+    .js #navigation select {
+        display: inline-block;
+        max-width: none;
+        padding: 7px 15px;
+        width: 80%;
+        color: #fff;
+        background: #303030;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+        font-size: 12px;
+        float: right;
+        margin-right: 15px;
+        border: 1px solid #000000;
+    }
+}
+
+@media screen and (max-width:480px) {
+	.js #navigation select {
+		width: 100%;
+		margin-right: 0;
+	}
+}
+
+@media screen and (max-width:300px) {
+    .js #navigation select {
+        width: 100%;
+        float: left;
+    }
+}

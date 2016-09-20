@@ -1,0 +1,169 @@
+@import 'nib'
+
+@import './plugins/react.css'
+@import './includes/base.styl'
+
+@require './blocks/menu-responsive.styl'
+@require './blocks/react-style.styl'
+
+.pb-mc-wrapper.hide
+	display none
+
+#course-enroll-banner
+	position relative
+	background-size cover
+	background-position center 70%
+
+	.play-btn
+		width 50px
+		height 50px
+		cursor pointer
+		background-size cover
+		absolute top 50% right 18%
+		transform translate(0, -50%)
+		background-position center center
+
+	.left-block
+		width 60%
+		background rgba(0, 0, 0, 0.54)
+
+		h5, h2
+			color #FFF
+			width 100%
+
+		h2 span
+			font-size 28px
+
+			@media(max-width 1222px)
+				font-size 26px
+
+			@media(max-width 1060px)
+				font-size 24px
+
+		@media(max-width 970px)
+			h2
+				width 370px
+
+				span
+					font-size 26px
+
+		.padding-block
+			padding 24px
+
+		a.btn
+			color #FFF
+			width 180px
+			display block
+			font-size 18px
+			margin-top 12px
+			padding 10px 25px
+			border-radius 5px
+			text-align center
+			box-sizing border-box
+			background-color #14D99D
+			transition background-color .3s
+
+			&:hover
+				background-color #15AA7C
+
+		.counter_wrapper
+			background #FFF
+			padding 0 10px
+			flex-inline()
+
+			p
+				width 130px
+				margin auto 0
+				font-size 18px
+				font-weight bold
+
+			.counter_labels
+				margin auto
+				flex-inline()
+				padding 10px 0
+
+				div
+					margin auto 15px
+					text-align center
+
+					&.m
+						margin-left 0
+
+					span
+						display block
+						position relative
+
+						&:not(.last)
+							margin-left -10px
+							padding-right 20px
+
+							&.label
+								border-right 1px solid #000
+
+						&:not(.label)
+							font-size 20px
+							font-weight bold
+
+	@media(max-width 1070px)
+		.left-block .counter_wrapper
+			padding 10px
+
+			p
+				width 100%
+				text-align center
+
+	@media(max-width 800px)
+		.left-block
+			width 70%
+
+	@media(max-width 970px)
+		.play-btn
+			top 60px
+			right 20px
+
+		.left-block
+			width 100%
+
+			.counter_wrapper
+				color #FFF
+				background initial
+				border-top 1px solid #FFF
+				border-bottom 1px solid #FFF
+
+				div span
+					border 0 !important
+
+				p
+					color #FFF
+
+			a.btn
+				width 100%
+
+	@media(max-width 500px)
+		.play-btn
+			top 35px
+
+
+.loveschool-teaser-video-background
+	width 100%
+	height 100%
+	display none
+	z-index 20000
+	fixed top 0 left 0
+	background rgba(18, 14, 14, 0.67)
+
+	.close-video
+		color #FFF
+		cursor pointer
+		font-size 40px
+		absolute top 40px right 20px
+
+		&:hover
+			color #D3D3D3
+
+	iframe
+		absolute top 50% left 50%
+		transform translate(-50%, -50%)
+
+		@media(max-width 700px)
+			width 100%
