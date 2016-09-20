@@ -167,7 +167,7 @@
                             <?php endif; ?>
                             
                             
-							<div class="pb-mc-wrapper">
+							<div class="pb-mc-wrapper hide">
 								<div id="pb-mailchimp">
 									<h3>Want To Become Sexually Healthy & Happy?</h3>
 									<p>Join The Secret Sunday List & Get 1 FREE Actionable Secret Every Sunday.</p>
