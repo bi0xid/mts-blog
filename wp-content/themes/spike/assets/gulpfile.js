@@ -10,7 +10,7 @@ var args    = require('yargs').argv,
 	getTime = require('./assets/includes/getTime.js');
 
 var dest = {
-	'css': '../wp-content/themes/spike/css/'
+	'css': '../css/'
 };
 
 var assets = {
