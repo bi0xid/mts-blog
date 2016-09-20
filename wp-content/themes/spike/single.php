@@ -224,6 +224,10 @@
 								</div>
 							</div>
 
+							<div class="loveschool-teaser-video">
+								<iframe src="https://www.youtube.com/embed/nJ0zRUbiCtA" frameborder="0" allowfullscreen></iframe>
+							</div>
+
 						<?php if ( function_exists( "get_yuzo_related_posts" ) ) { get_yuzo_related_posts(); } ?>
 							<?php //if ( function_exists( "wp_related_posts" ) ) { wp_related_posts(); } ?>
 							

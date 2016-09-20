@@ -24,11 +24,22 @@
 		background-position center center
 
 	.left-block
-		width 55%
+		width 60%
 		background rgba(0, 0, 0, 0.54)
 
 		h5, h2
 			color #FFF
+			width 100%
+			white-space nowrap
+			
+		h2 span
+			font-size 21px
+
+			@media(max-width 1222px)
+				font-size 18px
+
+			@media(max-width 1222px)
+				font-size 16px
 
 		.padding-block
 			padding 24px
@@ -62,8 +73,6 @@
 
 			.counter_labels
 				margin auto
-
-			.counter_labels
 				flex-inline()
 				padding 10px 0
 
@@ -101,12 +110,19 @@
 		.left-block
 			width 70%
 
-	@media(max-width 600px)
+	@media(max-width 970px)
+		.play-btn
+			top 60px
+			right 20px
+
 		.left-block
 			width 100%
 
 			.counter_wrapper
+				color #FFF
 				background initial
+				border-top 1px solid #FFF
+				border-bottom 1px solid #FFF
 				
 				div span
 					border 0 !important
@@ -115,4 +131,9 @@
 					color #FFF
 
 			a.btn
-				width: 100%
+				width 100%
+
+	@media(max-width 500px)
+		.play-btn
+			top 40px
+	

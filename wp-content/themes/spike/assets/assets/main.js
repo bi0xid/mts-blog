@@ -1,5 +1,7 @@
 $(document).ready(function() {
-	if($('#course-enroll-banner').length) {
+	var container = $('#course-enroll-banner')
+
+	if(container.length) {
 		require('countdown')
 		var moment = require('moment-timezone')
 
