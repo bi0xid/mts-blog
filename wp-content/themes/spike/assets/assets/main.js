@@ -20,8 +20,12 @@ $(document).ready(function() {
 					+ '<span>%H</span>'
 				+ '</div>'
 				+ '<div class="m">'
-					+ '<span class="label last">Minutes</span>'
-					+ '<span class="last">%M</span>'
+					+ '<span class="label">Minutes</span>'
+					+ '<span>%M</span>'
+				+ '</div>'
+				+ '<div class="s">'
+					+ '<span class="label last">Seconds</span>'
+					+ '<span class="last">%S</span>'
 				+ '</div>'
 			))
 		})
