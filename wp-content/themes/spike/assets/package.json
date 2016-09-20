@@ -25,6 +25,9 @@
       "browserify-shim"
     ]
   },
+  "browser": {
+    "countdown": "./plugins/jquery.countdown.js"
+  },
   "browserify-shim": {
     "moment-timezone": {
       "depends": [

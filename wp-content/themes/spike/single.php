@@ -196,7 +196,7 @@
 									</div>
 
 									<div class="counter_wrapper">
-										<p>ENROLLMENT CLOSES IN</p>
+										<p>Enrollment closes In</p>
 
 										<div id="ls_course_counter" data-deadline="2016-10-03 00:00">
 											<div class="counter_labels">

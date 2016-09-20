@@ -588,7 +588,7 @@ Reactshare plugin styles*/
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
-  background-position: center center;
+  background-position: center 70%;
 }
 #course-enroll-banner .left-block {
   width: 55%;
@@ -604,8 +604,27 @@ Reactshare plugin styles*/
 #course-enroll-banner .left-block .padding-block {
   padding: 24px;
 }
+#course-enroll-banner .left-block a.btn {
+  color: #fff;
+  width: 134px;
+  display: block;
+  font-size: 18px;
+  margin-top: 12px;
+  padding: 10px 25px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: #14d99d;
+  -webkit-transition: background-color 0.3s;
+  -moz-transition: background-color 0.3s;
+  -o-transition: background-color 0.3s;
+  -ms-transition: background-color 0.3s;
+  transition: background-color 0.3s;
+}
+#course-enroll-banner .left-block a.btn:hover {
+  background-color: #15aa7c;
+}
 #course-enroll-banner .left-block .counter_wrapper {
-  padding: 0 24px;
+  padding: 0 10px;
   display: -webkit-box;
   display: -moz-box;
   display: -webkit-flex;
@@ -630,9 +649,10 @@ Reactshare plugin styles*/
 }
 #course-enroll-banner .left-block .counter_wrapper p {
   width: 130px;
+  margin: auto 0;
+  font-size: 18px;
   font-weight: bold;
 }
-#course-enroll-banner .left-block .counter_wrapper p,
 #course-enroll-banner .left-block .counter_wrapper .counter_labels {
   margin: auto;
 }
@@ -658,6 +678,7 @@ Reactshare plugin styles*/
   -ms-flex-pack: distribute;
   -webkit-justify-content: space-around;
   justify-content: space-around;
+  padding: 10px 0;
 }
 #course-enroll-banner .left-block .counter_wrapper .counter_labels div {
   margin: auto 15px;
@@ -678,5 +699,6 @@ Reactshare plugin styles*/
   border-right: 1px solid #000;
 }
 #course-enroll-banner .left-block .counter_wrapper .counter_labels div span:not(.label) {
+  font-size: 20px;
   font-weight: bold;
 }
