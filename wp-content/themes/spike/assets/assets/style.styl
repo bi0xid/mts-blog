@@ -35,6 +35,7 @@
 			padding 10px 25px
 			border-radius 5px
 			text-align center
+			box-sizing border-box
 			background-color #14D99D
 			transition background-color .3s
 
@@ -79,3 +80,22 @@
 						&:not(.label)
 							font-size 20px
 							font-weight bold
+
+	@media(max-width 1070px)
+		.left-block .counter_wrapper
+			padding 10px
+
+			p
+				width 100%
+				text-align center
+
+	@media(max-width 800px)
+		.left-block
+			width 70%
+
+	@media(max-width 600px)
+		.left-block
+			width 100%
+
+			a.btn
+				width: 100%
