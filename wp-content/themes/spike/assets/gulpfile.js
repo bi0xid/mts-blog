@@ -4,10 +4,8 @@ var gulp       = require('gulp'),
 	minify     = require('gulp-minify-css'),
 	nib        = require('nib'),
 	gulpif     = require('gulp-if'),
+	args       = require('yargs').argv,
 	livereload = require('gulp-livereload');
-
-var args    = require('yargs').argv,
-	getTime = require('./assets/includes/getTime.js');
 
 var dest = {
 	'css': '../css/'
