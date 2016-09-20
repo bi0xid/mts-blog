@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	var container = $('#course-enroll-banner')
+	var videoBackground = $('.loveschool-teaser-video-background')
 
 	if(container.length) {
 		require('countdown')
@@ -23,6 +24,25 @@ $(document).ready(function() {
 					+ '<span class="last">%M</span>'
 				+ '</div>'
 			))
+		})
+
+		$(window).load(function(){
+			var player = new YT.Player('teaser-video', {
+				height  : '390',
+				width   : '640',
+				videoId : 'nJ0zRUbiCtA',
+			})
+
+			container.find('.play-btn').on('click', function() {
+				videoBackground.fadeIn(400, function() {
+					player.playVideo()
+				})
+			})
+
+			videoBackground.find('.close-video').on('click', function() {
+				player.stopVideo()
+				videoBackground.fadeOut(400)
+			})
 		})
 	}
 })

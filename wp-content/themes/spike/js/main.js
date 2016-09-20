@@ -2,6 +2,7 @@
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 $(document).ready(function() {
 	var container = $('#course-enroll-banner')
+	var videoBackground = $('.loveschool-teaser-video-background')
 
 	if(container.length) {
 		require('countdown')
@@ -26,9 +27,28 @@ $(document).ready(function() {
 				+ '</div>'
 			))
 		})
+
+		$(window).load(function(){
+			var player = new YT.Player('teaser-video', {
+				height  : '390',
+				width   : '640',
+				videoId : 'nJ0zRUbiCtA',
+			})
+
+			container.find('.play-btn').on('click', function() {
+				videoBackground.fadeIn(400, function() {
+					player.playVideo()
+				})
+			})
+
+			videoBackground.find('.close-video').on('click', function() {
+				player.stopVideo()
+				videoBackground.fadeOut(400)
+			})
+		})
 	}
 })
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_e2a13b42.js","/")
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_4c31f8af.js","/")
 },{"7YKIPe":4,"buffer":3,"countdown":10,"moment-timezone":7}],2:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';

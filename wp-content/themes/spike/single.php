@@ -224,8 +224,9 @@
 								</div>
 							</div>
 
-							<div class="loveschool-teaser-video">
-								<iframe src="https://www.youtube.com/embed/nJ0zRUbiCtA" frameborder="0" allowfullscreen></iframe>
+							<div class="loveschool-teaser-video-background">
+								<span class="close-video">X</span>
+								<div id="teaser-video"></div>
 							</div>
 
 						<?php if ( function_exists( "get_yuzo_related_posts" ) ) { get_yuzo_related_posts(); } ?>
