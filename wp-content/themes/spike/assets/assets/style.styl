@@ -8,3 +8,55 @@
 
 .pb-mc-wrapper.hide
 	display none
+
+#course-enroll-banner
+	background-size cover
+	background-position center center
+
+	.left-block
+		width 55%
+		background rgba(0, 0, 0, 0.54)
+
+		h5, h2
+			color #FFF
+
+		.counter_wrapper
+			background #FFF
+
+		.padding-block
+			padding 24px
+
+		.counter_wrapper
+			padding 0 24px
+			flex-inline()
+
+			p
+				width 130px
+				font-weight bold
+
+			p, .counter_labels
+				margin auto
+
+			.counter_labels
+				flex-inline()
+
+				div
+					margin auto 15px
+					text-align center
+
+					&.m
+						margin-left: 0
+
+					span
+						display block
+						position relative
+
+						&:not(.last)
+							margin-left -10px
+							padding-right 20px
+
+							&.label
+								border-right 1px solid #000
+
+						&:not(.label)
+							font-weight bold

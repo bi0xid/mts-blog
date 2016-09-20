@@ -584,3 +584,99 @@ Reactshare plugin styles*/
 .pb-mc-wrapper.hide {
   display: none;
 }
+#course-enroll-banner {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  background-position: center center;
+}
+#course-enroll-banner .left-block {
+  width: 55%;
+  background: rgba(0,0,0,0.54);
+}
+#course-enroll-banner .left-block h5,
+#course-enroll-banner .left-block h2 {
+  color: #fff;
+}
+#course-enroll-banner .left-block .counter_wrapper {
+  background: #fff;
+}
+#course-enroll-banner .left-block .padding-block {
+  padding: 24px;
+}
+#course-enroll-banner .left-block .counter_wrapper {
+  padding: 0 24px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -o-box-orient: horizontal;
+  -webkit-box-lines: multiple;
+  -moz-box-lines: multiple;
+  -o-box-lines: multiple;
+  -webkit-flex-flow: row wrap;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -webkit-box-pack: distribute;
+  -moz-box-pack: distribute;
+  -o-box-pack: distribute;
+  -ms-flex-pack: distribute;
+  -webkit-justify-content: space-around;
+  justify-content: space-around;
+}
+#course-enroll-banner .left-block .counter_wrapper p {
+  width: 130px;
+  font-weight: bold;
+}
+#course-enroll-banner .left-block .counter_wrapper p,
+#course-enroll-banner .left-block .counter_wrapper .counter_labels {
+  margin: auto;
+}
+#course-enroll-banner .left-block .counter_wrapper .counter_labels {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -o-box-orient: horizontal;
+  -webkit-box-lines: multiple;
+  -moz-box-lines: multiple;
+  -o-box-lines: multiple;
+  -webkit-flex-flow: row wrap;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -webkit-box-pack: distribute;
+  -moz-box-pack: distribute;
+  -o-box-pack: distribute;
+  -ms-flex-pack: distribute;
+  -webkit-justify-content: space-around;
+  justify-content: space-around;
+}
+#course-enroll-banner .left-block .counter_wrapper .counter_labels div {
+  margin: auto 15px;
+  text-align: center;
+}
+#course-enroll-banner .left-block .counter_wrapper .counter_labels div.m {
+  margin-left: 0;
+}
+#course-enroll-banner .left-block .counter_wrapper .counter_labels div span {
+  display: block;
+  position: relative;
+}
+#course-enroll-banner .left-block .counter_wrapper .counter_labels div span:not(.last) {
+  margin-left: -10px;
+  padding-right: 20px;
+}
+#course-enroll-banner .left-block .counter_wrapper .counter_labels div span:not(.last).label {
+  border-right: 1px solid #000;
+}
+#course-enroll-banner .left-block .counter_wrapper .counter_labels div span:not(.label) {
+  font-weight: bold;
+}
