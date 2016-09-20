@@ -16,6 +16,7 @@
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 	<?php mts_head(); ?>
 	<meta name="p:domain_verify" content="2299c127dcf14a09af8856aae852cd5e"/>
+	<script src="https://www.youtube.com/iframe_api"></script>
 <style>.single_post a {
   color: #de0079;
 }</style>

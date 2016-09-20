@@ -26,28 +26,40 @@ $(document).ready(function() {
 			))
 		})
 
-		$(window).load(function(){
-			var player = new YT.Player('teaser-video', {
-				height  : '390',
-				width   : '640',
-				videoId : 'Stdk8LTsMx4',
-			})
+		var player = new YT.Player('teaser-video', {
+			height  : '390',
+			width   : '640',
+			videoId : 'Stdk8LTsMx4',
+		})
 
-			container.find('.play-btn').on('click', function() {
-				videoBackground.fadeIn(400, function() {
-					player.playVideo()
-				})
+		container.find('.play-btn').on('click', function() {
+			videoBackground.fadeIn(400, function() {
+				player.playVideo()
 			})
+		})
 
-			videoBackground.on('click', function() {
-				player.stopVideo()
-				videoBackground.fadeOut(400)
-			})
+		videoBackground.on('click', function() {
+			player.stopVideo()
+			videoBackground.fadeOut(400)
+		})
 
-			videoBackground.find('.close-video').on('click', function() {
-				player.stopVideo()
-				videoBackground.fadeOut(400)
-			})
+		videoBackground.find('.close-video').on('click', function() {
+			player.stopVideo()
+			videoBackground.fadeOut(400)
+		})
+
+		container.find('a.btn').on('click', function() {
+			trackOutboundLink('http://adinariversloveschool.com/pussy-pleasure-course/')
+			return false
+		})
+	}
+
+	var trackOutboundLink = function(url) {
+		ga('send', 'event', 'outbound', 'click', url, {
+			'transport'  : 'beacon',
+			'hitCallback': function() {
+				document.location = url
+			}
 		})
 	}
 })
