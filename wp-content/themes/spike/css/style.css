@@ -585,10 +585,28 @@ Reactshare plugin styles*/
   display: none;
 }
 #course-enroll-banner {
+  position: relative;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
   background-position: center 70%;
+}
+#course-enroll-banner .play-btn {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  position: absolute;
+  top: 50%;
+  right: 18%;
+  -webkit-transform: translate(0, -50%);
+  -moz-transform: translate(0, -50%);
+  -o-transform: translate(0, -50%);
+  -ms-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+  background-position: center center;
 }
 #course-enroll-banner .left-block {
   width: 55%;
@@ -598,15 +616,12 @@ Reactshare plugin styles*/
 #course-enroll-banner .left-block h2 {
   color: #fff;
 }
-#course-enroll-banner .left-block .counter_wrapper {
-  background: #fff;
-}
 #course-enroll-banner .left-block .padding-block {
   padding: 24px;
 }
 #course-enroll-banner .left-block a.btn {
   color: #fff;
-  width: 134px;
+  width: 180px;
   display: block;
   font-size: 18px;
   margin-top: 12px;
@@ -627,6 +642,7 @@ Reactshare plugin styles*/
   background-color: #15aa7c;
 }
 #course-enroll-banner .left-block .counter_wrapper {
+  background: #fff;
   padding: 0 10px;
   display: -webkit-box;
   display: -moz-box;
@@ -722,6 +738,15 @@ Reactshare plugin styles*/
 @media (max-width: 600px) {
   #course-enroll-banner .left-block {
     width: 100%;
+  }
+  #course-enroll-banner .left-block .counter_wrapper {
+    background: initial;
+  }
+  #course-enroll-banner .left-block .counter_wrapper div span {
+    border: 0 !important;
+  }
+  #course-enroll-banner .left-block .counter_wrapper p {
+    color: #fff;
   }
   #course-enroll-banner .left-block a.btn {
     width: 100%;

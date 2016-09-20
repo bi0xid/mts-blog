@@ -10,8 +10,18 @@
 	display none
 
 #course-enroll-banner
+	position relative
 	background-size cover
 	background-position center 70%
+
+	.play-btn
+		width 50px
+		height 50px
+		cursor pointer
+		background-size cover
+		absolute top 50% right 18%
+		transform translate(0, -50%)
+		background-position center center
 
 	.left-block
 		width 55%
@@ -20,15 +30,12 @@
 		h5, h2
 			color #FFF
 
-		.counter_wrapper
-			background #FFF
-
 		.padding-block
 			padding 24px
 
 		a.btn
 			color #FFF
-			width 134px
+			width 180px
 			display block
 			font-size 18px
 			margin-top 12px
@@ -43,6 +50,7 @@
 				background-color #15AA7C
 
 		.counter_wrapper
+			background #FFF
 			padding 0 10px
 			flex-inline()
 
@@ -96,6 +104,15 @@
 	@media(max-width 600px)
 		.left-block
 			width 100%
+
+			.counter_wrapper
+				background initial
+				
+				div span
+					border 0 !important
+
+				p
+					color #FFF
 
 			a.btn
 				width: 100%
