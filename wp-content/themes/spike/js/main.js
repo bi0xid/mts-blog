@@ -32,13 +32,18 @@ $(document).ready(function() {
 			var player = new YT.Player('teaser-video', {
 				height  : '390',
 				width   : '640',
-				videoId : 'QXve1cThPl4',
+				videoId : 'Stdk8LTsMx4',
 			})
 
 			container.find('.play-btn').on('click', function() {
 				videoBackground.fadeIn(400, function() {
 					player.playVideo()
 				})
+			})
+
+			videoBackground.on('click', function() {
+				player.stopVideo()
+				videoBackground.fadeOut(400)
 			})
 
 			videoBackground.find('.close-video').on('click', function() {
@@ -48,7 +53,7 @@ $(document).ready(function() {
 		})
 	}
 })
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_2bffdc45.js","/")
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_c13fd887.js","/")
 },{"7YKIPe":4,"buffer":3,"countdown":10,"moment-timezone":7}],2:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';

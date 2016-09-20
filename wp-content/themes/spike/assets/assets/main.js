@@ -30,13 +30,18 @@ $(document).ready(function() {
 			var player = new YT.Player('teaser-video', {
 				height  : '390',
 				width   : '640',
-				videoId : 'QXve1cThPl4',
+				videoId : 'Stdk8LTsMx4',
 			})
 
 			container.find('.play-btn').on('click', function() {
 				videoBackground.fadeIn(400, function() {
 					player.playVideo()
 				})
+			})
+
+			videoBackground.on('click', function() {
+				player.stopVideo()
+				videoBackground.fadeOut(400)
 			})
 
 			videoBackground.find('.close-video').on('click', function() {
