@@ -616,19 +616,26 @@ Reactshare plugin styles*/
 #course-enroll-banner .left-block h2 {
   color: #fff;
   width: 100%;
-  white-space: nowrap;
 }
 #course-enroll-banner .left-block h2 span {
-  font-size: 21px;
+  font-size: 28px;
 }
 @media (max-width: 1222px) {
   #course-enroll-banner .left-block h2 span {
-    font-size: 18px;
+    font-size: 26px;
   }
 }
-@media (max-width: 1222px) {
+@media (max-width: 1060px) {
   #course-enroll-banner .left-block h2 span {
-    font-size: 16px;
+    font-size: 24px;
+  }
+}
+@media (max-width: 970px) {
+  #course-enroll-banner .left-block h2 {
+    width: 370px;
+  }
+  #course-enroll-banner .left-block h2 span {
+    font-size: 26px;
   }
 }
 #course-enroll-banner .left-block .padding-block {
@@ -774,7 +781,7 @@ Reactshare plugin styles*/
 }
 @media (max-width: 500px) {
   #course-enroll-banner .play-btn {
-    top: 40px;
+    top: 35px;
   }
 }
 .loveschool-teaser-video-background {

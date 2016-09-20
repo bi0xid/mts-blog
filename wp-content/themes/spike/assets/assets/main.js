@@ -30,7 +30,7 @@ $(document).ready(function() {
 			var player = new YT.Player('teaser-video', {
 				height  : '390',
 				width   : '640',
-				videoId : 'nJ0zRUbiCtA',
+				videoId : 'QXve1cThPl4',
 			})
 
 			container.find('.play-btn').on('click', function() {
