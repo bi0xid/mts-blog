@@ -618,16 +618,11 @@ Reactshare plugin styles*/
   width: 100%;
 }
 #course-enroll-banner .left-block h2 span {
-  font-size: 28px;
-}
-@media (max-width: 1222px) {
-  #course-enroll-banner .left-block h2 span {
-    font-size: 26px;
-  }
+  font-size: 32px;
 }
 @media (max-width: 1060px) {
   #course-enroll-banner .left-block h2 span {
-    font-size: 24px;
+    font-size: 26px;
   }
 }
 @media (max-width: 970px) {
@@ -635,7 +630,7 @@ Reactshare plugin styles*/
     width: 370px;
   }
   #course-enroll-banner .left-block h2 span {
-    font-size: 26px;
+    font-size: 28px;
   }
 }
 #course-enroll-banner .left-block .padding-block {
