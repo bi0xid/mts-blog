@@ -188,7 +188,7 @@
 								</div>
 							</div>
 
-							<div id="course-enroll-banner" style="background-image:url('<?php echo get_stylesheet_directory_uri() . '/images/loveschool/banner.png' ?>')">
+							<div id="course-enroll-banner" style="background-image:url('<?php echo get_stylesheet_directory_uri() . '/images/loveschool/banner.jpg' ?>')">
 								<div class="left-block">
 									<div class="padding-block">
 										<h5><span>The Pussy Pleasure Course™</span></h5>
