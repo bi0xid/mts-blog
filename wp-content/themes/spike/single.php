@@ -217,7 +217,7 @@
 									</div>
 
 									<div class="padding-block">
-										<a href="http://adinariversloveschool.com/pussy-pleasure-course/" class="btn">Tell Me More</a>
+										<a href="https://goo.gl/bFF05Q" class="btn">Tell Me More</a>
 									</div>
 
 									<span class="play-btn" style="background-image:url('<?php echo get_stylesheet_directory_uri() . '/images/loveschool/play-button.png' ?>')">
