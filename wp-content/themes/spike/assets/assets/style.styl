@@ -47,6 +47,10 @@
 				span
 					font-size 26px
 
+		@media(max-width 400px)
+			h2
+				width 100%
+
 		.padding-block
 			padding 24px
 
@@ -140,8 +144,20 @@
 				width 100%
 
 	@media(max-width 500px)
-		.play-btn
-			top 32px
+		.left-block .counter_wrapper
+			.play-btn
+				width 30px
+				height 30px
+				position initial
+				margin 10px 0 15px
+				transform translate(0, 0)
+
+			#ls_course_counter
+				width 100%
+
+				.counter_labels span
+					padding-right 0 !important
+
 
 .loveschool-teaser-video-background
 	width 100%
