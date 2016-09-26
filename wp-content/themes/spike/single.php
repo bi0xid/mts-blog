@@ -188,7 +188,7 @@
 								</div>
 							</div>
 
-							<div id="course-enroll-banner" style="background-image:url('<?php echo get_stylesheet_directory_uri() . '/images/loveschool/banner.png' ?>')">
+							<div id="course-enroll-banner" style="background-image:url('<?php echo get_stylesheet_directory_uri() . '/images/loveschool/banner.jpg' ?>')">
 								<div class="left-block">
 									<div class="padding-block">
 										<h5><span>The Pussy Pleasure Course™</span></h5>
@@ -219,7 +219,7 @@
 									</div>
 
 									<div class="padding-block">
-										<a href="http://adinariversloveschool.com/pussy-pleasure-course/" class="btn">Tell Me More</a>
+										<a href="https://goo.gl/bFF05Q" class="btn">Tell Me More</a>
 									</div>
 								</div>
 							</div>
