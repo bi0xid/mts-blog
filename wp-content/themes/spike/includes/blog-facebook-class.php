@@ -47,8 +47,8 @@ class BlogFacebookClass {
 
 	public function get_all_post_facebook_shares() {
 		// If there is no transient that means we have to check all post shares
-		if( !get_transient( POSTS_HOUR_SCHEDULE ) ) {
-			set_transient( POSTS_HOUR_SCHEDULE, true, 60 * 60 );
+		if( !get_transient( self::POSTS_HOUR_SCHEDULE ) ) {
+			set_transient( self::POSTS_HOUR_SCHEDULE, true, 60 * 60 );
 
 			$posts = get_posts( array(
 				'numberposts' => 2000,
