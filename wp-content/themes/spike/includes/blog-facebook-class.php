@@ -82,8 +82,5 @@ class BlogFacebookClass {
 		if( isset( $facebook_results_json->og_object->likes->summary->total_count ) ) {
 			update_post_meta( $post_id, '_msp_fb_likes', $facebook_results_json->og_object->likes->summary->total_count );
 		}
-
-
-		return $facebook_results_json;
 	}
 }
