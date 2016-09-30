@@ -401,7 +401,7 @@ function wp_ajax_query( $atts = '' ) {
 							$iPostId = get_the_ID();
 
 							$iFBLikes = (int)get_post_meta($iPostId, '_msp_fb_likes', true);
-							$iFBShares = (int)get_post_meta($iPostId, '_msp_shares_total', true);
+							$iFBShares = (int)get_post_meta($iPostId, '_msp_total_shares', true);
 							$iTweeterShares = (int)get_post_meta(get_the_ID(), '_msp_tweets', true);
 							$iGoogleShares = (int)get_post_meta(get_the_ID(), '_msp_google_plus_ones', true); 
 							$iPinterestShares = (int)get_post_meta(get_the_ID(), 'pinterest_shares_count', true);
@@ -409,14 +409,17 @@ function wp_ajax_query( $atts = '' ) {
 							$iDiggShares = (int)get_post_meta(get_the_ID(), 'digg_post_type', true);
 							$iMailShares = (int)get_post_meta(get_the_ID(), 'mail_post_type', true);
 
-							$aSharesArray = array('iFBLikes' => $iFBLikes,
-										'iFBShares' => $iFBShares,
-										'iTweeterShares' => $iTweeterShares,
-										'iGoogleShares' => $iGoogleShares,
-										'iPinterestShares' => $iPinterestShares,
-										'iStumbleShares' => $iStumbleShares,
-										'iDiggShares' => $iDiggShares,
-										'iMailShares' => $iMailShares);                                            
+							$aSharesArray = array(
+									'iFBLikes' => $iFBLikes,
+									'iFBShares' => $iFBShares,
+									'iTweeterShares' => $iTweeterShares,
+									'iGoogleShares' => $iGoogleShares,
+									'iPinterestShares' => $iPinterestShares,
+									'iStumbleShares' => $iStumbleShares,
+									'iDiggShares' => $iDiggShares,
+									'iMailShares' => $iMailShares
+							);
+
 							arsort($aSharesArray);
 							$aSharesArray = array_slice($aSharesArray, 0, 4);
 
@@ -428,9 +431,7 @@ function wp_ajax_query( $atts = '' ) {
 								}
 							}
 
-							$aSharesArray = array_keys($aSharesArray);                                        
-
-
+							$aSharesArray = array_keys($aSharesArray);
 
 							if(!defined('ESSB_PLUGIN_URL')){
 								define('ESSB_PLUGIN_URL', "{$sSiteUrl}/wp-content/plugins/easy-social-share-buttons");
