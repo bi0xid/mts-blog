@@ -70,7 +70,7 @@ class BlogFacebookClass {
 
 		$output = curl_exec( $ch );
 		$facebook_results_json = json_decode( $output );
-		print_r($facebook_results_json);die();
+
 		curl_close( $ch );
 
 		if( isset( $facebook_results_json->share->share_count ) ) {
