@@ -155,7 +155,7 @@
                                                 </li>
                                             <?php endif; ?>
                                             
-                                            <?php if(in_array('iTweeterShares', $aSharesArray)): ?>
+                                            <?php /*if(in_array('iTweeterShares', $aSharesArray)): ?>
                                                 <li class="essb_item1 essb_link_twitter twitter_custom_share">
                                                     <a onclick="custom_social_window('https://twitter.com/intent/tweet?source=webclient&amp;original_referer=<?php echo $sPermaLink; ?>&amp;text=<?php echo $sPostTitle; ?>&amp;url=<?php echo $sPermaLink; ?>'); return false;"
                                                         href="#" 
@@ -167,7 +167,7 @@
                                                     </a>
                                                     <span class="twitterCounter essb_counter1"><?php echo number_format($iTweeterShares, 0, ',', '.') ?></span>
                                                 </li>
-                                            <?php endif; ?>
+                                            <?php endif;*/ ?>
                                                 
                                             <?php if(in_array('iGoogleShares', $aSharesArray)): ?>
                                                 <li class="essb_item1 essb_link_google google_custom_share">
