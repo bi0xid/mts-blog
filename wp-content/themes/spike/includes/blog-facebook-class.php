@@ -10,7 +10,11 @@ class BlogFacebookClass {
 	CONST POST_SCHEDULE_HOUR = 'post_facebook_schedule_hour_';
 	CONST POST_SCHEDULE_TEN_MINUTES = 'post_facebook_schedule_minute_';
 
+	private $test_curl_response;
+
 	function __construct() {
+		$this->test_curl_response = [];
+
 		add_action( 'init', array( $this, 'check_lastest_post_facebook_shares' ), 10 );
 
 		add_action( 'admin_menu', array( $this, 'facebook_posts_shares' ) );
@@ -74,7 +78,8 @@ class BlogFacebookClass {
 		};
 
 		echo json_encode( array(
-			'new_fetch_date' => $now
+			'new_fetch_date' => $now,
+			'response'       => $this->test_curl_response
 		) );
 		die();
 	}
@@ -89,9 +94,15 @@ class BlogFacebookClass {
 
 		curl_setopt( $ch, CURLOPT_URL, $url );
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+        curl_setopt( $ch, CURLOPT_HEADER, 0 );
+        curl_setopt( $ch, CURLOPT_POST, 1 );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0 );
 
 		$output = curl_exec( $ch );
 		$facebook_results_json = json_decode( $output );
+
+		$this->test_curl_response[] = $facebook_results_json;
 
 		curl_close( $ch );
 
@@ -105,7 +116,7 @@ class BlogFacebookClass {
 	}
 
 	public function facebook_posts_shares() {
-		add_dashboard_page( 'Facebook Posts Stats', 'Facebook Posts Stats', 'activate_plugins', 'facebbok_posts_shares', array( $this, 'facebook_posts_shares_page' ) );
+		add_dashboard_page( 'Facebook Posts Stats', 'Facebook Posts Stats', 'activate_plugins', 'facebook_posts_shares', array( $this, 'facebook_posts_shares_page' ) );
 	}
 
 	public function facebook_posts_shares_page() {
