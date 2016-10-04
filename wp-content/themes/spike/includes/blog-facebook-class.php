@@ -53,30 +53,8 @@ class BlogFacebookClass {
 	}
 
 	/**
-	 * Given a Post ID update the facebook shares and likes
-	 * @param (int) post_id
+	 * AJAX Call. Update all posts shares/likes
 	 */
-	private function update_post_facebook_stats( $post_id ) {
-		$url = 'http://graph.facebook.com/?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.urlencode( get_permalink( $post_id ) );
-		$ch = curl_init();
-
-		curl_setopt( $ch, CURLOPT_URL, $url );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-
-		$output = curl_exec( $ch );
-		$facebook_results_json = json_decode( $output );
-
-		curl_close( $ch );
-
-		if( isset( $facebook_results_json->share->share_count ) ) {
-			update_post_meta( $post_id, '_msp_total_shares', $facebook_results_json->share->share_count );
-		}
-
-		if( isset( $facebook_results_json->og_object->likes->summary->total_count ) ) {
-			update_post_meta( $post_id, '_msp_fb_likes', $facebook_results_json->og_object->likes->summary->total_count );
-		}
-	}
-
 	public function update_all_facebook_posts() {
 		if( !check_ajax_referer( 'seguridad', 'security' ) ) {
 			echo json_encode('Security error');
@@ -99,6 +77,31 @@ class BlogFacebookClass {
 			'new_fetch_date' => $now
 		) );
 		die();
+	}
+
+	/**
+	 * Given a Post ID update the facebook shares and likes
+	 * @param (int) post_id
+	 */
+	private function update_post_facebook_stats( $post_id ) {
+		$url = 'http://graph.facebook.com/?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.urlencode( get_permalink( $post_id ) );
+		$ch = curl_init();
+
+		curl_setopt( $ch, CURLOPT_URL, $url );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+
+		$output = curl_exec( $ch );
+		$facebook_results_json = json_decode( $output );
+
+		curl_close( $ch );
+
+		if( isset( $facebook_results_json->share->share_count ) ) {
+			update_post_meta( $post_id, '_msp_total_shares', $facebook_results_json->share->share_count );
+		}
+
+		if( isset( $facebook_results_json->og_object->likes->summary->total_count ) ) {
+			update_post_meta( $post_id, '_msp_fb_likes', $facebook_results_json->og_object->likes->summary->total_count );
+		}
 	}
 
 	public function facebook_posts_shares() {
