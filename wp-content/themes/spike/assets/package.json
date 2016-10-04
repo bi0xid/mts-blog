@@ -34,5 +34,9 @@
         "moment"
       ]
     }
+  },
+  "dependencies": {
+    "datatables.net": "^1.10.12",
+    "datatables.net-dt": "^1.10.12"
   }
 }

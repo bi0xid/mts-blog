@@ -10,13 +10,16 @@ var gulp       = require('gulp'),
 	browserify = require('gulp-browserify'),
 	livereload = require('gulp-livereload');
 
-var isProduction = args.env   === 'prod';
+var isProduction  = args.env    === 'prod',
+	isAdminAssets = args.module === 'admin';
 
 isProduction && gulp.task('default', ['stylus', 'scripts']);
 isProduction || gulp.task('default', ['stylus', 'scripts', 'watch']);
 
 gulp.task('stylus', function() {
-	gulp.src('./assets/style.styl')
+	var src = isAdminAssets ? './admin-assets/admin-style.styl' : './theme-assets/style.styl';
+
+	gulp.src(src)
 		.pipe(stylus({
 			use    : [nib()],
 			errors : true,
@@ -33,7 +36,9 @@ gulp.task('stylus', function() {
 });
 
 gulp.task('scripts', function() {
-	gulp.src('./assets/main.js')
+	var src = isAdminAssets ? './admin-assets/*.js' : './theme-assets/*.js';
+
+	gulp.src(src)
 		.pipe(browserify({ insertGlobals : true }))
 		.pipe(gulpif(isProduction, uglify().on('error', gulpUtil.log)))
 		.pipe(gulp.dest('../js/'))
@@ -48,6 +53,11 @@ gulp.task('scripts', function() {
 gulp.task('watch', function() {
 	livereload.listen();
 
-	gulp.watch('./assets/**/*.js', ['scripts']);
-	gulp.watch('./assets/**/*.styl', ['stylus']);
+	if(isAdminAssets) {
+		gulp.watch('./admin-assets/**/*.js', ['scripts']);
+		gulp.watch('./admin-assets/**/*.styl', ['stylus']);
+	} else {
+		gulp.watch('./theme-assets/**/*.js', ['scripts']);
+		gulp.watch('./theme-assets/**/*.styl', ['stylus']);
+	}
 });
