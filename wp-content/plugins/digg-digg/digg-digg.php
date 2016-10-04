@@ -294,28 +294,36 @@ function constructFloatingButtons($url, $title, $id, $commentcount, $dd_global_c
 }
 
 function integrateFloatingButtonsIntoWpContent($dd_floating_button_for_display,$content,$ddFloatDisplay){
-
 	global $dd_floating_bar;
+	global $wp_query;
+
+    // See if the post has custom meta tags to override the position of the top/y coord
+    $post = $wp_query->post;
+    $id = $post->ID;
 
 	$floatButtonsContainer=DD_EMPTY_VALUE;
 	$dd_lazyLoad_jQuery_script =DD_EMPTY_VALUE;
 	$dd_lazyLoad_scheduler_script =DD_EMPTY_VALUE;
 	$scheduler = DD_EMPTY_VALUE;
 
-	foreach($dd_floating_button_for_display as $obj){
+	foreach( $dd_floating_button_for_display as $obj ) {
+		// Temporal for Testing
+		if($obj->name === 'Facebook Like (XFBML)') {
+			$floatButtonsContainer .= '<div class="fb-like" data-href="'.get_permalink( $post->ID ).'" data-layout="box_count" data-action="like" data-size="small" data-show-faces="false" data-share="true"></div>';
+			$floatButtonsContainer .= '<div id="fb-root"></div><script>(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v2.7&appId=109970876058039";fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>';
+		} else {
+			$finalURL=DD_EMPTY_VALUE;
 
-		$finalURL=DD_EMPTY_VALUE;
+			if( $obj->getOptionLazyLoad()==DD_EMPTY_VALUE ){
+				$finalURL = $obj->finalURL;
+			} else {
+				$finalURL = $obj->finalURL_lazy;
+				$dd_lazyLoad_jQuery_script .= $obj->finalURL_lazy_script;
+				$dd_lazyLoad_scheduler_script .= $obj->final_scheduler_lazy_script;
+			}
 
-		if($obj->getOptionLazyLoad()==DD_EMPTY_VALUE){
-			$finalURL=$obj->finalURL;
-		}else{
-			$finalURL=$obj->finalURL_lazy;
-			$dd_lazyLoad_jQuery_script.=$obj->finalURL_lazy_script;
-			$dd_lazyLoad_scheduler_script.=$obj->final_scheduler_lazy_script;
+			$floatButtonsContainer .= "<div class='dd_button_v'>" . $finalURL . "</div><div style='clear:left'></div>";
 		}
-
-		$floatButtonsContainer .= "<div class='dd_button_v'>" . $finalURL . "</div><div style='clear:left'></div>";
-
 	}
 
 	if($floatButtonsContainer != DD_EMPTY_VALUE){
@@ -330,11 +338,6 @@ function integrateFloatingButtonsIntoWpContent($dd_floating_button_for_display,$
 			$dd_lazyLoad_scheduler_script = "<script type=\"text/javascript\"> jQuery(document).ready(function($) { " . $dd_lazyLoad_scheduler_script . " }); </script>";
 		}
 
-        // See if the post has custom meta tags to override the position of the top/y coord
-        global $wp_query;
-        $post = $wp_query->post; //get post content
-        $id = $post->ID; //get post id
-        
         // Try post overriden start_anchor_id before falling back to sitewide
         if(get_post_meta( $id, 'dd_override_start_anchor_id', true ) || get_post_meta( $id, 'dd_override_top_offset', true )){        
 	        $dd_override_start_anchor_id = get_post_meta( $id, 'dd_override_start_anchor_id', true );

@@ -2839,7 +2839,7 @@ ul.related_post li img{	border: 0 !important;	border-radius: 0 !important;}.pb-m
 width: 100% !important;
 }
 
-.fb-like span{overflow:visible !important; /*width:450px !important;*/ margin-right:-375px;}
+/*.fb-like span{overflow:visible !important; width:450px !important; margin-right:-375px;}*/
 
 .custom_advertising_block{
     max-height: 141px;
