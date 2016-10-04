@@ -17,6 +17,8 @@ class BlogFacebookClass {
 		add_action( 'save_post', array( $this, 'schedule_post_share_check' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_wp_admin_assets' ));
+
+		add_action( 'wp_ajax_update_all_facebook_posts', array( $this, 'update_all_facebook_posts' ) );
 	}
 
 	/**
@@ -75,6 +77,10 @@ class BlogFacebookClass {
 		}
 	}
 
+	public function update_all_facebook_posts() {
+
+	}
+
 	public function facebook_posts_shares() {
 		add_dashboard_page( 'Facebook Posts Stats', 'Facebook Posts Stats', 'activate_plugins', 'facebbok_posts_shares', array( $this, 'facebook_posts_shares_page' ) );
 	}
@@ -84,6 +90,10 @@ class BlogFacebookClass {
 	}
 
 	public function load_custom_wp_admin_assets() {
-		wp_enqueue_script( 'admin-scripts', get_template_directory_uri() . '/js/admin-script.js' );
+		wp_register_style( 'admin-style', get_template_directory_uri() . '/css/admin-style.css', false, '0.0.1' );
+		wp_register_script( 'admin-scripts', get_template_directory_uri() . '/js/admin-script.js', false, '0.0.1', true );
+
+		wp_enqueue_style( 'admin-style' );
+		wp_enqueue_script( 'admin-scripts' );
 	}
 }
