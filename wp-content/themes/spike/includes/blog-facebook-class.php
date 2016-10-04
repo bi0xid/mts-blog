@@ -16,13 +16,18 @@ class BlogFacebookClass {
 		add_action( 'save_post', array( $this, 'schedule_post_share_check' ) );
 	}
 
+	/**
+	 * On post save prepare the schedule
+	 */
 	public function schedule_post_share_check( $post_id ) {
 		if ( get_post_status( $post_id ) === 'publish' && !wp_is_post_revision( $post_id ) ) {
-			// The limit for every ten minutes check is one hour
 			set_transient( self::POST_SCHEDULE_HOUR.$post_id, true, 60 * 60  );
 		}
 	}
 
+	/**
+	 * Check Lastest post Shares/Likes every ten minutes in a hour
+	 */
 	public function check_lastest_post_facebook_shares() {
 		$recent_posts = wp_get_recent_posts( array(
 			'numberposts' => 5,
@@ -42,6 +47,10 @@ class BlogFacebookClass {
 		}
 	}
 
+	/**
+	 * Given a Post ID update the facebook shares and likes
+	 * @param (int) post_id
+	 */
 	private function update_post_facebook_stats( $post_id ) {
 		$url = 'http://graph.facebook.com/?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.urlencode( get_permalink( $post_id ) );
 		$ch = curl_init();
