@@ -532,13 +532,11 @@ table.dataTable td {
 #facebook_posts_stats_update #update_all:hover {
   background-color: #9bd491;
 }
-#facebook_posts_stats_update #table_wrapper,
-#facebook_posts_stats_update .dataTables_wrapper {
-  padding: 0 base-sizes(-1);
-  margin-top: base-sizes(1);
+#facebook_posts_stats_update #table_wrapper {
+  margin-top: 30px;
+  padding-right: 15px;
 }
-#facebook_posts_stats_update #table_wrapper td,
-#facebook_posts_stats_update .dataTables_wrapper td {
+#facebook_posts_stats_update #table_wrapper td {
   text-align: center;
 }
 #facebook_posts_stats_update .loading-background {
