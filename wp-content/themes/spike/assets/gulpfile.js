@@ -16,7 +16,7 @@ isProduction && gulp.task('default', ['stylus', 'scripts']);
 isProduction || gulp.task('default', ['stylus', 'scripts', 'watch']);
 
 gulp.task('stylus', function() {
-	gulp.src('./assets/style.styl')
+	gulp.src('./theme-assets/style.styl')
 		.pipe(stylus({
 			use    : [nib()],
 			errors : true,
@@ -33,7 +33,7 @@ gulp.task('stylus', function() {
 });
 
 gulp.task('scripts', function() {
-	gulp.src('./assets/main.js')
+	gulp.src('./theme-assets/main.js')
 		.pipe(browserify({ insertGlobals : true }))
 		.pipe(gulpif(isProduction, uglify().on('error', gulpUtil.log)))
 		.pipe(gulp.dest('../js/'))
@@ -48,6 +48,6 @@ gulp.task('scripts', function() {
 gulp.task('watch', function() {
 	livereload.listen();
 
-	gulp.watch('./assets/**/*.js', ['scripts']);
-	gulp.watch('./assets/**/*.styl', ['stylus']);
+	gulp.watch('./theme-assets/**/*.js', ['scripts']);
+	gulp.watch('./theme-assets/**/*.styl', ['stylus']);
 });
