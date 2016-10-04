@@ -22,25 +22,20 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 	<hr>
 
 	<p>All the data below are from the post_meta (<strong>_msp_total_shares</strong> and <strong>_msp_fb_likes</strong>).</p>
+
 	<p><strong>Please</strong>, reload the page after Update to see the latest data.</p>
+	<p>If the field Shares/Like appears as empty that means there is no data inside post_meta.</p>
 
 	<table id="table">
 		<thead>
 			<tr>
 				<th>Post ID</th>
 				<th>Post Name</th>
+				<th>Create Date</th>
 				<th>Shares</th>
 				<th>Likes</th>
 			</tr>
 		</thead>
-		<tfoot>
-			<tr>
-				<th>Post ID</th>
-				<th>Post Name</th>
-				<th>Shares</th>
-				<th>Likes</th>
-			</tr>
-		</tfoot>
 		<tbody>
 			<?php
 				$posts = get_posts( array(
@@ -54,12 +49,22 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 					echo '<tr>';
 						echo '<td>'.$post->ID.'</td>';
 						echo '<td>'.get_the_title( $post->ID ).'</td>';
+						echo '<td>'.get_the_date( false, $post->ID ).'</td>';
 						echo '<td>'.get_post_meta( $post->ID, '_msp_total_shares', true ).'</td>';
 						echo '<td>'.get_post_meta( $post->ID, '_msp_fb_likes', true ).'</td>';
 					echo '</tr>';
 				}
 			?>
 		</tbody>
+		<tfoot>
+			<tr>
+				<th>Post ID</th>
+				<th>Post Name</th>
+				<th>Create Date</th>
+				<th>Shares</th>
+				<th>Likes</th>
+			</tr>
+		</tfoot>
 	</table>
 
 	<div class="loading-background">
