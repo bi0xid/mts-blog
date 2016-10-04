@@ -167,7 +167,7 @@
                             <?php endif; ?>
                             
                             
-							<div class="pb-mc-wrapper hide">
+							<div class="pb-mc-wrapper">
 								<div id="pb-mailchimp">
 									<h3>Want To Become Sexually Healthy & Happy?</h3>
 									<p>Join The Secret Sunday List & Get 1 FREE Actionable Secret Every Sunday.</p>
@@ -184,42 +184,6 @@
 											</div>
 											
 										</form>
-									</div>
-								</div>
-							</div>
-
-							<div id="course-enroll-banner" style="background-image:url('<?php echo get_stylesheet_directory_uri() . '/images/loveschool/banner.jpg' ?>')">
-								<div class="left-block">
-									<div class="padding-block">
-										<h5><span>The Pussy Pleasure Course™</span></h5>
-										<h2><span>Learn How To Fully Pleasure Your Partner!</span></h2>
-									</div>
-
-									<div class="counter_wrapper">
-										<p>Enrollment closes In</p>
-
-										<div id="ls_course_counter" data-deadline="2016-10-03 00:00">
-											<div class="counter_labels">
-												<div class="d">
-													<span class="label">Days</span>
-													<span>0</span>
-												</div>
-												<div class="gh">
-													<span class="label">Hours</span>
-													<span>0</span>
-												</div>
-												<div class="m">
-													<span class="label last">Minutes</span>
-													<span class="last">0</span>
-												</div>
-											</div>
-										</div>
-
-										<span class="play-btn" style="background-image:url('<?php echo get_stylesheet_directory_uri() . '/images/loveschool/play-button.png' ?>')">
-									</div>
-
-									<div class="padding-block">
-										<a href="https://goo.gl/bFF05Q" class="btn">Tell Me More</a>
 									</div>
 								</div>
 							</div>
