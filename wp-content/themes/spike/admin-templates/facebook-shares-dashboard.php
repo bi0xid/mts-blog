@@ -16,7 +16,7 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 
 	<input type="hidden" id="nonce" value="<?php echo $ajax_nonce; ?>">
 
-	<em>The last update was <span id="update_date"><?php echo get_option( 'facebook_posts_stats_lats_update' ); ?></span></em>
+	<em>The last update was <strong id="update_date"><?php echo get_option( 'facebook_posts_stats_lats_update' ); ?></strong></em>
 	<button id="update_all">Update</button>
 
 	<hr>

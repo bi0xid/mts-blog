@@ -504,6 +504,34 @@ table.dataTable td {
 #facebook_posts_stats_update {
   position: relative;
 }
+#facebook_posts_stats_update #update_all {
+  border: 0;
+  padding: 0;
+  width: 80%;
+  color: #fff;
+  height: 50px;
+  display: block;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 15px auto;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: #71c263;
+  text-transform: uppercase;
+  -webkit-transition: background-color 0.3s;
+  -moz-transition: background-color 0.3s;
+  -o-transition: background-color 0.3s;
+  -ms-transition: background-color 0.3s;
+  transition: background-color 0.3s;
+}
+#facebook_posts_stats_update #update_all:focus {
+  outline-color: #9bd491;
+}
+#facebook_posts_stats_update #update_all:hover {
+  background-color: #9bd491;
+}
 #facebook_posts_stats_update #table_wrapper,
 #facebook_posts_stats_update .dataTables_wrapper {
   padding: 0 base-sizes(-1);
