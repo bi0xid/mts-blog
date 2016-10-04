@@ -17,7 +17,7 @@ isProduction && gulp.task('default', ['stylus', 'scripts']);
 isProduction || gulp.task('default', ['stylus', 'scripts', 'watch']);
 
 gulp.task('stylus', function() {
-	var src = isAdminAssets ? './admin-assets/admin.styl' : './theme-assets/style.styl';
+	var src = isAdminAssets ? './admin-assets/admin-style.styl' : './theme-assets/style.styl';
 
 	gulp.src(src)
 		.pipe(stylus({
