@@ -113,8 +113,8 @@ class BlogFacebookClass {
 	}
 
 	public function load_custom_wp_admin_assets() {
-		wp_register_style( 'admin-style', get_template_directory_uri() . '/css/admin-style.css', false, '0.0.1' );
-		wp_register_script( 'admin-scripts', get_template_directory_uri() . '/js/admin-script.js', false, '0.0.1', true );
+		wp_register_style( 'admin-style', get_template_directory_uri() . '/css/admin-style.css', false, '0.5.0' );
+		wp_register_script( 'admin-scripts', get_template_directory_uri() . '/js/admin-script.js', false, '0.5.0', true );
 
 		wp_enqueue_style( 'admin-style' );
 		wp_enqueue_script( 'admin-scripts' );
