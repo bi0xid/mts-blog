@@ -10,10 +10,7 @@ class BlogFacebookClass {
 	CONST POST_SCHEDULE_HOUR = 'post_facebook_schedule_hour_';
 	CONST POST_SCHEDULE_TEN_MINUTES = 'post_facebook_schedule_minute_';
 
-	CONST POSTS_HOUR_SCHEDULE = 'post_facebook_shares_checked';
-
 	function __construct() {
-		add_action( 'init', array( $this, 'get_all_post_facebook_shares' ), 10 );
 		add_action( 'init', array( $this, 'check_lastest_post_facebook_shares' ), 10 );
 
 		add_action( 'save_post', array( $this, 'schedule_post_share_check' ) );
@@ -42,22 +39,6 @@ class BlogFacebookClass {
 					set_transient( self::POST_SCHEDULE_TEN_MINUTES.$recent_post['ID'], true, 60 * 10 );
 				}
 			}
-		}
-	}
-
-	public function get_all_post_facebook_shares() {
-		// If there is no transient that means we have to check all post shares
-		if( !get_transient( self::POSTS_HOUR_SCHEDULE ) ) {
-			set_transient( self::POSTS_HOUR_SCHEDULE, true, 60 * 60 );
-
-			$posts = get_posts( array(
-				'numberposts' => 2000,
-				'post_status' => 'publish'
-			) );
-
-			foreach ( $posts as $post ) {
-				$this->update_post_facebook_stats( $post->ID );
-			};
 		}
 	}
 
