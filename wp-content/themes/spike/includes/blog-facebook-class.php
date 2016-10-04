@@ -13,6 +13,7 @@ class BlogFacebookClass {
 	function __construct() {
 		add_action( 'init', array( $this, 'check_lastest_post_facebook_shares' ), 10 );
 
+		add_action( 'admin_menu', array( $this, 'facebook_posts_shares' ) );
 		add_action( 'save_post', array( $this, 'schedule_post_share_check' ) );
 	}
 
@@ -70,5 +71,13 @@ class BlogFacebookClass {
 		if( isset( $facebook_results_json->og_object->likes->summary->total_count ) ) {
 			update_post_meta( $post_id, '_msp_fb_likes', $facebook_results_json->og_object->likes->summary->total_count );
 		}
+	}
+
+	public function facebook_posts_shares() {
+		add_dashboard_page( 'Facebook Posts Stats', 'Facebook Posts Stats', 'activate_plugins', 'facebbok_posts_shares', array( $this, 'facebook_posts_shares_page' ) );
+	}
+
+	public function facebook_posts_shares_page() {
+		include( get_template_directory().'/admin-templates/facebook-shares-dashboard.php' );
 	}
 }
