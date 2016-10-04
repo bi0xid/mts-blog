@@ -167,7 +167,7 @@
                             <?php endif; ?>
                             
                             
-							<div class="pb-mc-wrapper hide">
+							<div class="pb-mc-wrapper">
 								<div id="pb-mailchimp">
 									<h3>Want To Become Sexually Healthy & Happy?</h3>
 									<p>Join The Secret Sunday List & Get 1 FREE Actionable Secret Every Sunday.</p>
@@ -188,7 +188,7 @@
 								</div>
 							</div>
 
-							<div id="course-enroll-banner" style="background-image:url('<?php echo get_stylesheet_directory_uri() . '/images/loveschool/banner.jpg' ?>')">
+							<div class="hide" id="course-enroll-banner" style="background-image:url('<?php echo get_stylesheet_directory_uri() . '/images/loveschool/banner.jpg' ?>')">
 								<div class="left-block">
 									<div class="padding-block">
 										<h5><span>The Pussy Pleasure Course™</span></h5>
