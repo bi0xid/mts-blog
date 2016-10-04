@@ -15,6 +15,8 @@ class BlogFacebookClass {
 
 		add_action( 'admin_menu', array( $this, 'facebook_posts_shares' ) );
 		add_action( 'save_post', array( $this, 'schedule_post_share_check' ) );
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_wp_admin_assets' ));
 	}
 
 	/**
@@ -79,5 +81,9 @@ class BlogFacebookClass {
 
 	public function facebook_posts_shares_page() {
 		include( get_template_directory().'/admin-templates/facebook-shares-dashboard.php' );
+	}
+
+	public function load_custom_wp_admin_assets() {
+		wp_enqueue_script( 'admin-scripts', get_template_directory_uri() . '/js/admin-script.js' );
 	}
 }
