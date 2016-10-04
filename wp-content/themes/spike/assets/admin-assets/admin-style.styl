@@ -2,8 +2,17 @@
 
 @import '../plugins/spinner.css'
 
+@import '../node_modules/datatables.net-dt/css/jquery.dataTables.css'
+
 #facebook_posts_stats_update
 	position relative
+
+	#table_wrapper, .dataTables_wrapper
+		padding 0 base-sizes(-1)
+		margin-top base-sizes(1)
+
+		td
+			text-align center
 	
 	.loading-background
 		opacity 0

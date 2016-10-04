@@ -78,7 +78,8 @@ class BlogFacebookClass {
 	}
 
 	public function update_all_facebook_posts() {
-
+		add_option( 'facebook_posts_stats_lats_update', 'Never' );
+		//var_dump(get_option('facebook_posts_stats_lats_update'));die();
 	}
 
 	public function facebook_posts_shares() {

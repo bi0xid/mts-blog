@@ -24,7 +24,7 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 	<p>All the data below are from the post_meta (<strong>_msp_total_shares</strong> and <strong>_msp_fb_likes</strong>).</p>
 	<p><strong>Please</strong>, reload the page after Update to see the latest data.</p>
 
-	<table id="tabla">
+	<table id="table">
 		<thead>
 			<tr>
 				<th>Post ID</th>
@@ -33,6 +33,14 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 				<th>Likes</th>
 			</tr>
 		</thead>
+		<tfoot>
+			<tr>
+				<th>Post ID</th>
+				<th>Post Name</th>
+				<th>Shares</th>
+				<th>Likes</th>
+			</tr>
+		</tfoot>
 		<tbody>
 			<?php
 				$posts = get_posts( array(
@@ -52,14 +60,6 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 				}
 			?>
 		</tbody>
-		<tfoot>
-			<tr>
-				<th>Post ID</th>
-				<th>Post Name</th>
-				<th>Shares</th>
-				<th>Likes</th>
-			</tr>
-		</tfoot>
 	</table>
 
 	<div class="loading-background">
