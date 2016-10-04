@@ -7,8 +7,11 @@ $(document).ready(function() {
 		require('datatables.net')(window, $)
 		var table = $('#table').dataTable()
 
+		var loadingSpinner = container.find('.loading-background')
+
 		container.find('#update_all').on('click', function(e) {
 			e.preventDefault()
+			loadingSpinner.addClass('in')
 
 			$.ajax({
 				method: 'GET',
@@ -18,7 +21,9 @@ $(document).ready(function() {
 					security : container.find('#nonce').val()
 				}
 			}).done(function(response) {
-				console.log(response)
+				var parsedData = JSON.parse(response)
+				loadingSpinner.removeClass('in')
+				container.find('#update_date').html(parsedData.new_fetch_date)
 			})
 		})
 	}

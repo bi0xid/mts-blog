@@ -9,8 +9,11 @@ $(document).ready(function() {
 		require('datatables.net')(window, $)
 		var table = $('#table').dataTable()
 
+		var loadingSpinner = container.find('.loading-background')
+
 		container.find('#update_all').on('click', function(e) {
 			e.preventDefault()
+			loadingSpinner.addClass('in')
 
 			$.ajax({
 				method: 'GET',
@@ -20,13 +23,15 @@ $(document).ready(function() {
 					security : container.find('#nonce').val()
 				}
 			}).done(function(response) {
-				console.log(response)
+				var parsedData = JSON.parse(response)
+				loadingSpinner.removeClass('in')
+				container.find('#update_date').html(parsedData.new_fetch_date)
 			})
 		})
 	}
 })
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_2188ed8a.js","/")
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_1741441d.js","/")
 },{"7YKIPe":5,"buffer":4,"datatables.net":2}],2:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /*! DataTables 1.10.12

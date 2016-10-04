@@ -78,8 +78,27 @@ class BlogFacebookClass {
 	}
 
 	public function update_all_facebook_posts() {
-		add_option( 'facebook_posts_stats_lats_update', 'Never' );
-		//var_dump(get_option('facebook_posts_stats_lats_update'));die();
+		if( !check_ajax_referer( 'seguridad', 'security' ) ) {
+			echo json_encode('Security error');
+			die();
+		}
+
+		$now = date('d-m-Y H:i:s');
+		update_option( 'facebook_posts_stats_lats_update', $now );
+
+		$posts = get_posts( array(
+			'numberposts' => 2000,
+			'post_status' => 'publish'
+		) );
+
+		foreach ( $posts as $post ) {
+			$this->update_post_facebook_stats( $post->ID );
+		};
+
+		echo json_encode( array(
+			'new_fetch_date' => $now
+		) );
+		die();
 	}
 
 	public function facebook_posts_shares() {
