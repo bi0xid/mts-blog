@@ -5,23 +5,27 @@
 * on Facebook, and the other one is to schedule this check every ten minutes for a new post (in one hour)
 * @author Alejandro Orta (alejandro@mytinysecrets.com)
 */
-class BlogFacebookClass {
+class FacebookSdkClass {
+
+	private $app_id = '109970876058039';
+	private $app_secret = 'c9b9f0496665882dab21486c0aa695f1';
+	private $access_token = '109970876058039|p4fimCw5sXSGcIP6ZJdt4HGia78';
 
 	CONST POST_SCHEDULE_HOUR = 'post_facebook_schedule_hour_';
 	CONST POST_SCHEDULE_TEN_MINUTES = 'post_facebook_schedule_minute_';
 
-	private $test_curl_response;
+	private $fb_sdk;
 
 	function __construct() {
-		$this->test_curl_response = [];
+		$this->fb_sdk = new \Facebook\Facebook([
+			'default_graph_version' => 'v2.8',
+			'app_id'                => $this->app_id,
+			'app_secret'            => $this->app_secret,
+			'default_access_token'  => $this->access_token
+		]);
 
-		add_action( 'init', array( $this, 'check_lastest_post_facebook_shares' ), 10 );
-
-		add_action( 'admin_menu', array( $this, 'facebook_posts_shares' ) );
 		add_action( 'save_post', array( $this, 'schedule_post_share_check' ) );
-
-		add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_wp_admin_assets' ));
-
+		add_action( 'init', array( $this, 'check_lastest_post_facebook_shares' ), 10 );
 		add_action( 'wp_ajax_update_all_facebook_posts', array( $this, 'update_all_facebook_posts' ) );
 	}
 
@@ -77,11 +81,7 @@ class BlogFacebookClass {
 			$this->update_post_facebook_stats( $post->ID );
 		};
 
-		echo json_encode( array(
-			'new_fetch_date' => $now,
-			'response'       => $this->test_curl_response
-		) );
-		die();
+		$this->returnResponse( 200, 'All data saved', $now );
 	}
 
 	/**
@@ -89,45 +89,31 @@ class BlogFacebookClass {
 	 * @param (int) post_id
 	 */
 	private function update_post_facebook_stats( $post_id ) {
-		$url = 'http://graph.facebook.com/?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.urlencode( get_permalink( $post_id ) );
-		$ch = curl_init();
+		$post_url = get_permalink( $post_id );
 
-		curl_setopt( $ch, CURLOPT_URL, $url );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt( $ch, CURLOPT_HEADER, 0 );
-        curl_setopt( $ch, CURLOPT_POST, 1 );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0 );
-
-		$output = curl_exec( $ch );
-		$facebook_results_json = json_decode( $output );
-
-		$this->test_curl_response[] = $facebook_results_json;
-
-		curl_close( $ch );
-
-		if( isset( $facebook_results_json->share->share_count ) ) {
-			update_post_meta( $post_id, '_msp_total_shares', $facebook_results_json->share->share_count );
+		try {
+			$response = $this->fb_sdk->get('?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.$post_url);
+		} catch( \Facebook\Exceptions\FacebookSDKException $e ) {
+			$this->returnResponse( 403, $e->getMessage() );
 		}
 
-		if( isset( $facebook_results_json->og_object->likes->summary->total_count ) ) {
-			update_post_meta( $post_id, '_msp_fb_likes', $facebook_results_json->og_object->likes->summary->total_count );
+		$response_body = $response->getDecodedBody();
+
+		if( isset( $response_body['share']['share_count'] ) ) {
+			update_post_meta( $post_id, '_msp_total_shares', $response_body['share']['share_count'] );
+		}
+
+		if( isset( $response_body['og_object']['likes']['summary']['total_count'] ) ) {
+			update_post_meta( $post_id, '_msp_fb_likes', $response_body['og_object']['likes']['summary']['total_count'] );
 		}
 	}
 
-	public function facebook_posts_shares() {
-		add_dashboard_page( 'Facebook Posts Stats', 'Facebook Posts Stats', 'activate_plugins', 'facebook_posts_shares', array( $this, 'facebook_posts_shares_page' ) );
-	}
-
-	public function facebook_posts_shares_page() {
-		include( get_template_directory().'/admin-templates/facebook-shares-dashboard.php' );
-	}
-
-	public function load_custom_wp_admin_assets() {
-		wp_register_style( 'admin-style', get_template_directory_uri() . '/css/admin-style.css', false, '0.5.0' );
-		wp_register_script( 'admin-scripts', get_template_directory_uri() . '/js/admin-script.js', false, '0.5.0', true );
-
-		wp_enqueue_style( 'admin-style' );
-		wp_enqueue_script( 'admin-scripts' );
+	private function returnResponse( $code, $message, $data = null ) {
+		echo json_encode( array(
+			'code'    => $code,
+			'data'    => $data,
+			'message' => $message,
+		) );
+		die();
 	}
 }

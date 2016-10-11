@@ -6,10 +6,6 @@ require_once( dirname( __FILE__ ) . '/theme-options.php' );
 include("functions/tinymce/tinymce.php");
 if ( ! isset( $content_width ) ) $content_width = 960;
 
-// Load our super Facebook class
-require_once( dirname( __FILE__ ) . '/includes/blog-facebook-class.php' );
-$blog_facebook_class = new BlogFacebookClass();
-
 /*-----------------------------------------------------------------------------------*/
 /*	Load Translation Text Domain
 /*-----------------------------------------------------------------------------------*/
