@@ -15,11 +15,8 @@ class FacebookSdkClass {
 	CONST POST_SCHEDULE_TEN_MINUTES = 'post_facebook_schedule_minute_';
 
 	private $fb_sdk;
-	private $test_curl_response;
 
 	function __construct() {
-		$this->test_curl_response = [];
-
 		$this->fb_sdk = new \Facebook\Facebook([
 			'default_graph_version' => 'v2.8',
 			'app_id'                => $this->app_id,
@@ -84,11 +81,7 @@ class FacebookSdkClass {
 			$this->update_post_facebook_stats( $post->ID );
 		};
 
-		echo json_encode( array(
-			'new_fetch_date' => $now,
-			'response'       => $this->test_curl_response
-		) );
-		die();
+		$this->returnResponse( 200, 'All data saved', $now );
 	}
 
 	/**
@@ -96,31 +89,28 @@ class FacebookSdkClass {
 	 * @param (int) post_id
 	 */
 	private function update_post_facebook_stats( $post_id ) {
-		$url = 'http://graph.facebook.com/?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.urlencode( get_permalink( $post_id ) );
-		$ch = curl_init();
+		// First lets get the object_id and share count
+		$post_url = get_permalink( $post_id );
 
-		curl_setopt( $ch, CURLOPT_URL, $url );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt( $ch, CURLOPT_HEADER, 0 );
-        curl_setopt( $ch, CURLOPT_POST, 1 );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0 );
-
-		$output = curl_exec( $ch );
-		$facebook_results_json = json_decode( $output );
-
-		$this->test_curl_response[] = $facebook_results_json;
-
-		curl_close( $ch );
-
-/*
-		if( isset( $facebook_results_json->share->share_count ) ) {
-			update_post_meta( $post_id, '_msp_total_shares', $facebook_results_json->share->share_count );
+		try {
+			$response = $this->fb_sdk->get('?id='.$post_url);
+		} catch( \Facebook\Exceptions\FacebookSDKException $e ) {
+			$this->returnResponse( 403, $e->getMessage() );
 		}
 
-		if( isset( $facebook_results_json->og_object->likes->summary->total_count ) ) {
-			update_post_meta( $post_id, '_msp_fb_likes', $facebook_results_json->og_object->likes->summary->total_count );
-		}
-*/
+		$response_body = $response->getDecodedBody();
+
+		$obj_id = $response_body['og_object']['id'];
+
+		update_post_meta( $post_id, '_msp_total_shares', $response_body['share']['share_count'] );
+	}
+
+	private function returnResponse( $code, $message, $data = null ) {
+		echo json_encode( array(
+			'code'    => $code,
+			'data'    => $data,
+			'message' => $message,
+		) );
+		die();
 	}
 }
