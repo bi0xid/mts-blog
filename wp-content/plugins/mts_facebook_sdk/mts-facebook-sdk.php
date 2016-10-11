@@ -4,7 +4,7 @@
 Plugin Name: MyTinySecrets Facebook SDK
 Description: Take control of the shares and likes
 Author: Alejandro Orta
-Version: 0.0.5
+Version: 0.1.0
 Author URI: alejandro@mytinysecrets.com
 */
 
@@ -13,7 +13,8 @@ if ( !defined( 'FACEBOOK_SDK_PLUGIN_DIR' ) ) {
 	define( 'FACEBOOK_SDK_PLUGIN_DIR', $plugin_dir );
 }
 
-include FACEBOOK_SDK_PLUGIN_DIR.'/class/facebook-sdk-class.php';
+require_once FACEBOOK_SDK_PLUGIN_DIR.'/vendor/autoload.php';
+require FACEBOOK_SDK_PLUGIN_DIR.'/class/facebook-sdk-class.php';
 
 class MtsFacebookSdf {
 	function __construct() {

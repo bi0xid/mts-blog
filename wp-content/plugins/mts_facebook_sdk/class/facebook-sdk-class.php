@@ -7,13 +7,25 @@
 */
 class FacebookSdkClass {
 
+	private $app_id = '109970876058039';
+	private $app_secret = 'c9b9f0496665882dab21486c0aa695f1';
+	private $access_token = '109970876058039|p4fimCw5sXSGcIP6ZJdt4HGia78';
+
 	CONST POST_SCHEDULE_HOUR = 'post_facebook_schedule_hour_';
 	CONST POST_SCHEDULE_TEN_MINUTES = 'post_facebook_schedule_minute_';
 
+	private $fb_sdk;
 	private $test_curl_response;
 
 	function __construct() {
 		$this->test_curl_response = [];
+
+		$this->fb_sdk = new \Facebook\Facebook([
+			'default_graph_version' => 'v2.8',
+			'app_id'                => $this->app_id,
+			'app_secret'            => $this->app_secret,
+			'default_access_token'  => $this->access_token
+		]);
 
 		add_action( 'save_post', array( $this, 'schedule_post_share_check' ) );
 		add_action( 'init', array( $this, 'check_lastest_post_facebook_shares' ), 10 );
@@ -101,6 +113,7 @@ class FacebookSdkClass {
 
 		curl_close( $ch );
 
+/*
 		if( isset( $facebook_results_json->share->share_count ) ) {
 			update_post_meta( $post_id, '_msp_total_shares', $facebook_results_json->share->share_count );
 		}
@@ -108,5 +121,6 @@ class FacebookSdkClass {
 		if( isset( $facebook_results_json->og_object->likes->summary->total_count ) ) {
 			update_post_meta( $post_id, '_msp_fb_likes', $facebook_results_json->og_object->likes->summary->total_count );
 		}
+*/
 	}
 }
