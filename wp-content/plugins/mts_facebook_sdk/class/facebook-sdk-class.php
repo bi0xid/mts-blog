@@ -89,20 +89,18 @@ class FacebookSdkClass {
 	 * @param (int) post_id
 	 */
 	private function update_post_facebook_stats( $post_id ) {
-		// First lets get the object_id and share count
 		$post_url = get_permalink( $post_id );
 
 		try {
-			$response = $this->fb_sdk->get('?id='.$post_url);
+			$response = $this->fb_sdk->get('?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.$post_url);
 		} catch( \Facebook\Exceptions\FacebookSDKException $e ) {
 			$this->returnResponse( 403, $e->getMessage() );
 		}
 
 		$response_body = $response->getDecodedBody();
 
-		$obj_id = $response_body['og_object']['id'];
-
 		update_post_meta( $post_id, '_msp_total_shares', $response_body['share']['share_count'] );
+		update_post_meta( $post_id, '_msp_fb_likes', $response_body['og_object']['likes']['summary']['total_count'] );
 	}
 
 	private function returnResponse( $code, $message, $data = null ) {

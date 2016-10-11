@@ -4,7 +4,7 @@
 Plugin Name: MyTinySecrets Facebook SDK
 Description: Take control of the shares and likes
 Author: Alejandro Orta
-Version: 0.1.0
+Version: 0.7.0
 Author URI: alejandro@mytinysecrets.com
 */
 
