@@ -99,8 +99,13 @@ class FacebookSdkClass {
 
 		$response_body = $response->getDecodedBody();
 
-		update_post_meta( $post_id, '_msp_total_shares', $response_body['share']['share_count'] );
-		update_post_meta( $post_id, '_msp_fb_likes', $response_body['og_object']['likes']['summary']['total_count'] );
+		if( isset( $response_body['share']['share_count'] ) ) {
+			update_post_meta( $post_id, '_msp_total_shares', $response_body['share']['share_count'] );
+		}
+
+		if( isset( $response_body['og_object']['likes']['summary']['total_count'] ) ) {
+			update_post_meta( $post_id, '_msp_fb_likes', $response_body['og_object']['likes']['summary']['total_count'] );
+		}
 	}
 
 	private function returnResponse( $code, $message, $data = null ) {
