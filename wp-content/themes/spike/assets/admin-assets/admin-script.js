@@ -23,7 +23,12 @@ $(document).ready(function() {
 			}).done(function(response) {
 				var parsedData = JSON.parse(response)
 				loadingSpinner.removeClass('in')
-				container.find('#update_date').html(parsedData.new_fetch_date)
+
+				if( parsedData.code == 200 ) {
+					container.find('#update_date').html(parsedData.data)
+				} else {
+					alert(parsedData.message)
+				}
 			})
 		})
 	}
