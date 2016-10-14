@@ -1,0 +1,65 @@
+#email-share-template
+	opacity 0
+	width 100%
+	height 100%
+	z-index 20000
+	fixed top 0 left 0
+	pointer-events none
+	transition opacity .3s
+	background-color rgba(17, 17, 17, 0.67)
+
+	&.in
+		opacity 1
+		pointer-events all
+
+	*
+		box-sizing border-box
+
+	.close-modal
+		color #FFF
+		cursor pointer
+		font-size 40px
+		transition color .3s
+		absolute top 40px right 40px
+
+		&:hover
+			color #D6D6D6
+
+	form
+		width 40%
+		padding 20px
+		text-align center
+		background-color #FFF
+		absolute top 50% left 50%
+		transform translate(-50%, -50%)
+
+		input
+			width 100%
+			padding 15px
+			margin 10px 0
+			font-size 16px
+			border 1px solid #7A7A7A
+
+		button[type="submit"]
+			width 40%
+			border 0
+			color #FFF
+			height 30px
+			cursor pointer
+			font-size 16px
+			margin-top 12px
+			background-color #D71A68
+			transition background-color .3s
+
+			&:hover
+				background-color lightness(#D71A68, 60%)
+
+#message_alert
+	margin 0
+	display none
+	z-index 50000
+	padding 10px 10px
+	background-color #FFF
+	border 1px solid #000
+	fixed bottom 10px left 50%
+	transform translate(-50%, 0)
