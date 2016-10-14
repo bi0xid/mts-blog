@@ -26,17 +26,28 @@ class EmailShareClass {
 			$this->returnResponseJson( 403, 'Some params are missing.' );
 		}
 
+		$post_excerpt = get_the_excerpt( $post_id );
+
 		$headers[] = 'From: <'.$email_from.'>';
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 
 		$subject = 'Take a look at this amazing article from MyTinySecrets!';
 
 		$message = '';
+
+		// Add user message
 		if( $user_message ) {
 			$message .= $user_message.'</br>';
 		}
-		$message .= get_the_excerpt( $post_id );
 
+		// Add Post Excerpt
+		if( $post_excerpt ) {
+			$message .= get_the_excerpt( $post_id );
+		}
+
+		// Add Post Link
+		$message .= '</br><a href="'.get_permalink( $post_id ).'" target="_blank" title="mts_blog">'.get_the_title( $post_id ).'</a>';
+		var_dump($message);die();
 		$email = wp_mail( $email_to, $subject, $message, $headers );
 
 		if( $email ) {

@@ -338,8 +338,6 @@ $options = get_option('spike');
 		<input type="text" class="message" placeholder="Message:">
 		<button type="submit">Send</button>
 	</form>
-
-	<input type="hidden" id="email_nonce" value="<?php echo wp_create_nonce( "seguridad" ); ?>">
 </div>
 
 <p id="message_alert"></p>
