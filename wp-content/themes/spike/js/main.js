@@ -7081,7 +7081,18 @@ moment.tz.load(require('./data/packed/latest.json'));
 var $ = jQuery
 
 module.exports = function(button) {
-	console.log(button)
+	var modal = $('#email-share-template')
+
+/*
+	var ajax_url = jQuery('#ajax_url').length ? jQuery('#ajax_url').val() : ajaxurl
+
+	jQuery.post(ajax_url, params,
+	function(response) {
+		callback && callback(response)
+	}).fail(function(error) {
+		callbackFail && callbackFail(error)
+	})
+*/
 }
 
 }).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/blocks/email-share/script.js","/blocks/email-share")
@@ -7167,5 +7178,5 @@ $(document).ready(function() {
 	})
 })
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_aaffeca.js","/")
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_9b27426d.js","/")
 },{"./blocks/email-share/script":10,"./blocks/loveschool-banner":11,"7YKIPe":3,"buffer":2}]},{},[12])

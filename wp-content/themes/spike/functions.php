@@ -6,6 +6,10 @@ require_once( dirname( __FILE__ ) . '/theme-options.php' );
 include("functions/tinymce/tinymce.php");
 if ( ! isset( $content_width ) ) $content_width = 960;
 
+// Email Share Class
+include( 'includes/email-share-class.php' );
+$email_share_class = new EmailShareClass();
+
 /*-----------------------------------------------------------------------------------*/
 /*	Load Translation Text Domain
 /*-----------------------------------------------------------------------------------*/
