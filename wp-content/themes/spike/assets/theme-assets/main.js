@@ -1,4 +1,4 @@
-var emailShareButton = require('./blocks/email-share')
+var emailShareButton = require('./blocks/email-share/script')
 var loveSchoolBanner = require('./blocks/loveschool-banner')
 
 $(document).ready(function() {

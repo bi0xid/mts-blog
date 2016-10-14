@@ -581,6 +581,9 @@ Reactshare plugin styles*/
     margin-left: 10px;
   }
 }
+#email-share-template {
+  display: none;
+}
 .pb-mc-wrapper.hide {
   display: none;
 }

@@ -7084,7 +7084,7 @@ module.exports = function(button) {
 	console.log(button)
 }
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/blocks/email-share.js","/blocks")
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/blocks/email-share/script.js","/blocks/email-share")
 },{"7YKIPe":3,"buffer":2}],11:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 module.exports = function(container) {
@@ -7156,7 +7156,7 @@ module.exports = function(container) {
 }).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/blocks/loveschool-banner.js","/blocks")
 },{"7YKIPe":3,"buffer":2,"countdown":9,"moment-timezone":6}],12:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-var emailShareButton = require('./blocks/email-share')
+var emailShareButton = require('./blocks/email-share/script')
 var loveSchoolBanner = require('./blocks/loveschool-banner')
 
 $(document).ready(function() {
@@ -7167,5 +7167,5 @@ $(document).ready(function() {
 	})
 })
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_b418dae7.js","/")
-},{"./blocks/email-share":10,"./blocks/loveschool-banner":11,"7YKIPe":3,"buffer":2}]},{},[12])
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_dea75da6.js","/")
+},{"./blocks/email-share/script":10,"./blocks/loveschool-banner":11,"7YKIPe":3,"buffer":2}]},{},[12])

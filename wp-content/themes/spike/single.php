@@ -328,4 +328,12 @@ $options = get_option('spike');
 	?>
 </div>
 
+<div id="email-share-template">
+	<form>
+		<h3>To whom you want to send this article via email?</h3>
+		<input type="email" required="true" placeholder="Email address">
+		<button type="submit">Send</button>
+	</form>
+</div>
+
 <?php get_footer(); ?>
