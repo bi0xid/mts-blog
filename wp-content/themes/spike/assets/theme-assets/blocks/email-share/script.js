@@ -20,7 +20,7 @@ module.exports = function() {
 			'email_to'   : modal.find('.to_email').val(),
 			'email_from' : modal.find('.from_email').val(),
 			'message'    : modal.find('.message').val(),
-			'post_id'    : $('#page').data('postid')
+			'post_id'    : modal.data('postid')
 		},
 		function(response) {
 			var parsedData = JSON.parse(response)

@@ -32,7 +32,7 @@ if( $affiliate_id_mts && is_single() ) {
 $options = get_option('spike');
 ?>
 
-<div id="page" class="single" data-postid="<?php echo the_id(); ?>">
+<div id="page" class="single">
 	<div class="content">
 		<article class="article">
 			<div id="content_box" >
@@ -297,7 +297,6 @@ $options = get_option('spike');
 			</div>
 		</article>
 
-
 <?php 
     if( $affiliate_id_mts && is_single() ) {
         ob_start();
@@ -328,7 +327,7 @@ $options = get_option('spike');
 	?>
 </div>
 
-<div id="email-share-template">
+<div id="email-share-template" data-postid="<?php echo the_ID(); ?>">
 	<p class="close-modal">X</p>
 
 	<form>

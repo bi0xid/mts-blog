@@ -8652,7 +8652,7 @@ module.exports = function() {
 			'email_to'   : modal.find('.to_email').val(),
 			'email_from' : modal.find('.from_email').val(),
 			'message'    : modal.find('.message').val(),
-			'post_id'    : $('#page').data('postid')
+			'post_id'    : modal.data('postid')
 		},
 		function(response) {
 			var parsedData = JSON.parse(response)
@@ -8764,8 +8764,15 @@ $(document).ready(function() {
 		e.preventDefault()
 		emailShareModalContainer.addClass('in')
 	})
+
+	$('.essb_link_mail').on('click', function(e) {
+		e.preventDefault()
+		var id = $(this).parents('.post.excerpt').data('id')
+		emailShareModalContainer.data('postid', id)
+		emailShareModalContainer.addClass('in')
+	})
 	emailShareModalContainer.length && emailShareModal()
 })
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_1cee849c.js","/")
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_f2fb5e31.js","/")
 },{"./blocks/email-share/script":11,"./blocks/loveschool-banner":12,"7YKIPe":3,"buffer":2}]},{},[13])

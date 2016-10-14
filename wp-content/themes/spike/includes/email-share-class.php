@@ -47,10 +47,13 @@ class EmailShareClass {
 
 		// Add Post Link
 		$message .= '</br><a href="'.get_permalink( $post_id ).'" target="_blank" title="mts_blog">'.get_the_title( $post_id ).'</a>';
-		var_dump($message);die();
+
 		$email = wp_mail( $email_to, $subject, $message, $headers );
 
 		if( $email ) {
+			$total_email_shares = get_post_meta( $post_id, 'total_email_shares', true );
+			update_post_meta( $post_id, 'total_email_shares', ++$total_email_shares );
+
 			$this->returnResponseJson( 200, 'Message sent successfully!' );
 		} else {
 			$this->returnResponseJson( 403, 'There was an error while sending the email. Please try again later.' );
