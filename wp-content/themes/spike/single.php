@@ -329,8 +329,9 @@ $options = get_option('spike');
 </div>
 
 <div id="email-share-template">
+	<p class="close-modal">X</p>
 	<form>
-		<h3>To whom you want to send this article via email?</h3>
+		<h3>To whom do you want to send this article via email?</h3>
 		<input type="email" required="true" placeholder="Email address">
 		<button type="submit">Send</button>
 	</form>
