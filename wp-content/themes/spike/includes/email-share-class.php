@@ -26,20 +26,34 @@ class EmailShareClass {
 			$this->returnResponseJson( 403, 'Some params are missing.' );
 		}
 
+		$post_excerpt = get_the_excerpt( $post_id );
+
 		$headers[] = 'From: <'.$email_from.'>';
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 
 		$subject = 'Take a look at this amazing article from MyTinySecrets!';
 
 		$message = '';
+
+		// Add user message
 		if( $user_message ) {
 			$message .= $user_message.'</br>';
 		}
-		$message .= get_the_excerpt( $post_id );
+
+		// Add Post Excerpt
+		if( $post_excerpt ) {
+			$message .= get_the_excerpt( $post_id );
+		}
+
+		// Add Post Link
+		$message .= '</br><a href="'.get_permalink( $post_id ).'" target="_blank" title="mts_blog">'.get_the_title( $post_id ).'</a>';
 
 		$email = wp_mail( $email_to, $subject, $message, $headers );
 
 		if( $email ) {
+			$total_email_shares = get_post_meta( $post_id, 'total_email_shares', true );
+			update_post_meta( $post_id, 'total_email_shares', ++$total_email_shares );
+
 			$this->returnResponseJson( 200, 'Message sent successfully!' );
 		} else {
 			$this->returnResponseJson( 403, 'There was an error while sending the email. Please try again later.' );

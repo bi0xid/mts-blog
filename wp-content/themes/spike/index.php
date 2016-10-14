@@ -1,5 +1,20 @@
 <?php $options = get_option('spike'); ?>
 <?php get_header(); ?>
+
+<div id="email-share-template">
+    <p class="close-modal">X</p>
+
+    <form>
+        <h3>To whom do you want to send this article via email?</h3>
+        <input type="email" required="true" class="from_email" placeholder="From email:">
+        <input type="email" required="true" class="to_email" placeholder="To email:">
+        <input type="text" class="message" placeholder="Message:">
+        <button type="submit">Send</button>
+    </form>
+</div>
+
+<p id="message_alert"></p>
+
 <div id="page">
 	<div class="content">
 		<article class="article">
@@ -44,7 +59,7 @@
 					foreach($custom_posts as $key => $post) : setup_postdata($post); ?>
 				
 					
-						<div class="post excerpt <?php echo (++$j % 2 == 0) ? 'last' : ''; ?>">						
+						<div data-id="<?php echo the_id(); ?>" class="post excerpt <?php echo (++$j % 2 == 0) ? 'last' : ''; ?>">						
 							<div class="post_excerpt_l">
 					
 								<a href="<?php the_permalink() ?>" title="<?php the_title(); ?>" rel="nofollow" id="featured-thumbnail">
@@ -98,7 +113,7 @@
                                             $iPinterestShares = (int)get_post_meta(get_the_ID(), 'pinterest_shares_count', true);
                                             $iStumbleShares = (int)get_post_meta(get_the_ID(), 'stumble_shares_count', true);
                                             $iDiggShares = (int)get_post_meta(get_the_ID(), 'digg_post_type', true);
-                                            $iMailShares = (int)get_post_meta(get_the_ID(), 'mail_post_type', true);
+                                            $iMailShares = (int)get_post_meta(get_the_ID(), 'total_email_shares', true);
                                             
                                             $aSharesArray = array('iFBLikes' => $iFBLikes,
                                                         'iFBShares' => $iFBShares,
@@ -396,7 +411,7 @@
                                             $iPinterestShares = (int)get_post_meta(get_the_ID(), 'pinterest_shares_count', true);
                                             $iStumbleShares = (int)get_post_meta(get_the_ID(), 'stumble_shares_count', true);
                                             $iDiggShares = (int)get_post_meta(get_the_ID(), 'digg_post_type', true);
-                                            $iMailShares = (int)get_post_meta(get_the_ID(), 'mail_post_type', true);
+                                            $iMailShares = (int)get_post_meta(get_the_ID(), 'total_email_shares', true);
                                             
                                             $aSharesArray = array('iFBLikes' => $iFBLikes,
                                                         'iFBShares' => $iFBShares,

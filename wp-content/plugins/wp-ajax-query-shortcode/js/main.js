@@ -21,6 +21,16 @@ function wp_ajax_query_shortcodeclassic(ajaxParam) {
 		param['ajax_runnig'] = true;
 		param['offset'] = item_showed * 1;
 
+		var appendShareEmailAction = debounce(function() {
+			$('.essb_link_mail').unbind('click')
+			$('.essb_link_mail').on('click', function(e) {
+				e.preventDefault()
+				var id = $(this).parents('.post.excerpt').data('id')
+				$('#email-share-template').data('postid', id)
+				$('#email-share-template').addClass('in')
+			})
+		}, 3000);
+
 		$.ajax({
 			type: "GET",
 			url: ajaxParam['home_url']+"ajax.php",
@@ -40,11 +50,28 @@ function wp_ajax_query_shortcodeclassic(ajaxParam) {
 					$(data).hide().appendTo('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-content').slideDown('slow').imagesLoaded( function(){
 						wp_ajax_query_resize();
 					});
+
+					appendShareEmailAction();
 				}
 			}
 		});
 	}
 }
+
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
 
 function wp_ajax_query_shortcodemodern(ajaxParam) {
 	var item_showed = $('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-content .ajax-item').length;

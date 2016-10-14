@@ -25,6 +25,7 @@
 <body id ="blog" <?php body_class('main'); ?>>
     <div id="fb-root"></div>
     <input type="hidden" id="ajax_url" value="<?php echo admin_url('admin-ajax.php'); ?>">
+    <input type="hidden" id="email_nonce" value="<?php echo wp_create_nonce( "seguridad" ); ?>">
 	<header class="main-header">
 		<div class="container">
 			<div id="header">

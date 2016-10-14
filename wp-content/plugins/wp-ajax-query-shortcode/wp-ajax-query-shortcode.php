@@ -357,7 +357,7 @@ function wp_ajax_query( $atts = '' ) {
 
 		if( $atts['layout'] == 'classic' && $atts['ajax_runnig'] ): ?>
 	
-		<div class="post excerpt">	
+		<div class="post excerpt" data-id="<?php echo the_id(); ?>">	
 			<div class="post_excerpt_l">
 				<a href="<?php the_permalink() ?>" title="<?php the_title(); ?>" rel="nofollow" id="featured-thumbnail">
 					<?php if ( has_post_thumbnail() ) { ?> 
