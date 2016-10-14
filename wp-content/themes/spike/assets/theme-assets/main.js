@@ -9,5 +9,5 @@ $(document).ready(function() {
 		e.preventDefault()
 		emailShareModalContainer.addClass('in')
 	})
-	emailShareModalContainer.lenght && emailShareModal()
+	emailShareModalContainer.length && emailShareModal()
 })

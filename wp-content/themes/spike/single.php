@@ -342,4 +342,6 @@ $options = get_option('spike');
 	<input type="hidden" id="email_nonce" value="<?php echo wp_create_nonce( "seguridad" ); ?>">
 </div>
 
+<p id="message_alert"></p>
+
 <?php get_footer(); ?>

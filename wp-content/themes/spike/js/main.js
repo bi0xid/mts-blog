@@ -8668,7 +8668,12 @@ module.exports = function() {
 	}
 
 	function showMessage(message) {
-		console.log(message)
+		$('#message_alert').html(message).fadeIn(400);
+		_.delay(function() {
+			$('#message_alert').fadeOut(400, function() {
+				$(this).html('')
+			})
+		}, 5000)
 	}
 
 	function closeModal() {
@@ -8759,8 +8764,8 @@ $(document).ready(function() {
 		e.preventDefault()
 		emailShareModalContainer.addClass('in')
 	})
-	emailShareModalContainer.lenght && emailShareModal()
+	emailShareModalContainer.length && emailShareModal()
 })
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_8de23433.js","/")
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_12c33f81.js","/")
 },{"./blocks/email-share/script":11,"./blocks/loveschool-banner":12,"7YKIPe":3,"buffer":2}]},{},[13])

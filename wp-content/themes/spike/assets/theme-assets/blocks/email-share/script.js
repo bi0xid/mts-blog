@@ -36,7 +36,12 @@ module.exports = function() {
 	}
 
 	function showMessage(message) {
-		console.log(message)
+		$('#message_alert').html(message).fadeIn(400);
+		_.delay(function() {
+			$('#message_alert').fadeOut(400, function() {
+				$(this).html('')
+			})
+		}, 5000)
 	}
 
 	function closeModal() {

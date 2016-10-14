@@ -665,6 +665,22 @@ Reactshare plugin styles*/
 #email-share-template form button[type="submit"]:hover {
   background-color: #e9498b;
 }
+#message_alert {
+  margin: 0;
+  display: none;
+  z-index: 50000;
+  padding: 10px 10px;
+  background-color: #fff;
+  border: 1px solid #000;
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  -webkit-transform: translate(-50%, 0);
+  -moz-transform: translate(-50%, 0);
+  -o-transform: translate(-50%, 0);
+  -ms-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+}
 .pb-mc-wrapper.hide {
   display: none;
 }
