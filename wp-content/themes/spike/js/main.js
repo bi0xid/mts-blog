@@ -8656,7 +8656,6 @@ module.exports = function() {
 		},
 		function(response) {
 			var parsedData = JSON.parse(response)
-			console.log(response)
 
 			if( parsedData.code == 200 ) {
 				closeModal()
@@ -8678,6 +8677,7 @@ module.exports = function() {
 
 	function closeModal() {
 		modal.removeClass('in')
+		modal.find('input').val('')
 	}
 }
 
@@ -8767,5 +8767,5 @@ $(document).ready(function() {
 	emailShareModalContainer.length && emailShareModal()
 })
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_12c33f81.js","/")
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_69c58f2e.js","/")
 },{"./blocks/email-share/script":11,"./blocks/loveschool-banner":12,"7YKIPe":3,"buffer":2}]},{},[13])

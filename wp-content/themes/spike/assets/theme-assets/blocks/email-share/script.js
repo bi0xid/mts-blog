@@ -24,7 +24,6 @@ module.exports = function() {
 		},
 		function(response) {
 			var parsedData = JSON.parse(response)
-			console.log(response)
 
 			if( parsedData.code == 200 ) {
 				closeModal()
@@ -46,5 +45,6 @@ module.exports = function() {
 
 	function closeModal() {
 		modal.removeClass('in')
+		modal.find('input').val('')
 	}
 }
