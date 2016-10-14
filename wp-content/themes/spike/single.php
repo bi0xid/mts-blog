@@ -32,7 +32,7 @@ if( $affiliate_id_mts && is_single() ) {
 $options = get_option('spike');
 ?>
 
-<div id="page" class="single">
+<div id="page" class="single" data-postid="<?php echo the_id(); ?>">
 	<div class="content">
 		<article class="article">
 			<div id="content_box" >
@@ -330,11 +330,16 @@ $options = get_option('spike');
 
 <div id="email-share-template">
 	<p class="close-modal">X</p>
+
 	<form>
 		<h3>To whom do you want to send this article via email?</h3>
-		<input type="email" required="true" placeholder="Email address">
+		<input type="email" required="true" class="from_email" placeholder="From email:">
+		<input type="email" required="true" class="to_email" placeholder="To email:">
+		<input type="text" class="message" placeholder="Message:">
 		<button type="submit">Send</button>
 	</form>
+
+	<input type="hidden" id="email_nonce" value="<?php echo wp_create_nonce( "seguridad" ); ?>">
 </div>
 
 <?php get_footer(); ?>

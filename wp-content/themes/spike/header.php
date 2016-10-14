@@ -24,6 +24,7 @@
 <?php flush(); ?>
 <body id ="blog" <?php body_class('main'); ?>>
     <div id="fb-root"></div>
+    <input type="hidden" id="ajax_url" value="<?php echo admin_url('admin-ajax.php'); ?>">
 	<header class="main-header">
 		<div class="container">
 			<div id="header">
