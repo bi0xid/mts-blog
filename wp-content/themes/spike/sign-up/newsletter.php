@@ -12,8 +12,8 @@ function redirect( $http_referer = '' ) {
 $http_referer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
 $http_referer = filter_var( $http_referer, FILTER_VALIDATE_URL ) ? $http_referer : '';
 
-if ( isset($_POST['email'] ) && $_POST['email'] ) {
-	$email = ( isset( $_POST['email'] ) && $_POST['email'] ) ? $_POST['email'] : '';
+if ( isset($_POST['email'] ) ) {
+	$email = $_POST['email'];
 
 	if( !filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
 		redirect( $http_referer );
