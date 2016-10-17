@@ -4,6 +4,7 @@ var $ = jQuery;
 window.short_code_ajax_is_loading = false;
 
 function wp_ajax_query_shortcodeclassic(ajaxParam) {
+	console.log(1)
 	var item_showed = $('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-content .ajax-item').length;
 
 	if(!item_showed) {
