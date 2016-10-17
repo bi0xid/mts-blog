@@ -46,9 +46,6 @@ if ( isset($_POST['email'] ) ) {
 		'api_key'  => $api_key,
 		'name'     => ucfirst( $name ),
 		'email'    => $email,
-		'tags'     => $tags,
-		'form_id'  => '47065',
-		'thankyou' => $thankyou,
 		'fields'   => array(
 			'ip'           => get_ip(),
 			'http_referer' => $http_referer
@@ -62,6 +59,7 @@ if ( isset($_POST['email'] ) ) {
 	curl_setopt( $curl, CURLOPT_HTTPHEADER, array( "Content-type: application/json" ) );
 	curl_setopt( $curl, CURLOPT_POST, true );
 	curl_setopt( $curl, CURLOPT_POSTFIELDS, json_encode( $vars ) );
+	$json_response = curl_exec($curl);
 
 	curl_close( $curl );
 

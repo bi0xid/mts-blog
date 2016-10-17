@@ -40,7 +40,7 @@ $options = get_option('spike');
 					<h2>Want To Become Sexually Healthy & Happy?</h2>
 					<p>Get 1 FREE Actionable Secret Every Sunday.</p>
 
-					<form accept-charset="utf-8" action="<?php echo get_home_url(); ?>/sign-up/register.php" method="post">
+					<form accept-charset="utf-8" action="<?php echo get_stylesheet_directory_uri().'/sign-up/newsletter.php' ?>" method="post">
 						<input type="hidden" name="form_type" value="post" />
 						<div class="box">
 							<div id="WFIcenter" class="wf-body">
@@ -121,7 +121,7 @@ $options = get_option('spike');
 									<h3>Want To Become Sexually Healthy & Happy?</h3>
 									<p>Join The Secret Sunday List & Get 1 FREE Actionable Secret Every Sunday.</p>
 									<div id="WFItem7323402" class="wf-formTpl">
-										<form accept-charset="utf-8" action="<?php echo get_home_url(); ?>/sign-up/register.php" method="post">
+										<form accept-charset="utf-8" action="<?php echo get_stylesheet_directory_uri().'/sign-up/newsletter.php' ?>" method="post">
 											<div class="pb-inputline">
 												<input type="text" value="" class="wf-input wf-req wf-valid__required" name="name" placeholder="Enter Your First Name Here" required="true" />
 												<input type="email" value="" class="wf-input wf-req wf-valid__email" name="email" required="true" required="required" placeholder="Enter Your E-mail Here" />
