@@ -31,11 +31,9 @@ if ( isset($_POST['email'] ) ) {
 		redirect( $http_referer );
 	}
 
-	$api_key = 'Vl6rr4wdvvE5zlJWkPtKZg';
-	$name    = ( isset($_POST['name'] ) && $_POST['name']) ? $_POST['name'] : '';
-
-
+	$api_key  = 'Vl6rr4wdvvE5zlJWkPtKZg';
 	$thankyou = 'http://mytinysecrets.com/thank-you/';
+	$name     = ( isset($_POST['name'] ) && $_POST['name']) ? $_POST['name'] : '';
 
 	if ( $name == '' ) {
 		$name = 'Beautiful';
