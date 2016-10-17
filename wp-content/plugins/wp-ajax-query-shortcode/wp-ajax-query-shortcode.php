@@ -301,8 +301,6 @@ function wp_ajax_template( $atts ) {
  * Do the query with parameters
  */
 function wp_ajax_query( $atts = '' ) {
-	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-
 	global $waq_id;
 
 	$is_ajax = 0;
