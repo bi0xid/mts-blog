@@ -258,7 +258,7 @@
 							<div id="WFItem7323302" class="wf-formTpl hidden-mailform">
 								<h2>Want To Become Sexually Healthy & Happy?</h2>
 								<p>Get 1 FREE Actionable Secret Every Sunday.</p>
-								<form accept-charset="utf-8" action="<?php echo get_home_url(); ?>/sign-up/register.php" method="post">
+								<form accept-charset="utf-8" action="<?php echo get_stylesheet_directory_uri().'/sign-up/newsletter.php' ?>" method="post">
                                                                     <input type="hidden" name="form_type" value="mobile">
 									<div class="box">
 										<!--<div id="WFIheader" class="wf-header el" style="height: 75px; display:  none !important; ">
