@@ -4,15 +4,14 @@ var $ = jQuery;
 window.short_code_ajax_is_loading = false;
 
 function wp_ajax_query_shortcodeclassic(ajaxParam) {
-	console.log(1)
-	var item_showed = $('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-content .ajax-item').length;
+	var item_showed = $('#waq' + ajaxParam['waq_id'] + ' .wp-ajax-query-content .ajax-item').length;
 
 	if(!item_showed) {
 		item_showed = $('.post.excerpt').length;
 	}
 
 	if(item_showed < 9999) {
-		$('#waq'+ajaxParam['waq_id']+' .wp-ajax-loading-images').addClass('show');
+		$('#waq' + ajaxParam['waq_id'] + ' .wp-ajax-loading-images').addClass('show');
 
 		var param1 = { action: 'wp_ajax_query' };
 		var param = $.extend({}, param1, ajaxParam);
@@ -20,7 +19,7 @@ function wp_ajax_query_shortcodeclassic(ajaxParam) {
 		short_code_ajax_is_loading = true;
 
 		param['ajax_runnig'] = true;
-		param['offset'] = item_showed * 1;
+		param['offset'] = item_showed;
 
 		var appendShareEmailAction = debounce(function() {
 			$('.essb_link_mail').unbind('click')
@@ -33,12 +32,13 @@ function wp_ajax_query_shortcodeclassic(ajaxParam) {
 		}, 3000);
 
 		$.ajax({
-			type: "GET",
-			url: ajaxParam['home_url']+"ajax.php",
+			type: 'GET',
+			url: $('#ajax_url').val(),
 			dataType: 'html',
-			data: (param),
+			data: param,
 			success: function(data) {
 				short_code_ajax_is_loading = false;
+
 				if(data == '-11'|| data.replace(/(\r\n|\n|\r)/gm, "") == '-11') {
 					$('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-button a').html('<i class="icon-remove"></i> No more');
 					$('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-button a').fadeOut(1000, function() {
@@ -90,11 +90,12 @@ function wp_ajax_query_shortcodemodern(ajaxParam) {
 
 		$.ajax({
 			type: "GET",
-			url: ajaxParam['home_url'] + 'ajax.php',
+			data: param,
 			dataType: 'html',
-			data: (param),
+			url: $('#ajax_url').val(),
 			success: function(data) {
 				short_code_ajax_is_loading = false;
+
 				if(data == '-11'|| data.replace(/(\r\n|\n|\r)/gm, "") == '-11') {
 					$('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-button a').html('<i class="icon-remove"></i> No more');
 					$('#waq'+ajaxParam['waq_id']+' .wp-ajax-query-button a').fadeOut(1500, function(){
