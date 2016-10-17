@@ -9,6 +9,18 @@ function redirect( $http_referer = '' ) {
 	exit();
 }
 
+function get_ip() {
+    if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+    }
+
+    return $ip;
+}
+
 $http_referer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
 $http_referer = filter_var( $http_referer, FILTER_VALIDATE_URL ) ? $http_referer : '';
 
@@ -37,6 +49,10 @@ if ( isset($_POST['email'] ) ) {
 		'tags'     => $tags,
 		'form_id'  => '47065',
 		'thankyou' => $thankyou,
+		'fields'   => array(
+			'ip'           => get_ip(),
+			'http_referer' => $http_referer
+		)
 	);
 
 	// Send the form to ConvertKit
