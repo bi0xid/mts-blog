@@ -12,6 +12,8 @@
 		<input type="email" required="true" class="to_email" placeholder="To email:">
 		<input type="text" class="message" placeholder="Message:">
 		<button type="submit">Send</button>
+
+		<span class="loading" style="background-image:url(<?php echo get_stylesheet_directory_uri().'/images/loading.gif'; ?>)"></span>
 	</form>
 </div>
 

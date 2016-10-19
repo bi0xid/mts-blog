@@ -22,7 +22,7 @@ class EmailShareClass {
 		$email_to     = $_POST['email_to'];
 		$email_from   = $_POST['email_from'];
 
-		if( !$post_id || !$email_to || !$email_from ) {
+		if( !$post_id || !$email_to || !$email_from || !$user_message ) {
 			$this->returnResponseJson( 403, 'Some params are missing.' );
 		}
 
@@ -33,27 +33,23 @@ class EmailShareClass {
 
 		$subject = 'Take a look at this amazing article from MyTinySecrets!';
 
-		$message = '';
-
-		// Add user message
-		if( $user_message ) {
-			$message .= $user_message.'</br>';
-		}
+		$message  = '<p>Hi! your friend <strong>'.$email_from. '</strong> has recommended this article entitled <strong>'.get_the_title( $post_id ).'</strong>.</p>';
+		$message .= '<p>Here is his/her remark: <strong>'.$user_message.'</strong></p>';
 
 		// Add Post Excerpt
 		if( $post_excerpt ) {
-			$message .= get_the_excerpt( $post_id );
+			$message .= '<p>Little summary: '.get_the_excerpt( $post_id ).'</p>';
 		}
 
-		// Add Post Link
-		$message .= '</br><a href="'.get_permalink( $post_id ).'" target="_blank" title="mts_blog">'.get_the_title( $post_id ).'</a>';
+		$message .= '<p></p>';
+		$message .= '<p>Article by <strong>'.get_post_field( 'post_author', $post_id ).'</strong></p>';
+		$message .= '<p>Link to the article: <a href="'.get_permalink( $post_id ).'" target="_blank" title="mts_blog">'.get_the_title( $post_id ).'</a></p>';
 
 		$email = wp_mail( $email_to, $subject, $message, $headers );
 
 		if( $email ) {
 			$total_email_shares = get_post_meta( $post_id, 'total_email_shares', true );
 			update_post_meta( $post_id, 'total_email_shares', ++$total_email_shares );
-
 			$this->returnResponseJson( 200, 'Message sent successfully!' );
 		} else {
 			$this->returnResponseJson( 403, 'There was an error while sending the email. Please try again later.' );

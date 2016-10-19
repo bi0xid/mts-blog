@@ -14,6 +14,8 @@ module.exports = function() {
 	modal.find('.close-modal').on('click', closeModal)
 
 	function sendEmailHandler(e) {
+		modal.find('.loading').addClass('in')
+
 		$.post($('#ajax_url').val(), {
 			'action'     : 'share_via_email',
 			'security'   : $('#email_nonce').val(),
@@ -24,6 +26,7 @@ module.exports = function() {
 		},
 		function(response) {
 			var parsedData = JSON.parse(response)
+			modal.find('.loading').removeClass('in')
 
 			if( parsedData.code == 200 ) {
 				closeModal()
