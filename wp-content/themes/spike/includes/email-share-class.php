@@ -41,8 +41,13 @@ class EmailShareClass {
 			$message .= '<p>Little summary: '.get_the_excerpt( $post_id ).'</p>';
 		}
 
+		$post_author = get_userdata( get_post_field( 'post_author', $post_id ) );
+		$post_author_name = $post_author->data->user_nicename
+			? $post_author->data->user_nicename
+			: $post_author->data->display_name;
+
 		$message .= '<p></p>';
-		$message .= '<p>Article by <strong>'.get_post_field( 'post_author', $post_id ).'</strong></p>';
+		$message .= '<p>Article by <strong>'.$post_author_name.'</strong></p>';
 		$message .= '<p>Link to the article: <a href="'.get_permalink( $post_id ).'" target="_blank" title="mts_blog">'.get_the_title( $post_id ).'</a></p>';
 
 		$email = wp_mail( $email_to, $subject, $message, $headers );
