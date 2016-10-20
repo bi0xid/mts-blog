@@ -19,7 +19,6 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 
 	<hr>
 	<p><strong>Please</strong>, reload the page after Update to see the latest data.</p>
-	<p>If the field Shares/Like appears as empty that means there is no data inside post_meta.</p>
 
 	<table id="table">
 		<thead>
@@ -27,8 +26,9 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 				<th>Post ID</th>
 				<th>Post Name</th>
 				<th>Create Date</th>
-				<th>Shares</th>
-				<th>Likes</th>
+				<th>Facebook Shares</th>
+				<th>Facebook Likes</th>
+				<th>Google+</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -47,6 +47,7 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 						echo '<td>'.get_the_date( false, $post->ID ).'</td>';
 						echo '<td>'.get_post_meta( $post->ID, 'facebook_shares', true ).'</td>';
 						echo '<td>'.get_post_meta( $post->ID, 'facebook_likes', true ).'</td>';
+						echo '<td>'.get_post_meta( $post->ID, 'google_shares', true ).'</td>';
 					echo '</tr>';
 				}
 			?>
@@ -56,8 +57,9 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 				<th>Post ID</th>
 				<th>Post Name</th>
 				<th>Create Date</th>
-				<th>Shares</th>
-				<th>Likes</th>
+				<th>Facebook Shares</th>
+				<th>Facebook Likes</th>
+				<th>Google+</th>
 			</tr>
 		</tfoot>
 	</table>

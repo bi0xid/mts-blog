@@ -98,7 +98,7 @@ class FacebookSdkClass {
 		 * Update Google+ Info
 		 */
 		$google_plus_shares = $this->getGooglePlusShares( $post_url );
-		if( $google_plus_shares ) {
+		if( $google_plus_shares >= 0 ) {
 			update_post_meta( $post_id, 'google_shares', $google_plus_shares );
 		}
 
