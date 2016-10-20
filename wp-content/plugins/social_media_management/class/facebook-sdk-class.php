@@ -98,9 +98,13 @@ class FacebookSdkClass {
 		 * Update Google+ Info
 		 */
 		$google_plus_shares = $this->getGooglePlusShares( $post_url );
-		if( $google_plus_shares >= 0 ) {
-			update_post_meta( $post_id, 'google_shares', $google_plus_shares );
-		}
+		$google_plus_shares && update_post_meta( $post_id, 'google_shares', $google_plus_shares );
+
+		/**
+		 * Update Pinterest Pins
+		 */
+		$pinterest_pins = $this->getPinterestPins( $post_url );
+		$pinterest_pins && update_post_meta( $post_id, 'pinterest_shares', $pinterest_pins );
 
 		/**
 		 * Update Facebook Shares and Likes
@@ -120,6 +124,12 @@ class FacebookSdkClass {
 		if( isset( $response_body['og_object']['likes']['summary']['total_count'] ) ) {
 			update_post_meta( $post_id, 'facebook_likes', $response_body['og_object']['likes']['summary']['total_count'] );
 		}
+	}
+
+	private function getPinterestPins( $url ) {
+		$json_string = preg_replace( "/[^(]*\((.*)\)/", "$1", file_get_contents( 'http://api.pinterest.com/v1/urls/count.json?url='.$url ) );
+		$json = json_decode( $json_string, true );
+		return $json['count'];
 	}
 
 	private function getGooglePlusShares( $url ) {
