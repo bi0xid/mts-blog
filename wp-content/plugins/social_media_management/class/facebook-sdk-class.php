@@ -53,7 +53,7 @@ class FacebookSdkClass {
 		foreach ( $recent_posts as $recent_post ) {
 			if( get_transient( self::POST_SCHEDULE_HOUR.$recent_post['ID'] ) ) {
 				if( !get_transient( self::POST_SCHEDULE_TEN_MINUTES.$recent_post['ID'] ) ) {
-					$this->update_post_facebook_stats( $recent_post['ID'] );
+					$this->update_post_social_media_data( $recent_post['ID'] );
 					set_transient( self::POST_SCHEDULE_TEN_MINUTES.$recent_post['ID'], true, 60 * 10 );
 				}
 			}
@@ -78,7 +78,7 @@ class FacebookSdkClass {
 		) );
 
 		foreach ( $posts as $post ) {
-			$this->update_post_facebook_stats( $post->ID );
+			$this->update_post_social_media_data( $post->ID );
 		};
 
 		$this->returnResponse( 200, 'All data saved', $now );
@@ -88,9 +88,23 @@ class FacebookSdkClass {
 	 * Given a Post ID update the facebook shares and likes
 	 * @param (int) post_id
 	 */
-	private function update_post_facebook_stats( $post_id ) {
+	private function update_post_social_media_data( $post_id ) {
 		$post_url = get_permalink( $post_id );
-		var_dump($post_url);die();
+
+		// Just for testing porpouses
+		$post_url = str_replace(array('.dev'), array('.com'), $post_url);
+
+		/**
+		 * Update Google+ Info
+		 */
+		$google_plus_shares = $this->getGooglePlusShares( $post_url );
+		if( $google_plus_shares ) {
+			update_post_meta( $post_id, 'google_shares', $google_plus_shares );
+		}
+
+		/**
+		 * Update Facebook Shares and Likes
+		 */
 		try {
 			$response = $this->fb_sdk->get('?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.$post_url);
 		} catch( \Facebook\Exceptions\FacebookSDKException $e ) {
@@ -106,6 +120,16 @@ class FacebookSdkClass {
 		if( isset( $response_body['og_object']['likes']['summary']['total_count'] ) ) {
 			update_post_meta( $post_id, 'facebook_likes', $response_body['og_object']['likes']['summary']['total_count'] );
 		}
+	}
+
+	private function getGooglePlusShares( $url ) {
+		$html =  file_get_contents( 'https://plusone.google.com/_/+1/fastbutton?url='.urlencode( $url ) );
+
+		$doc = new DOMDocument();
+		$doc->loadHTML( $html );
+
+		$counter = $doc->getElementById( 'aggregateCount' );
+		return $counter->nodeValue;
 	}
 
 	private function returnResponse( $code, $message, $data = null ) {

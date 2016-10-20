@@ -10,7 +10,7 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 ?>
 
 <section id="facebook_posts_stats_update">
-	<h1>Posts Shares and Likes in FaceBook</h1>
+	<h1>Posts Shares and Likes.</h1>
 
 	<input type="hidden" id="nonce" value="<?php echo $ajax_nonce; ?>">
 
@@ -45,8 +45,8 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 						echo '<td>'.$post->ID.'</td>';
 						echo '<td>'.get_the_title( $post->ID ).'</td>';
 						echo '<td>'.get_the_date( false, $post->ID ).'</td>';
-						echo '<td>'.get_post_meta( $post->ID, '_msp_total_shares', true ).'</td>';
-						echo '<td>'.get_post_meta( $post->ID, '_msp_fb_likes', true ).'</td>';
+						echo '<td>'.get_post_meta( $post->ID, 'facebook_shares', true ).'</td>';
+						echo '<td>'.get_post_meta( $post->ID, 'facebook_likes', true ).'</td>';
 					echo '</tr>';
 				}
 			?>
