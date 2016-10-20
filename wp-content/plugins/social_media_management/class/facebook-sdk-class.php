@@ -24,9 +24,9 @@ class FacebookSdkClass {
 			'default_access_token'  => $this->access_token
 		]);
 
-		add_action( 'save_post', array( $this, 'schedule_post_share_check' ) );
 		add_action( 'init', array( $this, 'check_lastest_post_facebook_shares' ), 10 );
-		add_action( 'wp_ajax_update_all_facebook_posts', array( $this, 'update_all_facebook_posts' ) );
+		add_action( 'save_post', array( $this, 'schedule_post_share_check' ) );
+		add_action( 'wp_ajax_update_all_posts_media', array( $this, 'update_all_posts_media' ) );
 	}
 
 	/**
@@ -63,7 +63,7 @@ class FacebookSdkClass {
 	/**
 	 * AJAX Call. Update all posts shares/likes
 	 */
-	public function update_all_facebook_posts() {
+	public function update_all_posts_media() {
 		if( !check_ajax_referer( 'seguridad', 'security' ) ) {
 			echo json_encode('Security error');
 			die();

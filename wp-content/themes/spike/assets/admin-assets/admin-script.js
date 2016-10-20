@@ -17,7 +17,7 @@ $(document).ready(function() {
 				method: 'GET',
 				url: ajaxurl,
 				data: {
-					action   : 'update_all_facebook_posts',
+					action   : 'update_all_posts_media',
 					security : container.find('#nonce').val()
 				}
 			}).done(function(response) {
