@@ -26,7 +26,7 @@
 		),
 		'digg' => array(
 			'name'  => 'Digg',
-			'value' => (int) get_post_meta( get_the_ID(), 'digg_shares', true ),
+			'value' => (int) get_post_meta( get_the_ID(), 'digg_post_type', true ),
 			'link'  => 'http://digg.com/submit?phase=2%20&amp;url='.get_the_permalink().'&amp;title='.get_the_title()
 		),
 		'email' => array(

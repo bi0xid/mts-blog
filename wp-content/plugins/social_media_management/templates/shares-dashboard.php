@@ -31,6 +31,7 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 				<th>Google+</th>
 				<th>Pinterest</th>
 				<th>StumbleUpon</th>
+				<th>Digg</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -52,6 +53,7 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 						echo '<td>'.get_post_meta( $post->ID, 'google_shares', true ).'</td>';
 						echo '<td>'.get_post_meta( $post->ID, 'pinterest_shares', true ).'</td>';
 						echo '<td>'.get_post_meta( $post->ID, 'stumble_shares', true ).'</td>';
+						echo '<td>'.get_post_meta( $post->ID, 'digg_post_type', true ).'</td>';
 					echo '</tr>';
 				}
 			?>
@@ -66,6 +68,7 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 				<th>Google+</th>
 				<th>Pinterest</th>
 				<th>StumbleUpon</th>
+				<th>Digg</th>
 			</tr>
 		</tfoot>
 	</table>
