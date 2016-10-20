@@ -41,7 +41,7 @@
 		foreach ( $social_networks as $key => $value ) {
 			echo '<li class="share_item '.$key.'">';
 				if( $value['link'] ) {
-					echo '<a href="#" data-url="'.$value['link'].'" data-media="'.$key.'" class="share-item-button">';
+					echo '<a href="#" data-url="'.$value['link'].'" data-media="'.$key.'" class="share-item-button modal">';
 				} elseif( $value['href'] ) {
 					echo '<a href="'.$value['href'].'" class="share-item-button">';
 				} else {
