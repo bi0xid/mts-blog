@@ -98,13 +98,19 @@ class FacebookSdkClass {
 		 * Update Google+ Info
 		 */
 		$google_plus_shares = $this->getGooglePlusShares( $post_url );
-		$google_plus_shares && update_post_meta( $post_id, 'google_shares', $google_plus_shares );
+		update_post_meta( $post_id, 'google_shares', $google_plus_shares );
 
 		/**
 		 * Update Pinterest Pins
 		 */
 		$pinterest_pins = $this->getPinterestPins( $post_url );
-		$pinterest_pins && update_post_meta( $post_id, 'pinterest_shares', $pinterest_pins );
+		update_post_meta( $post_id, 'pinterest_shares', $pinterest_pins );
+
+		/**
+		 * Update StumbleUpon Shares
+		 */
+		$stumbleupon_shares = $this->getStumbleUponCount( $post_url );
+		update_post_meta( $post_id, 'stumble_shares', $stumbleupon_shares );
 
 		/**
 		 * Update Facebook Shares and Likes
@@ -126,10 +132,25 @@ class FacebookSdkClass {
 		}
 	}
 
+	private function getStumbleUponCount( $url ) {
+		$ch = curl_init( 'http://www.stumbleupon.com/services/1.01/badge.getinfo?url='.$url );
+
+		curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] );
+		curl_setopt( $ch, CURLOPT_FAILONERROR, 1 );
+		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1 );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		curl_setopt( $ch, CURLOPT_TIMEOUT, 10 );
+
+		$cont = curl_exec( $ch );
+		$json = json_decode( $cont, true );
+
+		return $json['result']['views'] ? $json['result']['views'] : 0;
+	}
+
 	private function getPinterestPins( $url ) {
 		$json_string = preg_replace( "/[^(]*\((.*)\)/", "$1", file_get_contents( 'http://api.pinterest.com/v1/urls/count.json?url='.$url ) );
 		$json = json_decode( $json_string, true );
-		return $json['count'];
+		return $json['count'] ? $json['count'] : 0;
 	}
 
 	private function getGooglePlusShares( $url ) {
@@ -139,7 +160,7 @@ class FacebookSdkClass {
 		$doc->loadHTML( $html );
 
 		$counter = $doc->getElementById( 'aggregateCount' );
-		return $counter->nodeValue;
+		return $counter->nodeValue ? $counter->nodeValue : 0;
 	}
 
 	private function returnResponse( $code, $message, $data = null ) {

@@ -30,6 +30,7 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 				<th>Facebook Likes</th>
 				<th>Google+</th>
 				<th>Pinterest</th>
+				<th>StumbleUpon</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -50,6 +51,7 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 						echo '<td>'.get_post_meta( $post->ID, 'facebook_likes', true ).'</td>';
 						echo '<td>'.get_post_meta( $post->ID, 'google_shares', true ).'</td>';
 						echo '<td>'.get_post_meta( $post->ID, 'pinterest_shares', true ).'</td>';
+						echo '<td>'.get_post_meta( $post->ID, 'stumble_shares', true ).'</td>';
 					echo '</tr>';
 				}
 			?>
@@ -63,6 +65,7 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 				<th>Facebook Likes</th>
 				<th>Google+</th>
 				<th>Pinterest</th>
+				<th>StumbleUpon</th>
 			</tr>
 		</tfoot>
 	</table>
