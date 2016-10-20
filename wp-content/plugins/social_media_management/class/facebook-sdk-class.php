@@ -90,7 +90,7 @@ class FacebookSdkClass {
 	 */
 	private function update_post_facebook_stats( $post_id ) {
 		$post_url = get_permalink( $post_id );
-
+		var_dump($post_url);die();
 		try {
 			$response = $this->fb_sdk->get('?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.$post_url);
 		} catch( \Facebook\Exceptions\FacebookSDKException $e ) {
@@ -100,11 +100,11 @@ class FacebookSdkClass {
 		$response_body = $response->getDecodedBody();
 
 		if( isset( $response_body['share']['share_count'] ) ) {
-			update_post_meta( $post_id, '_msp_total_shares', $response_body['share']['share_count'] );
+			update_post_meta( $post_id, 'facebook_shares', $response_body['share']['share_count'] );
 		}
 
 		if( isset( $response_body['og_object']['likes']['summary']['total_count'] ) ) {
-			update_post_meta( $post_id, '_msp_fb_likes', $response_body['og_object']['likes']['summary']['total_count'] );
+			update_post_meta( $post_id, 'facebook_likes', $response_body['og_object']['likes']['summary']['total_count'] );
 		}
 	}
 

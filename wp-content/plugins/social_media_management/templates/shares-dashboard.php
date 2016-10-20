@@ -12,17 +12,12 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 <section id="facebook_posts_stats_update">
 	<h1>Posts Shares and Likes in FaceBook</h1>
 
-	<p>Update all Posts Shares/Likes from Facebook.</p>
-
 	<input type="hidden" id="nonce" value="<?php echo $ajax_nonce; ?>">
 
 	<em>The last update was <strong id="update_date"><?php echo get_option( 'facebook_posts_stats_lats_update' ); ?></strong></em>
 	<button id="update_all">Update</button>
 
 	<hr>
-
-	<p>All the data below are from the post_meta (<strong>_msp_total_shares</strong> and <strong>_msp_fb_likes</strong>).</p>
-
 	<p><strong>Please</strong>, reload the page after Update to see the latest data.</p>
 	<p>If the field Shares/Like appears as empty that means there is no data inside post_meta.</p>
 

@@ -1,7 +1,7 @@
 <?php
 
 /*
-Plugin Name: MyTinySecrets Facebook SDK
+Plugin Name: MyTinySecrets Social Media Management
 Description: Take control of the shares and likes
 Author: Alejandro Orta
 Version: 0.7.0
@@ -25,11 +25,11 @@ class MtsFacebookSdf {
 	}
 
 	public function facebook_posts_shares() {
-		add_dashboard_page( 'Facebook Posts Stats', 'Facebook Posts Stats', 'activate_plugins', 'facebook_posts_shares', array( $this, 'facebook_posts_shares_page' ) );
+		add_dashboard_page( 'Posts Social Media Settings', 'Posts Social Media Settings', 'activate_plugins', 'facebook_posts_shares', array( $this, 'posts_shares_page' ) );
 	}
 
-	public function facebook_posts_shares_page() {
-		include( FACEBOOK_SDK_PLUGIN_DIR.'/templates/facebook-shares-dashboard.php' );
+	public function posts_shares_page() {
+		include( FACEBOOK_SDK_PLUGIN_DIR.'/templates/shares-dashboard.php' );
 	}
 
 	public function load_custom_wp_admin_assets() {

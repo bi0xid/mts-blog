@@ -3,9 +3,10 @@
 @import './plugins/react.css'
 @import './includes/base.styl'
 
+@import './blocks/share-items.styl'
+
 @require './blocks/menu-responsive.styl'
 @require './blocks/react-style.styl'
-
 @require './blocks/email-share/style.styl'
 
 .pb-mc-wrapper.hide
@@ -160,6 +161,9 @@
 
 				.counter_labels span
 					padding-right 0 !important
+
+.social_shares
+	share-items-style()
 
 .loveschool-teaser-video-background
 	width 100%
