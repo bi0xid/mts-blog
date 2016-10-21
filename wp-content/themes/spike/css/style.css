@@ -959,16 +959,13 @@ Reactshare plugin styles*/
 .social_shares li.facebook_like .icon {
   background-position: -24px 0;
 }
-.social_shares li.facebook_like:hover a {
-  background-color: #6c89c6;
-}
 .social_shares li.facebook_shares a {
   background-color: #3b5999;
 }
 .social_shares li.facebook_shares .icon {
   background-position: -24px 0;
 }
-.social_shares li.facebook_shares:hover a {
+.social_shares li.facebook_shares a:hover {
   background-color: #6c89c6;
 }
 .social_shares li.google a {
@@ -977,7 +974,7 @@ Reactshare plugin styles*/
 .social_shares li.google .icon {
   background-position: -12px 0;
 }
-.social_shares li.google:hover a {
+.social_shares li.google a:hover {
   background-color: #dc6456;
 }
 .social_shares li.pinterest a {
@@ -986,7 +983,7 @@ Reactshare plugin styles*/
 .social_shares li.pinterest .icon {
   background-position: -48px 0;
 }
-.social_shares li.pinterest:hover a {
+.social_shares li.pinterest a:hover {
   background-color: #e05257;
 }
 .social_shares li.stumbleupon a {
@@ -995,7 +992,7 @@ Reactshare plugin styles*/
 .social_shares li.stumbleupon .icon {
   background-position: -96px 0;
 }
-.social_shares li.stumbleupon:hover a {
+.social_shares li.stumbleupon a:hover {
   background-color: #ee6344;
 }
 .social_shares li.digg a {
@@ -1004,7 +1001,7 @@ Reactshare plugin styles*/
 .social_shares li.digg .icon {
   background-position: -84px 0;
 }
-.social_shares li.digg:hover a {
+.social_shares li.digg a:hover {
   background-color: #539adf;
 }
 .social_shares li.email a {
@@ -1013,11 +1010,15 @@ Reactshare plugin styles*/
 .social_shares li.email .icon {
   background-position: -36px 0;
 }
-.social_shares li.email:hover a {
+.social_shares li.email a:hover {
   background-color: #999;
+}
+.social_shares li:not(.facebook_like) a {
+  cursor: pointer;
 }
 .social_shares li a {
   color: #fff;
+  cursor: default;
   font-size: 12px;
   padding: 1px 15px;
   text-decoration: none;

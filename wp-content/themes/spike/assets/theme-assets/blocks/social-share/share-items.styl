@@ -1,6 +1,7 @@
 $socials = 'facebook_like' 'facebook_shares'   'google'    'pinterest'   'stumbleupon'    'digg'    'email'
 $colors  =     #3B5999         #3B5999         #BF3727       #CD252B        #EB4723      #1B5791     #888
-$icons   =       -24            -24              -12           -48           -96          -84         -36
+$icons   =       -24            -24              -12           -48           -96           -84        -36
+$hover   =      false           true            true           true          true          true      true
 
 share-items-style()
 	padding 0
@@ -26,17 +27,23 @@ share-items-style()
 				.icon
 					background-position unit($icons[c], 'px') 0
 
-			&.{x}:hover a
-				background-color lightness($colors[c], 60%)
+			if $hover[c]
+				&.{x} a:hover
+					background-color lightness($colors[c], 60%)
+
+		&:not(.facebook_like) a
+			cursor pointer
 
 		a
 			color #FFF
+			cursor default
 			font-size 12px
 			padding 1px 15px
 			text-decoration none
 			display inline-block
 			background-color #04B7E3
 			transition color .2s, background-color .2s
+			
 
 		.icon
 			width 12px
