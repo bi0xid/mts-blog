@@ -2,17 +2,6 @@ var emailShareModal  = require('./blocks/email-share/script'),
 	loveSchoolBanner = require('./blocks/loveschool-banner')
 
 $(document).ready(function() {
-	// Init Facebook SDK
-	window.fbAsyncInit = function() {
-		FB.init({
-			appId   : '109970876058039',
-			xfbml   : true,
-			version : 'v2.8'
-		})
-
-		FB.AppEvents.logPageView()
-	}
-
 	// LoveSchool Banner
 	$('#course-enroll-banner').length && loveSchoolBanner($('#course-enroll-banner'))
 

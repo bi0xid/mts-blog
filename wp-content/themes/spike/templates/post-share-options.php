@@ -51,18 +51,6 @@
 					echo '<span>'.$value['name'].'</span>';
 				echo '</a>';
 				echo '<span class="counter">'.$value['value'].'</span>';
-
-				if( $key === 'facebook_like' ) {
-					$test_url = str_replace(array('.dev'), array('.com'), get_the_permalink());
-				?>
-					<div class="fb-like"
-						data-href="<?php echo $test_url; ?>"
-						data-layout="standard"
-						data-action="like"
-						data-show-faces="true">
-					</div>
-				<?php
-				}
 			echo '</li>';
 		}
 	?>

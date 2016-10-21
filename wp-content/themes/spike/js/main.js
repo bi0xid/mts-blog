@@ -8760,17 +8760,6 @@ var emailShareModal  = require('./blocks/email-share/script'),
 	loveSchoolBanner = require('./blocks/loveschool-banner')
 
 $(document).ready(function() {
-	// Init Facebook SDK
-	window.fbAsyncInit = function() {
-		FB.init({
-			appId   : '109970876058039',
-			xfbml   : true,
-			version : 'v2.8'
-		})
-
-		FB.AppEvents.logPageView()
-	}
-
 	// LoveSchool Banner
 	$('#course-enroll-banner').length && loveSchoolBanner($('#course-enroll-banner'))
 
@@ -8798,5 +8787,5 @@ $(document).ready(function() {
 	})
 })
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_b5e57a38.js","/")
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_d685f759.js","/")
 },{"./blocks/email-share/script":11,"./blocks/loveschool-banner":12,"7YKIPe":3,"buffer":2}]},{},[13])
