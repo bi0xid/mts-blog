@@ -34,6 +34,8 @@
 			'value' => (int) get_post_meta( get_the_ID(), 'total_email_shares', true )
 		)
 	);
+
+	$social_networks = $blog_helpers->shuffle_assoc($social_networks);
 ?>
 
 <ul class="social_shares">
