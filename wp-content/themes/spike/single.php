@@ -119,6 +119,8 @@ $options = get_option('spike');
 									<?php }; ?>
 							<?php }; ?>
 
+							<?php include get_stylesheet_directory().'/templates/single-post-share.php'; ?>
+
 							<div class="pb-mc-wrapper">
 								<div id="pb-mailchimp">
 									<h3>Want To Become Sexually Healthy & Happy?</h3>
