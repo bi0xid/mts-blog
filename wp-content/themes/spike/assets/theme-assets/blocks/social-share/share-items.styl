@@ -1,2 +1,56 @@
+$socials = 'facebook_like' 'facebook_shares' 'google' 'pinterest' 'stumbleupon'   'digg'    'email'
+$colors  =     #3B5999         #3B5999       #BF3727     #CD252B      #EB4723     #1B5791     #888
+
 share-items-style()
-	//
+	padding 0
+	width 100%
+	clear both
+	word-wrap normal
+	margin 0 !important
+	display inline-table
+	list-style none !important
+
+	li
+		width auto
+		height auto
+		position relative
+		margin 2px 5px 2px 0
+		display inline-block
+
+		for x, c in $socials
+			&.{x} a
+				background-color $colors[c]
+
+		a
+			color #FFF
+			font-size 12px
+			padding 1px 10px
+			text-decoration none
+			display inline-block
+			background-color #04B7E3
+			transition color .2s, background-color .2s
+
+		.counter
+			padding 0
+			color #000
+			font-size 11px
+			min-width 35px
+			background #FFF
+			margin-left -4px
+			text-align center
+			position relative
+			vertical-align top
+			display inline-block
+			box-sizing border-box
+			border 1px solid #D1D1D1
+			border-radius 3px 0 0 3px
+			border-width 1px 1px 1px 0px
+
+			&:after
+				content: ""
+				margin-right 6px
+				border-right 6px solid #FFF
+				absolute bottom 6px left -6px
+				border-top 6px solid transparent
+				border-left 0px solid transparent
+				border-bottom 6px solid transparent
