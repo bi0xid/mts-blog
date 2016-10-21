@@ -1,7 +1,7 @@
-$socials = 'facebook_like' 'facebook_shares'   'google'    'pinterest'   'stumbleupon'    'digg'    'email'
-$colors  =     #3B5999         #3B5999         #BF3727       #CD252B        #EB4723      #1B5791     #888
-$icons   =       -24            -24              -12           -48           -96           -84        -36
-$hover   =      false           true            true           true          true          true      true
+$socials =  'twitter'  'facebook_like' 'facebook_shares'   'google'    'pinterest'   'stumbleupon'    'digg'    'email'
+$colors  =   #00aced      #3B5999         #3B5999         #BF3727       #CD252B        #EB4723      #1B5791     #888
+$icons   =      0           -24            -24              -12           -48           -96           -84        -36
+$hover   =     true        false           true            true           true          true          true      true
 
 share-items-style()
 	padding 0
@@ -12,71 +12,111 @@ share-items-style()
 	display inline-table
 	list-style none !important
 
-	li
-		width auto
-		height auto
-		position relative
-		margin 2px 5px 2px 0
-		display inline-block
-
-		&:last-child
-			margin-right 0
-
-		for x, c in $socials
-			&.{x}
-				a
-					background-color $colors[c]
-
-				.icon
-					background-position unit($icons[c], 'px') 0
-
-			if $hover[c]
-				&.{x} a:hover
-					background-color lightness($colors[c], 60%)
-
-		&:not(.facebook_like) a
-			cursor pointer
-
-		a
-			color #FFF
-			cursor default
-			font-size 12px
-			padding 1px 15px
-			text-decoration none
+	&.single_post
+		li
+			margin 0
 			display inline-block
-			background-color #04B7E3
-			transition color .2s, background-color .2s
+			
+			&:not(:last-child)
+				margin-right .25em
 
-		.icon
-			width 12px
-			height 12px
-			margin-right 5px
-			vertical-align -2px
-			display inline-block
-			background-size 132px 12px !important
-			background url('/wp-content/themes/spike/images/networks.png') 0 0 no-repeat
+			for x, c in $socials
+				&.{x}
+					a
+						background-color $colors[c]
 
-		.counter
-			padding 0
-			color #000
-			font-size 11px
-			min-width 35px
-			background #FFF
-			margin-left -4px
-			text-align center
+					a:hover
+						background-color lightness($colors[c], 60%)
+
+			a
+				color #FFF
+				border none
+				box-shadow none
+				padding .1em .6em
+				border-radius 3px
+				display inline-block
+				text-decoration none
+
+				svg
+					fill #FFF
+					width 2em
+					height 1.3em
+					vertical-align sub
+					display inline-block
+
+				span
+					top auto
+					left auto
+					margin 0 5px
+					position relative
+					display inline-block
+
+	&:not(.single_post)
+		li
+			width auto
+			height auto
 			position relative
-			vertical-align top
+			margin 2px 5px 2px 0
 			display inline-block
-			box-sizing border-box
-			border 1px solid #D1D1D1
-			border-radius 3px 0 0 3px
-			border-width 1px 1px 1px 0px
 
-			&:after
-				content: ""
-				margin-right 6px
-				border-right 6px solid #FFF
-				absolute bottom 6px left -6px
-				border-top 6px solid transparent
-				border-left 0px solid transparent
-				border-bottom 6px solid transparent
+			&:last-child
+				margin-right 0
+
+			for x, c in $socials
+				&.{x}
+					a
+						background-color $colors[c]
+
+					.icon
+						background-position unit($icons[c], 'px') 0
+
+				if $hover[c]
+					&.{x} a:hover
+						background-color lightness($colors[c], 60%)
+
+			&:not(.facebook_like) a
+				cursor pointer
+
+			a
+				color #FFF
+				cursor default
+				font-size 12px
+				padding 1px 15px
+				text-decoration none
+				display inline-block
+				background-color #04B7E3
+				transition color .2s, background-color .2s
+
+			.icon
+				width 12px
+				height 12px
+				margin-right 5px
+				vertical-align -2px
+				display inline-block
+				background-size 132px 12px !important
+				background url('/wp-content/themes/spike/images/networks.png') 0 0 no-repeat
+
+			.counter
+				padding 0
+				color #000
+				font-size 11px
+				min-width 35px
+				background #FFF
+				margin-left -4px
+				text-align center
+				position relative
+				vertical-align top
+				display inline-block
+				box-sizing border-box
+				border 1px solid #D1D1D1
+				border-radius 3px 0 0 3px
+				border-width 1px 1px 1px 0px
+
+				&:after
+					content: ""
+					margin-right 6px
+					border-right 6px solid #FFF
+					absolute bottom 6px left -6px
+					border-top 6px solid transparent
+					border-left 0px solid transparent
+					border-bottom 6px solid transparent

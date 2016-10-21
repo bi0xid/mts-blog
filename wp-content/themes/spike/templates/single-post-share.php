@@ -22,7 +22,6 @@ $social_shares = array(
 		),
 		'email' => array(
 			'name'  => 'E-mail',
-			'value' => (int) get_post_meta( get_the_ID(), 'total_email_shares', true ),
 			'svg'  => '<path d="M928 128h-832c-52.8 0-96 43.2-96 96v640c0 52.8 43.2 96 96 96h832c52.8 0 96-43.2 96-96v-640c0-52.8-43.2-96-96-96zM398.74 550.372l-270.74 210.892v-501.642l270.74 290.75zM176.38 256h671.24l-335.62 252-335.62-252zM409.288 561.698l102.712 110.302 102.71-110.302 210.554 270.302h-626.528l210.552-270.302zM625.26 550.372l270.74-290.75v501.642l-270.74-210.892z"></path>'
 		)
 );
@@ -39,10 +38,9 @@ $social_shares = array(
 				} else {
 					echo '<a href="#" data-media="'.$key.'" class="share-item-button">';
 				}
-				echo '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"viewBox="0 0 1024 1024">'.$value['svg'].'</svg>';
+					echo '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"viewBox="0 0 1024 1024">'.$value['svg'].'</svg>';
 					echo '<span>'.$value['name'].'</span>';
 				echo '</a>';
-				echo '<span class="counter">'.$value['value'].'</span>';
 			echo '</li>';
 		}
 	?>

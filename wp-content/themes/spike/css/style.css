@@ -946,80 +946,168 @@ Reactshare plugin styles*/
   display: inline-table;
   list-style: none !important;
 }
-.social_shares li {
+.social_shares.single_post li {
+  margin: 0;
+  display: inline-block;
+}
+.social_shares.single_post li:not(:last-child) {
+  margin-right: 0.25em;
+}
+.social_shares.single_post li.twitter a {
+  background-color: #00aced;
+}
+.social_shares.single_post li.twitter a:hover {
+  background-color: #33c7ff;
+}
+.social_shares.single_post li.facebook_like a {
+  background-color: #3b5999;
+}
+.social_shares.single_post li.facebook_like a:hover {
+  background-color: #6c89c6;
+}
+.social_shares.single_post li.facebook_shares a {
+  background-color: #3b5999;
+}
+.social_shares.single_post li.facebook_shares a:hover {
+  background-color: #6c89c6;
+}
+.social_shares.single_post li.google a {
+  background-color: #bf3727;
+}
+.social_shares.single_post li.google a:hover {
+  background-color: #dc6456;
+}
+.social_shares.single_post li.pinterest a {
+  background-color: #cd252b;
+}
+.social_shares.single_post li.pinterest a:hover {
+  background-color: #e05257;
+}
+.social_shares.single_post li.stumbleupon a {
+  background-color: #eb4723;
+}
+.social_shares.single_post li.stumbleupon a:hover {
+  background-color: #ee6344;
+}
+.social_shares.single_post li.digg a {
+  background-color: #1b5791;
+}
+.social_shares.single_post li.digg a:hover {
+  background-color: #539adf;
+}
+.social_shares.single_post li.email a {
+  background-color: #888;
+}
+.social_shares.single_post li.email a:hover {
+  background-color: #999;
+}
+.social_shares.single_post li a {
+  color: #fff;
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  padding: 0.1em 0.6em;
+  border-radius: 3px;
+  display: inline-block;
+  text-decoration: none;
+}
+.social_shares.single_post li a svg {
+  fill: #fff;
+  width: 2em;
+  height: 1.3em;
+  vertical-align: sub;
+  display: inline-block;
+}
+.social_shares.single_post li a span {
+  top: auto;
+  left: auto;
+  margin: 0 5px;
+  position: relative;
+  display: inline-block;
+}
+.social_shares:not(.single_post) li {
   width: auto;
   height: auto;
   position: relative;
   margin: 2px 5px 2px 0;
   display: inline-block;
 }
-.social_shares li:last-child {
+.social_shares:not(.single_post) li:last-child {
   margin-right: 0;
 }
-.social_shares li.facebook_like a {
+.social_shares:not(.single_post) li.twitter a {
+  background-color: #00aced;
+}
+.social_shares:not(.single_post) li.twitter .icon {
+  background-position: 0px 0;
+}
+.social_shares:not(.single_post) li.twitter a:hover {
+  background-color: #33c7ff;
+}
+.social_shares:not(.single_post) li.facebook_like a {
   background-color: #3b5999;
 }
-.social_shares li.facebook_like .icon {
+.social_shares:not(.single_post) li.facebook_like .icon {
   background-position: -24px 0;
 }
-.social_shares li.facebook_shares a {
+.social_shares:not(.single_post) li.facebook_shares a {
   background-color: #3b5999;
 }
-.social_shares li.facebook_shares .icon {
+.social_shares:not(.single_post) li.facebook_shares .icon {
   background-position: -24px 0;
 }
-.social_shares li.facebook_shares a:hover {
+.social_shares:not(.single_post) li.facebook_shares a:hover {
   background-color: #6c89c6;
 }
-.social_shares li.google a {
+.social_shares:not(.single_post) li.google a {
   background-color: #bf3727;
 }
-.social_shares li.google .icon {
+.social_shares:not(.single_post) li.google .icon {
   background-position: -12px 0;
 }
-.social_shares li.google a:hover {
+.social_shares:not(.single_post) li.google a:hover {
   background-color: #dc6456;
 }
-.social_shares li.pinterest a {
+.social_shares:not(.single_post) li.pinterest a {
   background-color: #cd252b;
 }
-.social_shares li.pinterest .icon {
+.social_shares:not(.single_post) li.pinterest .icon {
   background-position: -48px 0;
 }
-.social_shares li.pinterest a:hover {
+.social_shares:not(.single_post) li.pinterest a:hover {
   background-color: #e05257;
 }
-.social_shares li.stumbleupon a {
+.social_shares:not(.single_post) li.stumbleupon a {
   background-color: #eb4723;
 }
-.social_shares li.stumbleupon .icon {
+.social_shares:not(.single_post) li.stumbleupon .icon {
   background-position: -96px 0;
 }
-.social_shares li.stumbleupon a:hover {
+.social_shares:not(.single_post) li.stumbleupon a:hover {
   background-color: #ee6344;
 }
-.social_shares li.digg a {
+.social_shares:not(.single_post) li.digg a {
   background-color: #1b5791;
 }
-.social_shares li.digg .icon {
+.social_shares:not(.single_post) li.digg .icon {
   background-position: -84px 0;
 }
-.social_shares li.digg a:hover {
+.social_shares:not(.single_post) li.digg a:hover {
   background-color: #539adf;
 }
-.social_shares li.email a {
+.social_shares:not(.single_post) li.email a {
   background-color: #888;
 }
-.social_shares li.email .icon {
+.social_shares:not(.single_post) li.email .icon {
   background-position: -36px 0;
 }
-.social_shares li.email a:hover {
+.social_shares:not(.single_post) li.email a:hover {
   background-color: #999;
 }
-.social_shares li:not(.facebook_like) a {
+.social_shares:not(.single_post) li:not(.facebook_like) a {
   cursor: pointer;
 }
-.social_shares li a {
+.social_shares:not(.single_post) li a {
   color: #fff;
   cursor: default;
   font-size: 12px;
@@ -1033,7 +1121,7 @@ Reactshare plugin styles*/
   -ms-transition: color 0.2s, background-color 0.2s;
   transition: color 0.2s, background-color 0.2s;
 }
-.social_shares li .icon {
+.social_shares:not(.single_post) li .icon {
   width: 12px;
   height: 12px;
   margin-right: 5px;
@@ -1044,7 +1132,7 @@ Reactshare plugin styles*/
   background-size: 132px 12px !important;
   background: url("/wp-content/themes/spike/images/networks.png") 0 0 no-repeat;
 }
-.social_shares li .counter {
+.social_shares:not(.single_post) li .counter {
   padding: 0;
   color: #000;
   font-size: 11px;
@@ -1062,7 +1150,7 @@ Reactshare plugin styles*/
   border-radius: 3px 0 0 3px;
   border-width: 1px 1px 1px 0px;
 }
-.social_shares li .counter:after {
+.social_shares:not(.single_post) li .counter:after {
   content: "";
   margin-right: 6px;
   border-right: 6px solid #fff;
