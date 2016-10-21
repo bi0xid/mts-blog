@@ -8756,16 +8756,8 @@ module.exports = function(container) {
 }).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/blocks/loveschool-banner.js","/blocks")
 },{"7YKIPe":3,"buffer":2,"countdown":10,"moment-timezone":6}],13:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-module.exports = function(event) {
-	event.preventDefault()
-
-}
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/blocks/social-share/facebook-likes.js","/blocks/social-share")
-},{"7YKIPe":3,"buffer":2}],14:[function(require,module,exports){
-(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-var emailShareModal     = require('./blocks/email-share/script'),
-	loveSchoolBanner    = require('./blocks/loveschool-banner'),
-	facebookLikesAction = require('./blocks/social-share/facebook-likes') 
+var emailShareModal  = require('./blocks/email-share/script'),
+	loveSchoolBanner = require('./blocks/loveschool-banner')
 
 $(document).ready(function() {
 	// Init Facebook SDK
@@ -8787,9 +8779,6 @@ $(document).ready(function() {
 		emailShareModalContainer.addClass('in')
 	})*/
 
-	// Facebook Like Action
-	$('.social_shares .facebook_like').length && $('.facebook_like a').on('click', facebookLikesAction)
-
 	// Share via Email Action
 	var emailShareModalContainer = $('#email-share-template')
 	$('.share_item.email').on('click', function(e) {
@@ -8809,5 +8798,5 @@ $(document).ready(function() {
 	})
 })
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_d2762018.js","/")
-},{"./blocks/email-share/script":11,"./blocks/loveschool-banner":12,"./blocks/social-share/facebook-likes":13,"7YKIPe":3,"buffer":2}]},{},[14])
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_b5e57a38.js","/")
+},{"./blocks/email-share/script":11,"./blocks/loveschool-banner":12,"7YKIPe":3,"buffer":2}]},{},[13])

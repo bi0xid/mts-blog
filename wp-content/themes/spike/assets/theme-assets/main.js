@@ -1,6 +1,5 @@
-var emailShareModal     = require('./blocks/email-share/script'),
-	loveSchoolBanner    = require('./blocks/loveschool-banner'),
-	facebookLikesAction = require('./blocks/social-share/facebook-likes') 
+var emailShareModal  = require('./blocks/email-share/script'),
+	loveSchoolBanner = require('./blocks/loveschool-banner')
 
 $(document).ready(function() {
 	// Init Facebook SDK
@@ -21,9 +20,6 @@ $(document).ready(function() {
 		e.preventDefault()
 		emailShareModalContainer.addClass('in')
 	})*/
-
-	// Facebook Like Action
-	$('.social_shares .facebook_like').length && $('.facebook_like a').on('click', facebookLikesAction)
 
 	// Share via Email Action
 	var emailShareModalContainer = $('#email-share-template')
