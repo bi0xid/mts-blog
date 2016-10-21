@@ -8756,19 +8756,42 @@ module.exports = function(container) {
 }).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/blocks/loveschool-banner.js","/blocks")
 },{"7YKIPe":3,"buffer":2,"countdown":10,"moment-timezone":6}],13:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-var emailShareModal = require('./blocks/email-share/script')
-var loveSchoolBanner = require('./blocks/loveschool-banner')
+module.exports = function(event) {
+	event.preventDefault()
+
+}
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/blocks/social-share/facebook-likes.js","/blocks/social-share")
+},{"7YKIPe":3,"buffer":2}],14:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+var emailShareModal     = require('./blocks/email-share/script'),
+	loveSchoolBanner    = require('./blocks/loveschool-banner'),
+	facebookLikesAction = require('./blocks/social-share/facebook-likes') 
 
 $(document).ready(function() {
+	// Init Facebook SDK
+	window.fbAsyncInit = function() {
+		FB.init({
+			appId   : '109970876058039',
+			xfbml   : true,
+			version : 'v2.8'
+		})
+
+		FB.AppEvents.logPageView()
+	}
+
+	// LoveSchool Banner
 	$('#course-enroll-banner').length && loveSchoolBanner($('#course-enroll-banner'))
 
-	var emailShareModalContainer = $('#email-share-template')
-/*
-	$('.ess-button--email').on('click', function(e) {
+	/*$('.ess-button--email').on('click', function(e) {
 		e.preventDefault()
 		emailShareModalContainer.addClass('in')
-	})
-*/
+	})*/
+
+	// Facebook Like Action
+	$('.social_shares .facebook_like').length && $('.facebook_like a').on('click', facebookLikesAction)
+
+	// Share via Email Action
+	var emailShareModalContainer = $('#email-share-template')
 	$('.share_item.email').on('click', function(e) {
 		e.preventDefault()
 		var id = $(this).parents('.post.excerpt').data('id')
@@ -8779,11 +8802,12 @@ $(document).ready(function() {
 
 	emailShareModalContainer.length && emailShareModal()
 
+	// Open Share Modal
 	$('.share-item-button.modal').on('click', function(e) {
 		e.preventDefault()
-		window.open($(this).data('url'), 'My Tiny Secrets share window', 'height=300,width=550,resizable=1');
+		window.open($(this).data('url'), 'My Tiny Secrets share window', 'height=300,width=550,resizable=1')
 	})
 })
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_f10efb3a.js","/")
-},{"./blocks/email-share/script":11,"./blocks/loveschool-banner":12,"7YKIPe":3,"buffer":2}]},{},[13])
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_d2762018.js","/")
+},{"./blocks/email-share/script":11,"./blocks/loveschool-banner":12,"./blocks/social-share/facebook-likes":13,"7YKIPe":3,"buffer":2}]},{},[14])
