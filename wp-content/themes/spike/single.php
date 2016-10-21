@@ -82,6 +82,9 @@ $options = get_option('spike');
 
 						<div class="post-single-content box mark-links">
 							<div class="single_post">
+
+								<?php include get_stylesheet_directory().'/templates/single-post-share.php'; ?>
+
 								<?php if ($options['mts_posttop_adcode'] != '') { ?>
 									<?php $toptime = $options['mts_posttop_adcode_time']; if (strcmp( date( "Y-m-d", strtotime( "-$toptime day") ), get_the_time( "Y-m-d" ) ) >= 0) { ?>
 										<div class="topad">
@@ -296,7 +299,6 @@ $options = get_option('spike');
 				<?php endwhile; ?>
 			</div>
 		</article>
-
 <?php 
     if( $affiliate_id_mts && is_single() ) {
         ob_start();
