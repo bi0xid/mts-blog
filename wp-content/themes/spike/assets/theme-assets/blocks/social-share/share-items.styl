@@ -1,5 +1,6 @@
-$socials = 'facebook_like' 'facebook_shares' 'google' 'pinterest' 'stumbleupon'   'digg'    'email'
-$colors  =     #3B5999         #3B5999       #BF3727     #CD252B      #EB4723     #1B5791     #888
+$socials = 'facebook_like' 'facebook_shares'   'google'    'pinterest'   'stumbleupon'    'digg'    'email'
+$colors  =     #3B5999         #3B5999         #BF3727       #CD252B        #EB4723      #1B5791     #888
+$icons   =       -24            -24              -12           -48           -96          -84         -36
 
 share-items-style()
 	padding 0
@@ -18,17 +19,33 @@ share-items-style()
 		display inline-block
 
 		for x, c in $socials
-			&.{x} a
-				background-color $colors[c]
+			&.{x}
+				a
+					background-color $colors[c]
+
+				.icon
+					background-position unit($icons[c], 'px') 0
+
+			&.{x}:hover a
+				background-color lightness($colors[c], 60%)
 
 		a
 			color #FFF
 			font-size 12px
-			padding 1px 10px
+			padding 1px 15px
 			text-decoration none
 			display inline-block
 			background-color #04B7E3
 			transition color .2s, background-color .2s
+
+		.icon
+			width 12px
+			height 12px
+			margin-right 5px
+			vertical-align -2px
+			display inline-block
+			background-size 132px 12px !important
+			background url('/wp-content/themes/spike/images/networks.png') 0 0 no-repeat
 
 		.counter
 			padding 0
