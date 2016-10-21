@@ -8763,17 +8763,18 @@ $(document).ready(function() {
 	$('#course-enroll-banner').length && loveSchoolBanner($('#course-enroll-banner'))
 
 	var emailShareModalContainer = $('#email-share-template')
-
+/*
 	$('.ess-button--email').on('click', function(e) {
 		e.preventDefault()
 		emailShareModalContainer.addClass('in')
 	})
-
+*/
 	$('.share_item.email').on('click', function(e) {
 		e.preventDefault()
 		var id = $(this).parents('.post.excerpt').data('id')
-		emailShareModalContainer.data('postid', id)
+
 		emailShareModalContainer.addClass('in')
+		emailShareModalContainer.data('postid', id)
 	})
 
 	emailShareModalContainer.length && emailShareModal()
@@ -8784,5 +8785,5 @@ $(document).ready(function() {
 	})
 })
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_8140321a.js","/")
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_f10efb3a.js","/")
 },{"./blocks/email-share/script":11,"./blocks/loveschool-banner":12,"7YKIPe":3,"buffer":2}]},{},[13])

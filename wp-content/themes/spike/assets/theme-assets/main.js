@@ -5,17 +5,18 @@ $(document).ready(function() {
 	$('#course-enroll-banner').length && loveSchoolBanner($('#course-enroll-banner'))
 
 	var emailShareModalContainer = $('#email-share-template')
-
+/*
 	$('.ess-button--email').on('click', function(e) {
 		e.preventDefault()
 		emailShareModalContainer.addClass('in')
 	})
-
+*/
 	$('.share_item.email').on('click', function(e) {
 		e.preventDefault()
 		var id = $(this).parents('.post.excerpt').data('id')
-		emailShareModalContainer.data('postid', id)
+
 		emailShareModalContainer.addClass('in')
+		emailShareModalContainer.data('postid', id)
 	})
 
 	emailShareModalContainer.length && emailShareModal()
