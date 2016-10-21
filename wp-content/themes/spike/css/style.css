@@ -953,6 +953,9 @@ Reactshare plugin styles*/
   margin: 2px 5px 2px 0;
   display: inline-block;
 }
+.social_shares li:last-child {
+  margin-right: 0;
+}
 .social_shares li.facebook_like a {
   background-color: #3b5999;
 }

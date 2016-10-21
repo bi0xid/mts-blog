@@ -35,7 +35,8 @@
 		)
 	);
 
-	$social_networks = $blog_helpers->shuffle_assoc($social_networks);
+	$social_networks = $blog_helpers->shuffle_assoc( $social_networks );
+	$social_networks = array_slice( $social_networks, 0, 3 );
 ?>
 
 <ul class="social_shares">
