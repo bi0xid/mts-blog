@@ -304,18 +304,6 @@ $options = get_option('spike');
 			</div>
 		</article>
 
-		<div id="floating_share">
-			<p>Helpful?</p>
-			<p>Share it!</p>
-
-			<div class="iframes">
-				<iframe src="http://platform.twitter.com/widgets/tweet_button.39f7ee9fffbd122b7a37a520dbdaebc6.en.html#dnt=false&id=twitter-widget-1&lang=en&original_referer=<?php echo get_permalink(); ?>&size=m&text=<?php echo get_the_title(); ?>&time=1477292950981&type=share&url=<?php echo get_permalink(); ?>&via=mytinysecrets" frameborder="0"></iframe>
-
-				<div class="fb-like" data-href="<?php echo get_permalink(); ?>" data-layout="box_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
-
-				<g:plusone size="tall" annotation="bubble"></g:plusone>
-			</div>
-		</div>
 <?php 
     if( $affiliate_id_mts && is_single() ) {
         ob_start();
@@ -363,3 +351,15 @@ $options = get_option('spike');
 <p id="message_alert"></p>
 
 <?php get_footer(); ?>
+
+<div id="floating_share">
+	<span class="image" style="background-image:url(<?php echo get_stylesheet_directory_uri().'/images/pb-bg-share.png'; ?>)"></span>
+
+	<div class="iframes">
+		<iframe class="twitter" src="http://platform.twitter.com/widgets/tweet_button.39f7ee9fffbd122b7a37a520dbdaebc6.en.html#dnt=false&id=twitter-widget-1&lang=en&original_referer=<?php echo get_permalink(); ?>&size=m&text=<?php echo get_the_title(); ?>&time=1477292950981&type=share&url=<?php echo get_permalink(); ?>&via=mytinysecrets" frameborder="0"></iframe>
+
+		<div class="fb-like" data-href="<?php echo get_permalink(); ?>" data-layout="box_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+
+		<g:plusone size="tall" annotation="bubble"></g:plusone>
+	</div>
+</div>
