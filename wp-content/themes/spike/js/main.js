@@ -8392,6 +8392,96 @@ moment.tz.load(require('./data/packed/latest.json'));
 }).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../node_modules/underscore/underscore.js","/../node_modules/underscore")
 },{"7YKIPe":3,"buffer":2}],10:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+﻿/*!
+* jQuery Bullseye v1.0
+* http://pixeltango.com
+*
+* Copyright 2010, Mickel Andersson
+* Dual licensed under the MIT or GPL Version 2 licenses.
+*
+* Date: Fri Aug 31 19:09:11 2010 +0100
+*/
+jQuery.fn.bullseye = function (settings, viewport) {
+    settings = jQuery.extend({
+        offsetTop: 0,
+        offsetHeight: 0,
+        extendDown: false
+    }, settings);
+
+    var isFocusedKey = 'is-focused';
+
+    return this.each(function () {
+        var
+            $element = $(this),
+            $viewport = $(viewport == null ? window : viewport);
+
+        var magic = function () {
+            var 
+                elementWidth = $element.outerWidth(),
+                elementHeight = $element.outerHeight() + settings.offsetHeight,
+                viewportWidth = $viewport.width(),
+                viewportHeight = $viewport.height(),
+
+                scrollTop = $viewport.scrollTop(),
+                scrollLeft = $viewport.scrollLeft(),
+                scrollRight = scrollLeft + elementWidth,
+                scrollBottom = scrollTop + viewportHeight,
+
+                x1 = $element.offset().left,
+                x2 = x1 + elementWidth,
+				y1 = $element.offset().top + settings.offsetTop,
+				y2 = y1 + elementHeight;
+
+            // Element is inside the viewport
+            var insideViewport = function () {
+                if (!isFocused($element)) {
+                    setFocused($element);
+
+                    $element.trigger('enterviewport');
+                }
+            }
+
+            // Element is outside the viewport
+            var outsideViewport = function () {
+                if (isFocused($element)) {
+                    clearFocused($element);
+
+                    $element.trigger('leaveviewport');
+                }
+            }
+
+            // Evaluate if the target is inside the viewport
+            if (
+                (scrollBottom < y1 || (settings.extendDown ? false : scrollTop > y2)) ||
+                (scrollRight < x1 || scrollRight > x2)
+            )
+                outsideViewport();
+            else
+                insideViewport();
+        };
+
+        $viewport
+            .scroll(magic)
+            .resize(magic);
+
+        magic();
+    });
+
+    function isFocused($element) {
+        return $element.data(isFocusedKey);
+    }
+
+    function setFocused($element) {
+        $element.data(isFocusedKey, true);
+    }
+
+    function clearFocused($element) {
+        $element.data(isFocusedKey, false);
+    }
+};
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../plugins/jquery.bullseye-1.0.js","/../plugins")
+},{"7YKIPe":3,"buffer":2}],11:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /*!
  * The Final Countdown for jQuery v2.1.0 (http://hilios.github.io/jQuery.countdown/)
  * Copyright (c) 2015 Edson Hilios
@@ -8628,7 +8718,7 @@ moment.tz.load(require('./data/packed/latest.json'));
     };
 });
 }).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../plugins/jquery.countdown.js","/../plugins")
-},{"7YKIPe":3,"buffer":2}],11:[function(require,module,exports){
+},{"7YKIPe":3,"buffer":2}],12:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var $ = jQuery
 var _ = require('underscore')
@@ -8685,7 +8775,7 @@ module.exports = function() {
 }
 
 }).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/blocks/email-share/script.js","/blocks/email-share")
-},{"7YKIPe":3,"buffer":2,"underscore":9}],12:[function(require,module,exports){
+},{"7YKIPe":3,"buffer":2,"underscore":9}],13:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 module.exports = function(container) {
 	require('countdown')
@@ -8754,19 +8844,16 @@ module.exports = function(container) {
 }
 
 }).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/blocks/loveschool-banner.js","/blocks")
-},{"7YKIPe":3,"buffer":2,"countdown":10,"moment-timezone":6}],13:[function(require,module,exports){
+},{"7YKIPe":3,"buffer":2,"countdown":11,"moment-timezone":6}],14:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var emailShareModal  = require('./blocks/email-share/script'),
 	loveSchoolBanner = require('./blocks/loveschool-banner')
 
+var _ = require('underscore')
+
 $(document).ready(function() {
 	// LoveSchool Banner
 	$('#course-enroll-banner').length && loveSchoolBanner($('#course-enroll-banner'))
-
-	/*$('.ess-button--email').on('click', function(e) {
-		e.preventDefault()
-		emailShareModalContainer.addClass('in')
-	})*/
 
 	// Share via Email Action
 	var emailShareModalContainer = $('#email-share-template')
@@ -8785,7 +8872,17 @@ $(document).ready(function() {
 		e.preventDefault()
 		window.open($(this).data('url'), 'My Tiny Secrets share window', 'height=300,width=550,resizable=1')
 	})
+
+	// Floating share block
+	if($('#blog').hasClass('single')) {
+		require('../plugins/jquery.bullseye-1.0.js')
+
+		var floatingBlock = $('#floating_share')
+
+		var initialTop = $('.article img.alignnone.size-full').offset()
+		floatingBlock.css('top', initialTop)
+	}
 })
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_887bc912.js","/")
-},{"./blocks/email-share/script":11,"./blocks/loveschool-banner":12,"7YKIPe":3,"buffer":2}]},{},[13])
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_c2efe0d.js","/")
+},{"../plugins/jquery.bullseye-1.0.js":10,"./blocks/email-share/script":12,"./blocks/loveschool-banner":13,"7YKIPe":3,"buffer":2,"underscore":9}]},{},[14])

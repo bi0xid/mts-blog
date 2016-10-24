@@ -1,14 +1,11 @@
 var emailShareModal  = require('./blocks/email-share/script'),
 	loveSchoolBanner = require('./blocks/loveschool-banner')
 
+var _ = require('underscore')
+
 $(document).ready(function() {
 	// LoveSchool Banner
 	$('#course-enroll-banner').length && loveSchoolBanner($('#course-enroll-banner'))
-
-	/*$('.ess-button--email').on('click', function(e) {
-		e.preventDefault()
-		emailShareModalContainer.addClass('in')
-	})*/
 
 	// Share via Email Action
 	var emailShareModalContainer = $('#email-share-template')
@@ -27,4 +24,14 @@ $(document).ready(function() {
 		e.preventDefault()
 		window.open($(this).data('url'), 'My Tiny Secrets share window', 'height=300,width=550,resizable=1')
 	})
+
+	// Floating share block
+	if($('#blog').hasClass('single')) {
+		require('../plugins/jquery.bullseye-1.0.js')
+
+		var floatingBlock = $('#floating_share')
+
+		var initialTop = $('.article img.alignnone.size-full').offset()
+		floatingBlock.css('top', initialTop)
+	}
 })
