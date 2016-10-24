@@ -28,6 +28,7 @@ $(document).ready(function() {
 	// Floating share block
 	if($('#blog').hasClass('single')) {
 		require('../plugins/jquery.bullseye-1.0.js')
+		require('../plugins/jquery.visible.js')
 
 		var floatingBlock = $('#floating_share')
 
@@ -45,6 +46,10 @@ $(document).ready(function() {
 			.bind('leaveviewport', function() {
 				floatingBlock.addClass('fixed')
 			})
-		.bullseye();
+		.bullseye()
+
+		_.defer(function() {
+			!bullseyeTopElement.visible(true) && floatingBlock.addClass('fixed')
+		})
 	}
 })

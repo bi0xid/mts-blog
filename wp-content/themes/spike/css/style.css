@@ -720,10 +720,20 @@ Reactshare plugin styles*/
   width: 73px;
   display: block;
   min-width: 55px;
+  -webkit-transition: opacity 0.3s;
+  -moz-transition: opacity 0.3s;
+  -o-transition: opacity 0.3s;
+  -ms-transition: opacity 0.3s;
+  transition: opacity 0.3s;
   border: 1px solid #d71a68;
   position: absolute;
   top: 540px;
   left: 35px;
+}
+#floating_share.hidden {
+  opacity: 0;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
 }
 #floating_share.fixed {
   top: 15px;

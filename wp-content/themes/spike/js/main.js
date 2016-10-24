@@ -8720,6 +8720,77 @@ jQuery.fn.bullseye = function (settings, viewport) {
 }).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../plugins/jquery.countdown.js","/../plugins")
 },{"7YKIPe":3,"buffer":2}],12:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+(function($){
+
+    /**
+     * Copyright 2012, Digital Fusion
+     * Licensed under the MIT license.
+     * http://teamdf.com/jquery-plugins/license/
+     *
+     * @author Sam Sehnert
+     * @desc A small plugin that checks whether elements are within
+     *       the user visible viewport of a web browser.
+     *       only accounts for vertical position, not horizontal.
+     */
+    var $w = $(window);
+    $.fn.visible = function(partial,hidden,direction){
+
+        if (this.length < 1)
+            return;
+
+        var $t        = this.length > 1 ? this.eq(0) : this,
+            t         = $t.get(0),
+            vpWidth   = $w.width(),
+            vpHeight  = $w.height(),
+            direction = (direction) ? direction : 'both',
+            clientSize = hidden === true ? t.offsetWidth * t.offsetHeight : true;
+
+        if (typeof t.getBoundingClientRect === 'function'){
+
+            // Use this native browser method, if available.
+            var rec = t.getBoundingClientRect(),
+                tViz = rec.top    >= 0 && rec.top    <  vpHeight,
+                bViz = rec.bottom >  0 && rec.bottom <= vpHeight,
+                lViz = rec.left   >= 0 && rec.left   <  vpWidth,
+                rViz = rec.right  >  0 && rec.right  <= vpWidth,
+                vVisible   = partial ? tViz || bViz : tViz && bViz,
+                hVisible   = partial ? lViz || rViz : lViz && rViz;
+
+            if(direction === 'both')
+                return clientSize && vVisible && hVisible;
+            else if(direction === 'vertical')
+                return clientSize && vVisible;
+            else if(direction === 'horizontal')
+                return clientSize && hVisible;
+        } else {
+
+            var viewTop         = $w.scrollTop(),
+                viewBottom      = viewTop + vpHeight,
+                viewLeft        = $w.scrollLeft(),
+                viewRight       = viewLeft + vpWidth,
+                offset          = $t.offset(),
+                _top            = offset.top,
+                _bottom         = _top + $t.height(),
+                _left           = offset.left,
+                _right          = _left + $t.width(),
+                compareTop      = partial === true ? _bottom : _top,
+                compareBottom   = partial === true ? _top : _bottom,
+                compareLeft     = partial === true ? _right : _left,
+                compareRight    = partial === true ? _left : _right;
+
+            if(direction === 'both')
+                return !!clientSize && ((compareBottom <= viewBottom) && (compareTop >= viewTop)) && ((compareRight <= viewRight) && (compareLeft >= viewLeft));
+            else if(direction === 'vertical')
+                return !!clientSize && ((compareBottom <= viewBottom) && (compareTop >= viewTop));
+            else if(direction === 'horizontal')
+                return !!clientSize && ((compareRight <= viewRight) && (compareLeft >= viewLeft));
+        }
+    };
+
+})(jQuery);
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../plugins/jquery.visible.js","/../plugins")
+},{"7YKIPe":3,"buffer":2}],13:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var $ = jQuery
 var _ = require('underscore')
 
@@ -8775,7 +8846,7 @@ module.exports = function() {
 }
 
 }).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/blocks/email-share/script.js","/blocks/email-share")
-},{"7YKIPe":3,"buffer":2,"underscore":9}],13:[function(require,module,exports){
+},{"7YKIPe":3,"buffer":2,"underscore":9}],14:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 module.exports = function(container) {
 	require('countdown')
@@ -8844,7 +8915,7 @@ module.exports = function(container) {
 }
 
 }).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/blocks/loveschool-banner.js","/blocks")
-},{"7YKIPe":3,"buffer":2,"countdown":11,"moment-timezone":6}],14:[function(require,module,exports){
+},{"7YKIPe":3,"buffer":2,"countdown":11,"moment-timezone":6}],15:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var emailShareModal  = require('./blocks/email-share/script'),
 	loveSchoolBanner = require('./blocks/loveschool-banner')
@@ -8876,6 +8947,7 @@ $(document).ready(function() {
 	// Floating share block
 	if($('#blog').hasClass('single')) {
 		require('../plugins/jquery.bullseye-1.0.js')
+		require('../plugins/jquery.visible.js')
 
 		var floatingBlock = $('#floating_share')
 
@@ -8893,9 +8965,13 @@ $(document).ready(function() {
 			.bind('leaveviewport', function() {
 				floatingBlock.addClass('fixed')
 			})
-		.bullseye();
+		.bullseye()
+
+		_.defer(function() {
+			!bullseyeTopElement.visible(true) && floatingBlock.addClass('fixed')
+		})
 	}
 })
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_956fc32.js","/")
-},{"../plugins/jquery.bullseye-1.0.js":10,"./blocks/email-share/script":12,"./blocks/loveschool-banner":13,"7YKIPe":3,"buffer":2,"underscore":9}]},{},[14])
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_5123bd32.js","/")
+},{"../plugins/jquery.bullseye-1.0.js":10,"../plugins/jquery.visible.js":12,"./blocks/email-share/script":13,"./blocks/loveschool-banner":14,"7YKIPe":3,"buffer":2,"underscore":9}]},{},[15])
