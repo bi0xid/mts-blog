@@ -720,15 +720,14 @@ Reactshare plugin styles*/
   width: 73px;
   display: block;
   min-width: 55px;
-  -webkit-transition: all 0.3s;
-  -moz-transition: all 0.3s;
-  -o-transition: all 0.3s;
-  -ms-transition: all 0.3s;
-  transition: all 0.3s;
   border: 1px solid #d71a68;
   position: absolute;
   top: 540px;
   left: 35px;
+}
+#floating_share.fixed {
+  top: 15px;
+  position: fixed;
 }
 #floating_share .image {
   width: 100%;

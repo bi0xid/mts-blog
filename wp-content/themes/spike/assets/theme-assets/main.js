@@ -33,5 +33,18 @@ $(document).ready(function() {
 
 		var initialTop = $('.article img.alignnone.size-full').offset()
 		floatingBlock.css('top', initialTop)
+
+		var bullseyeTopElement = $('.social_shares.single_post')
+			? $('.social_shares.single_post').first()
+			: $('.article img.alignnone.size-full')
+
+		bullseyeTopElement
+			.bind('enterviewport', function() {
+				floatingBlock.removeClass('fixed')
+			})
+			.bind('leaveviewport', function() {
+				floatingBlock.addClass('fixed')
+			})
+		.bullseye();
 	}
 })

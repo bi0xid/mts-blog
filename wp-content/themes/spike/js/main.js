@@ -8881,8 +8881,21 @@ $(document).ready(function() {
 
 		var initialTop = $('.article img.alignnone.size-full').offset()
 		floatingBlock.css('top', initialTop)
+
+		var bullseyeTopElement = $('.social_shares.single_post')
+			? $('.social_shares.single_post').first()
+			: $('.article img.alignnone.size-full')
+
+		bullseyeTopElement
+			.bind('enterviewport', function() {
+				floatingBlock.removeClass('fixed')
+			})
+			.bind('leaveviewport', function() {
+				floatingBlock.addClass('fixed')
+			})
+		.bullseye();
 	}
 })
 
-}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_c2efe0d.js","/")
+}).call(this,require("7YKIPe"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_956fc32.js","/")
 },{"../plugins/jquery.bullseye-1.0.js":10,"./blocks/email-share/script":12,"./blocks/loveschool-banner":13,"7YKIPe":3,"buffer":2,"underscore":9}]},{},[14])
