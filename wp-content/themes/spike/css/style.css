@@ -728,7 +728,44 @@ Reactshare plugin styles*/
   border: 1px solid #d71a68;
   position: absolute;
   top: 540px;
-  left: 35px;
+  left: 290px;
+}
+@media (max-width: 1900px) {
+  #floating_share {
+    left: 190px;
+  }
+}
+@media (max-width: 1700px) {
+  #floating_share {
+    left: 100px;
+  }
+}
+@media (max-width: 1500px) {
+  #floating_share {
+    left: 60px;
+  }
+}
+@media (max-width: 1420px) {
+  #floating_share {
+    left: 40px;
+  }
+}
+@media (max-width: 1370px) {
+  #floating_share {
+    left: 20px;
+  }
+}
+@media (max-width: 1325px) {
+  #floating_share {
+    left: 10px;
+  }
+}
+@media (max-width: 1310px) {
+  #floating_share {
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+  }
 }
 #floating_share.hidden {
   opacity: 0;
@@ -991,7 +1028,7 @@ Reactshare plugin styles*/
   list-style: none !important;
 }
 .social_shares.single_post li {
-  margin: 0;
+  margin: 5px 0;
   display: inline-block;
 }
 .social_shares.single_post li:not(:last-child) {
@@ -1048,6 +1085,7 @@ Reactshare plugin styles*/
 .social_shares.single_post li a {
   color: #fff;
   border: none;
+  cursor: pointer;
   -webkit-box-shadow: none;
   box-shadow: none;
   padding: 0.1em 0.6em;
