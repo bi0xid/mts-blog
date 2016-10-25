@@ -55,6 +55,7 @@ class SocialSdkClass {
 			'post_type'   => 'post',
 			'post_status' => 'publish'
 		) );
+
 		foreach ( $recent_posts as $recent_post ) {
 			if( get_transient( self::POST_SCHEDULE_HOUR.$recent_post['ID'] ) ) {
 				if( !get_transient( self::POST_SCHEDULE_TEN_MINUTES.$recent_post['ID'] ) ) {
@@ -95,7 +96,7 @@ class SocialSdkClass {
 		) );
 
 		foreach ( $posts as $post ) {
-			$google_plus_shares = $this->getGooglePlusShares( get_permalink( $post->ID ) );
+			$google_plus_shares = $this->getGooglePlusShares( urlencode( get_permalink( $post->ID ) ) );
 			update_post_meta( $post->ID, 'google_shares', (int) str_replace( array('.'), array(''), $google_plus_shares ) );
 		};
 
@@ -114,7 +115,7 @@ class SocialSdkClass {
 		) );
 
 		foreach ( $posts as $post ) {
-			$stumbleupon_shares = $this->getStumbleUponCount( get_permalink( $post->ID ) );
+			$stumbleupon_shares = $this->getStumbleUponCount( urlencode( get_permalink( $post->ID ) ) );
 			update_post_meta( $post->ID, 'stumble_shares', (int) $stumbleupon_shares );
 		};
 
@@ -133,7 +134,7 @@ class SocialSdkClass {
 		) );
 
 		foreach ( $posts as $post ) {
-			$pinterest_pins = $this->getPinterestPins( get_permalink( $post->ID ) );
+			$pinterest_pins = $this->getPinterestPins( urlencode( get_permalink( $post->ID ) ) );
 			update_post_meta( $post->ID, 'pinterest_shares', (int) $pinterest_pins );
 		};
 
@@ -163,7 +164,7 @@ class SocialSdkClass {
 	 * @param (int) post_id
 	 */
 	private function update_post_social_media_data( $post_id ) {
-		$post_url = get_permalink( $post_id );
+		$post_url = urlencode( get_permalink( $post_id ) );
 
 		/**
 		 * Update Google+ Info
@@ -211,7 +212,9 @@ class SocialSdkClass {
 	}
 
 	private function getGooglePlusShares( $url ) {
-		$html =  file_get_contents( 'https://plusone.google.com/_/+1/fastbutton?url='.urlencode( $url ) );
+		libxml_use_internal_errors( true );
+
+		$html = file_get_contents( 'https://plusone.google.com/_/+1/fastbutton?url='.$url );
 
 		$doc = new DOMDocument();
 		$doc->loadHTML( $html );
@@ -222,7 +225,7 @@ class SocialSdkClass {
 
 	private function updateFacebookSharesAndLikes( $post_id ) {
 		try {
-			$response = $this->fb_sdk->get('?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.get_permalink( $post_id ) );
+			$response = $this->fb_sdk->get('?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.urlencode( get_permalink( $post_id ) ) );
 		} catch( \Facebook\Exceptions\FacebookSDKException $e ) {
 			$this->returnResponse( 403, $e->getMessage() );
 		}
