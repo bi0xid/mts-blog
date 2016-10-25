@@ -16,17 +16,17 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 	<button id="update_all">Update all Social Media at one</button>
 
 	<ul class="individual_updated">
-		<li>
-			<a href="#" data-ajax="update_facebook_shares" class="facebook">Update Facebook Shares and Likes</a>
+		<li class="facebook_shares">
+			<a href="#" data-ajax="update_facebook_shares">Update Facebook Shares and Likes</a>
 		</li>
-		<li>
-			<a href="#" data-ajax="update_google_plus" class="google">Update Google+</a>
+		<li class="google">
+			<a href="#" data-ajax="update_google_plus">Update Google+</a>
 		</li>
-		<li>
-			<a href="#" data-ajax="update_pinterest_pins" class="pinterest">Update Pinterest Pins</a>
+		<li class="pinterest">
+			<a href="#" data-ajax="update_pinterest_pins">Update Pinterest Pins</a>
 		</li>
-		<li>
-			<a href="#" data-ajax="update_stumble_upon" class="stumble_upon">Update StumbleUpon</a>
+		<li class="stumbleupon">
+			<a href="#" data-ajax="update_stumble_upon">Update StumbleUpon</a>
 		</li>
 	</ul>
 

@@ -504,6 +504,85 @@ table.dataTable td {
 #facebook_posts_stats_update {
   position: relative;
 }
+#facebook_posts_stats_update .individual_updated {
+  margin: 30px 0;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -o-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -o-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+#facebook_posts_stats_update .individual_updated li {
+  margin: auto;
+}
+#facebook_posts_stats_update .individual_updated li.twitter {
+  background-color: #00aced;
+}
+#facebook_posts_stats_update .individual_updated li.twitter:hover {
+  background-color: #33c7ff;
+}
+#facebook_posts_stats_update .individual_updated li.facebook_like {
+  background-color: #3b5999;
+}
+#facebook_posts_stats_update .individual_updated li.facebook_like:hover {
+  background-color: #6c89c6;
+}
+#facebook_posts_stats_update .individual_updated li.facebook_shares {
+  background-color: #3b5999;
+}
+#facebook_posts_stats_update .individual_updated li.facebook_shares:hover {
+  background-color: #6c89c6;
+}
+#facebook_posts_stats_update .individual_updated li.google {
+  background-color: #bf3727;
+}
+#facebook_posts_stats_update .individual_updated li.google:hover {
+  background-color: #dc6456;
+}
+#facebook_posts_stats_update .individual_updated li.pinterest {
+  background-color: #cd252b;
+}
+#facebook_posts_stats_update .individual_updated li.pinterest:hover {
+  background-color: #e05257;
+}
+#facebook_posts_stats_update .individual_updated li.stumbleupon {
+  background-color: #eb4723;
+}
+#facebook_posts_stats_update .individual_updated li.stumbleupon:hover {
+  background-color: #ee6344;
+}
+#facebook_posts_stats_update .individual_updated li.digg {
+  background-color: #1b5791;
+}
+#facebook_posts_stats_update .individual_updated li.digg:hover {
+  background-color: #539adf;
+}
+#facebook_posts_stats_update .individual_updated li.email {
+  background-color: #888;
+}
+#facebook_posts_stats_update .individual_updated li.email:hover {
+  background-color: #999;
+}
+#facebook_posts_stats_update .individual_updated li a {
+  color: #fff;
+  display: block;
+  cursor: pointer;
+  padding: 10px 20px;
+  text-decoration: none;
+}
 #facebook_posts_stats_update #update_all {
   border: 0;
   padding: 0;

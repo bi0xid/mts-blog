@@ -1,5 +1,3 @@
-$socials =  'twitter'  'facebook_like' 'facebook_shares'   'google'    'pinterest'   'stumbleupon'    'digg'    'email'
-$colors  =   #00aced      #3B5999         #3B5999         #BF3727       #CD252B        #EB4723      #1B5791     #888
 $icons   =      0           -24            -24              -12           -48           -96           -84        -36
 $hover   =     true        false           true            true           true          true          true      true
 
@@ -23,10 +21,10 @@ share-items-style()
 			for x, c in $socials
 				&.{x}
 					a
-						background-color $colors[c]
+						background-color $socials_colors[c]
 
 					a:hover
-						background-color lightness($colors[c], 60%)
+						background-color lightness($socials_colors[c], 60%)
 
 			a
 				color #FFF
@@ -66,14 +64,14 @@ share-items-style()
 			for x, c in $socials
 				&.{x}
 					a
-						background-color $colors[c]
+						background-color $socials_colors[c]
 
 					.icon
 						background-position unit($icons[c], 'px') 0
 
 				if $hover[c]
 					&.{x} a:hover
-						background-color lightness($colors[c], 60%)
+						background-color lightness($socials_colors[c], 60%)
 
 			&:not(.facebook_like) a
 				cursor pointer

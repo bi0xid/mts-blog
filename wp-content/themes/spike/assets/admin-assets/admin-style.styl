@@ -1,11 +1,32 @@
 @import 'nib'
 
 @import '../plugins/spinner.css'
-
+@import '../theme-assets/includes/base.styl'
 @import '../node_modules/datatables.net-dt/css/jquery.dataTables.css'
 
 #facebook_posts_stats_update
 	position relative
+
+	.individual_updated
+		margin 30px 0
+		flex-vertical()
+
+		li
+			margin auto
+
+			for x, c in $socials
+				&.{x}
+					background-color $socials_colors[c]
+
+				&.{x}:hover
+						background-color lightness($socials_colors[c], 60%)
+
+			a
+				color #FFF
+				display block
+				cursor pointer
+				padding 10px 20px
+				text-decoration none
 
 	#update_all
 		border 0
