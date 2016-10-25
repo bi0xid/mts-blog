@@ -4,7 +4,7 @@
 Plugin Name: MyTinySecrets Social Media Management
 Description: Take control of the shares and likes
 Author: Alejandro Orta
-Version: 0.9.4
+Version: 0.9.9
 Author URI: alejandro@mytinysecrets.com
 */
 

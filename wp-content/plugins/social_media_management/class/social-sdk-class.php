@@ -28,7 +28,10 @@ class SocialSdkClass {
 
 		add_action( 'save_post', array( $this, 'schedule_post_share_check' ) );
 
-		add_action( 'wp_ajax_update_all_posts_media', array( $this, 'update_all_posts_media' ) );
+		add_action( 'wp_ajax_update_google_plus', array( $this, 'update_google_plus' ) );
+		add_action( 'wp_ajax_update_stumble_upon', array( $this, 'update_stumble_upon' ) );
+		add_action( 'wp_ajax_update_pinterest_pins', array( $this, 'update_pinterest_pins' ) );
+		add_action( 'wp_ajax_update_facebook_shares', array( $this, 'update_facebook_shares' ) );
 	}
 
 	/**
@@ -65,13 +68,7 @@ class SocialSdkClass {
 	 * AJAX Call. Update all posts shares/likes
 	 */
 	public function update_all_posts_media() {
-		if( !check_ajax_referer( 'seguridad', 'security' ) ) {
-			echo json_encode('Security error');
-			die();
-		}
-
-		$now = date('d-m-Y H:i:s');
-		update_option( 'facebook_posts_stats_lats_update', $now );
+		$this->checkAjaxNonce();
 
 		$posts = get_posts( array(
 			'numberposts' => 2000,
@@ -82,7 +79,82 @@ class SocialSdkClass {
 			$this->update_post_social_media_data( $post->ID );
 		};
 
-		$this->returnResponse( 200, 'All data saved', $now );
+		$this->returnResponse( 200, 'All data saved', false );
+	}
+
+	/**
+	 * AJAX Call. Update all posts Google Plus Shares
+	 */
+	public function update_google_plus() {
+		$this->checkAjaxNonce();
+
+		$posts = get_posts( array(
+			'numberposts' => 2000,
+			'post_status' => 'publish'
+		) );
+
+		foreach ( $posts as $post ) {
+			$google_plus_shares = $this->getGooglePlusShares(  get_permalink( $post->ID ) );
+			update_post_meta( $post->ID, 'google_shares', (int) str_replace( array('.'), array(''), $google_plus_shares ) );
+		};
+
+		$this->returnResponse( 200, 'Google Plus Shares updated' );
+	}
+
+	/**
+	 * AJAX Call. Update all posts StumbleUpon shares
+	 */
+	public function update_stumble_upon() {
+		$this->checkAjaxNonce();
+
+		$posts = get_posts( array(
+			'numberposts' => 2000,
+			'post_status' => 'publish'
+		) );
+
+		foreach ( $posts as $post ) {
+			$stumbleupon_shares = $this->getStumbleUponCount( get_permalink( $post->ID ) );
+			update_post_meta( $post->ID, 'stumble_shares', (int) $stumbleupon_shares );
+		};
+
+		$this->returnResponse( 200, 'All data saved' );
+	}
+
+	/**
+	 * AJAX Call. Update all posts Pinterest Pins
+	 */
+	public function update_pinterest_pins() {
+		$this->checkAjaxNonce();
+
+		$posts = get_posts( array(
+			'numberposts' => 2000,
+			'post_status' => 'publish'
+		) );
+
+		foreach ( $posts as $post ) {
+			$pinterest_pins = $this->getPinterestPins( get_permalink( $post->ID ) );
+			update_post_meta( $post->ID, 'pinterest_shares', (int) $pinterest_pins );
+		};
+
+		$this->returnResponse( 200, 'All data saved' );
+	}
+
+	/**
+	 * AJAX Call. Update all posts Facebook Shares and Likes
+	 */
+	public function update_facebook_shares() {
+		$this->checkAjaxNonce();
+
+		$posts = get_posts( array(
+			'numberposts' => 2000,
+			'post_status' => 'publish'
+		) );
+
+		foreach ( $posts as $post ) {
+			$this->updateFacebookSharesAndLikes( $post->ID );
+		};
+
+		$this->returnResponse( 200, 'All data saved' );
 	}
 
 	/**
@@ -116,21 +188,7 @@ class SocialSdkClass {
 		/**
 		 * Update Facebook Shares and Likes
 		 */
-		try {
-			$response = $this->fb_sdk->get('?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.$post_url);
-		} catch( \Facebook\Exceptions\FacebookSDKException $e ) {
-			$this->returnResponse( 403, $e->getMessage() );
-		}
-
-		$response_body = $response->getDecodedBody();
-
-		if( isset( $response_body['share']['share_count'] ) ) {
-			update_post_meta( $post_id, 'facebook_shares', (int) $response_body['share']['share_count'] );
-		}
-
-		if( isset( $response_body['og_object']['likes']['summary']['total_count'] ) ) {
-			update_post_meta( $post_id, 'facebook_likes', (int) $response_body['og_object']['likes']['summary']['total_count'] );
-		}
+		$this->updateFacebookSharesAndLikes( $post_id );
 	}
 
 	private function getStumbleUponCount( $url ) {
@@ -164,6 +222,24 @@ class SocialSdkClass {
 		return $counter->nodeValue ? $counter->nodeValue : 0;
 	}
 
+	private function updateFacebookSharesAndLikes( $post_id ) {
+		try {
+			$response = $this->fb_sdk->get('?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.get_permalink( $post_id ) );
+		} catch( \Facebook\Exceptions\FacebookSDKException $e ) {
+			$this->returnResponse( 403, $e->getMessage() );
+		}
+
+		$response_body = $response->getDecodedBody();
+
+		if( isset( $response_body['share']['share_count'] ) ) {
+			update_post_meta( $post_id, 'facebook_shares', (int) $response_body['share']['share_count'] );
+		}
+
+		if( isset( $response_body['og_object']['likes']['summary']['total_count'] ) ) {
+			update_post_meta( $post_id, 'facebook_likes', (int) $response_body['og_object']['likes']['summary']['total_count'] );
+		}
+	}
+
 	private function returnResponse( $code, $message, $data = null ) {
 		echo json_encode( array(
 			'code'    => $code,
@@ -171,5 +247,12 @@ class SocialSdkClass {
 			'message' => $message,
 		) );
 		die();
+	}
+
+	private function checkAjaxNonce() {
+		if( !check_ajax_referer( 'seguridad', 'security' ) ) {
+			echo json_encode('Security error');
+			die();
+		}
 	}
 }
