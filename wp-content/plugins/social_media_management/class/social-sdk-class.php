@@ -95,7 +95,7 @@ class SocialSdkClass {
 		) );
 
 		foreach ( $posts as $post ) {
-			$google_plus_shares = $this->getGooglePlusShares(  get_permalink( $post->ID ) );
+			$google_plus_shares = $this->getGooglePlusShares( get_permalink( $post->ID ) );
 			update_post_meta( $post->ID, 'google_shares', (int) str_replace( array('.'), array(''), $google_plus_shares ) );
 		};
 
@@ -164,9 +164,6 @@ class SocialSdkClass {
 	 */
 	private function update_post_social_media_data( $post_id ) {
 		$post_url = get_permalink( $post_id );
-
-		// Just for testing porpouses
-		$post_url = str_replace(array('.dev'), array('.com'), $post_url);
 
 		/**
 		 * Update Google+ Info
