@@ -10,6 +10,10 @@ if ( ! isset( $content_width ) ) $content_width = 960;
 include( 'includes/email-share-class.php' );
 $email_share_class = new EmailShareClass();
 
+// Include our Blog Helpers
+include( 'includes/blog-helpers.php' );
+$blog_helpers = new BlogHelpers();
+
 /*-----------------------------------------------------------------------------------*/
 /*	Load Translation Text Domain
 /*-----------------------------------------------------------------------------------*/

@@ -11,25 +11,28 @@ $(document).ready(function() {
 
 		container.find('#update_all').on('click', function(e) {
 			e.preventDefault()
-			loadingSpinner.addClass('in')
+			ajaxCall('update_all_posts_media')
+		})
 
-			$.ajax({
-				method: 'GET',
-				url: ajaxurl,
-				data: {
-					action   : 'update_all_facebook_posts',
-					security : container.find('#nonce').val()
-				}
-			}).done(function(response) {
-				var parsedData = JSON.parse(response)
-				loadingSpinner.removeClass('in')
+		container.find('.individual_updated li a').on('click', function(e) {
+			e.preventDefault()
+			ajaxCall($(this).data('ajax'))
+		})
+	}
 
-				if( parsedData.code == 200 ) {
-					container.find('#update_date').html(parsedData.data)
-				} else {
-					alert(parsedData.message)
-				}
-			})
+	function ajaxCall(url) {
+		loadingSpinner.addClass('in')
+
+		$.ajax({
+			method: 'GET',
+			url: ajaxurl,
+			data: {
+				action   : url,
+				security : container.find('#nonce').val()
+			}
+		}).done(function(response) {
+			loadingSpinner.removeClass('in')
+			alert(JSON.parse(response).message)
 		})
 	}
 })

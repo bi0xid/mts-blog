@@ -1,0 +1,54 @@
+#floating_share
+	width 73px
+	display block
+	min-width 55px
+	transition opacity .3s
+	border 1px solid #D71A68
+	absolute top 540px left 290px
+
+	@media(max-width 1900px)
+		left 190px
+
+	@media(max-width 1700px)
+		left 100px
+
+	@media(max-width 1500px)
+		left 60px
+
+	@media(max-width 1420px)
+		left 40px
+
+	@media(max-width 1370px)
+		left 20px
+
+	@media(max-width 1325px)
+		left 10px
+
+	@media(max-width 1310px)
+		opacity 0
+
+	&.hidden
+		opacity 0
+
+	&.fixed
+		top 15px
+		position fixed
+
+	.image
+		width 100%
+		height 62px
+		display block
+		background-size cover
+		background-repeat no-repeat
+
+	.iframes
+		padding 9px 5px
+		text-align center
+		background-color #FFF
+
+		.twitter
+			height 25px
+			margin-left 2px
+
+		.fb-like
+			margin-bottom 10px

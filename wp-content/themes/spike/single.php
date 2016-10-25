@@ -1,6 +1,8 @@
-<?php 
-//Replace all links to the shop when user read affiliate authors post
-//First we check if author in affiliate program if yes then parse content
+<?php
+/**
+ * Replace all links to the shop when user read affiliate authors post
+ * First we check if author in affiliate program if yes then parse content
+ */
 $post_author_id = get_post_field( 'post_author', get_the_ID() );
 $affiliate_id_mts = (int) get_user_meta( $post_author_id, 'affiliate_id_mts', true );
 
@@ -82,6 +84,9 @@ $options = get_option('spike');
 
 						<div class="post-single-content box mark-links">
 							<div class="single_post">
+
+								<?php include get_stylesheet_directory().'/templates/single-post-share.php'; ?>
+
 								<?php if ($options['mts_posttop_adcode'] != '') { ?>
 									<?php $toptime = $options['mts_posttop_adcode_time']; if (strcmp( date( "Y-m-d", strtotime( "-$toptime day") ), get_the_time( "Y-m-d" ) ) >= 0) { ?>
 										<div class="topad">
@@ -115,6 +120,8 @@ $options = get_option('spike');
 										</div>
 									<?php }; ?>
 							<?php }; ?>
+
+							<?php include get_stylesheet_directory().'/templates/single-post-share.php'; ?>
 
 							<div class="pb-mc-wrapper">
 								<div id="pb-mailchimp">
@@ -344,3 +351,15 @@ $options = get_option('spike');
 <p id="message_alert"></p>
 
 <?php get_footer(); ?>
+
+<div id="floating_share">
+	<span class="image" style="background-image:url(<?php echo get_stylesheet_directory_uri().'/images/pb-bg-share.png'; ?>)"></span>
+
+	<div class="iframes">
+		<iframe class="twitter" src="http://platform.twitter.com/widgets/tweet_button.39f7ee9fffbd122b7a37a520dbdaebc6.en.html#dnt=false&id=twitter-widget-1&lang=en&original_referer=<?php echo get_permalink(); ?>&size=m&text=<?php echo get_the_title(); ?>&time=1477292950981&type=share&url=<?php echo get_permalink(); ?>&via=mytinysecrets" frameborder="0"></iframe>
+
+		<div class="fb-like" data-href="<?php echo get_permalink(); ?>" data-layout="box_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+
+		<g:plusone size="tall" annotation="bubble"></g:plusone>
+	</div>
+</div>
