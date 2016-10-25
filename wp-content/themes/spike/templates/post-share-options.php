@@ -2,11 +2,11 @@
 	$important_social = array(
 		'facebook_like' => array(
 			'name'  => 'Likes',
-			'value' => (int) get_post_meta( get_the_ID(), 'facebook_likes', true )
+			'value' => get_post_meta( get_the_ID(), 'facebook_likes', true )
 		),
 		'facebook_shares' => array(
 			'name'  => 'Share',
-			'value' => (int) get_post_meta( get_the_ID(), 'facebook_shares', true ),
+			'value' => get_post_meta( get_the_ID(), 'facebook_shares', true ),
 			'link'  => 'https://www.facebook.com/sharer/sharer.php?u='.get_the_permalink()
 		)
 	);
@@ -14,27 +14,27 @@
 	$social_networks = array(
 		'google' => array(
 			'name'  => 'Google+',
-			'value' => (int) get_post_meta( get_the_ID(), 'google_shares', true ),
+			'value' => get_post_meta( get_the_ID(), 'google_shares', true ),
 			'link'  => 'https://plus.google.com/share?url='.get_the_permalink()
 		),
 		'pinterest' => array(
 			'name'  => 'Pinterest',
-			'value' => (int) get_post_meta( get_the_ID(), 'pinterest_shares', true ),
+			'value' => get_post_meta( get_the_ID(), 'pinterest_shares', true ),
 			'href'  => "javascript:void((function(){var%20e=document.createElement('script');e.setAttribute('type','text/javascript');e.setAttribute('charset','UTF-8');e.setAttribute('src','http://assets.pinterest.com/js/pinmarklet.js?r='+Math.random()*99999999);document.body.appendChild(e)})());"
 		),
 		'stumbleupon' => array(
 			'name' => 'StumbleUpon',
-			'value' => (int) get_post_meta( get_the_ID(), 'stumble_shares', true ),
+			'value' => get_post_meta( get_the_ID(), 'stumble_shares', true ),
 			'link' => 'http://www.stumbleupon.com/badge/?url='.get_the_permalink()
 		),
 		'digg' => array(
 			'name'  => 'Digg',
-			'value' => (int) get_post_meta( get_the_ID(), 'digg_post_type', true ),
+			'value' => get_post_meta( get_the_ID(), 'digg_post_type', true ),
 			'link'  => 'http://digg.com/submit?phase=2%20&amp;url='.get_the_permalink().'&amp;title='.get_the_title()
 		),
 		'email' => array(
 			'name'  => 'E-mail',
-			'value' => (int) get_post_meta( get_the_ID(), 'total_email_shares', true )
+			'value' => get_post_meta( get_the_ID(), 'total_email_shares', true )
 		)
 	);
 
