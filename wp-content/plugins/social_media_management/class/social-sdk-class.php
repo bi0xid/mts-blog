@@ -118,7 +118,7 @@ class SocialSdkClass {
 			update_post_meta( $post->ID, 'stumble_shares', (int) $stumbleupon_shares );
 		};
 
-		$this->returnResponse( 200, 'All data saved' );
+		$this->returnResponse( 200, 'StumbleUpon data saved' );
 	}
 
 	/**
@@ -137,7 +137,7 @@ class SocialSdkClass {
 			update_post_meta( $post->ID, 'pinterest_shares', (int) $pinterest_pins );
 		};
 
-		$this->returnResponse( 200, 'All data saved' );
+		$this->returnResponse( 200, 'Pinterest data saved' );
 	}
 
 	/**
@@ -155,7 +155,7 @@ class SocialSdkClass {
 			$this->updateFacebookSharesAndLikes( $post->ID );
 		};
 
-		$this->returnResponse( 200, 'All data saved' );
+		$this->returnResponse( 200, 'Facebook data saved' );
 	}
 
 	/**
