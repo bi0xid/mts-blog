@@ -31,6 +31,7 @@ class SocialSdkClass {
 		add_action( 'wp_ajax_update_google_plus', array( $this, 'update_google_plus' ) );
 		add_action( 'wp_ajax_update_stumble_upon', array( $this, 'update_stumble_upon' ) );
 		add_action( 'wp_ajax_update_pinterest_pins', array( $this, 'update_pinterest_pins' ) );
+		add_action( 'wp_ajax_update_all_posts_media', array( $this, 'update_all_posts_media' ) );
 		add_action( 'wp_ajax_update_facebook_shares', array( $this, 'update_facebook_shares' ) );
 	}
 

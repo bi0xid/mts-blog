@@ -13,9 +13,22 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 	<h1>Posts Shares and Likes.</h1>
 
 	<input type="hidden" id="nonce" value="<?php echo $ajax_nonce; ?>">
+	<button id="update_all">Update all Social Media at one</button>
 
-	<em>The last update was <strong id="update_date"><?php echo get_option( 'facebook_posts_stats_lats_update' ); ?></strong></em>
-	<button id="update_all">Update</button>
+	<ul class="individual_updated">
+		<li>
+			<a href="#" data-ajax="update_facebook_shares" class="facebook">Update Facebook Shares and Likes</a>
+		</li>
+		<li>
+			<a href="#" data-ajax="update_google_plus" class="google">Update Google+</a>
+		</li>
+		<li>
+			<a href="#" data-ajax="update_pinterest_pins" class="pinterest">Update Pinterest Pins</a>
+		</li>
+		<li>
+			<a href="#" data-ajax="update_stumble_upon" class="stumble_upon">Update StumbleUpon</a>
+		</li>
+	</ul>
 
 	<hr>
 	<p><strong>Please</strong>, reload the page after Update to see the latest data.</p>
@@ -25,7 +38,6 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 			<tr>
 				<th>Post ID</th>
 				<th>Post Name</th>
-				<th>Create Date</th>
 				<th>Facebook Shares</th>
 				<th>Facebook Likes</th>
 				<th>Google+</th>
@@ -47,7 +59,6 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 					echo '<tr>';
 						echo '<td>'.$post->ID.'</td>';
 						echo '<td>'.get_the_title( $post->ID ).'</td>';
-						echo '<td>'.get_the_date( false, $post->ID ).'</td>';
 						echo '<td>'.get_post_meta( $post->ID, 'facebook_shares', true ).'</td>';
 						echo '<td>'.get_post_meta( $post->ID, 'facebook_likes', true ).'</td>';
 						echo '<td>'.get_post_meta( $post->ID, 'google_shares', true ).'</td>';
@@ -62,7 +73,6 @@ $ajax_nonce = wp_create_nonce( 'seguridad' );
 			<tr>
 				<th>Post ID</th>
 				<th>Post Name</th>
-				<th>Create Date</th>
 				<th>Facebook Shares</th>
 				<th>Facebook Likes</th>
 				<th>Google+</th>
