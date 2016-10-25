@@ -78,7 +78,7 @@ class SocialSdkClass {
 		) );
 
 		foreach ( $posts as $post ) {
-			$post->ID === 13869 && $this->update_post_social_media_data( $post->ID );
+			$this->update_post_social_media_data( $post->ID );
 		};
 
 		$this->returnResponse( 200, 'All data saved', false );
