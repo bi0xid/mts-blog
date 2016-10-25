@@ -201,6 +201,10 @@ class Most_Shared_Posts extends WP_Widget {
 			if ( !$suppress_icons ) {
 				echo '<div class="share-counts ' . $css_class_font . '" style="width: 235px;">';
 
+				if ( $include_fb_count ) {
+					echo "<span id='most_shared_post_fb' class='shared_icons_wrapper'><span class='shared_icons'></span></span>" . $fb_shares;
+				}
+
 				if ( $include_google_count ) {
 					echo "<span id='most_shared_post_gl' class='shared_icons_wrapper'><span class='shared_icons'></span></span>" . $plusones;
 					echo " &nbsp; ";
@@ -209,10 +213,6 @@ class Most_Shared_Posts extends WP_Widget {
 				if ( $include_twitter_count ) {
 					echo "<span id='most_shared_post_tw' class='shared_icons_wrapper'><span class='shared_icons'></span></span>" . $tweets;
 					echo " &nbsp; ";
-				}
-
-				if ( $include_fb_count ) {
-					echo "<span id='most_shared_post_fb' class='shared_icons_wrapper'><span class='shared_icons'></span></span>" . $fb_shares;
 				}
 
 				echo '</div>';
