@@ -55,6 +55,7 @@ class SocialSdkClass {
 			'post_type'   => 'post',
 			'post_status' => 'publish'
 		) );
+
 		foreach ( $recent_posts as $recent_post ) {
 			if( get_transient( self::POST_SCHEDULE_HOUR.$recent_post['ID'] ) ) {
 				if( !get_transient( self::POST_SCHEDULE_TEN_MINUTES.$recent_post['ID'] ) ) {
@@ -211,7 +212,9 @@ class SocialSdkClass {
 	}
 
 	private function getGooglePlusShares( $url ) {
-		$html =  file_get_contents( 'https://plusone.google.com/_/+1/fastbutton?url='.urlencode( $url ) );
+		libxml_use_internal_errors( true );
+
+		$html = file_get_contents( 'https://plusone.google.com/_/+1/fastbutton?url='.urlencode( $url ) );
 
 		$doc = new DOMDocument();
 		$doc->loadHTML( $html );
