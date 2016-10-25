@@ -25,7 +25,9 @@ class SocialSdkClass {
 		]);
 
 		add_action( 'init', array( $this, 'check_lastest_post_facebook_shares' ), 10 );
+
 		add_action( 'save_post', array( $this, 'schedule_post_share_check' ) );
+
 		add_action( 'wp_ajax_update_all_posts_media', array( $this, 'update_all_posts_media' ) );
 	}
 
@@ -49,12 +51,11 @@ class SocialSdkClass {
 			'post_type'   => 'post',
 			'post_status' => 'publish'
 		) );
-
 		foreach ( $recent_posts as $recent_post ) {
 			if( get_transient( self::POST_SCHEDULE_HOUR.$recent_post['ID'] ) ) {
 				if( !get_transient( self::POST_SCHEDULE_TEN_MINUTES.$recent_post['ID'] ) ) {
-					$this->update_post_social_media_data( $recent_post['ID'] );
 					set_transient( self::POST_SCHEDULE_TEN_MINUTES.$recent_post['ID'], true, 60 * 10 );
+					$this->update_post_social_media_data( $recent_post['ID'] );
 				}
 			}
 		}
@@ -98,19 +99,19 @@ class SocialSdkClass {
 		 * Update Google+ Info
 		 */
 		$google_plus_shares = $this->getGooglePlusShares( $post_url );
-		update_post_meta( $post_id, 'google_shares', $google_plus_shares );
+		update_post_meta( $post_id, 'google_shares', (int) str_replace( array('.'), array(''), $google_plus_shares ) );
 
 		/**
 		 * Update Pinterest Pins
 		 */
 		$pinterest_pins = $this->getPinterestPins( $post_url );
-		update_post_meta( $post_id, 'pinterest_shares', $pinterest_pins );
+		update_post_meta( $post_id, 'pinterest_shares', (int) $pinterest_pins );
 
 		/**
 		 * Update StumbleUpon Shares
 		 */
 		$stumbleupon_shares = $this->getStumbleUponCount( $post_url );
-		update_post_meta( $post_id, 'stumble_shares', $stumbleupon_shares );
+		update_post_meta( $post_id, 'stumble_shares', (int) $stumbleupon_shares );
 
 		/**
 		 * Update Facebook Shares and Likes
@@ -124,11 +125,11 @@ class SocialSdkClass {
 		$response_body = $response->getDecodedBody();
 
 		if( isset( $response_body['share']['share_count'] ) ) {
-			update_post_meta( $post_id, 'facebook_shares', $response_body['share']['share_count'] );
+			update_post_meta( $post_id, 'facebook_shares', (int) $response_body['share']['share_count'] );
 		}
 
 		if( isset( $response_body['og_object']['likes']['summary']['total_count'] ) ) {
-			update_post_meta( $post_id, 'facebook_likes', $response_body['og_object']['likes']['summary']['total_count'] );
+			update_post_meta( $post_id, 'facebook_likes', (int) $response_body['og_object']['likes']['summary']['total_count'] );
 		}
 	}
 
