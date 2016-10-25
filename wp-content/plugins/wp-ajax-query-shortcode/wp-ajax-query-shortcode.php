@@ -396,7 +396,7 @@ function wp_ajax_query( $atts = '' ) {
 						</div>
 						<div class="home_meta_comment_social get_social_counter_result" data-id="<?php echo get_the_ID(); ?>" id="get_social_counter_result_<?php echo get_the_ID(); ?>">
 							<?php
-								$social_networks = array(
+								$important_social = array(
 									'facebook_like' => array(
 										'name'  => 'Likes',
 										'value' => (int) get_post_meta( get_the_ID(), 'facebook_likes', true )
@@ -405,7 +405,10 @@ function wp_ajax_query( $atts = '' ) {
 										'name'  => 'Share',
 										'value' => (int) get_post_meta( get_the_ID(), 'facebook_shares', true ),
 										'link'  => 'https://www.facebook.com/sharer/sharer.php?u='.get_the_permalink()
-									),
+									)
+								);
+
+								$social_networks = array(
 									'google' => array(
 										'name'  => 'Google+',
 										'value' => (int) get_post_meta( get_the_ID(), 'google_shares', true ),
@@ -447,12 +450,14 @@ function wp_ajax_query( $atts = '' ) {
 								}
 
 								$social_networks = shuffle_assoc( $social_networks );
-								$social_networks = array_slice( $social_networks, 0, 3 );
+								$social_networks = array_slice( $social_networks, 0, 1 );
+
+								$result = array_merge( $important_social, $social_networks );
 							?>
 
 							<ul class="social_shares">
 								<?php
-									foreach ( $social_networks as $key => $value ) {
+									foreach ( $result as $key => $value ) {
 										echo '<li class="share_item '.$key.'">';
 											if( $value['link'] ) {
 												echo '<a href="#" data-url="'.$value['link'].'" data-media="'.$key.'" class="share-item-button modal">';
