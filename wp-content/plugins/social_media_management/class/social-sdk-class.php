@@ -78,7 +78,7 @@ class SocialSdkClass {
 		) );
 
 		foreach ( $posts as $post ) {
-			$this->update_post_social_media_data( $post->ID );
+			$post->ID === 13869 && $this->update_post_social_media_data( $post->ID );
 		};
 
 		$this->returnResponse( 200, 'All data saved', false );
@@ -225,7 +225,7 @@ class SocialSdkClass {
 
 	private function updateFacebookSharesAndLikes( $post_id ) {
 		try {
-			$response = $this->fb_sdk->get('?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.get_permalink( $post_id ) );
+			$response = $this->fb_sdk->get('?fields=share,og_object{likes.limit(0).summary(true),comments.limit(0).summary(true)}&id='.urlencode( get_permalink( $post_id ) ) );
 		} catch( \Facebook\Exceptions\FacebookSDKException $e ) {
 			$this->returnResponse( 403, $e->getMessage() );
 		}
