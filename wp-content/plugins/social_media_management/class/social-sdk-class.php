@@ -97,7 +97,7 @@ class SocialSdkClass {
 
 		foreach ( $posts as $post ) {
 			$google_plus_shares = $this->getGooglePlusShares( urlencode( get_permalink( $post->ID ) ) );
-			update_post_meta( $post->ID, 'google_shares', (int) str_replace( array('.'), array(''), $google_plus_shares ) );
+			update_post_meta( $post->ID, 'google_shares', str_replace( array('.'), array(''), $google_plus_shares ) );
 		};
 
 		$this->returnResponse( 200, 'Google Plus Shares updated' );
