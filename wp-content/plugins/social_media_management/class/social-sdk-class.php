@@ -5,7 +5,7 @@
 * on Facebook, and the other one is to schedule this check every ten minutes for a new post (in one hour)
 * @author Alejandro Orta (alejandro@mytinysecrets.com)
 */
-class FacebookSdkClass {
+class SocialSdkClass {
 
 	private $app_id = '109970876058039';
 	private $app_secret = 'c9b9f0496665882dab21486c0aa695f1';

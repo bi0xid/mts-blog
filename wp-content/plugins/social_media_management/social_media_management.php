@@ -14,11 +14,11 @@ if ( !defined( 'FACEBOOK_SDK_PLUGIN_DIR' ) ) {
 }
 
 require_once FACEBOOK_SDK_PLUGIN_DIR.'/vendor/autoload.php';
-require FACEBOOK_SDK_PLUGIN_DIR.'/class/facebook-sdk-class.php';
+require FACEBOOK_SDK_PLUGIN_DIR.'/class/social-sdk-class.php';
 
 class MtsFacebookSdf {
 	function __construct() {
-		$facebook_sdk_class = new FacebookSdkClass();
+		$social_sdk_class = new SocialSdkClass();
 
 		add_action( 'admin_menu', array( $this, 'facebook_posts_shares' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_wp_admin_assets' ));
