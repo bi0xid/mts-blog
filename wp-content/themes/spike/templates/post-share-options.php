@@ -29,12 +29,12 @@
 		),
 		'digg' => array(
 			'name'  => 'Digg',
-			'value' => get_post_meta( get_the_ID(), 'digg_post_type', true ),
+			'value' => (int) get_post_meta( get_the_ID(), 'digg_post_type', true ),
 			'link'  => 'http://digg.com/submit?phase=2%20&amp;url='.get_the_permalink().'&amp;title='.get_the_title()
 		),
 		'email' => array(
 			'name'  => 'E-mail',
-			'value' => get_post_meta( get_the_ID(), 'total_email_shares', true )
+			'value' => (int) get_post_meta( get_the_ID(), 'total_email_shares', true )
 		)
 	);
 
