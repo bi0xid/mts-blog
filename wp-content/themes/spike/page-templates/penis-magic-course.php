@@ -9,8 +9,8 @@
 
 <section id="penis-magic-course">
 	<div class="header">
-		<!-- Foto de Adina -->
-		<!-- Firma de Adina -->
+		<img src="<?php echo get_stylesheet_directory_uri().'/images/signup-pages/adinacontact-300x300.jpg'; ?>" alt="Adina avatar">
+		<img src="<?php echo get_stylesheet_directory_uri().'/images/signup-pages/signature-300x170.png'; ?>" alt="Adina avatar">
 
 		<div id="subscribe_form_wrapper">
 			<div class="ck_form ck_naked">
