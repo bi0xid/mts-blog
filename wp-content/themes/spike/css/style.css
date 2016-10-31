@@ -512,6 +512,18 @@ Reactshare plugin styles*/
 #form-sign-up-thanks {
   padding: 40px;
 }
+#form-sign-up-thanks .intro-img {
+  text-align: center;
+  margin-bottom: 40px;
+}
+@media (max-width: 800px) {
+  #form-sign-up-thanks .intro-img {
+    margin-bottom: 40px;
+  }
+  #form-sign-up-thanks .intro-img img {
+    max-width: 90%;
+  }
+}
 #form-sign-up-thanks * {
   font-family: 'Asap';
   -webkit-box-sizing: border-box;

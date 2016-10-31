@@ -14,7 +14,9 @@
 ?>
 
 <section id="form-sign-up-thanks">
-	<h1>You are AMAZING</h1>
+	<div class="intro-img">
+		<img src="<?php echo get_stylesheet_directory_uri().'/images/signup-pages/amazing.gif' ?>" alt="you are amazing">
+	</div>
 
 	<strong>Hi there,</strong>
 	<p>It’s me Adina. Thank you so much for signing up for my <?php echo $course_name[$_GET['course']]; ?>.</p>

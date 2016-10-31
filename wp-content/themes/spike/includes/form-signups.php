@@ -55,7 +55,7 @@ class FormSignups {
 			$this->saveIntoDataBase( $data['email'], $data['form_id'] );
 			$this->saveEmailIntoConvertKit( $data['email'], $data['form_id'], $data['name'] );
 
-			wp_redirect( get_permalink( 13890 ).'?course='.$data['form_id'] );
+			wp_redirect( get_permalink( 14039 ).'?course='.$data['form_id'] );
 			exit;
 		}
 	}
