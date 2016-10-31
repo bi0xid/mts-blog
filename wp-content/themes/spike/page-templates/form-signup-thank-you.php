@@ -1,17 +1,22 @@
 <?php
 	/**
-	* Template Name: Penis Magic Thank You Template
+	* Template Name: Form Signup Thank You Template
 	* @author: Alejandro Orta (alejandro@mytinysecrets.com)
 	*/
 
 	get_template_part('templates/mts-header');
+
+	$course_name = array(
+		'penis_magic_course' => 'Penis Magic Course',
+		'pussy_empowerment_course' => 'Pussy Empowerment Course'
+	);
 ?>
 
 <section id="penis-magic-thank">
 	<h1>You are AMAZING</h1>
 
 	<strong>Hi there,</strong>
-	<p>It’s me Adina. Thank you so much for signing up for my Penis Magic Course.</p>
+	<p>It’s me Adina. Thank you so much for signing up for my <?php echo $course_name[$_GET['course']]; ?>.</p>
 	<p>The course is not ready yet! I am still working on it. And you know me. I don’t half-ass anything.</p>
 	<p>I am creating something really unique and empowering for you; something that will truly and deeply impact you on every level – sex, love & life.</p>
 	<p>Please bare with me.</p>
