@@ -12,7 +12,7 @@
 	);
 ?>
 
-<section id="penis-magic-thank">
+<section id="form-sign-up-thanks">
 	<h1>You are AMAZING</h1>
 
 	<strong>Hi there,</strong>

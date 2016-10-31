@@ -7,7 +7,7 @@
 	get_template_part('templates/mts-header');
 ?>
 
-<section id="penis-magic-course">
+<section id="form-sign-up">
 	<div class="header">
 		<h1>THE PENIS MAGIC COURSE</h1>
 

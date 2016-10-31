@@ -427,6 +427,130 @@ Reactshare plugin styles*/
     margin-left: 10px;
   }
 }
+#form-sign-up {
+  text-align: center;
+}
+#form-sign-up h1 {
+  font-size: 30px;
+}
+#form-sign-up * {
+  font-family: 'Asap';
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+#form-sign-up .header {
+  padding: 0 40px 0 40px;
+}
+#form-sign-up .header em {
+  margin: 0 auto;
+  display: block;
+  max-width: 600px;
+}
+#form-sign-up .header h5 {
+  font-size: 20px;
+}
+#form-sign-up .header ul {
+  padding: 0;
+  margin: 0 auto;
+  max-width: 500px;
+}
+#form-sign-up .header .img-wrapper {
+  margin: 20px 0;
+  text-align: center;
+}
+#form-sign-up .header .img-wrapper img {
+  max-width: 200px;
+}
+#form-sign-up .header .img-wrapper.small img {
+  max-width: 120px;
+}
+#form-sign-up #existing_email {
+  color: #297706;
+  font-size: 20px;
+}
+#form-sign-up #subscribe_form_wrapper {
+  width: 50%;
+  margin: 40px auto 40px auto;
+}
+#form-sign-up #subscribe_form_wrapper input {
+  width: 100%;
+  height: 54px;
+  color: #4e4e4e;
+  font-size: 24px;
+  margin-bottom: 5%;
+  padding: 0px 10px;
+  border: 3px solid #ecf0f2;
+  background-color: #fff;
+}
+#form-sign-up #subscribe_form_wrapper .subscribe_button {
+  border: 0;
+  width: 50%;
+  color: #fff;
+  height: 40px;
+  cursor: pointer;
+  font-size: 20px;
+  -webkit-transition: background-color 0.3s;
+  -moz-transition: background-color 0.3s;
+  -o-transition: background-color 0.3s;
+  -ms-transition: background-color 0.3s;
+  transition: background-color 0.3s;
+  background-color: #a9507a;
+}
+#form-sign-up #subscribe_form_wrapper .subscribe_button:hover {
+  background-color: #bd7597;
+}
+@media (max-width: 600px) {
+  #form-sign-up #subscribe_form_wrapper {
+    width: 90%;
+    margin-top: 20px;
+  }
+  #form-sign-up #subscribe_form_wrapper .subscribe_button {
+    width: 100%;
+  }
+}
+#form-sign-up-thanks {
+  padding: 40px;
+}
+#form-sign-up-thanks * {
+  font-family: 'Asap';
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+#form-sign-up-thanks h1 {
+  margin-top: 0;
+  font-size: 40px;
+  text-align: center;
+}
+#form-sign-up-thanks ul {
+  list-style-type: decimal;
+}
+#form-sign-up-thanks .btn {
+  border: 0;
+  color: #fff;
+  width: 250px;
+  padding: 10px;
+  display: block;
+  font-size: 21px;
+  margin: 10px auto;
+  text-align: center;
+  text-decoration: none;
+  -webkit-transition: background-color 0.3s;
+  -moz-transition: background-color 0.3s;
+  -o-transition: background-color 0.3s;
+  -ms-transition: background-color 0.3s;
+  transition: background-color 0.3s;
+  background-color: #a9507a;
+}
+@media (max-width: 400px) {
+  #form-sign-up-thanks .btn {
+    width: 90%;
+  }
+}
+#form-sign-up-thanks .btn:hover {
+  background-color: #bd7597;
+}
 #mobile-navigation {
   display: none;
 }
@@ -796,130 +920,6 @@ Reactshare plugin styles*/
 }
 #floating_share .iframes .fb-like {
   margin-bottom: 10px;
-}
-#penis-magic-course {
-  text-align: center;
-}
-#penis-magic-course h1 {
-  font-size: 30px;
-}
-#penis-magic-course * {
-  font-family: 'Asap';
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-#penis-magic-course .header {
-  padding: 0 40px 0 40px;
-}
-#penis-magic-course .header em {
-  margin: 0 auto;
-  display: block;
-  max-width: 600px;
-}
-#penis-magic-course .header h5 {
-  font-size: 20px;
-}
-#penis-magic-course .header ul {
-  padding: 0;
-  margin: 0 auto;
-  max-width: 500px;
-}
-#penis-magic-course .header .img-wrapper {
-  margin: 20px 0;
-  text-align: center;
-}
-#penis-magic-course .header .img-wrapper img {
-  max-width: 200px;
-}
-#penis-magic-course .header .img-wrapper.small img {
-  max-width: 120px;
-}
-#penis-magic-course #existing_email {
-  color: #297706;
-  font-size: 20px;
-}
-#penis-magic-course #subscribe_form_wrapper {
-  width: 50%;
-  margin: 40px auto 40px auto;
-}
-#penis-magic-course #subscribe_form_wrapper input {
-  width: 100%;
-  height: 54px;
-  color: #4e4e4e;
-  font-size: 24px;
-  margin-bottom: 5%;
-  padding: 0px 10px;
-  border: 3px solid #ecf0f2;
-  background-color: #fff;
-}
-#penis-magic-course #subscribe_form_wrapper .subscribe_button {
-  border: 0;
-  width: 50%;
-  color: #fff;
-  height: 40px;
-  cursor: pointer;
-  font-size: 20px;
-  -webkit-transition: background-color 0.3s;
-  -moz-transition: background-color 0.3s;
-  -o-transition: background-color 0.3s;
-  -ms-transition: background-color 0.3s;
-  transition: background-color 0.3s;
-  background-color: #a9507a;
-}
-#penis-magic-course #subscribe_form_wrapper .subscribe_button:hover {
-  background-color: #bd7597;
-}
-@media (max-width: 600px) {
-  #penis-magic-course #subscribe_form_wrapper {
-    width: 90%;
-    margin-top: 20px;
-  }
-  #penis-magic-course #subscribe_form_wrapper .subscribe_button {
-    width: 100%;
-  }
-}
-#penis-magic-thank {
-  padding: 40px;
-}
-#penis-magic-thank * {
-  font-family: 'Asap';
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-#penis-magic-thank h1 {
-  margin-top: 0;
-  font-size: 40px;
-  text-align: center;
-}
-#penis-magic-thank ul {
-  list-style-type: decimal;
-}
-#penis-magic-thank .btn {
-  border: 0;
-  color: #fff;
-  width: 250px;
-  padding: 10px;
-  display: block;
-  font-size: 21px;
-  margin: 10px auto;
-  text-align: center;
-  text-decoration: none;
-  -webkit-transition: background-color 0.3s;
-  -moz-transition: background-color 0.3s;
-  -o-transition: background-color 0.3s;
-  -ms-transition: background-color 0.3s;
-  transition: background-color 0.3s;
-  background-color: #a9507a;
-}
-@media (max-width: 400px) {
-  #penis-magic-thank .btn {
-    width: 90%;
-  }
-}
-#penis-magic-thank .btn:hover {
-  background-color: #bd7597;
 }
 .pb-mc-wrapper.hide {
   display: none;
