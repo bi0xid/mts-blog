@@ -289,6 +289,144 @@ Reactshare plugin styles*/
 	top: 0;
 }
 
+#reactshare-button,
+#new-shop-link {
+  width: 50%;
+  height: 50px;
+}
+#new-shop-link {
+  display: none;
+  z-index: 200;
+  font-size: 15px;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  transition: all 0.3s;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: #fcdd07;
+}
+@media (max-width: 480px) {
+  #new-shop-link {
+    display: block;
+  }
+}
+#new-shop-link.opened {
+  width: 100%;
+}
+#new-shop-link span {
+  color: #000;
+  width: 100%;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.react-and-link {
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+  -webkit-transition: opacity 0.1s;
+  -moz-transition: opacity 0.1s;
+  -o-transition: opacity 0.1s;
+  -ms-transition: opacity 0.1s;
+  transition: opacity 0.1s;
+}
+.react-and-link.out {
+  opacity: 0;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
+}
+#reactshare-button {
+  right: 0;
+  bottom: 0;
+  padding: 0;
+  background: #d71a68;
+}
+#reactshare-button:after {
+  width: 1px;
+  height: 30px;
+  background: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+#reactshare-button.opened {
+  width: 100%;
+  bottom: 50px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+#reactshare-button.opened:after {
+  display: none;
+}
+#reactshare-button .opinion-functions span,
+#reactshare-button .opinion-functions a {
+  width: 25%;
+}
+#reactshare-button .share-functions {
+  width: 100%;
+  padding-left: 0px;
+  text-align: center;
+}
+#reactshare-button .share-functions a,
+#reactshare-button .share-functions #share-funct-mail {
+  width: 25%;
+  float: initial;
+  display: inline-block;
+}
+#reactshare-button .rs-react,
+#reactshare-button .rs-share {
+  top: 50%;
+  float: initial;
+  font-size: 15px;
+  font-weight: bold;
+  position: absolute;
+  -webkit-transform: translate(0, -50%);
+  -moz-transform: translate(0, -50%);
+  -o-transform: translate(0, -50%);
+  -ms-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+}
+#reactshare-button .rs-react {
+  right: 5%;
+  margin-right: 15px;
+}
+#reactshare-button .rs-share {
+  left: 5%;
+  border: none;
+  margin-left: 15px;
+}
+@media (max-width: 390px) {
+  #reactshare-button .rs-react {
+    right: 0px;
+  }
+  #reactshare-button .rs-share {
+    left: 0px;
+  }
+}
+@media (max-width: 300px) {
+  #reactshare-button .rs-react {
+    margin-right: 10px;
+  }
+  #reactshare-button .rs-share {
+    margin-left: 10px;
+  }
+}
 #mobile-navigation {
   display: none;
 }
@@ -442,144 +580,6 @@ Reactshare plugin styles*/
 }
 #mobile-navigation.in .toggler {
   background-image: url("../images/png-icons/close-ff-01.png");
-}
-#reactshare-button,
-#new-shop-link {
-  width: 50%;
-  height: 50px;
-}
-#new-shop-link {
-  display: none;
-  z-index: 200;
-  font-size: 15px;
-  -webkit-transition: all 0.3s;
-  -moz-transition: all 0.3s;
-  -o-transition: all 0.3s;
-  -ms-transition: all 0.3s;
-  transition: all 0.3s;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  background: #fcdd07;
-}
-@media (max-width: 480px) {
-  #new-shop-link {
-    display: block;
-  }
-}
-#new-shop-link.opened {
-  width: 100%;
-}
-#new-shop-link span {
-  color: #000;
-  width: 100%;
-  font-weight: bold;
-  text-align: center;
-  text-transform: uppercase;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-.react-and-link {
-  opacity: 1;
-  -ms-filter: none;
-  filter: none;
-  -webkit-transition: opacity 0.1s;
-  -moz-transition: opacity 0.1s;
-  -o-transition: opacity 0.1s;
-  -ms-transition: opacity 0.1s;
-  transition: opacity 0.1s;
-}
-.react-and-link.out {
-  opacity: 0;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-  filter: alpha(opacity=0);
-}
-#reactshare-button {
-  right: 0;
-  bottom: 0;
-  padding: 0;
-  background: #d71a68;
-}
-#reactshare-button:after {
-  width: 1px;
-  height: 30px;
-  background: #fff;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-#reactshare-button.opened {
-  width: 100%;
-  bottom: 50px;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-#reactshare-button.opened:after {
-  display: none;
-}
-#reactshare-button .opinion-functions span,
-#reactshare-button .opinion-functions a {
-  width: 25%;
-}
-#reactshare-button .share-functions {
-  width: 100%;
-  padding-left: 0px;
-  text-align: center;
-}
-#reactshare-button .share-functions a,
-#reactshare-button .share-functions #share-funct-mail {
-  width: 25%;
-  float: initial;
-  display: inline-block;
-}
-#reactshare-button .rs-react,
-#reactshare-button .rs-share {
-  top: 50%;
-  float: initial;
-  font-size: 15px;
-  font-weight: bold;
-  position: absolute;
-  -webkit-transform: translate(0, -50%);
-  -moz-transform: translate(0, -50%);
-  -o-transform: translate(0, -50%);
-  -ms-transform: translate(0, -50%);
-  transform: translate(0, -50%);
-}
-#reactshare-button .rs-react {
-  right: 5%;
-  margin-right: 15px;
-}
-#reactshare-button .rs-share {
-  left: 5%;
-  border: none;
-  margin-left: 15px;
-}
-@media (max-width: 390px) {
-  #reactshare-button .rs-react {
-    right: 0px;
-  }
-  #reactshare-button .rs-share {
-    left: 0px;
-  }
-}
-@media (max-width: 300px) {
-  #reactshare-button .rs-react {
-    margin-right: 10px;
-  }
-  #reactshare-button .rs-share {
-    margin-left: 10px;
-  }
 }
 #email-share-template {
   opacity: 0;
@@ -796,6 +796,79 @@ Reactshare plugin styles*/
 }
 #floating_share .iframes .fb-like {
   margin-bottom: 10px;
+}
+#penis-magic-course {
+  text-align: center;
+}
+#penis-magic-course h1 {
+  font-size: 30px;
+}
+#penis-magic-course * {
+  font-family: 'Asap';
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+#penis-magic-course .header {
+  padding: 0 40px 0 40px;
+}
+#penis-magic-course .header em {
+  margin: 0 auto;
+  display: block;
+  max-width: 600px;
+}
+#penis-magic-course .header h5 {
+  font-size: 20px;
+}
+#penis-magic-course .header ul {
+  padding: 0;
+  margin: 0 auto;
+  max-width: 500px;
+}
+#penis-magic-course .header .img-wrapper {
+  margin: 20px 0;
+  text-align: center;
+}
+#penis-magic-course .header .img-wrapper img {
+  max-width: 200px;
+}
+#penis-magic-course .header .img-wrapper.small img {
+  max-width: 120px;
+}
+#penis-magic-course #existing_email {
+  color: #297706;
+  font-size: 20px;
+}
+#penis-magic-course #subscribe_form_wrapper {
+  width: 50%;
+  margin: 0 auto 40px auto;
+}
+#penis-magic-course #subscribe_form_wrapper input {
+  width: 100%;
+  height: 54px;
+  color: #4e4e4e;
+  font-size: 24px;
+  margin-bottom: 5%;
+  padding: 0px 10px;
+  border: 3px solid #ecf0f2;
+  background-color: #fff;
+}
+#penis-magic-course #subscribe_form_wrapper .subscribe_button {
+  border: 0;
+  width: 50%;
+  color: #fff;
+  height: 40px;
+  cursor: pointer;
+  font-size: 20px;
+  -webkit-transition: background-color 0.3s;
+  -moz-transition: background-color 0.3s;
+  -o-transition: background-color 0.3s;
+  -ms-transition: background-color 0.3s;
+  transition: background-color 0.3s;
+  background-color: #a9507a;
+}
+#penis-magic-course #subscribe_form_wrapper .subscribe_button:hover {
+  background-color: #bd7597;
 }
 .pb-mc-wrapper.hide {
   display: none;
