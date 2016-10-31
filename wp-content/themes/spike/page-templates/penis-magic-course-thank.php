@@ -29,7 +29,7 @@
 	<strong>Much Love, Adina</strong>
 
 	<hr>
-	<a href="<?php echo get_home_url(); ?>" target="_self">Visit my blog »</a>
+	<a href="<?php echo get_home_url(); ?>" class="btn" target="_self">Visit my blog »</a>
 </section>
 
 <?php get_template_part('templates/mts-footer'); ?>
