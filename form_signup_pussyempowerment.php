@@ -1,4 +1,5 @@
 <?php 
+    // WE CAN REMOVE THIS
     // We get the variables
     extract($_POST);
 

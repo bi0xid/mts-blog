@@ -7,15 +7,18 @@
 */
 class FormSignups {
 	protected $pages_ids = array(
-		'penis_magic_course' => 12831
+		'penis_magic_course'       => 12831,
+		'pussy_empowerment_course' => 12835
 	);
 
 	protected $thank_you_pages = array(
-		'penis_magic_course' => 12833
+		'penis_magic_course'       => 12833,
+		'pussy_empowerment_course' => 12837
 	);
 
 	protected $convertkit_url = array(
-		'penis_magic_course' => 'https://api.convertkit.com/v3/forms/47312/subscribe'
+		'penis_magic_course'       => 'https://api.convertkit.com/v3/forms/47312/subscribe',
+		'pussy_empowerment_course' => 'https://api.convertkit.com/v3/forms/47349/subscribe'
 	);
 
 	protected $convertkit_vars = array(
@@ -50,7 +53,24 @@ class FormSignups {
 			case 'penis_magic_course':
 				$this->penisMagicCourseSignup( $data );
 				break;
+
+			case 'pussy_empowerment_course':
+				$this->pussyEmpowermentCourseSignup( $data );
+				break;
 		}
+	}
+
+	public function pussyEmpowermentCourseSignup( $data ) {
+		if( $this->checkIfEmailExists( $data['email'], $data['form_id'] ) ) {
+			wp_redirect( get_permalink( $this->pages_ids[$data['form_id']] ).'?existing_email=true' );
+			exit;
+		}
+
+		$this->saveIntoDataBase( $data['email'], $data['form_id'] );
+		$this->saveEmailIntoConvertKit( $data['email'], $data['form_id'], $data['name'] );
+
+		wp_redirect( get_permalink( $this->thank_you_pages[$data['form_id']] ) );
+		exit;
 	}
 
 	/**
