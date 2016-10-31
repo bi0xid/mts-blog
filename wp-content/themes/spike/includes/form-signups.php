@@ -59,7 +59,6 @@ class FormSignups {
 	 * @return url redirect
 	 */
 	public function penisMagicCourseSignup( $data ) {
-
 		if( $this->checkIfEmailExists( $data['email'], $data['form_id'] ) ) {
 			wp_redirect( get_permalink( $this->pages_ids[$data['form_id']] ).'?existing_email=true' );
 			exit;
@@ -86,11 +85,23 @@ class FormSignups {
 		return mysql_fetch_array( $existing_email ) > 0;
 	}
 
+	/**
+	 * Save new row into database
+	 * @param user_email
+	 * @param form_id
+	 */
 	private function saveIntoDataBase( $email, $form_id ) {
 		$query = 'INSERT INTO `wparl_leads` (`form_id`, `user_email`) VALUES ("'.$form_id.'", "'.$email.'")';
 		$insert = mysql_query( $query, $this->conn );
 	}
 
+	/**
+	 * Save the new Email into Converkit
+	 * @param user_email
+	 * @param form_id
+	 * @param name
+	 * @return response json
+	 */
 	private function saveEmailIntoConvertKit( $email, $form_id, $name ) {
 		$this->convertkit_vars['email'] = $email;	
 		$this->convertkit_vars['form_id'] = $form_id;
