@@ -25,7 +25,6 @@
 
 					<form method="POST" id="ck_subscribe_form" class="ck_subscribe_form">
 
-						<input type="hidden" name="api_key" value="Vl6rr4wdvvE5zlJWkPtKZg"><br>
 						<input type="hidden" name="id" value="47312" id="landing_page_id"><p></p>
 						<input type="hidden" name="thankyou" class="ck_email_address" id="" value="http://mytinysecrets.com/penis-magic-course-signup/"><br>
 						<input type="hidden" name="form_id" class="" id="" value="penis_magic_course">
