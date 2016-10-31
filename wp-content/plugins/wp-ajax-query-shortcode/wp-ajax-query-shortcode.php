@@ -445,7 +445,7 @@ function wp_ajax_query( $atts = '' ) {
 										'name'  => 'E-mail',
 										'value' => get_post_meta( get_the_ID(), 'total_email_shares', true )
 											? get_post_meta( get_the_ID(), 'total_email_shares', true )
-											: get_post_meta( get_the_ID(), 'total_email_shares', true )
+											: 0
 									)
 								);
 
