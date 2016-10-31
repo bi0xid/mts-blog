@@ -24,17 +24,10 @@ class FormSignups {
 
 	private $conn;
 
-/*
 	protected $db = 'adinariv_arls';
 	protected $password = '6LC0SN9.P[';
 	protected $username = 'adinariv_arls';
 	protected $servername = 'loveschool.cgwdbyp5vyan.us-east-1.rds.amazonaws.com';
-*/
-
-	protected $db = 'mytinyse_loveschool_multi';
-	protected $password = '';
-	protected $username = 'root';
-	protected $servername = 'localhost';
 
 	function __construct() {
 		$this->conn = mysql_connect( $this->servername, $this->username, $this->password );
