@@ -23,7 +23,7 @@
 						<p>Success! Now check your email to confirm your subscription.</p>
 					</div>
 
-					<form method="POST" id="ck_subscribe_form" class="ck_subscribe_form" action="http://mytinysecrets.com/form_signup_penismagic.php" data-remote="true" novalidate="novalidate">
+					<form method="POST" id="ck_subscribe_form" class="ck_subscribe_form">
 
 						<input type="hidden" name="api_key" value="Vl6rr4wdvvE5zlJWkPtKZg"><br>
 						<input type="hidden" name="id" value="47312" id="landing_page_id"><p></p>

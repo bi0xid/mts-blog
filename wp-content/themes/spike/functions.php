@@ -14,6 +14,14 @@ $email_share_class = new EmailShareClass();
 include( 'includes/blog-helpers.php' );
 $blog_helpers = new BlogHelpers();
 
+// FormSignups Class and Actions
+include( 'includes/form-signups.php' );
+$form_signups = new FormSignups();
+
+if( $_POST && $_POST['form_id'] ) {
+	$form_signups->submitFormSignup( $_POST );
+}
+
 /*-----------------------------------------------------------------------------------*/
 /*	Load Translation Text Domain
 /*-----------------------------------------------------------------------------------*/
