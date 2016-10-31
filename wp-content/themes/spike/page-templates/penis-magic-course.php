@@ -34,7 +34,7 @@
 		<p>Once the course is online you’ll be the first to receive an email. So please make sure to leave me your name & email.</p>
 	</div>
 
-	<div id="subscribe_form_wrapper">
+	<div id="subscribe_form_wrapper" class="course-signup-form">
 		<div class="ck_form ck_naked">
 			<div class="ck_form_fields">
 
@@ -49,8 +49,8 @@
 					<input type="hidden" name="form_id" value="penis_magic_course">
 
 					<div class="ck_control_group ck_email_field_group">
-						<input type="text" required name="name" class="ck_first_name" id="ck_firstNameField" placeholder="First Name"><br>
-						<input type="email" name="email" class="ck_email_address" id="ck_emailField" placeholder="Email Address" required><br>
+						<input type="text" required name="name" class="form-input" id="ck_firstNameField" placeholder="First Name"><br>
+						<input type="email" name="email" class="form-input" id="ck_emailField" placeholder="Email Address" required><br>
 					</div>
 
 					<div class="buttons">
