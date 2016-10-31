@@ -400,10 +400,14 @@ function wp_ajax_query( $atts = '' ) {
 									'facebook_like' => array(
 										'name'  => 'Likes',
 										'value' => get_post_meta( get_the_ID(), 'facebook_likes', true )
+											? get_post_meta( get_the_ID(), 'facebook_likes', true )
+											: 0
 									),
 									'facebook_shares' => array(
 										'name'  => 'Share',
-										'value' => get_post_meta( get_the_ID(), 'facebook_shares', true ),
+										'value' => get_post_meta( get_the_ID(), 'facebook_shares', true )
+											? get_post_meta( get_the_ID(), 'facebook_shares', true )
+											: 0,
 										'link'  => 'https://www.facebook.com/sharer/sharer.php?u='.get_the_permalink()
 									)
 								);
@@ -411,27 +415,37 @@ function wp_ajax_query( $atts = '' ) {
 								$social_networks = array(
 									'google' => array(
 										'name'  => 'Google+',
-										'value' => get_post_meta( get_the_ID(), 'google_shares', true ),
+										'value' => get_post_meta( get_the_ID(), 'google_shares', true )
+											? get_post_meta( get_the_ID(), 'google_shares', true )
+											: 0,
 										'link'  => 'https://plus.google.com/share?url='.get_the_permalink()
 									),
 									'pinterest' => array(
 										'name'  => 'Pinterest',
-										'value' => get_post_meta( get_the_ID(), 'pinterest_shares', true ),
+										'value' => get_post_meta( get_the_ID(), 'pinterest_shares', true )
+											? get_post_meta( get_the_ID(), 'pinterest_shares', true )
+											: 0,
 										'href'  => "javascript:void((function(){var%20e=document.createElement('script');e.setAttribute('type','text/javascript');e.setAttribute('charset','UTF-8');e.setAttribute('src','http://assets.pinterest.com/js/pinmarklet.js?r='+Math.random()*99999999);document.body.appendChild(e)})());"
 									),
 									'stumbleupon' => array(
 										'name' => 'StumbleUpon',
-										'value' => get_post_meta( get_the_ID(), 'stumble_shares', true ),
+										'value' => get_post_meta( get_the_ID(), 'stumble_shares', true )
+											? get_post_meta( get_the_ID(), 'stumble_shares', true )
+											: 0,
 										'link' => 'http://www.stumbleupon.com/badge/?url='.get_the_permalink()
 									),
 									'digg' => array(
 										'name'  => 'Digg',
-										'value' => get_post_meta( get_the_ID(), 'digg_post_type', true ),
+										'value' => get_post_meta( get_the_ID(), 'digg_post_type', true )
+											? get_post_meta( get_the_ID(), 'digg_post_type', true )
+											: 0,
 										'link'  => 'http://digg.com/submit?phase=2%20&amp;url='.get_the_permalink().'&amp;title='.get_the_title()
 									),
 									'email' => array(
 										'name'  => 'E-mail',
 										'value' => get_post_meta( get_the_ID(), 'total_email_shares', true )
+											? get_post_meta( get_the_ID(), 'total_email_shares', true )
+											: get_post_meta( get_the_ID(), 'total_email_shares', true )
 									)
 								);
 
