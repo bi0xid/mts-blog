@@ -8,6 +8,7 @@
 
 	$course_name = array(
 		'penis_magic_course' => 'Penis Magic Course',
+		'energy_orgasm_course' => 'Energy Orgasm Course',
 		'pussy_empowerment_course' => 'Pussy Empowerment Course'
 	);
 ?>

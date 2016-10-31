@@ -8,12 +8,14 @@
 class FormSignups {
 	protected $pages_ids = array(
 		'penis_magic_course'       => 12831,
-		'pussy_empowerment_course' => 12835
+		'pussy_empowerment_course' => 12835,
+		'energy_orgasm_course'     => 13336
 	);
 
 	protected $convertkit_url = array(
 		'penis_magic_course'       => 'https://api.convertkit.com/v3/forms/47312/subscribe',
-		'pussy_empowerment_course' => 'https://api.convertkit.com/v3/forms/47349/subscribe'
+		'pussy_empowerment_course' => 'https://api.convertkit.com/v3/forms/47349/subscribe',
+		'energy_orgasm_course'     => 'https://api.convertkit.com/v3/forms/47351/subscribe'
 	);
 
 	protected $convertkit_vars = array(
