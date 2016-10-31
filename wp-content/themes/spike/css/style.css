@@ -870,6 +870,15 @@ Reactshare plugin styles*/
 #penis-magic-course #subscribe_form_wrapper .subscribe_button:hover {
   background-color: #bd7597;
 }
+@media (max-width: 600px) {
+  #penis-magic-course #subscribe_form_wrapper {
+    width: 90%;
+    margin-top: 20px;
+  }
+  #penis-magic-course #subscribe_form_wrapper .subscribe_button {
+    width: 100%;
+  }
+}
 .pb-mc-wrapper.hide {
   display: none;
 }
