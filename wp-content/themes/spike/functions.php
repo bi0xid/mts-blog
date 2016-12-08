@@ -81,7 +81,7 @@ function mts_enqueue_css() {
 		wp_enqueue_style('prettyPhoto', get_template_directory_uri() . '/css/prettyPhoto.css', 'style');
 	}
 
-	wp_enqueue_style('custom-style', get_template_directory_uri() . '/css/style.css', 'style', '1.0.8');
+	wp_enqueue_style('custom-style', get_template_directory_uri() . '/css/style.css', 'style', '1.0.9');
 }
 add_action('wp_enqueue_scripts', 'mts_enqueue_css');
 
