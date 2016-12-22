@@ -613,11 +613,15 @@ Reactshare plugin styles*/
   color: #fff;
   font-size: 16px;
   margin-bottom: 5px;
+  text-align: center;
   -webkit-transition: color 0.3s;
   -moz-transition: color 0.3s;
   -o-transition: color 0.3s;
   -ms-transition: color 0.3s;
   transition: color 0.3s;
+}
+.loveschool-banner a .text p:last-child {
+  margin: 0;
 }
 .loveschool-banner a .text p.underline {
   text-decoration: underline;
