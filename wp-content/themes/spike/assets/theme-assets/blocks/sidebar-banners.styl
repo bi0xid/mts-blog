@@ -24,6 +24,9 @@
 			transition background-color .3s
 			background-color rgba(0, 0, 0, 0.55)
 
+			&.with-alert
+				bottom 50px
+
 			p
 				margin 0
 				color #FFF
@@ -34,7 +37,24 @@
 				&.underline
 					text-decoration underline
 
+		.alert
+			width 100%
+			color #FFF
+			padding 5px
+			text-align center
+			box-sizing border-box
+			absolute bottom 0 left 0
+			background-color #FF806C
+			transition background-color .3s
+
+			p
+				margin 0
+				font-size 17px
+
 		&:hover
+			.alert
+				background-color #f2634d
+
 			.text
 				background-color rgba(0, 0, 0, 0.65)
 

@@ -16,7 +16,7 @@ $blog_helpers = new BlogHelpers();
 
 // FormSignups Class and Actions
 include( 'includes/form-signups.php' );
-$form_signups = new FormSignups();
+//$form_signups = new FormSignups();
 
 if( $_POST && $_POST['form_id'] ) {
 	$form_signups->submitFormSignup( $_POST );
