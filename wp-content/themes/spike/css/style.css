@@ -608,6 +608,21 @@ Reactshare plugin styles*/
 .loveschool-banner a .text.with-alert {
   bottom: 50px;
 }
+@media (max-width: 950px) {
+  .loveschool-banner a .text.with-alert {
+    bottom: 70px;
+  }
+}
+@media (max-width: 720px) {
+  .loveschool-banner a .text.with-alert {
+    bottom: 30px;
+  }
+}
+@media (max-width: 520px) {
+  .loveschool-banner a .text.with-alert {
+    bottom: 50px;
+  }
+}
 .loveschool-banner a .text p {
   margin: 0;
   color: #fff;
