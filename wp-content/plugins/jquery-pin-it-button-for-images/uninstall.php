@@ -8,9 +8,7 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
 //delete all added options
 delete_option( 'jpibfi_selection_options' );
 delete_option( 'jpibfi_visual_options' );
-delete_option( 'jpibfi_advanced_options' );
 delete_option( 'jpibfi_version' );
-delete_option( 'jpibfi_lightbox_options' );
-
-//delete added metadata from all posts
-delete_post_meta_by_key( 'jpibfi_meta' );
+delete_option( 'jpibfi_options_version' );
+delete_option( 'jpibfi_pro_ad' );
+delete_option( 'jpibfi_license' );

@@ -1,92 +1,51 @@
 <?php
 /*
-Plugin Name: jQuery Pin It Button For Images
-Plugin URI: http://mrsztuczkens.me/jpibfi/
+Plugin Name: jQuery Pin It Button for Images
+Plugin URI: https://highfiveplugins.com/jpibfi/jquery-pin-it-button-for-images-documentation/
 Description: Highlights images on hover and adds a "Pin It" button over them for easy pinning.
 Text Domain: jquery-pin-it-button-for-images
 Domain Path: /languages
 Author: Marcin Skrzypiec
-Version:1.60
-Author URI: http://mrsztuczkens.me/
+Version:2.2.5
+Author URI: https://highfiveplugins.com/
 */
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if ( !defined( 'WPINC' ) )
 	die;
-}
 
-if ( ! class_exists( 'jQuery_Pin_It_Button_For_Images' ) ) :
+if ( !class_exists( 'jQuery_Pin_It_Button_For_Images' ) ) {
 
 	final class jQuery_Pin_It_Button_For_Images {
 
-		private static $instance;
-
-		private function __construct() {
-			$this->includes();
-			$this->load_textdomain();
-
-			$jpibfi_plugin = plugin_basename( __FILE__ );
-			add_filter( "plugin_action_links_$jpibfi_plugin", array( $this, 'plugin_settings_filter' ) );
-
-			register_activation_hook( __FILE__, array( $this, 'update_plugin' ) );
-			add_action( 'plugins_loaded', array( $this, 'update_plugin' ) );
-		}
-
-		public static function instance() {
-			if ( null == self::$instance ) {
-				self::$instance = new self;
-			}
-			return self::$instance;
-		}
-
-		private function includes() {
-
-            require_once(plugin_dir_path(__FILE__) . 'includes/class-jpibfi-globals.php');
-            JPIBFI_Globals::init(__FILE__,  '1.60', 'a');
-
-            $files = array(
-                'includes/consts/jpibfi-description-option.php',
-                'includes/admin/class-jpibfi-admin-utilities.php',
-                'includes/admin/class-jpibfi-options.php',
-                'includes/admin/class-jpibfi-selection-options.php',
-                'includes/admin/class-jpibfi-advanced-options.php',
-                'includes/admin/class-jpibfi-visual-options.php',
-                'includes/admin/class-jpibfi-lightbox-options.php',
-                'includes/admin/class-jpibfi-admin.php',
-                'includes/admin/class-jpibfi-import-export.php',
-                'includes/public/class-jpibfi-client-utilities.php',
-                'includes/public/class-jpibfi-client.php'
-            );
-            foreach($files as $file)
-                require_once JPIBFI_Globals::get_plugin_dir() .$file;
-		}
-
-		public function load_textdomain() {
-			load_plugin_textdomain( 'jquery-pin-it-button-for-images', FALSE, dirname( plugin_basename( JPIBFI_Globals::get_plugin_file() ) ) . '/languages/' );
-		}
-
-		public function plugin_settings_filter( $links ) {
-			$settings_link = '<a href="options-general.php?page=jpibfi_settings">' . __( 'Settings', 'jquery-pin-it-button-for-images' ) . '</a>';
-			array_unshift( $links, $settings_link );
-			return $links;
-		}
-
-		/* Function updates DB if it detects new version of the plugin */
-		public function update_plugin() {
-            $version_option = 'jpibfi_version';
-            $update_option = 'jpibfi_update_options';
-
-            $jpibfi_v = JPIBFI_Globals::get_version();
-			$version = get_option( $version_option );
-			if ( false == $version || (float)$version < (float)$jpibfi_v  || get_option( $update_option ) ) {
-				update_option( $version_option, $jpibfi_v);
-				update_option( $update_option, false);
-                update_option('jpibfi_pro_ad', 1);
-			}
+		function __construct() {
+			$version = '2.2.5';
+			require_once plugin_dir_path(__FILE__) . 'includes/jpibfi.php';
+			new JPIBFI(__FILE__,  $version);
 		}
 	}
 
-endif; // End if class_exists check
+	$JPIBFI = new jQuery_Pin_It_Button_For_Images();
 
+	function jpibfi_activation_hook() {
+		// Bail if activating from network, or bulk
+		if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
+			return;
+		}
 
-$JPIBFI = jQuery_Pin_It_Button_For_Images::instance();
+		// Add the transient to redirect
+		set_transient( '_jpibfi_activation_redirect', true, 30 );
+    }
+	register_activation_hook( __FILE__, 'jpibfi_activation_hook' );
+
+} else {
+	function jpibfi_duplicate_error() {
+		?>
+		<div class="notice notice-error">
+			<p><strong>
+				<?php _e('You have two versions of jQuery Pin It Button for Images installed. Please deactivate and remove one of them.', 'jquery-pin-it-button-for-images'); ?>
+			</strong></p>
+		</div>
+		<?php
+	}
+	add_action( 'admin_notices', 'jpibfi_duplicate_error' );
+}

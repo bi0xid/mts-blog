@@ -1,9 +1,9 @@
-=== jQuery Pin It Button For Images ===
+=== jQuery Pin It Button for Images ===
 Contributors: mrsztuczkens, redearthdesign, brocheafoin, robertark
 Tags: pinterest, pin it, button, image, images, pinit, social media, hover, click, photo, photos
 Requires at least: 3.3.0
-Tested up to: 4.5.3
-Stable tag: 1.60
+Tested up to: 4.6.1
+Stable tag: 2.2.5
 License: GPLv2 or later
 
 Highlights images on hover and adds a Pinterest "Pin It" button over them for easy pinning.
@@ -17,19 +17,19 @@ The plugin allows you to:
 * choose which pictures shouldn't show the "Pin it" button (using classes)
 * choose which pictures should show the "Pin it" button (all images, post images, images with certain class(es))
 * choose if you want to show the "Pin it" button on home page, single posts, single pages or category pages
-* disable showing the button on certain posts and pages (works only on single posts and single pages)
+* disable showing the button on certain posts and pages
 * choose transparency level depending on your needs
 * use your own Pinterest button design
 
 Once you activate the plugin, it's ready to go with the default settings - button appears on all images within the body of your posts/pages that aren't marked with "nopin" or "wp-smiley" classes.
 
 > <strong>jQuery Pin It Button For Images Pro</strong><br>
-> jQuery Pin It Button For Images Pro is available with full support for touch devices. Check it out: http://mrsztuczkens.me/jquery-pin-it-button-for-images-pro/
+> jQuery Pin It Button For Images Pro is available with full support for touch devices. Check it out: https://highfiveplugins.com/downloads/jquery-pin-it-button-for-images-pro/
 
 **Translators**
 - Spanish (es_ES) -  Andrew Kurtis [WebHostingHub](http://www.webhostinghub.com/)
 
-If you want to learn more about the plugin, visit its website: http://mrsztuczkens.me/jpibfi/
+If you want to learn more about the plugin, visit its website: https://highfiveplugins.com/jpibfi/jquery-pin-it-button-for-images-documentation/
 
 (This plugin is not related to or endorsed by Pinterest or its affiliates)
 
@@ -67,6 +67,66 @@ Please report them in the plugin's support forum on Wordpress.org.
 4. Pinterest pop-up window
 
 == Changelog ==
+
+= 2.2.5 =
+* Released 2017-01-31
+* Fixed issue with updating the settings
+
+= 2.2.4 =
+* Released 2017-01-30
+* Fix to support old versions of PHP
+
+= 2.2.3 =
+* Released 2017-01-29
+* Minor cleanup
+* Enhanced type checking to reduce errors caused by type mismatch even further
+
+= 2.2.1 =
+* Released 2017-01-22
+* Fixed issue with saving custom images
+
+= 2.2.0 =
+* Released 2017-01-21
+* Settings panel switched to saving via form submit instead of an Ajax request to avoid conflicts with security plugins
+* Settings panel cleanup
+
+= 2.1.3 =
+* Released 2017-01-12
+* Added ability to disable the plugin on certain filters and changing filters priority
+* Added strong type checking in settings to reduce errors caused by type mismatch
+
+= 2.1.2 =
+* Released 2016-12-07
+* Minor bug fixes
+
+= 2.1.1 =
+* Released 2016-11-11
+* Fixed issue with double icons
+* Disabled on and Enabled on settings now are not space-sensitive
+
+= 2.1.0 =
+* Released 2016-11-06
+* Meta box to disable plugin on certain posts/pages added
+* Added new icons
+
+= 2.0.3 =
+* Released 2016-10-08
+* Fixed bug with removing image attributes
+* Fixed issue with getting image description by URL
+
+= 2.0.2 =
+* Release 2016-10-05
+* Another set of fixes for version 2.0.0
+
+= 2.0.1 =
+* Release 2016-10-04
+* Fixes for version 2.0.0
+
+= 2.00 =
+* Release 2016-10-02
+* Complete code rewrite
+* Added support for featured image
+* Plugin settings clean up
 
 = 1.60 =
 * Release 2016-07-04
@@ -243,6 +303,47 @@ Please report them in the plugin's support forum on Wordpress.org.
 * Feature: IE7 image highlight fix: using a transparent png instead of background-color
 
 == Upgrade Notice ==
+
+= 2.2.5 =
+* Fixed issue with updating the settings
+
+= 2.2.4 =
+* Fix to support old versions of PHP
+
+= 2.2.3 =
+* Code cleanup * enhancements to using settings
+
+= 2.2.1 =
+* Fixed issue with saving custom images
+
+= 2.2.0 =
+* Changed how settings are saved to avoid conflicts with security plugins
+
+= 2.1.3 =
+* Added ability to manipulate filters the plugin uses and added additional validation to settings.
+
+= 2.1.2 =
+* Minor bug fixes
+
+= 2.1.1 =
+* Minor bug fixes
+
+= 2.1.0 =
+* Meta box to disable plugin on certain posts/pages added
+* New icons available
+
+= 2.0.3 =
+* Fixed bug with removing image attributes
+* Fixed issue with getting image description by URL
+
+= 2.0.2 =
+* Another set of fixes for version 2.0.0
+
+= 2.0.1 =
+* Fixes for version 2.0.0
+
+= 2.00 =
+* Complete rewrite plus some changes in settings.
 
 = 1.60 =
 * Added lightbox feature

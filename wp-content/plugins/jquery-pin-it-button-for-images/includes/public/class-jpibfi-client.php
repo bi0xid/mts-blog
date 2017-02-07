@@ -2,236 +2,312 @@
 
 class JPIBFI_Client {
 
-	protected static $instance = null;
-    private $image_width = 65;
-    private $image_height = 41;
+	private $selection_options;
+	private $visual_options;
+	/**
+	 * @var JPIBFI_Advanced_Options
+	 */
+	private $advanced_options;
+	private $version;
+	private $plugin_dir_url;
 
-	private function __construct() {
+	public function __construct( $file, $version ) {
+		$this->version           = $version;
+		$this->plugin_dir_url    = plugin_dir_url( $file );
+		$this->selection_options = new JPIBFI_Selection_Options();
+		$this->visual_options    = new JPIBFI_Visual_Options();
+		$this->advanced_options  = new JPIBFI_Advanced_Options();
+
 		add_action( 'wp_enqueue_scripts', array( $this, 'add_plugin_scripts' ) );
 		add_action( 'wp_head', array( $this, 'print_header_style' ) );
-		add_filter( "the_excerpt", array( $this, 'prepare_the_content' ), 9999 );
-		add_filter( "the_content", array( $this, 'prepare_the_content' ), 9999 );
-
-        $lightbox_options = JPIBFI_Lightbox_Options::get_instance()->get_options();
-        if ($lightbox_options['enabled'] == '1') {
-            add_filter("the_content", array($this, 'add_lightbox'), 9998);
-        }
+		$this->add_conditional_filters();
 	}
 
-	public static function get_instance() {
-		// If the single instance hasn't been set, set it now.
-		if ( null == self::$instance ) {
-			self::$instance = new self;
+	private function add_conditional_filters() {
+		$advanced_value = $this->advanced_options->get();
+
+		$filters = array(
+			'post_thumbnail_html',
+			'the_excerpt',
+			'the_content'
+		);
+
+		foreach ( $filters as $filter ) {
+			if ( $advanced_value[ 'filter_' . $filter . '_on' ] ) {
+				add_filter( $filter, array(
+					$this,
+					'the_content'
+				), $advanced_value[ 'filter_' . $filter . '_priority' ] );
+			}
+		}
+	}
+
+	public function add_plugin_scripts() {
+		if ( ! $this->add_jpibfi() ) {
+			return;
 		}
 
-		return self::$instance;
-	}
+		$deps = array( 'jquery' );
 
-	//Adds all necessary scripts
-	public function add_plugin_scripts() {
-        $jpibfi_adanced_options = JPIBFI_Advanced_Options::get_instance()->get_options();
-        $jpibfi_selection_options = JPIBFI_Selection_Options::get_instance()->get_options();
-        $jpibfi_visual_options = JPIBFI_Visual_Options::get_instance()->get_options();
-        $lightbox_options = JPIBFI_Lightbox_Options::get_instance()->get_options();
+		wp_enqueue_script( 'jpibfi-script', $this->plugin_dir_url . 'js/jpibfi.client.js', $deps, $this->version, false );
 
-		if ( ! ( JPIBFI_Client_Utilities::add_jpibfi() ) )
-			return;
-
-        $deps = array('jquery');
-
-        if ($lightbox_options['enabled'] == '1') {
-            wp_enqueue_script('jquery-colorbox', JPIBFI_Globals::get_plugin_url() . 'js/jquery.colorbox-min.js', array('jquery'), JPIBFI_Globals::get_file_version(), false);
-            wp_enqueue_style('jquery-colorbox', JPIBFI_Globals::get_plugin_url() . 'css/colorbox.css', array(), JPIBFI_Globals::get_file_version());
-            $deps[] = 'jquery-colorbox';
-        }
-
-		wp_enqueue_script( 'jquery-pin-it-button-script', JPIBFI_Globals::get_plugin_url() . 'js/jpibfi.js', $deps, JPIBFI_Globals::get_file_version(), false );
-
-		$use_custom_image = $jpibfi_visual_options[ 'use_custom_image' ] == "1";
+		$selection_options                   = $this->selection_options->get();
+		$selection_options['image_selector'] = apply_filters( 'jpibfi_image_selector', $selection_options['image_selector'] );
 
 		$parameters_array = array(
-			'imageSelector' 	=> $jpibfi_selection_options['image_selector'],
-			'disabledClasses' 	=> $jpibfi_selection_options['disabled_classes'],
-			'enabledClasses' 	=> $jpibfi_selection_options['enabled_classes'],
-			'descriptionOption' => $jpibfi_visual_options['description_option'],
-			'usePostUrl' 		=> $jpibfi_visual_options['use_post_url'],
-			'minImageHeight'	=> $jpibfi_selection_options['min_image_height'],
-			'minImageWidth'		=> $jpibfi_selection_options['min_image_width'],
-			'siteTitle'			=> get_bloginfo( 'name', 'display' ),
-			'buttonPosition'	=> $jpibfi_visual_options[ 'button_position' ],
-			'debug'				=> $jpibfi_adanced_options[ 'debug'],
-			'containerSelector' => $jpibfi_adanced_options[ 'container_selector'],
-			'pinImageHeight' 	=> $use_custom_image ? $jpibfi_visual_options['custom_image_height'] : $this->image_height,
-			'pinImageWidth'		=> $use_custom_image ? $jpibfi_visual_options['custom_image_width'] : $this->image_width,
-			'buttonMarginTop'	=> $jpibfi_visual_options[ 'button_margin_top' ],
-			'buttonMarginBottom'=> $jpibfi_visual_options[ 'button_margin_bottom' ],
-			'buttonMarginLeft'   => $jpibfi_visual_options[ 'button_margin_left' ],
-			'buttonMarginRight'	=> $jpibfi_visual_options[ 'button_margin_right' ],
-			'retinaFriendly'    => $jpibfi_visual_options[ 'retina_friendly' ] == '1' ? '1' : '0',
-            'showButton'        => $jpibfi_visual_options['show_button'],
-            'pinLinkedImages'   => $jpibfi_visual_options['pinLinkedImages'] == '1',
-            'pinLinkedImagesExtensions' => $jpibfi_visual_options['pinLinkedImagesExtensions'],
-            'lightbox' => array(
-                'enabled' => $lightbox_options['enabled'] == '1',
-                'descriptionOption' => $lightbox_options['description_option']
-            )
+			'hover' => array_merge(
+				array( 'siteTitle' => esc_attr( get_bloginfo( 'name', 'display' ) ) ),
+				$selection_options,
+				$this->visual_options->get_options_for_view()
+			),
 		);
-		wp_localize_script( 'jquery-pin-it-button-script', 'jpibfi_options', apply_filters( 'jpibfi_javascript_parameters', $parameters_array ) );
+		wp_localize_script( 'jpibfi-script', 'jpibfi_options', $parameters_array );
 
-
+		wp_enqueue_style( 'jpibfi-style', $this->plugin_dir_url . 'css/client.css', array(), $this->version );
 	}
 
 	public function print_header_style() {
-        $jpibfi_visual_options = JPIBFI_Visual_Options::get_instance()->get_options();
-
-		if ( ! ( JPIBFI_Client_Utilities::add_jpibfi() ) )
+		if ( ! $this->add_jpibfi() ) {
 			return;
-
-		$use_custom_image = $jpibfi_visual_options[ 'use_custom_image' ] == "1";
-
-		$width  = $use_custom_image ? $jpibfi_visual_options['custom_image_width'] : $this->image_width;
-		$height = $use_custom_image ? $jpibfi_visual_options['custom_image_height'] : $this->image_height;
-
-		if ( $jpibfi_visual_options[ 'retina_friendly' ] == '1' ){
-			$width = floor( $width / 2 );
-			$height = floor ( $height / 2 );
 		}
 
-		$url = $use_custom_image ? $jpibfi_visual_options['custom_image_url'] : JPIBFI_Globals::get_plugin_url() . 'images/pinit-button.png';
-        ob_start();
-		?>
-		<style type="text/css">
-			a.pinit-button {
-                position:absolute;
-                text-indent:-9999em !important;
-				width: <?php echo $width; ?>px !important;
-				height: <?php echo $height; ?>px !important;
-				background: transparent url('<?php echo $url; ?>') no-repeat 0 0 !important;
-				background-size: <?php echo $width; ?>px <?php echo $height; ?>px !important;
-			}
+		$visual_options_js = $this->visual_options->get_options_for_view();
 
-			img.pinit-hover {
-				opacity: <?php echo (1 - $jpibfi_visual_options['transparency_value']); ?> !important;
-				filter:alpha(opacity=<?php echo (1 - $jpibfi_visual_options['transparency_value']) * 100; ?>) !important; /* For IE8 and earlier */
-			}
-		</style>
-        
-	   <?php
-       $what = "\\x00-\\x20";
-       echo  trim( preg_replace( "/[".$what."]+/" , ' ' , ob_get_clean() ) , $what );
+		$custom_button_span_css = '';
+		$custom_button_css      = '';
+		if ( $visual_options_js['pin_image'] === 'custom' ) {
+			$custom_button_css .= sprintf( 'width: %dpx !important;', $visual_options_js['pinImageWidth'] );
+			$custom_button_css .= sprintf( 'height: %dpx !important;', $visual_options_js['pinImageHeight'] );
+
+			$custom_button_span_css .= $custom_button_css;
+			$custom_button_span_css .= sprintf( 'background-image: url("%s");', $visual_options_js['custom_image_url'] );
+			$custom_button_span_css .= sprintf( 'background-size: %dpx %dpx;', $visual_options_js['pinImageWidth'], $visual_options_js['pinImageHeight'] );
+		}
+		ob_start();
+		?>
+        <style type="text/css">
+            a.pinit-button.custom {
+            <?php echo $custom_button_css; ?>
+            }
+
+            a.pinit-button.custom span {
+            <?php echo $custom_button_span_css; ?>
+            }
+
+            img.pinit-hover {
+                opacity: <?php echo (1 - $visual_options_js['transparency_value']); ?> !important;
+                filter: alpha(opacity=<?php echo (1 - $visual_options_js['transparency_value']) * 100; ?>) !important;
+            }
+        </style>
+
+		<?php
+		echo ob_get_clean();
 	}
 
 	/*
- * Adds a hidden field with url and and description of the pin that's used when user uses "Link to individual page"
- * Thanks go to brocheafoin, who added most of the code that handles creating description
- */
-	public function prepare_the_content( $content ) {
-		if ( ! JPIBFI_Client_Utilities::add_jpibfi() )
+	* Adds data-jpibfi-description attribute to each image that is added through media library. The value is the "Description"  of the image from media library.
+	* This piece of code uses a lot of code from the Photo Protect http://wordpress.org/plugins/photo-protect/ plugin
+	*/
+	function the_content( $content ) {
+		if ( ! $this->add_jpibfi() ) {
 			return $content;
-
-        $jpibfi_visual_options = JPIBFI_Visual_Options::get_instance()->get_options();
-        $lightbox_options = JPIBFI_Lightbox_Options::get_instance()->get_options();
-
+		}
 		global $post;
 
-		$attributes_html = '';
+		$visual_options = $this->visual_options->get();
 
-		//if we need to add additional attributes to handle use_post_url setting
-		if ( !is_singular() && '1' == $jpibfi_visual_options[ 'use_post_url' ] ){
-			//if page description should be used as pin description and an excerpt for the post exists
-			if ( has_excerpt( $post->ID ) && (JPIBFIDescriptionOption::PageDescription == $jpibfi_visual_options[ 'description_option' ] || JPIBFIDescriptionOption::PageDescription == $lightbox_options[ 'description_option' ]))
-				$description = wp_kses( $post->post_excerpt, array() );
-			else
-				$description = get_the_title($post->ID);
+		$get_description = in_array( 'img_description', $visual_options['description_option'] );
+		$get_caption     = in_array( 'img_caption', $visual_options['description_option'] );
 
-			$attributes_html .= 'data-jpibfi-url="' . get_permalink( $post->ID ) . '" ' ;
-			$attributes_html .= 'data-jpibfi-description ="' . esc_attr( $description ) . '" ';
-		}
+		$imgPattern  = '/<img[^>]*>/i';
+		$attrPattern = '/ ([-\w]+)[ ]*=[ ]*([\"\'])(.*?)\2/i';
 
-		$input_html = '<input class="jpibfi" type="hidden" ' . $attributes_html . '>';
-		$content = $input_html . $content;
+		preg_match_all( $imgPattern, $content, $images, PREG_SET_ORDER );
 
-		$add_image_descriptions = JPIBFIDescriptionOption::ImageDescription == $jpibfi_visual_options[ 'description_option' ] || JPIBFIDescriptionOption::ImageDescription == $lightbox_options[ 'description_option' ];
+		foreach ( $images as $img ) {
 
-		//if we need to add data-jpibfi-description to each image
-		if ( $add_image_descriptions ){
-			$content = $this->add_description_attribute_to_images( $content );
-		}
+			preg_match_all( $attrPattern, $img[0], $attributes, PREG_SET_ORDER );
 
-		return $content;
-	}
+			$new_img = '<img';
+			$src     = '';
+			$id      = '';
 
-    public  function add_lightbox( $content ){
-        if ( ! JPIBFI_Client_Utilities::add_jpibfi() )
-            return $content;
-
-        global $post;
-        // universal IMG-Tag pattern matches everything between "<img" and the closing "(/)>"
-        // will be used to match all IMG-Tags in Content.
-        $imgPattern = "/<img([^\>]*?)>/i";
-        if (preg_match_all($imgPattern, $content, $imgTags)) {
-            foreach ($imgTags[0] as $imgTag) {
-                // only work on imgTags that do not already contain the string "colorbox-"
-                if (!preg_match('/jpibfi-group-/i', $imgTag)) {
-                    if (!preg_match('/class=/i', $imgTag)) {
-                        // imgTag does not contain class-attribute
-                        $pattern = $imgPattern;
-                        $replacement = '<img class="jpibfi-group-' . $post->ID . '" $1>';
-                    }	else {
-                        // imgTag already contains class-attribute
-                        $pattern = "/<img(.*?)class=('|\")([A-Za-z0-9 \/_\.\~\:-]*?)('|\")([^\>]*?)>/i";
-                        $replacement = '<img$1class=$2$3 jpibfi-group-' . $post->ID . '$4$5>';
-                    }
-                    $replacedImgTag = preg_replace($pattern, $replacement, $imgTag);
-                    $content = str_replace($imgTag, $replacedImgTag, $content);
-                }
-            }
-        }
-        return $content;
-    }
-
-	/* PRIVATE METHODS */
-
-	/*
- * Adds data-jpibfi-description attribute to each image that is added through media library. The value is the "Description"  of the image from media library.
- * This piece of code uses a lot of code from the Photo Protect http://wordpress.org/plugins/photo-protect/ plugin
- */
-	private function add_description_attribute_to_images( $content ) {
-
-		$imgPattern = '/<img[^>]*>/i';
-		$attrPattern = '/ ([\w]+)[ ]*=[ ]*([\"\'])(.*?)\2/i';
-
-		preg_match_all($imgPattern, $content, $images, PREG_SET_ORDER);
-
-		foreach ($images as $img) {
-
-			preg_match_all($attrPattern, $img[0], $attributes, PREG_SET_ORDER);
-
-			$newImg = '<img';
-			$src = '';
-			$id = '';
-
-			foreach ($attributes as $att) {
-				$full = $att[0];
-				$name = $att[1];
+			foreach ( $attributes as $att ) {
+				$full  = $att[0];
+				$name  = $att[1];
 				$value = $att[3];
 
-				$newImg .= $full;
+				$new_img .= $full;
 
-				if ('class' == $name ) {
-					$id = JPIBFI_Client_Utilities::get_post_id_from_image_classes( $value );
-				}	else if ( 'src' == $name ) {
+				if ( 'class' == $name ) {
+					$id = $this->get_post_id_from_image_classes( $value );
+				}
+
+				if ( 'src' == $name ) {
 					$src = $value;
 				}
 			}
 
-			$description = JPIBFI_Client_Utilities::get_image_description( $id, $src );
-			$newImg .= ' data-jpibfi-description="' . esc_attr( $description ) . '" />';
-			$content = str_replace($img[0], $newImg, $content);
+			if ( $get_description || $get_caption ) {
+				$att = $this->get_attachment( $id, $src );
+				if ( $att != null ) {
+					if ( $get_description ) {
+						$new_img .= sprintf( ' data-jpibfi-description="%s"', esc_attr( $att->post_content ) );
+					}
+
+					if ( $get_caption ) {
+						$new_img .= sprintf( ' data-jpibfi-caption="%s"', esc_attr( $att->post_excerpt ) );
+					}
+				}
+			}
+
+			$new_img .= sprintf( ' data-jpibfi-post-excerpt="%s"', esc_attr( wp_kses( $post->post_excerpt, array() ) ) );
+			$new_img .= sprintf( ' data-jpibfi-post-url="%s"', esc_attr( get_permalink() ) );
+			$new_img .= sprintf( ' data-jpibfi-post-title="%s"', esc_attr( get_the_title() ) );
+			$new_img .= ' >';
+			$content = str_replace( $img[0], $new_img, $content );
+		}
+		$jscript = '';
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			ob_start();
+			?>
+            <script type="text/javascript">
+                (function () {
+                    if (!jQuery) return;
+                    jQuery(document).ready(function () {
+                        jQuery('.jpibfi').closest('div').addClass('jpibfi_container');
+                    });
+                })();
+            </script>
+			<?php
+			$jscript = ob_get_clean();
 		}
 
-		return $content;
+		return '<input class="jpibfi" type="hidden">' . $content . $jscript;
+	}
+
+	//function gets the id of the image by searching for class with wp-image- prefix, otherwise returns empty string
+	function get_post_id_from_image_classes( $class_attribute ) {
+		$classes = preg_split( '/\s+/', $class_attribute, - 1, PREG_SPLIT_NO_EMPTY );
+		$prefix  = 'wp-image-';
+
+		foreach ( $classes as $class ) {
+			if ( $prefix === substr( $class, 0, strlen( $prefix ) ) ) {
+				return str_replace( $prefix, '', $class );
+			}
+		}
+
+		return '';
+	}
+
+	function get_attachment( $id, $src ) {
+		$result = is_numeric( $id ) ? get_post( $id ) : null;
+
+		if ( null === $result ) {
+			$id     = $this->get_attachment_id_by_url( $src );
+			$result = $id !== 0 ? get_post( $id ) : null;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Function copied from https://wpscholar.com/blog/get-attachment-id-from-wp-image-url/
+	 * Return an ID of an attachment by searching the database with the file URL.
+	 *
+	 * @return {int} $attachment
+	 */
+	function get_attachment_id_by_url( $url ) {
+		$attachment_id = 0;
+		$dir           = wp_upload_dir();
+		if ( false !== strpos( $url, $dir['baseurl'] . '/' ) ) {
+			$file       = basename( $url );
+			$query_args = array(
+				'post_type'   => 'attachment',
+				'post_status' => 'inherit',
+				'fields'      => 'ids',
+				'meta_query'  => array(
+					array(
+						'value'   => $file,
+						'compare' => 'LIKE',
+						'key'     => '_wp_attachment_metadata',
+					),
+				)
+			);
+			$query      = new WP_Query( $query_args );
+			if ( $query->have_posts() ) {
+				foreach ( $query->posts as $post_id ) {
+					$meta                = wp_get_attachment_metadata( $post_id );
+					$original_file       = basename( $meta['file'] );
+					$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+					if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) {
+						$attachment_id = $post_id;
+						break;
+					}
+				}
+			}
+		}
+
+		return $attachment_id;
+	}
+
+	function add_jpibfi() {
+		if ( is_feed() ) {
+			return false;
+		}
+		$add_jpibfi               = false;
+		$jpibfi_selection_options = $this->selection_options->get();
+		$show_on                  = $jpibfi_selection_options['show_on'];
+		$show_array               = explode( ',', $show_on );
+
+		foreach ( $show_array as $show_tag ) {
+			if ( $this->is_tag( $show_tag ) ) {
+				$add_jpibfi = true;
+				break;
+			}
+		}
+		if ( ! $add_jpibfi ) {
+			return false;
+		}
+
+		$disable_on    = $jpibfi_selection_options['disable_on'];
+		$disable_array = explode( ',', $disable_on );
+
+		foreach ( $disable_array as $disable_tag ) {
+			if ( $this->is_tag( $disable_tag ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	function is_tag( $tag ) {
+		$tag = trim( $tag );
+		if ( is_numeric( $tag ) ) {
+			$int = intval( $tag );
+
+			return get_the_ID() === $int;
+		}
+		switch ( strtolower( $tag ) ) {
+			case '[front]':
+				return is_front_page();
+			case '[single]':
+				return is_single();
+			case '[page]':
+				return is_page();
+			case '[archive]':
+				return is_archive();
+			case '[search]':
+				return is_search();
+			case '[category]':
+				return is_category();
+			case '[tag]':
+				return is_tag();
+			case '[home]':
+				return is_home();
+			default:
+				return false;
+		}
 	}
 }
-
-add_action( 'plugins_loaded', array( 'JPIBFI_Client', 'get_instance' ) );

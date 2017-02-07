@@ -1,0 +1,5 @@
+#AuthType Basic
+#AuthName "MyTinySecrets access"
+#AuthUserFile /var/www/mytinysecrets.com/.htpasswd
+#Require valid-user
+
