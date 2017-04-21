@@ -62,6 +62,8 @@ shop-wp.tar.gz
 /wp-content/uploads
 /sitemap.*
 *.sql
+nginx.conf
+/wp-content/db.php
 
 # Hidden files
 *.DS_Store
