@@ -52,3 +52,19 @@ shop-original.bak/
 buscayreemplaza.php
 prestashop.zip
 shop-wp.tar.gz
+
+
+
+
+# git is no backup
+/wp-content/themes/twenty*
+/wp-content/upgrade
+/wp-content/uploads
+/sitemap.*
+*.sql
+
+# Hidden files
+*.DS_Store
+*Thumbs.db
+*.sass-cache*
+*~imageoptim*
