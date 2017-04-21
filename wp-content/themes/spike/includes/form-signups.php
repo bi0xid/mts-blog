@@ -27,11 +27,10 @@ class FormSignups {
 	protected $db = 'adinariv_arls';
 	protected $password = '6LC0SN9.P[';
 	protected $username = 'adinariv_arls';
-	protected $servername = 'loveschool.cgwdbyp5vyan.us-east-1.rds.amazonaws.com';
+	protected $servername = DB_HOST;
 
 	function __construct() {
-		$this->conn = mysql_connect( $this->servername, $this->username, $this->password );
-		mysql_select_db( $this->db, $this->conn );
+		$this->conn = mysqli_connect( $this->servername, $this->username, $this->password, $this->db );
 	}
 
 	/**
@@ -62,9 +61,9 @@ class FormSignups {
 	private function checkIfEmailExists( $email, $form_id ) {
 		$query = 'SELECT ID FROM wparl_leads WHERE user_email = "'.$email.'" AND form_id = "'.$form_id.'"';
 
-		$existing_email = mysql_query( $query, $this->conn );
+		$existing_email = mysqli_query( $this->conn, $query );
 
-		return mysql_fetch_array( $existing_email ) > 0;
+		return $existing_email->fetch_array() > 0;
 	}
 
 	/**
@@ -74,7 +73,7 @@ class FormSignups {
 	 */
 	private function saveIntoDataBase( $email, $form_id ) {
 		$query = 'INSERT INTO `wparl_leads` (`form_id`, `user_email`) VALUES ("'.$form_id.'", "'.$email.'")';
-		$insert = mysql_query( $query, $this->conn );
+		$insert = mysqli_query( $this->conn, $query );
 	}
 
 	/**
