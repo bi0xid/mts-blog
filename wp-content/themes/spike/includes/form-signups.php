@@ -24,12 +24,16 @@ class FormSignups {
 
 	private $conn;
 
-	protected $db = 'adinariv_arls';
-	protected $password = '6LC0SN9.P[';
-	protected $username = 'adinariv_arls';
-	protected $servername = DB_HOST;
+	private $db;
+	private $password;
+	private $username;
+	private $servername;
 
 	function __construct() {
+	    $this->db = getenv('ARLS_DB_NAME');
+	    $this->password = getenv('ARLS_DB_PASS');
+	    $this->username = getenv('ARLS_DB_USER');
+	    $this->servername = getenv('ARLS_DB_HOST');
 		$this->conn = mysqli_connect( $this->servername, $this->username, $this->password, $this->db );
 	}
 

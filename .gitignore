@@ -13,7 +13,6 @@
 /wp-content/object-cache.php
 /wp-content/themes/spike/assets/node_modules
 /phpunit/tests/tool/reports
-/wp-config.php
 /.htaccess
 /member/*
 /purge/*
