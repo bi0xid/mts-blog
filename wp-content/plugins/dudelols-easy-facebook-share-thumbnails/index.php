@@ -111,9 +111,9 @@ $output = preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $content, $match
   $first_img = $matches [1] [0];
 
   if(empty($first_img)){ //if we do not find an image try to find one via string split
- $split= split("<img src=", $content);
+ $split= preg_split("/<img src=/", $content);
 //echo $split[1];
-$first_img= split(" alt=", $split[1]);
+$first_img= preg_split("/ alt=/", $split[1]);
 $first_img= $first_img[0];
 
 return $first_img;
