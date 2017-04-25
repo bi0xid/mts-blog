@@ -13,7 +13,6 @@
 /wp-content/object-cache.php
 /wp-content/themes/spike/assets/node_modules
 /phpunit/tests/tool/reports
-/wp-config.php
 /.htaccess
 /member/*
 /purge/*
@@ -52,3 +51,21 @@ shop-original.bak/
 buscayreemplaza.php
 prestashop.zip
 shop-wp.tar.gz
+
+
+
+
+# git is no backup
+/wp-content/themes/twenty*
+/wp-content/upgrade
+/wp-content/uploads
+/sitemap.*
+*.sql
+nginx.conf
+/wp-content/db.php
+
+# Hidden files
+*.DS_Store
+*Thumbs.db
+*.sass-cache*
+*~imageoptim*
