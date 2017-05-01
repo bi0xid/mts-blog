@@ -112,9 +112,7 @@
 
 								<div class="home_meta_comment_social">
 									<?php
-										if($options['mts_social_buttons_home'] == '1') {
-											include get_stylesheet_directory().'/templates/post-share-options.php';
-										}
+										require('includes/share-buttons.php');
 									?>
 								</div>
 							</div>
@@ -194,14 +192,10 @@
 									</div>
 
 									<div class="home_meta_comment_social">
-										<?php
-											if( $options['mts_social_buttons_home'] == '1' ) {
-												include get_stylesheet_directory().'/templates/post-share-options.php';
-											?>
-												<div class="home_meta_comment_social get_social_counter_result" data-id="<?php echo get_the_ID(); ?>" id="get_social_counter_result_<?php echo get_the_ID(); ?>"></div>
-											<?php
-											}
-										?>
+                                    <?php
+										require('includes/share-buttons.php');
+									?>
+
 									</div>
 								</div>
 							</div>
