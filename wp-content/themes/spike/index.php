@@ -110,11 +110,6 @@
 									<a class="pereadore" href="<?php the_permalink() ?>" title="<?php the_title(); ?>" rel="nofollow"><?php _e('...Read More','mythemeshop'); ?></a>
 								</div>
 
-								<div class="home_meta_comment_social">
-									<?php
-										require('includes/share-buttons.php');
-									?>
-								</div>
 							</div>
 						</div>
 						
@@ -191,12 +186,6 @@
 										<a class="pereadore" href="<?php the_permalink() ?>" title="<?php the_title(); ?>" rel="nofollow"><?php _e('...Read More','mythemeshop'); ?></a>
 									</div>
 
-									<div class="home_meta_comment_social">
-                                    <?php
-										require('includes/share-buttons.php');
-									?>
-
-									</div>
 								</div>
 							</div>
 					<?php }; };
