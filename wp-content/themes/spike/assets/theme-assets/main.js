@@ -25,31 +25,4 @@ $(document).ready(function() {
 		window.open($(this).data('url'), 'My Tiny Secrets share window', 'height=300,width=550,resizable=1')
 	})
 
-	// Floating share block
-	if($('#blog').hasClass('single')) {
-		require('../plugins/jquery.bullseye-1.0.js')
-		require('../plugins/jquery.visible.js')
-
-		var floatingBlock = $('#floating_share')
-
-		var initialTop = $('.article img.alignnone.size-full').offset()
-		floatingBlock.css('top', initialTop)
-
-		var bullseyeTopElement = $('.social_shares.single_post')
-			? $('.social_shares.single_post').first()
-			: $('.article img.alignnone.size-full')
-
-		bullseyeTopElement
-			.bind('enterviewport', function() {
-				floatingBlock.removeClass('fixed')
-			})
-			.bind('leaveviewport', function() {
-				floatingBlock.addClass('fixed')
-			})
-		.bullseye()
-
-		_.defer(function() {
-			!bullseyeTopElement.visible(true) && floatingBlock.addClass('fixed')
-		})
-	}
 })
