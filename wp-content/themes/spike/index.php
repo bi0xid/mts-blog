@@ -110,13 +110,10 @@
 									<a class="pereadore" href="<?php the_permalink() ?>" title="<?php the_title(); ?>" rel="nofollow"><?php _e('...Read More','mythemeshop'); ?></a>
 								</div>
 
-								<div class="home_meta_comment_social">
-									<?php
-										if($options['mts_social_buttons_home'] == '1') {
-											include get_stylesheet_directory().'/templates/post-share-options.php';
-										}
-									?>
-								</div>
+                                <?php
+                                echo do_shortcode('[easy-social-share counters=1 template="10" counter_pos="right" total_counter_pos="leftbig" style="icon" point_type="simple" url="'.get_the_permalink().'" text="'.str_replace( [ "[" , "]" ] , [ "&#91;" , "&#93;" ] ,get_the_title()).'"]');
+                                ?>
+
 							</div>
 						</div>
 						
@@ -193,16 +190,10 @@
 										<a class="pereadore" href="<?php the_permalink() ?>" title="<?php the_title(); ?>" rel="nofollow"><?php _e('...Read More','mythemeshop'); ?></a>
 									</div>
 
-									<div class="home_meta_comment_social">
-										<?php
-											if( $options['mts_social_buttons_home'] == '1' ) {
-												include get_stylesheet_directory().'/templates/post-share-options.php';
-											?>
-												<div class="home_meta_comment_social get_social_counter_result" data-id="<?php echo get_the_ID(); ?>" id="get_social_counter_result_<?php echo get_the_ID(); ?>"></div>
-											<?php
-											}
-										?>
-									</div>
+                                    <?php
+                                    echo do_shortcode('[easy-social-share counters=1 template="10" counter_pos="right" total_counter_pos="leftbig" style="icon" point_type="simple" url="'.get_the_permalink().'" text="'.str_replace( [ "[" , "]" ] , [ "&#91;" , "&#93;" ] ,get_the_title()).'"]');
+                                    ?>
+
 								</div>
 							</div>
 					<?php }; };
