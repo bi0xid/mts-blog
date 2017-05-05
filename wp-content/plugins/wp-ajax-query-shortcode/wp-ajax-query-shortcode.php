@@ -394,8 +394,10 @@ function wp_ajax_query( $atts = '' ) {
 								<?php _e( '...Read More','mythemeshop' ); ?>
 							</a>
 						</div>
-
-					</div>
+                        <?php
+                        echo do_shortcode('[easy-social-share counters=1 template="10" counter_pos="right" total_counter_pos="leftbig" style="icon" point_type="simple" url="'.get_the_permalink().'" text="'.str_replace( [ "[" , "]" ] , [ "&#91;" , "&#93;" ] ,get_the_title()).'"]');
+                        ?>
+                    </div>
 				</div>
 
 			<?php } elseif( $atts['ajax_runnig'] ) { ?>

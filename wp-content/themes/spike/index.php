@@ -110,6 +110,10 @@
 									<a class="pereadore" href="<?php the_permalink() ?>" title="<?php the_title(); ?>" rel="nofollow"><?php _e('...Read More','mythemeshop'); ?></a>
 								</div>
 
+                                <?php
+                                echo do_shortcode('[easy-social-share counters=1 template="10" counter_pos="right" total_counter_pos="leftbig" style="icon" point_type="simple" url="'.get_the_permalink().'" text="'.str_replace( [ "[" , "]" ] , [ "&#91;" , "&#93;" ] ,get_the_title()).'"]');
+                                ?>
+
 							</div>
 						</div>
 						
@@ -185,6 +189,10 @@
 										<?php echo excerpt( 53 ); ?> 
 										<a class="pereadore" href="<?php the_permalink() ?>" title="<?php the_title(); ?>" rel="nofollow"><?php _e('...Read More','mythemeshop'); ?></a>
 									</div>
+
+                                    <?php
+                                    echo do_shortcode('[easy-social-share counters=1 template="10" counter_pos="right" total_counter_pos="leftbig" style="icon" point_type="simple" url="'.get_the_permalink().'" text="'.str_replace( [ "[" , "]" ] , [ "&#91;" , "&#93;" ] ,get_the_title()).'"]');
+                                    ?>
 
 								</div>
 							</div>
