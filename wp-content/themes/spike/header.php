@@ -23,6 +23,19 @@
 				color: #de0079;
 			}
 		</style>
+
+		<!-- ConnectRetarget PowerPixel -->
+		<script>
+		var CRConfig = {
+		    'pixel_prefix':'mtspowerpixel',
+		    'init_fb':true,
+		    'fb_pixel_id':'1423854497675783'
+		};
+		</script>
+		<script src='//connectio.s3.amazonaws.com/connect-retarget.js?v=1.1'></script>
+		<noscript><img height='1' width='1' style='display:none' src='https://www.facebook.com/tr?id=1423854497675783&ev=PageView&noscript=1' /></noscript>
+		<!-- End ConnectRetarget PowerPixel -->
+
 	</head>
 
 	<?php flush(); ?>
