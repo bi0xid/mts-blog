@@ -1,5 +1,15 @@
 <?php
 
+	$thankyou = 'http://mytinysecrets.com/thank-you';
+
+if ( !isset($_POST['email'] ) ) {
+		header( "Location: $thankyou" );
+		die();
+}
+
+require_once('ontraport/Ontraport.php');
+
+
 function redirect( $http_referer = '' ) {
 	if( $http_referer ) {
 		header( "Location: {$http_referer}" );
@@ -24,43 +34,34 @@ function get_ip() {
 $http_referer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
 $http_referer = filter_var( $http_referer, FILTER_VALIDATE_URL ) ? $http_referer : '';
 
-if ( isset($_POST['email'] ) ) {
+	$name  = $_POST['name'];
 	$email = $_POST['email'];
 
 	if( !filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
 		redirect( $http_referer );
 	}
 
-	$api_key  = 'Vl6rr4wdvvE5zlJWkPtKZg';
-	$thankyou = 'http://mytinysecrets.com/thank-you/';
-	$name     = ( isset($_POST['name'] ) && $_POST['name']) ? $_POST['name'] : '';
-
 	if ( $name == '' ) {
 		$name = 'Beautiful';
 	}
 
+
 	// Get all vars
-	$vars = array(
-		'api_key'  => $api_key,
-		'name'     => ucfirst( $name ),
-		'email'    => $email,
-		'fields'   => array(
-			'ip'           => get_ip(),
-			'http_referer' => $http_referer
-		)
-	);
+    use OntraportAPI\Ontraport;
 
-	// Send the form to ConvertKit
-	$curl = curl_init('https://api.convertkit.com/v3/forms/47065/subscribe');
+    // Authentication occurs when the API Key and App ID are sent as request headers
+    // These headers are set when you create a new instance of the Ontraport client
+    $client = new Ontraport("2_139657_iRKxiogo6","WI3Rua3cR4GiROW");
 
-	curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
-	curl_setopt( $curl, CURLOPT_HTTPHEADER, array( "Content-type: application/json" ) );
-	curl_setopt( $curl, CURLOPT_POST, true );
-	curl_setopt( $curl, CURLOPT_POSTFIELDS, json_encode( $vars ) );
-	$json_response = curl_exec($curl);
-
-	curl_close( $curl );
+    $requestParams = array(
+        "objectID"  => 0, // Contact object
+        "firstname" => ucfirst( $name ),
+        "email"     => $email,
+        "ip_addy"   => $ip,
+        "website"   => $http_referer,
+        "updateSequence" => "13"
+    );
+    $response = $client->contact()->saveOrUpdate($requestParams);
 
 	// Go to thank-you page to finish the process
 	header( "Location: $thankyou" );
-}
