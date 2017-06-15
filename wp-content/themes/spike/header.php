@@ -100,11 +100,11 @@
 			<div id="header-mail-form">
 				<div id="header-form-content">
 					<div id="top-form-textbox">
-						<h1>
+						<h2>
 							WANT TO BECOME Sexually  <br>
 							<span class="bold-part">Healthy & Happy?</span>
 							<p>Join The Secret Sunday List & Get 1 FREE Actionable Secret Every Sunday.</p>
-						</h1>
+						</h2>
 					</div>
 					<div id="header-form-wrapper">
 						<div id="WFItem7323202" class="wf-formTpl">
