@@ -1,3 +1,2 @@
 User-agent: *
-Disallow: /wp-admin/
 Sitemap: http://mytinysecrets.com/sitemap.xml
